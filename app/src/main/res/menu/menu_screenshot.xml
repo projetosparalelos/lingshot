@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/ic_translate"
+        android:icon="@drawable/ic_translate_24"
+        android:title="Translate"></item>
+
+    <item android:id="@+id/ic_listen"
+        android:icon="@drawable/ic_listen_24"
+        android:title="Listen"></item>
+
+    <item android:id="@+id/ic_reset_focus"
+        android:icon="@drawable/ic_focus_out_24"
+        android:title="Focus"></item>
+
+    <item android:id="@+id/ic_image_gallery"
+        android:icon="@drawable/ic_image_gallery_24"
+        android:title="Gallery"></item>
+
+    <item android:id="@+id/ic_language"
+        android:icon="@drawable/ic_language_24"
+        android:title="Language"></item>
+</menu>

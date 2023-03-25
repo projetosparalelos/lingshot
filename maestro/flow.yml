@@ -1,0 +1,5 @@
+appId: com.language.teachermetoon
+---
+- launchApp
+- assertVisible: "Iniciar"
+- tapOn: "Iniciar"

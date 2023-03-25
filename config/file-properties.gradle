@@ -1,0 +1,10 @@
+def apiChatGPTPropertiesFile = rootProject.file("api-chatgpt.properties")
+def apiChatGPTProperties = new Properties()
+apiChatGPTProperties.load(new FileInputStream(apiChatGPTPropertiesFile))
+
+android {
+    defaultConfig {
+        buildConfigField("String", "CHAT_GPT_KEY", apiChatGPTProperties['CHAT_GPT_KEY'])
+        buildConfigField("String", "BASE_API", '"https://api.openai.com/v1/"')
+    }
+}
