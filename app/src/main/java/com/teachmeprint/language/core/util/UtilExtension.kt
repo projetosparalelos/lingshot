@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.google.android.material.R.id.snackbar_action
 import com.google.android.material.snackbar.Snackbar
@@ -18,7 +19,8 @@ fun Context.fadeAnimation(): Bundle? =
     ).toBundle()
 
 fun View.snackBarAlert(
-    text: String, textAction: String = "Close",
+    @StringRes text: Int,
+    @StringRes textAction: Int = R.string.text_button_action_close_snack_bar,
     isActionVisible: Boolean = false, onAction: () -> Unit = {}
 ) =
     Snackbar.make(this, text, Snackbar.LENGTH_LONG).also { snackBar ->

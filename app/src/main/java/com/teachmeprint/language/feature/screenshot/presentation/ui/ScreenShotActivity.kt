@@ -21,9 +21,9 @@ import com.teachmeprint.language.core.helper.observeOnLoading
 import com.teachmeprint.language.core.helper.observeOnSuccess
 import com.teachmeprint.language.core.helper.setLifecycleOwner
 import com.teachmeprint.language.core.util.snackBarAlert
-import com.teachmeprint.language.data.model.screenshot.TypeActionEnum
-import com.teachmeprint.language.data.model.screenshot.TypeActionEnum.LISTEN
-import com.teachmeprint.language.data.model.screenshot.TypeActionEnum.TRANSLATE
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
 import com.teachmeprint.language.data.service.ScreenShotService.Companion.EXTRA_PATH_SCREEN_SHOT
 import com.teachmeprint.language.databinding.ActivityScreenShotBinding
 import com.teachmeprint.language.feature.screenshot.presentation.ScreenShotViewModel
@@ -34,7 +34,6 @@ import com.skydoves.balloon.BalloonSizeSpec
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
-import java.util.*
 
 class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageCompleteListener {
 
@@ -42,24 +41,19 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         ActivityScreenShotBinding.inflate(layoutInflater)
     }
 
-    private val imageUri by lazy {
-        val message = intent.getStringExtra(EXTRA_PATH_SCREEN_SHOT) ?: ""
-        Uri.fromFile(File(message))
+    private val imageUriPath by lazy {
+        val path = intent.getStringExtra(EXTRA_PATH_SCREEN_SHOT) ?: ""
+        Uri.fromFile(File(path))
     }
 
     private val viewModel: ScreenShotViewModel by viewModel()
 
-    private val cropImageOptions = CropImageOptions(
-        guidelines = CropImageView.Guidelines.OFF,
-        cornerShape = CropImageView.CropCornerShape.OVAL, showProgressBar = false
-    )
-
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    private val requestPickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             binding.cropImageScreenShot.setImageUriAsync(uri)
-            setOptions()
+            setupImageCropOptions()
         } else {
-            Timber.d("No media selected")
+            Timber.d(NO_MEDIA_SELECTED)
         }
     }
 
@@ -67,15 +61,15 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupBottomNavigation()
+        setupCropImage()
+        setupObservable()
+    }
 
-        binding.cropImageScreenShot.setImageUriAsync(imageUri)
-        binding.cropImageScreenShot.setOnCropImageCompleteListener(this)
-        setOptions()
-
+    private fun setupObservable() {
         viewModel.response.setLifecycleOwner(this)
             .observeOnSuccess { data ->
                 performActionWithLoadingIndicator {
-                    setupBalloon(data)
+                    setupBalloonTranslate(data)
                 }
             }
             .observeOnError {
@@ -87,51 +81,41 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
             }
     }
 
-    private fun setupBalloon(phrase: String) {
-        val balloon = Balloon.Builder(this)
-            .setWidthRatio(0.90f)
-            .setHeight(BalloonSizeSpec.WRAP)
-            .setText(phrase)
-            .setTextSize(15f)
-            .setArrowSize(10)
-            .setMarginHorizontal(16)
-            .setMarginBottom(8)
-            .setPadding(12)
-            .setCornerRadius(24f)
-            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-            .setBackgroundColor(ContextCompat.getColor(this, R.color.balloon_color))
-            .setBalloonAnimation(BalloonAnimation.ELASTIC)
-            .build()
-
-        balloon.showAlignTop(binding.bottomNavigationScreenShot.findViewById(R.id.ic_translate))
-    }
-
-    private fun getLanguages() {
-        val language = Locale.getAvailableLocales().sortedBy { it.displayLanguage }
-        val listaaa = arrayListOf<String>()
-
-        language.forEach {
-            if (!isLanguageInList(listaaa, it)) {
-                listaaa.add(it.displayLanguage);
+    private fun setupBalloonTranslate(phrase: String) =
+        with(Balloon.Builder(this)) {
+            setWidthRatio(0.90f)
+            setHeight(BalloonSizeSpec.WRAP)
+            setText(phrase)
+            setTextSize(15f)
+            setArrowSize(10)
+            setMarginHorizontal(16)
+            setMarginBottom(8)
+            setPadding(12)
+            setCornerRadius(24f)
+            setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            setBackgroundColor(ContextCompat.getColor(this@ScreenShotActivity, R.color.balloon_translate_color))
+            setBalloonAnimation(BalloonAnimation.ELASTIC)
+            build().also {
+                it.showAlignTop(binding.bottomNavigationScreenShot.findViewById(R.id.ic_translate))
             }
         }
 
-        var selectedLanguageIndex = listaaa.indexOf(viewModel.getLanguage())
+    private fun setupDialogChooseLanguage() {
+        var languageSelectedIndex = viewModel.getLanguageSelectedIndex()
 
         MaterialAlertDialogBuilder(this)
-            .setTitle("Choose Language")
-            .setSingleChoiceItems(listaaa.toTypedArray(), selectedLanguageIndex) { p0, p1 ->
-                selectedLanguageIndex = p1
-                viewModel.saveLanguage(listaaa[p1])
-
-                p0.dismiss()
+            .setTitle(getString(R.string.text_title_dialog_choose_language))
+            .setSingleChoiceItems(viewModel.getLanguageList().toTypedArray(),
+                languageSelectedIndex
+            ) { _, index ->
+                languageSelectedIndex = index
             }
-            .setNegativeButton("Cancel") { _, _ -> }
+            .setPositiveButton(getString(R.string.text_button_select_dialog_choose_language)) { dialog, _ ->
+                viewModel.saveLanguage(viewModel.getLanguageList()[languageSelectedIndex])
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.text_button_dialog_cancel)) { _, _ -> }
             .show()
-    }
-
-    private fun isLanguageInList(list: List<String>?, locale: Locale): Boolean {
-       return list?.any { it.equals(locale.displayLanguage, ignoreCase = true) } ?: false
     }
 
     private fun setupBottomNavigation() {
@@ -145,43 +129,50 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         binding.bottomNavigationScreenShot.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.ic_translate -> {
-                    if (!binding.animationScreenShotLoadingTranslate.isVisible) {
                         viewModel.getLanguage()?.let {
                             performActionIndicator(TRANSLATE)
                         } ?: run  {
-                            binding.bottomNavigationScreenShot.snackBarAlert("Select the language you want to translate.", "Add", true) {
-                                getLanguages()
+                            binding.bottomNavigationScreenShot.snackBarAlert(
+                                R.string.text_select_language_translate_message,
+                                R.string.text_button_action_add_snack_bar,
+                                true
+                            ) {
+                                setupDialogChooseLanguage()
                             }
-                        }
                     }
                 }
                 R.id.ic_listen -> {
                     performActionIndicator(LISTEN)
                 }
                 R.id.ic_reset_focus -> {
-                    resetCrop()
+                    resetImageCropReact()
                 }
                 R.id.ic_image_gallery -> {
-                    pickMedia.launch(PickVisualMediaRequest(ImageOnly))
+                    requestPickMedia.launch(PickVisualMediaRequest(ImageOnly))
                 }
                 R.id.ic_language -> {
-                    getLanguages()
+                    setupDialogChooseLanguage()
                 }
             }
             super.onOptionsItemSelected(item)
         }
     }
 
-    private fun performActionIndicator(typeActionEnum: TypeActionEnum) {
-        if (!binding.animationScreenShotLoadingTranslate.isVisible ||
+    private fun setupCropImage() {
+        binding.cropImageScreenShot.setImageUriAsync(imageUriPath)
+        binding.cropImageScreenShot.setOnCropImageCompleteListener(this)
+        setupImageCropOptions()
+    }
+    private fun performActionIndicator(typeIndicatorEnum: TypeIndicatorEnum) {
+        if (!binding.animationScreenShotLoadingTranslate.isVisible &&
             !binding.animationScreenShotLoadingListen.isVisible
         ) {
-            viewModel.typeActionEnum = typeActionEnum
+            viewModel.typeIndicatorEnum = typeIndicatorEnum
             binding.cropImageScreenShot.croppedImageAsync()
         }
     }
     private fun performActionWithLoadingIndicator(isVisible: Boolean = false, onActionTranslate: () -> Unit = {}) {
-        when (viewModel.typeActionEnum) {
+        when (viewModel.typeIndicatorEnum) {
             TRANSLATE -> {
                 binding.animationScreenShotLoadingTranslate.isVisible = isVisible
                 onActionTranslate.invoke()
@@ -192,13 +183,18 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         }
     }
 
-    private fun resetCrop() {
-        binding.cropImageScreenShot.cropRect = Rect(0, 0, 0, 0)
-    }
-
-    private fun setOptions() {
+    private fun setupImageCropOptions() {
+        val cropImageOptions = CropImageOptions(
+            guidelines = CropImageView.Guidelines.OFF,
+            cornerShape = CropImageView.CropCornerShape.OVAL,
+            showProgressBar = false
+        )
         binding.cropImageScreenShot.cropRect = Rect(100, 300, 500, 700)
         binding.cropImageScreenShot.setImageCropOptions(cropImageOptions)
+    }
+
+    private fun resetImageCropReact() {
+        binding.cropImageScreenShot.cropRect = Rect(0, 0, 0, 0)
     }
 
     override fun onCropImageComplete(view: CropImageView, result: CropImageView.CropResult) {
@@ -208,5 +204,9 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     override fun onDestroy() {
         viewModel.stopTextToSpeech()
         super.onDestroy()
+    }
+
+    companion object {
+        private const val NO_MEDIA_SELECTED = "No media selected."
     }
 }

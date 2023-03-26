@@ -18,7 +18,7 @@ import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.*
 import androidx.core.app.NotificationCompat
 import com.teachmeprint.language.MainActivity
-import com.teachmeprint.language.MyApplication.Companion.CHANNEL_ID
+import com.teachmeprint.language.TeachMePrintApplication.Companion.CHANNEL_ID
 import com.teachmeprint.language.R
 import com.teachmeprint.language.core.helper.ScreenShotDetection
 import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotActivity
@@ -67,8 +67,8 @@ class ScreenShotService: Service(), ScreenShotDetection.ScreenshotDetectionListe
 
     private fun setupNotificationForeground() {
         NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Reading activated")
-            .setContentText("Click here to interrupt.")
+            .setContentTitle(getString(R.string.text_notification_title_display_reading_activated))
+            .setContentText(getString(R.string.text_notification_message_display_interrupt))
             .setContentIntent(intentStopScreenShot())
             .setSmallIcon(R.drawable.ic_translate_24).run {
                 startForeground(NOTIFICATION_FOREGROUND_ID, build())
@@ -95,7 +95,7 @@ class ScreenShotService: Service(), ScreenShotDetection.ScreenshotDetectionListe
         numScreenShotsTaken++
         if (numScreenShotsTaken == NUM_SCREENSHOTS_TAKEN_MAX) {
             val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Clean up your screenshots in the gallery.")
+                .setContentTitle(getString(R.string.text_notification_message_clean_up_gallery))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_delete_24)
                 .build()

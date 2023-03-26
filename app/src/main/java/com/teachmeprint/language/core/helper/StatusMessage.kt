@@ -1,5 +1,7 @@
 package com.teachmeprint.language.core.helper
 
+import com.teachmeprint.language.R
+
 object StatusMessage {
     const val STATUS_TEXT_ERROR_GENERIC = 0
     const val STATUS_TEXT_RECOGNIZER_FAILED = 1
@@ -8,15 +10,15 @@ object StatusMessage {
     const val STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED = 4
     const val STATUS_IDENTIFY_LANGUAGE_FAILED = 5
 
-    fun getErrorMessage(statusCode: Int): String {
+    fun getErrorMessage(statusCode: Int): Int {
         return when (statusCode) {
-            STATUS_TEXT_ERROR_GENERIC -> "An unknown error occurred."
-            STATUS_TEXT_RECOGNIZER_FAILED -> "Text recognition failed."
-            STATUS_TEXT_TO_SPEECH_FAILED -> "Text to speech failed."
-            STATUS_TEXT_TO_SPEECH_ERROR -> "An error occurred while using text to speech."
-            STATUS_IDENTIFY_LANGUAGE_FAILED -> "Language identification failed."
-            STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED -> "Text to speech not supported."
-            else -> "An error occurred while processing your request."
+            STATUS_TEXT_ERROR_GENERIC -> R.string.text_status_message_error_generic
+            STATUS_TEXT_RECOGNIZER_FAILED -> R.string.text_status_message_recognition_failed
+            STATUS_TEXT_TO_SPEECH_FAILED -> R.string.text_status_message_speech_failed
+            STATUS_TEXT_TO_SPEECH_ERROR -> R.string.text_status_message_speech_error
+            STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED -> R.string.text_status_message_speech_not_supported
+            STATUS_IDENTIFY_LANGUAGE_FAILED -> R.string.text_status_language_identification_failed
+            else -> R.string.text_status_message_processing_request
         }
     }
 }

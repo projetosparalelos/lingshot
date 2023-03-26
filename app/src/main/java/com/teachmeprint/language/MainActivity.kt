@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     ) { permissions ->
         permissions.entries.forEach {
             if (!it.value) {
-                tryAgainPermissionReadAndWrite()
+                tryAgainReadAndWritePermission()
                 return@registerForActivityResult
             }
         }
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         if (hasOverlayPermission() && hasPermissions()) {
             startService()
         } else {
-            binding.linearMainContainer.snackBarAlert("Permission is required.")
+            binding.linearMainContainer.snackBarAlert(R.string.text_message_alert_permission)
         }
     }
 
@@ -80,42 +81,64 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestOverlayPermission() {
         if (!hasOverlayPermission()) {
-            val intent = Intent(ACTION_MANAGE_OVERLAY_PERMISSION)
-            registerForActivityResult.launch(intent)
+            setupDialogPermission(
+                title = R.string.text_title_display_dialog_permission,
+                message = R.string.text_message_display_dialog_permission
+            ) {
+                launchOverlayPermission()
+            }
         } else {
             startService()
         }
     }
 
-    private fun tryAgainPermissionReadAndWrite() {
-        MaterialAlertDialogBuilder(this).apply {
-            setMessage("This app needs you to allow this permission in order to function." +
-                "\n\nWill you allow it?")
-                .setPositiveButton("Yes") { _, _ ->
-                    setupActionApplicationDetailsSettings()
-                }
-                .setNegativeButton("No") { _, _ -> }
-        }.show()
+    private fun launchOverlayPermission() {
+        val intent = Intent(ACTION_MANAGE_OVERLAY_PERMISSION)
+        registerForActivityResult.launch(intent)
     }
 
-    private fun setupActionApplicationDetailsSettings() =
+    private fun tryAgainReadAndWritePermission() {
+        setupDialogPermission(
+            title = R.string.text_title_read_dialog_permission,
+            message = R.string.text_message_read_dialog_permission
+        ) {
+            launchActionApplicationDetailsSettings()
+        }
+    }
+
+    private fun launchActionApplicationDetailsSettings() =
         with(Intent(ACTION_APPLICATION_DETAILS_SETTINGS)) {
-            val uri = Uri.fromParts("package", packageName, null)
+            val uri = Uri.fromParts(SCHEME_PACKAGE, packageName, null)
             data = uri
             registerForActivityResult.launch(this)
         }
 
+    private fun setupDialogPermission(
+        @StringRes title: Int,
+        @StringRes message: Int,
+        block: () -> Unit
+    ) {
+        MaterialAlertDialogBuilder(this).apply {
+            setTitle(getString(title))
+            setMessage(getString(message))
+                .setPositiveButton(getString(R.string.text_button_settings_dialog_permission)) { dialog, _ ->
+                    block.invoke()
+                    dialog.dismiss()
+                }
+        }.show()
+    }
 
     private fun hasPermissions() =
         PERMISSIONS.all {
             checkSelfPermission(this, it) == PERMISSION_GRANTED
         }
 
-    private fun hasOverlayPermission()  =
+    private fun hasOverlayPermission() =
         Settings.canDrawOverlays(this)
 
 
     companion object {
+        private const val SCHEME_PACKAGE = "package"
         private val PERMISSIONS = arrayOf(
             READ_EXTERNAL_STORAGE,
             WRITE_EXTERNAL_STORAGE

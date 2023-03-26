@@ -16,9 +16,9 @@ import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_RECOGNIZE
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
-import com.teachmeprint.language.data.model.screenshot.TypeActionEnum
-import com.teachmeprint.language.data.model.screenshot.TypeActionEnum.LISTEN
-import com.teachmeprint.language.data.model.screenshot.TypeActionEnum.TRANSLATE
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
 import com.teachmeprint.language.feature.screenshot.repository.ScreenShotRepository
 import kotlinx.coroutines.launch
@@ -42,7 +42,7 @@ class ScreenShotViewModel(
         }
     }
 
-    lateinit var typeActionEnum: TypeActionEnum
+    lateinit var typeIndicatorEnum: TypeIndicatorEnum
 
     init {
         setupTextToSpeech()
@@ -54,7 +54,7 @@ class ScreenShotViewModel(
             textRecognizer.process(it)
                 .addOnSuccessListener { value ->
                     val textFormatted = value.text.checkTextAndFormat()
-                    when (typeActionEnum) {
+                    when (typeIndicatorEnum) {
                         TRANSLATE -> fetchPhraseToTranslate(textFormatted)
                         LISTEN -> fetchLanguageIdentifier(textFormatted)
                     }
@@ -145,6 +145,27 @@ class ScreenShotViewModel(
 
     fun saveLanguage(languageSelected: String) {
         screenShotRepository.saveLanguage(languageSelected)
+    }
+
+    fun getLanguageList(): List<String> {
+        val languageLocaleList = Locale.getAvailableLocales().sortedBy { it.displayLanguage }
+        val languageLocaleFilterList = arrayListOf<String>()
+
+        languageLocaleList.forEach {
+            if (!isLanguageLocaleInList(languageLocaleFilterList, it)) {
+                languageLocaleFilterList.add(it.displayLanguage);
+            }
+        }
+
+        return languageLocaleFilterList
+    }
+
+    fun getLanguageSelectedIndex(): Int {
+        return getLanguageList().indexOf(getLanguage())
+    }
+
+    private fun isLanguageLocaleInList(list: List<String>?, locale: Locale): Boolean {
+        return list?.any { it.equals(locale.displayLanguage, ignoreCase = true) } ?: false
     }
 
     companion object {

@@ -1,6 +1,6 @@
 package com.teachmeprint.language.data.model.screenshot
 
-enum class TypeActionEnum {
+enum class TypeIndicatorEnum {
     LISTEN,
     TRANSLATE
 }
