@@ -57,5 +57,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/crop_image_screen_shot"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_screenshot" />
+        app:menu="@menu/menu_screen_shot" />
 </androidx.constraintlayout.widget.ConstraintLayout>

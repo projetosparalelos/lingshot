@@ -21,7 +21,9 @@ import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
 import com.teachmeprint.language.feature.screenshot.repository.ScreenShotRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class ScreenShotViewModel(
@@ -143,24 +145,29 @@ class ScreenShotViewModel(
         return screenShotRepository.getLanguage()
     }
 
-    fun saveLanguage(languageSelected: String) {
-        screenShotRepository.saveLanguage(languageSelected)
+     fun saveLanguage(languageSelected: suspend () -> String) {
+         viewModelScope.launch {
+             screenShotRepository.saveLanguage(languageSelected())
+         }
     }
 
-    fun getLanguageList(): List<String> {
-        val languageLocaleList = Locale.getAvailableLocales().sortedBy { it.displayLanguage }
+    suspend fun getLanguageList(): List<String> {
         val languageLocaleFilterList = arrayListOf<String>()
+        withContext(Dispatchers.IO) {
+            val languageLocaleList =
+                Locale.getAvailableLocales().sortedBy { it.displayLanguage }
 
-        languageLocaleList.forEach {
-            if (!isLanguageLocaleInList(languageLocaleFilterList, it)) {
-                languageLocaleFilterList.add(it.displayLanguage);
+            languageLocaleList.forEach {
+                if (!isLanguageLocaleInList(languageLocaleFilterList, it)) {
+                    languageLocaleFilterList.add(it.displayLanguage);
+                }
             }
-        }
 
+        }
         return languageLocaleFilterList
     }
 
-    fun getLanguageSelectedIndex(): Int {
+    suspend fun getLanguageSelectedIndex(): Int {
         return getLanguageList().indexOf(getLanguage())
     }
 

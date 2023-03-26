@@ -17,7 +17,6 @@ import android.view.View
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.*
 import androidx.core.app.NotificationCompat
-import com.teachmeprint.language.MainActivity
 import com.teachmeprint.language.TeachMePrintApplication.Companion.CHANNEL_ID
 import com.teachmeprint.language.R
 import com.teachmeprint.language.core.helper.ScreenShotDetection
@@ -58,7 +57,6 @@ class ScreenShotService: Service(), ScreenShotDetection.ScreenshotDetectionListe
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == STOP_SERVICE) {
             stopSelf()
-            backToMainActivity()
         }
 
         setupNotificationForeground()
@@ -67,9 +65,9 @@ class ScreenShotService: Service(), ScreenShotDetection.ScreenshotDetectionListe
 
     private fun setupNotificationForeground() {
         NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(getString(R.string.text_notification_title_display_reading_activated))
-            .setContentText(getString(R.string.text_notification_message_display_interrupt))
-            .setContentIntent(intentStopScreenShot())
+            .setContentTitle(getString(R.string.text_notification_title_display_display_tuned_on))
+            .setContentText(getString(R.string.text_notification_message_display_reading_is_ready_to_use))
+            .addAction(0, getString(R.string.text_notification_button_display_turn_off), intentStopScreenShot())
             .setSmallIcon(R.drawable.ic_translate_24).run {
                 startForeground(NOTIFICATION_FOREGROUND_ID, build())
             }
@@ -81,15 +79,6 @@ class ScreenShotService: Service(), ScreenShotDetection.ScreenshotDetectionListe
             PendingIntent.getService(this@ScreenShotService,
                 0, this, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
         }
-
-    private fun backToMainActivity() {
-        Intent(this, MainActivity::class.java).apply {
-            addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
-        }.also {
-            setupNotificationClearScreenshot()
-            startActivity(it, fadeAnimation())
-        }
-    }
 
     private fun setupNotificationClearScreenshot() {
         numScreenShotsTaken++
