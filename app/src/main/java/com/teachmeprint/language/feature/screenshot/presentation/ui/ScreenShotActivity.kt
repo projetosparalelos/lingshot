@@ -85,11 +85,11 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
             }
     }
 
-    private fun setupBalloonTranslate(phrase: String) =
+    private fun setupBalloonTranslate(text: String) =
         with(Balloon.Builder(this)) {
             setWidthRatio(BALLOON_WIDTH_RATIO)
             setHeight(BalloonSizeSpec.WRAP)
-            setText(phrase)
+            setText(text)
             setTextSize(BALLOON_TEXT_SIZE)
             setMarginHorizontal(BALLOON_MARGIN_HORIZONTAL)
             setMarginBottom(BALLOON_MARGIN_BOTTOM)
