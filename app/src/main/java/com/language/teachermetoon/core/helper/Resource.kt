@@ -3,9 +3,11 @@ package com.language.teachermetoon.core.helper
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.language.teachermetoon.core.helper.StatusMessage.STATUS_TEXT_ERROR_GENERIC
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import timber.log.Timber
 import kotlin.reflect.KProperty
 
 typealias LiveResource<T> = LiveData<Resource<T>>
@@ -95,9 +97,11 @@ private suspend fun <T> MutableLiveResource<T>.setupValidationState(
     } catch (e: HttpException) {
         this.error(e.code())
         onError.invoke(e.code(), e.message())
+        Timber.e(e, e.message())
     } catch (e: Exception) {
-        this.error(0)
-        onError.invoke(0, "")
+        this.error(STATUS_TEXT_ERROR_GENERIC)
+        onError.invoke(STATUS_TEXT_ERROR_GENERIC, "")
+        Timber.e(e, e.message)
     }
 }
 

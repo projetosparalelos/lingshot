@@ -49,26 +49,32 @@ data class Usage(
 
 data class RequestBody(
     @SerializedName("model")
-    val model: String,
+    val model: String = MODEL_DEFAULT,
 
     @SerializedName("prompt")
     val prompt: String,
 
     @SerializedName("max_tokens")
-    val maxTokens: Int,
+    val maxTokens: Int = MAX_TOKENS_DEFAULT,
 
     @SerializedName("temperature")
-    var temperature: Float,
+    var temperature: Float = TEMPERATURE_DEFAULT,
 
     @SerializedName("top_p")
-    val topP: Float,
+    val topP: Float = TOP_P_DEFAULT,
 
     @SerializedName("frequency_penalty")
-    val frequencyPenalty: Int,
+    val frequencyPenalty: Int = 0,
 
     @SerializedName("presence_penalty")
-    val presencePenalty: Int,
+    val presencePenalty: Int = 0,
 
     @SerializedName("stop")
-    val stop: String
+    val stop: String = STOP_DEFAULT
 )
+
+private const val MODEL_DEFAULT = "text-davinci-003"
+private const val MAX_TOKENS_DEFAULT = 100
+private const val TEMPERATURE_DEFAULT = 0.3f
+private const val TOP_P_DEFAULT = 1F
+private const val STOP_DEFAULT = "\n"

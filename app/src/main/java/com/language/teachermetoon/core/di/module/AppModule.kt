@@ -5,5 +5,6 @@ val addModule = listOf(
     apiServiceModule,
     dataBaseModule,
     repositoryModule,
-    viewModelModule
+    viewModelModule,
+    librariesModule
 )
