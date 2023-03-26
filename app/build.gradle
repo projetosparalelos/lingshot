@@ -9,11 +9,11 @@ apply {
 }
 
 android {
-    namespace 'com.language.teachermetoon'
+    namespace 'com.teachmeprint.language'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.language.teachermetoon"
+        applicationId "com.teachmeprint.language"
         minSdk 24
         targetSdk 33
         versionCode 1

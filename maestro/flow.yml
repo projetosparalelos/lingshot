@@ -1,4 +1,4 @@
-appId: com.language.teachermetoon
+appId: com.teachmeprint.language
 ---
 - launchApp
 - assertVisible: "Iniciar"
