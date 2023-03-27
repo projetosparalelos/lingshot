@@ -44,7 +44,7 @@ class ScreenShotViewModel(
         }
     }
 
-    lateinit var typeIndicatorEnum: TypeIndicatorEnum
+    var typeIndicatorEnum: TypeIndicatorEnum = TRANSLATE
 
     init {
         setupTextToSpeech()

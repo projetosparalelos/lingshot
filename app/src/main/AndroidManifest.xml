@@ -39,6 +39,7 @@
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />
-        <service android:name=".data.service.ScreenShotService" />
+        <service android:name=".data.service.ScreenShotService"
+            android:foregroundServiceType="mediaProjection"/>
     </application>
 </manifest>

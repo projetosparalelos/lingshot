@@ -2,8 +2,10 @@ package com.teachmeprint.language
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.media.projection.MediaProjectionManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -38,10 +40,16 @@ class MainActivity : AppCompatActivity() {
     private val registerForActivityResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        if (hasOverlayPermission() && hasPermissions()) {
-            startService()
-        } else {
+        if (!hasOverlayPermission() && !hasPermissions()) {
             binding.linearMainContainer.snackBarAlert(R.string.text_message_alert_permission)
+        }
+    }
+
+    private val requestScreenShotService = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            setupScreenShotService(result.data)
         }
     }
 
@@ -68,11 +76,11 @@ class MainActivity : AppCompatActivity() {
             requestOverlayPermission()
             return
         }
-        setupScreenShotService()
+        launchMediaProjectionManagerPermission()
     }
 
-    private fun setupScreenShotService() {
-        Intent(this, ScreenShotService::class.java).also {
+    private fun setupScreenShotService(resultData: Intent?) {
+        ScreenShotService.getStartIntent(this, resultData).also {
             startService(it)
         }.run {
             finish()
@@ -112,6 +120,11 @@ class MainActivity : AppCompatActivity() {
             data = uri
             registerForActivityResult.launch(this)
         }
+
+    private fun launchMediaProjectionManagerPermission() {
+        val mediaProjectionManager: MediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        requestScreenShotService.launch(mediaProjectionManager.createScreenCaptureIntent())
+    }
 
     private fun setupDialogPermission(
         @StringRes title: Int,

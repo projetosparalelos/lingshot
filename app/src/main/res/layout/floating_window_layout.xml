@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/containerFloat"
+    android:background="@android:color/transparent">
+
+    <ImageButton
+        android:id="@+id/buttonService"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/round_button"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_app_shortcut_24"
+        android:text="Button" />
+</LinearLayout>
