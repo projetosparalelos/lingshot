@@ -34,6 +34,7 @@ import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
@@ -50,6 +51,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     }
 
     private val viewModel: ScreenShotViewModel by viewModel()
+    private val screenShotFloatingWindow: ScreenShotFloatingWindow by inject()
 
     private val requestPickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -67,6 +69,16 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         setupBottomNavigation()
         setupCropImage()
         setupObservable()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        screenShotFloatingWindow.showOrHide(false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        screenShotFloatingWindow.showOrHide()
     }
 
     private fun setupObservable() {

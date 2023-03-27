@@ -1,8 +1,7 @@
-@file:Suppress("Deprecation", "InflateParams", "Warning")
+@file:Suppress("Deprecation")
 
 package com.teachmeprint.language.data.service
 
-import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
@@ -11,15 +10,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.graphics.PixelFormat.TRANSLUCENT
-import android.os.Build
-import android.util.DisplayMetrics
-import android.view.*
-import android.view.WindowManager.LayoutParams.*
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.teachmeprint.language.R
@@ -28,41 +20,23 @@ import com.teachmeprint.language.core.helper.ScreenCaptureManager
 import com.teachmeprint.language.core.helper.ScreenShotDetection
 import com.teachmeprint.language.core.util.fadeAnimation
 import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotFloatingWindow
+import org.koin.android.ext.android.inject
 
 class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
 
-    private val windowManager: WindowManager by lazy {
-        getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    }
-    private val rootView by lazy {
-        LayoutInflater.from(this).inflate(R.layout.floating_window_layout, null)
-    }
-    private lateinit var windowParams: WindowManager.LayoutParams
+    private val screenShotFloatingWindow: ScreenShotFloatingWindow by inject()
 
     private val screenshotDetection = ScreenShotDetection(this)
     private var screenCaptureManager: ScreenCaptureManager = ScreenCaptureManager()
     private var numScreenShotsTaken = 1
 
-    private var initialX = 0
-    private var initialY = 0
-    private var initialTouchX = 0f
-    private var initialTouchY = 0f
-
-    private val floatingButtonScreenShot by lazy {
-        rootView.findViewById<ImageButton>(R.id.buttonService)
-    }
-
     override fun onCreate() {
         super.onCreate()
-        setupWindowParams()
-
-        start()
         screenshotDetection.startScreenshotDetection()
-        onTouchMoveFloatingButton()
+        screenShotFloatingWindow.onClickFloatingButton(lifecycleScope) {
+            screenCaptureManager.captureScreenshot()
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -77,71 +51,6 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
     private fun Intent?.sendIntentScreenCapture() {
         val data: Intent? = this?.getParcelableExtra(SCREEN_CAPTURE_DATA)
         data?.let { screenCaptureManager.startCapture(AppCompatActivity.RESULT_OK, it) }
-    }
-
-    private fun setupWindowParams() {
-       windowParams = WindowManager.LayoutParams(WRAP_CONTENT, WRAP_CONTENT,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                TYPE_APPLICATION_OVERLAY
-            } else {
-               TYPE_PHONE
-            },
-           FLAG_NOT_FOCUSABLE or FLAG_LAYOUT_NO_LIMITS or FLAG_NOT_TOUCH_MODAL,
-            TRANSLUCENT
-        ).apply {
-           gravity = Gravity.TOP or Gravity.START
-           x = 0
-           y = 0
-       }
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun onTouchMoveFloatingButton() {
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val screenHeight = displayMetrics.heightPixels
-        val screenWidth = displayMetrics.widthPixels
-
-        floatingButtonScreenShot.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    initialX = windowParams.x
-                    initialY = windowParams.y
-                    initialTouchX = event.rawX
-                    initialTouchY = event.rawY
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    windowParams.x = (initialX + event.rawX - initialTouchX).toInt()
-                    windowParams.y = (initialY + event.rawY - initialTouchY).toInt()
-
-                    if (windowParams.x < 0) windowParams.x = 0
-                    if (windowParams.y < 0) windowParams.y = 0
-                    if (windowParams.x > screenWidth - rootView.width) windowParams.x = screenWidth - rootView.width
-                    if (windowParams.y > screenHeight - rootView.height) windowParams.y = screenHeight - rootView.height
-
-                    windowManager.updateViewLayout(rootView, windowParams)
-                }
-                MotionEvent.ACTION_BUTTON_PRESS -> {
-                    screenCaptureManager.captureScreenshot()
-
-                }
-            }
-            false
-        }
-        floatingButtonScreenShot.onClickFloatingButton()
-    }
-
-    private fun ImageButton.onClickFloatingButton() {
-        setOnClickListener {
-            isVisible = false
-            lifecycleScope.launch {
-                delay(50L)
-                withContext(Dispatchers.IO) {
-                    screenCaptureManager.captureScreenshot()
-                }
-                isVisible = true
-            }
-        }
     }
 
     private fun setupNotificationForeground() {
@@ -191,19 +100,11 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
 
     override fun onDestroy() {
         super.onDestroy()
-        close()
+        screenShotFloatingWindow.close()
         numScreenShotsTaken = NUM_SCREENSHOTS_TAKEN_INITIAL
         screenshotDetection.stopScreenshotDetection()
         screenCaptureManager.stopCapture()
     }
-
-    private fun start() = runCatching {
-        windowManager.addView(rootView, windowParams)
-    }.getOrNull()
-
-    private fun close() = runCatching {
-        windowManager.removeView(rootView)
-    }.getOrNull()
 
     companion object {
         const val EXTRA_PATH_SCREEN_SHOT = "EXTRA_PATH_SCREEN_SHOT"
