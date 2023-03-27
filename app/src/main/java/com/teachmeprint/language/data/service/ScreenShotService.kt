@@ -28,7 +28,7 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
     private val screenShotFloatingWindow: ScreenShotFloatingWindow by inject()
 
     private val screenshotDetection = ScreenShotDetection(this)
-    private var screenCaptureManager: ScreenCaptureManager = ScreenCaptureManager()
+    private val screenCaptureManager = ScreenCaptureManager()
     private var numScreenShotsTaken = 1
 
     override fun onCreate() {
