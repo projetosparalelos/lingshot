@@ -33,3 +33,13 @@ fun View.snackBarAlert(
             isVisible = isActionVisible
         }
     }
+
+fun String.limitCharactersWithEllipsize(limit: Int): String {
+    return if (length >= limit) {
+        val stringBuilder = StringBuilder(substring(0, limit))
+        stringBuilder.append("...")
+        stringBuilder.toString()
+    } else {
+        this
+    }
+}

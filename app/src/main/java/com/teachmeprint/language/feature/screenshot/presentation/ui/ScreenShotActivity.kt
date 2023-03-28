@@ -33,6 +33,7 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
+import com.teachmeprint.language.core.util.limitCharactersWithEllipsize
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -106,7 +107,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         with(Balloon.Builder(this)) {
             setWidthRatio(BALLOON_WIDTH_RATIO)
             setHeight(BalloonSizeSpec.WRAP)
-            setText(text)
+            setText(text.limitCharactersWithEllipsize(BALLOON_LIMIT_CHARACTERS))
             setTextSize(BALLOON_TEXT_SIZE)
             setMarginHorizontal(BALLOON_MARGIN_HORIZONTAL)
             setMarginBottom(BALLOON_MARGIN_BOTTOM)
@@ -250,6 +251,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         private const val BALLOON_MARGIN_BOTTOM = 8
         private const val BALLOON_PADDING = 12
         private const val BALLOON_CORNER_RADIUS = 24F
+        private const val BALLOON_LIMIT_CHARACTERS = 280
 
         private const val RECT_CUSTOM_RIGHT = 500
         private const val RECT_CUSTOM_LEFT = 100
