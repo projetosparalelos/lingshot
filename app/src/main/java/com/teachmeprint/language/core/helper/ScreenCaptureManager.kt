@@ -92,7 +92,9 @@ class ScreenCaptureManager(private val reference: WeakReference<TeachMePrintAppl
             fos.flush()
             fos.close()
 
-            if (file.exists() && (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)) {
+            if (file.exists()
+                && (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
+            ) {
                 notificationClearScreenshot.start()
                 reference.get()?.let { NavigationIntentUtil.launchScreenShotActivity(it, file.absolutePath) }
             }

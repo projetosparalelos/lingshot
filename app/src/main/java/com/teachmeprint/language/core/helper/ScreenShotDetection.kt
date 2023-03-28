@@ -2,7 +2,8 @@
 
 package com.teachmeprint.language.core.helper
 
-import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.READ_MEDIA_IMAGES
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.ContentObserver
@@ -130,10 +131,15 @@ class ScreenShotDetection(
     }
 
     private fun isReadExternalStoragePermissionGranted(): Boolean {
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            READ_MEDIA_IMAGES
+        } else {
+            READ_EXTERNAL_STORAGE
+        }
         return reference.get()?.let { activity ->
             ContextCompat.checkSelfPermission(
                 activity,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                permission
             ) == PackageManager.PERMISSION_GRANTED
         } ?: run {
             false

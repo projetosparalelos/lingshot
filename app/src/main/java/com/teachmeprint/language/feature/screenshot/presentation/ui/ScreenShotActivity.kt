@@ -3,8 +3,6 @@ package com.teachmeprint.language.feature.screenshot.presentation.ui
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
@@ -35,7 +33,6 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
-import com.teachmeprint.language.core.util.fadeAnimation
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -70,6 +67,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         super.finish()
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

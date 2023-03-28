@@ -1,12 +1,12 @@
 package com.teachmeprint.language
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.Manifest.permission.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hasPermissions() =
-        PERMISSIONS.all {
+        PERMISSIONS.filter { it != WRITE_EXTERNAL_STORAGE }.all {
             checkSelfPermission(this, it) == PERMISSION_GRANTED
         }
 
@@ -165,7 +165,11 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val SCHEME_PACKAGE = "package"
         private val PERMISSIONS = arrayOf(
-            READ_EXTERNAL_STORAGE,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                READ_MEDIA_IMAGES
+            } else {
+                READ_EXTERNAL_STORAGE
+            },
             WRITE_EXTERNAL_STORAGE
         )
     }

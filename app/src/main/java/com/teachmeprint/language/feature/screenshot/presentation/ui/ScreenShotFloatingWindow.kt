@@ -102,7 +102,7 @@ class ScreenShotFloatingWindow(context: Context) {
     }
 
     fun showOrHide(isVisible: Boolean = true) {
-        floatingButtonScreenShot.isVisible = isVisible
+        rootView.isVisible = isVisible
     }
 
     fun start() = runCatching {
