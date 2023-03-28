@@ -30,6 +30,7 @@ class ScreenShotFloatingWindow(context: Context) {
     private var initialY = 0
     private var initialTouchX = 0f
     private var initialTouchY = 0f
+    private val touchSensitivity = 20
 
     private val floatingButtonScreenShot by lazy {
         rootView.findViewById<ImageButton>(R.id.buttonService)
@@ -65,8 +66,8 @@ class ScreenShotFloatingWindow(context: Context) {
                 MotionEvent.ACTION_DOWN -> {
                     initialX = windowParams.x
                     initialY = windowParams.y
-                    initialTouchX = event.rawX
-                    initialTouchY = event.rawY
+                    initialTouchX = event.rawX + touchSensitivity
+                    initialTouchY = event.rawY + touchSensitivity
                 }
                 MotionEvent.ACTION_MOVE -> {
                     windowParams.x = (initialX + event.rawX - initialTouchX).toInt()
