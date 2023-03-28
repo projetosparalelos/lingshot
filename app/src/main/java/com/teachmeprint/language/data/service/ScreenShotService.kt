@@ -2,7 +2,6 @@
 
 package com.teachmeprint.language.data.service
 
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
@@ -16,23 +15,25 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.teachmeprint.language.R
 import com.teachmeprint.language.TeachMePrintApplication.Companion.CHANNEL_ID
+import com.teachmeprint.language.core.helper.NotificationClearScreenshot
 import com.teachmeprint.language.core.helper.ScreenCaptureManager
 import com.teachmeprint.language.core.helper.ScreenShotDetection
 import com.teachmeprint.language.core.util.fadeAnimation
 import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotActivity
 import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotFloatingWindow
 import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
 
     private val screenShotFloatingWindow: ScreenShotFloatingWindow by inject()
-
-    private val screenshotDetection = ScreenShotDetection(this)
-    private val screenCaptureManager = ScreenCaptureManager()
-    private var numScreenShotsTaken = 1
+    private val notificationClearScreenshot: NotificationClearScreenshot by inject()
+    private val screenshotDetection: ScreenShotDetection by inject {  parametersOf(this)  }
+    private val screenCaptureManager: ScreenCaptureManager by inject()
 
     override fun onCreate() {
         super.onCreate()
+        screenShotFloatingWindow.start()
         screenshotDetection.startScreenshotDetection()
         screenShotFloatingWindow.onClickFloatingButton(lifecycleScope) {
             screenCaptureManager.captureScreenshot()
@@ -70,25 +71,8 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
                 0, this, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
         }
 
-    private fun setupNotificationClearScreenshot() {
-        numScreenShotsTaken++
-        if (numScreenShotsTaken == NUM_SCREENSHOTS_TAKEN_MAX) {
-            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle(getString(R.string.text_notification_message_clean_up_gallery))
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setSmallIcon(R.drawable.ic_delete_24)
-                .build()
-
-            val notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.notify(NOTIFICATION_CLEAR_SCREEN_SHOT_ID, notification)
-
-            numScreenShotsTaken = NUM_SCREENSHOTS_TAKEN_INITIAL
-        }
-    }
-
     override fun onScreenCaptured(path: String) {
-        setupNotificationClearScreenshot()
+        notificationClearScreenshot.start()
         Intent(this, ScreenShotActivity::class.java).apply {
             putExtra(EXTRA_PATH_SCREEN_SHOT, path)
             addFlags(FLAG_ACTIVITY_CLEAR_TOP)
@@ -101,7 +85,7 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
     override fun onDestroy() {
         super.onDestroy()
         screenShotFloatingWindow.close()
-        numScreenShotsTaken = NUM_SCREENSHOTS_TAKEN_INITIAL
+        notificationClearScreenshot.clear()
         screenshotDetection.stopScreenshotDetection()
         screenCaptureManager.stopCapture()
     }
@@ -111,9 +95,6 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
         private const val SCREEN_CAPTURE_DATA = "SCREEN_CAPTURE_DATA"
         private const val STOP_SERVICE = "STOP_SERVICE"
         private const val NOTIFICATION_FOREGROUND_ID = 1
-        private const val NOTIFICATION_CLEAR_SCREEN_SHOT_ID = 2
-        private const val NUM_SCREENSHOTS_TAKEN_INITIAL = 0
-        private const val NUM_SCREENSHOTS_TAKEN_MAX = 10
 
         fun getStartIntent(context: Context?, data: Intent?): Intent {
            return Intent(context, ScreenShotService::class.java).apply {

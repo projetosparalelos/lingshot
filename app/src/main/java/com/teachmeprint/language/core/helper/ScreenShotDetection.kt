@@ -29,10 +29,6 @@ class ScreenShotDetection(
     private var job: Job? = null
 
     constructor(
-        listener: ScreenshotDetectionListener
-    ) : this(WeakReference(TeachMePrintApplication.applicationContext()), listener)
-
-    constructor(
         onScreenCaptured: (path: String) -> Unit
     ) : this(
         WeakReference(TeachMePrintApplication.applicationContext()),

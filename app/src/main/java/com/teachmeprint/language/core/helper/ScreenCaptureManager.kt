@@ -10,18 +10,18 @@ import android.media.Image
 import android.media.ImageReader
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
+import android.os.Build
 import android.os.Environment
 import com.teachmeprint.language.TeachMePrintApplication
+import com.teachmeprint.language.core.util.NavigationIntentUtil
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ScreenCaptureManager(private val reference: WeakReference<TeachMePrintApplication>) {
-
-    constructor(
-    ) : this(WeakReference(TeachMePrintApplication.applicationContext()))
+class ScreenCaptureManager(private val reference: WeakReference<TeachMePrintApplication>,
+                           private val notificationClearScreenshot: NotificationClearScreenshot) {
 
    private val mediaProjectionManager: MediaProjectionManager =
         reference.get()?.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
@@ -37,7 +37,7 @@ class ScreenCaptureManager(private val reference: WeakReference<TeachMePrintAppl
         mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data)
         imageReader = ImageReader.newInstance(
             displayMetrics.widthPixels, displayMetrics.heightPixels,
-            android.graphics.PixelFormat.RGBA_8888, 1
+            android.graphics.PixelFormat.RGBA_8888, 2
         )
         virtualDisplay = mediaProjection?.createVirtualDisplay(
             VIRTUAL_NAME_DISPLAY,
@@ -91,6 +91,11 @@ class ScreenCaptureManager(private val reference: WeakReference<TeachMePrintAppl
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
             fos.flush()
             fos.close()
+
+            if (file.exists() && (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)) {
+                notificationClearScreenshot.start()
+                reference.get()?.let { NavigationIntentUtil.launchScreenShotActivity(it, file.absolutePath) }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

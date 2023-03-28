@@ -15,10 +15,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.checkSelfPermission
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teachmeprint.language.data.service.ScreenShotService
 import com.teachmeprint.language.databinding.ActivityMainBinding
 import com.teachmeprint.language.core.util.snackBarAlert
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,7 +52,11 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            setupScreenShotService(result.data)
+            lifecycleScope.launch {
+                setupScreenShotService(result.data)
+                delay(500)
+                finish()
+            }
         }
     }
 
@@ -82,8 +89,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupScreenShotService(resultData: Intent?) {
         ScreenShotService.getStartIntent(this, resultData).also {
             startService(it)
-        }.run {
-            finish()
         }
     }
 
@@ -122,7 +127,8 @@ class MainActivity : AppCompatActivity() {
         }
 
     private fun launchMediaProjectionManagerPermission() {
-        val mediaProjectionManager: MediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        val mediaProjectionManager: MediaProjectionManager =
+            getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         requestScreenShotService.launch(mediaProjectionManager.createScreenCaptureIntent())
     }
 
@@ -149,6 +155,10 @@ class MainActivity : AppCompatActivity() {
     private fun hasOverlayPermission() =
         Settings.canDrawOverlays(this)
 
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+    }
 
     companion object {
         private const val SCHEME_PACKAGE = "package"

@@ -37,7 +37,6 @@ class ScreenShotFloatingWindow(context: Context) {
 
     init {
         setupWindowParams()
-        start()
         onTouchMoveFloatingButton()
     }
 
@@ -106,7 +105,7 @@ class ScreenShotFloatingWindow(context: Context) {
         floatingButtonScreenShot.isVisible = isVisible
     }
 
-    private fun start() = runCatching {
+    fun start() = runCatching {
         windowManager.addView(rootView, windowParams)
     }.getOrNull()
 
