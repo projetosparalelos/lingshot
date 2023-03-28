@@ -1,8 +1,6 @@
 package com.teachmeprint.language.core.util
 
-import android.app.ActivityOptions
-import android.content.Context
-import android.os.Bundle
+import android.app.Activity
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.StringRes
@@ -11,12 +9,10 @@ import com.google.android.material.R.id.snackbar_action
 import com.google.android.material.snackbar.Snackbar
 import com.teachmeprint.language.R
 
-fun Context.fadeAnimation(): Bundle? =
-    ActivityOptions.makeCustomAnimation(
-        this,
+fun Activity.fadeAnimation() =
+    overridePendingTransition(
         R.anim.fade_in,
-        R.anim.fade_out
-    ).toBundle()
+        R.anim.fade_out);
 
 fun View.snackBarAlert(
     @StringRes text: Int,

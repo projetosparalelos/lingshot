@@ -7,8 +7,6 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import androidx.appcompat.app.AppCompatActivity
@@ -20,8 +18,7 @@ import com.teachmeprint.language.TeachMePrintApplication.Companion.CHANNEL_ID
 import com.teachmeprint.language.core.helper.NotificationClearScreenshot
 import com.teachmeprint.language.core.helper.ScreenCaptureManager
 import com.teachmeprint.language.core.helper.ScreenShotDetection
-import com.teachmeprint.language.core.util.fadeAnimation
-import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotActivity
+import com.teachmeprint.language.core.util.NavigationIntentUtil
 import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotFloatingWindow
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
@@ -90,13 +87,7 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
     override fun onScreenCaptured(path: String) {
         if (isOrientationPortrait) {
             notificationClearScreenshot.start()
-            Intent(this, ScreenShotActivity::class.java).apply {
-                putExtra(EXTRA_PATH_SCREEN_SHOT, path)
-                addFlags(FLAG_ACTIVITY_CLEAR_TOP)
-                addFlags(FLAG_ACTIVITY_NEW_TASK)
-            }.also {
-                startActivity(it, fadeAnimation())
-            }
+            NavigationIntentUtil.launchScreenShotActivity(this, path)
         }
     }
 

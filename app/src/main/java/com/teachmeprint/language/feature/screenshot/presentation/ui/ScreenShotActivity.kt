@@ -33,6 +33,7 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
+import com.teachmeprint.language.core.util.fadeAnimation
 import com.teachmeprint.language.core.util.limitCharactersWithEllipsize
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -66,12 +67,13 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        fadeAnimation()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        fadeAnimation()
         setupBottomNavigation()
         setupCropImage()
         setupObservable()
