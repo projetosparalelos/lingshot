@@ -20,8 +20,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teachmeprint.language.data.service.ScreenShotService
 import com.teachmeprint.language.databinding.ActivityMainBinding
 import com.teachmeprint.language.core.util.snackBarAlert
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,8 +55,9 @@ class MainActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             lifecycleScope.launch {
                 setupScreenShotService(result.data)
-                delay(500)
-                finish()
+                withContext(Dispatchers.Main) {
+                    finish()
+                }
             }
         }
     }
