@@ -9,6 +9,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.res.Configuration
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
@@ -31,12 +33,26 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
     private val screenshotDetection: ScreenShotDetection by inject {  parametersOf(this)  }
     private val screenCaptureManager: ScreenCaptureManager by inject()
 
+    private var isOrientationPortrait: Boolean = true
+
     override fun onCreate() {
         super.onCreate()
         screenShotFloatingWindow.start()
         screenshotDetection.startScreenshotDetection()
         screenShotFloatingWindow.onClickFloatingButton(lifecycleScope) {
             screenCaptureManager.captureScreenshot()
+        }
+    }
+
+    override fun onConfigurationChanged(configuration: Configuration) {
+        super.onConfigurationChanged(configuration)
+
+        isOrientationPortrait = if (configuration.orientation == ORIENTATION_PORTRAIT) {
+            screenShotFloatingWindow.showOrHide()
+            true
+        } else {
+            screenShotFloatingWindow.showOrHide(false)
+            false
         }
     }
 
@@ -72,13 +88,15 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
         }
 
     override fun onScreenCaptured(path: String) {
-        notificationClearScreenshot.start()
-        Intent(this, ScreenShotActivity::class.java).apply {
-            putExtra(EXTRA_PATH_SCREEN_SHOT, path)
-            addFlags(FLAG_ACTIVITY_CLEAR_TOP)
-            addFlags(FLAG_ACTIVITY_NEW_TASK)
-        }.also {
-            startActivity(it, fadeAnimation())
+        if (isOrientationPortrait) {
+            notificationClearScreenshot.start()
+            Intent(this, ScreenShotActivity::class.java).apply {
+                putExtra(EXTRA_PATH_SCREEN_SHOT, path)
+                addFlags(FLAG_ACTIVITY_CLEAR_TOP)
+                addFlags(FLAG_ACTIVITY_NEW_TASK)
+            }.also {
+                startActivity(it, fadeAnimation())
+            }
         }
     }
 
