@@ -8,19 +8,11 @@ plugins {
 
 apply {
     from "$rootDir/config/file-properties.gradle"
+    from "$rootDir/config/app-versions.gradle"
 }
 
 android {
-    namespace 'com.teachmeprint.language'
-    compileSdk 33
-
     defaultConfig {
-        applicationId "com.teachmeprint.language"
-        minSdk 24
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

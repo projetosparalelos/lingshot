@@ -12,7 +12,7 @@ import com.teachmeprint.language.R
 fun Activity.fadeAnimation() =
     overridePendingTransition(
         R.anim.fade_in,
-        R.anim.fade_out);
+        R.anim.fade_out)
 
 fun View.snackBarAlert(
     @StringRes text: Int,

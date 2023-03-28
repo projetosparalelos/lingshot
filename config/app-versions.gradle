@@ -1,0 +1,12 @@
+android {
+    namespace 'com.teachmeprint.language'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId applicationId
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+    }
+}
