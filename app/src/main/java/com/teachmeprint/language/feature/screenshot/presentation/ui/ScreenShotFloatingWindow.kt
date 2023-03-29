@@ -13,80 +13,104 @@ import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.core.view.isVisible
 import com.teachmeprint.language.R
+import com.teachmeprint.language.core.util.isViewOverlapping
 import kotlinx.coroutines.*
 
-class ScreenShotFloatingWindow(context: Context) {
+class ScreenShotFloatingWindow(private val context: Context) {
 
     private val windowManager: WindowManager by lazy {
         context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
-    private val rootView by lazy {
-        LayoutInflater.from(context).inflate(R.layout.floating_window_layout, null)
+    private val rootViewFloating by lazy {
+        LayoutInflater.from(context).inflate(R.layout.floating_screen_shot_window_layout, null)
     }
 
-    private lateinit var windowParams: WindowManager.LayoutParams
+    private val rootViewFloatingClose by lazy {
+        LayoutInflater.from(context).inflate(R.layout.floating_close_window_layout, null)
+    }
+
+    private lateinit var windowParamsFloating: WindowManager.LayoutParams
+    private lateinit var windowParamsFloatingClose: WindowManager.LayoutParams
 
     private var initialX = 0
     private var initialY = 0
     private var initialTouchX = 0f
     private var initialTouchY = 0f
-    private val touchSensitivity = 20
 
-    private val floatingButtonScreenShot by lazy {
-        rootView.findViewById<ImageButton>(R.id.buttonService)
+    private val imageButtonScreenShotFloating by lazy {
+        rootViewFloating.findViewById<ImageButton>(R.id.image_button_screen_shot_floating)
     }
 
     init {
-        setupWindowParams()
-        onTouchMoveFloatingButton()
+        setupWindowParamsFloating()
+        setupWindowParamsFloatingClose()
     }
 
-    fun onClickFloatingButton(coroutineScope: CoroutineScope, block: () -> Unit) =
-        with(floatingButtonScreenShot) {
+    fun onFloating(
+        coroutineScope: CoroutineScope,
+        onScreenShot: () -> Unit,
+        onStopService: () -> Unit
+    ) {
+        with(imageButtonScreenShotFloating) {
             setOnClickListener {
                 showOrHide(false)
                 coroutineScope.launch {
                     delay(50L)
                     withContext(Dispatchers.IO) {
-                        block.invoke()
+                        onScreenShot.invoke()
                     }
                     showOrHide()
                 }
             }
+            onTouchMoveFloatingButton(onStopService)
         }
+    }
 
-    private fun onTouchMoveFloatingButton() {
+    private fun ImageButton.onTouchMoveFloatingButton(onStopService: () -> Unit) {
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val screenHeight = displayMetrics.heightPixels
         val screenWidth = displayMetrics.widthPixels
 
-        floatingButtonScreenShot.setOnTouchListener { _, event ->
+        setOnTouchListener { _, event ->
+            event.setTouchSensitivity()
+
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    initialX = windowParams.x
-                    initialY = windowParams.y
-                    initialTouchX = event.rawX + touchSensitivity
-                    initialTouchY = event.rawY + touchSensitivity
+                    initialX = windowParamsFloating.x
+                    initialY = windowParamsFloating.y
+                    initialTouchX = event.rawX
+                    initialTouchY = event.rawY
+
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    windowParams.x = (initialX + event.rawX - initialTouchX).toInt()
-                    windowParams.y = (initialY + event.rawY - initialTouchY).toInt()
+                    windowParamsFloating.x = (initialX + event.rawX - initialTouchX).toInt()
+                    windowParamsFloating.y = (initialY + event.rawY - initialTouchY).toInt()
 
-                    if (windowParams.x < 0) windowParams.x = 0
-                    if (windowParams.y < 0) windowParams.y = 0
-                    if (windowParams.x > screenWidth - rootView.width) windowParams.x = screenWidth - rootView.width
-                    if (windowParams.y > screenHeight - rootView.height) windowParams.y = screenHeight - rootView.height
-
-                    windowManager.updateViewLayout(rootView, windowParams)
+                    if (windowParamsFloating.x < 0) windowParamsFloating.x = 0
+                    if (windowParamsFloating.y < 0) windowParamsFloating.y = 0
+                    if (windowParamsFloating.x > screenWidth - rootViewFloating.width) windowParamsFloating.x =
+                        screenWidth - rootViewFloating.width
+                    if (windowParamsFloating.y > screenHeight - rootViewFloating.height) windowParamsFloating.y =
+                        screenHeight - rootViewFloating.height
+                    if (event.rawY > initialTouchY) rootViewFloatingClose.isVisible = true
+                    windowManager.updateViewLayout(rootViewFloating, windowParamsFloating)
+                }
+                MotionEvent.ACTION_UP -> {
+                    rootViewFloatingClose.isVisible = false
+                    setupFloatingCloseService(onStopService)
                 }
             }
             false
         }
     }
 
-    private fun setupWindowParams() {
-        windowParams = WindowManager.LayoutParams(
+    private fun MotionEvent.setTouchSensitivity() {
+        setLocation(x * 1.0f, y * 1.0f)
+    }
+
+    private fun setupWindowParamsFloating() {
+        windowParamsFloating = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -102,15 +126,42 @@ class ScreenShotFloatingWindow(context: Context) {
         }
     }
 
+    private fun setupWindowParamsFloatingClose() {
+        windowParamsFloatingClose = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            } else {
+                WindowManager.LayoutParams.TYPE_PHONE
+            },
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+            PixelFormat.TRANSLUCENT
+        ).apply {
+            gravity = Gravity.CENTER or Gravity.BOTTOM
+            x = 0
+            y = 0
+        }
+    }
+
+    private fun setupFloatingCloseService(onStopService: () -> Unit) {
+        if (rootViewFloating.isViewOverlapping(rootViewFloatingClose)) {
+            onStopService.invoke()
+        }
+    }
+
     fun showOrHide(isVisible: Boolean = true) {
-        rootView.isVisible = isVisible
+        rootViewFloating.isVisible = isVisible
     }
 
     fun start() = runCatching {
-        windowManager.addView(rootView, windowParams)
+        windowManager.addView(rootViewFloating, windowParamsFloating)
+        windowManager.addView(rootViewFloatingClose, windowParamsFloatingClose)
     }.getOrNull()
 
     fun close() = runCatching {
-        windowManager.removeView(rootView)
+        windowManager.removeView(rootViewFloating)
+        windowManager.removeView(rootViewFloatingClose)
     }.getOrNull()
 }

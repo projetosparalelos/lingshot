@@ -36,9 +36,13 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
         super.onCreate()
         screenShotFloatingWindow.start()
         screenshotDetection.startScreenshotDetection()
-        screenShotFloatingWindow.onClickFloatingButton(lifecycleScope) {
-            screenCaptureManager.captureScreenshot()
-        }
+        screenShotFloatingWindow.onFloating(lifecycleScope,
+            onScreenShot = {
+                screenCaptureManager.captureScreenshot()
+            },
+            onStopService = {
+                stopSelf()
+            })
     }
 
     override fun onConfigurationChanged(configuration: Configuration) {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/space_size_medium"
+        android:background="@drawable/shape_round_button_close_service"
+        android:elevation="@dimen/space_size_xsmall"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_close_24"
+        tools:ignore="ContentDescription" />
+</FrameLayout>

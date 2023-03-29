@@ -2,6 +2,7 @@ package com.teachmeprint.language.core.util
 
 import android.app.ActivityOptions
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -33,6 +34,19 @@ fun View.snackBarAlert(
             isVisible = isActionVisible
         }
     }
+
+fun View.isViewOverlapping(other: View, deltaX: Int = 0, deltaY: Int = 0): Boolean {
+    val thisXY  = IntArray(2).apply { getLocationOnScreen(this) }
+    val otherXY = IntArray(2).apply {
+        other.getLocationOnScreen(this)
+        this[0] += deltaX
+        this[1] += deltaY
+    }
+    return thisXY.let { Rect(it[0], it[1], it[0] + width, it[1] + height) }
+        .intersect(otherXY.let {
+            Rect(it[0], it[1], it[0] + other.width, it[1] + other.height)
+        })
+}
 
 fun String.limitCharactersWithEllipsize(limit: Int): String {
     return if (length >= limit) {
