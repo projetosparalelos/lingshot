@@ -12,7 +12,7 @@ object NavigationIntentUtil {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }.also {
-            context.startActivity(it)
+            context.startActivity(it, context.fadeAnimation())
         }
     }
 }

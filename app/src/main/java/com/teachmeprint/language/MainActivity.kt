@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.teachmeprint.language.core.util.fadeAnimation
 import com.teachmeprint.language.data.service.ScreenShotService
 import com.teachmeprint.language.databinding.ActivityMainBinding
 import com.teachmeprint.language.core.util.snackBarAlert
@@ -157,11 +156,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun hasOverlayPermission() =
         Settings.canDrawOverlays(this)
-
-    override fun finish() {
-        super.finish()
-        fadeAnimation()
-    }
 
     companion object {
         private const val SCHEME_PACKAGE = "package"
