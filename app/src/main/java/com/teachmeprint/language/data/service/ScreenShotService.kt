@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
@@ -67,7 +68,11 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
     }
 
     private fun Intent?.sendIntentScreenCapture() {
-        val data: Intent? = this?.getParcelableExtra(SCREEN_CAPTURE_DATA)
+        val data: Intent? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            this?.getParcelableExtra(SCREEN_CAPTURE_DATA, Intent::class.java)
+        } else {
+            this?.getParcelableExtra(SCREEN_CAPTURE_DATA)
+        }
         data?.let { screenCaptureManager.startCapture(AppCompatActivity.RESULT_OK, it) }
     }
 
