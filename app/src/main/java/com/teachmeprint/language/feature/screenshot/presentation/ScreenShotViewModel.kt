@@ -76,10 +76,13 @@ class ScreenShotViewModel(
         if (text != ILLEGIBLE_TEXT) {
             _response.loading()
             viewModelScope.launchResource(_response, {
-                val requestBody = RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
-                val response = screenShotRepository.getTranslatePhrase(requestBody)
+                screenShotRepository.saveTranslationCount()
+                withContext(Dispatchers.IO) {
+                    val requestBody = RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
+                    val response = screenShotRepository.getTranslatePhrase(requestBody)
 
-                response.choices[0].text
+                    response.choices[0].text
+                }
             })
         } else {
             _response.success(text)
@@ -173,6 +176,10 @@ class ScreenShotViewModel(
 
     private fun isLanguageLocaleInList(list: List<String>?, locale: Locale): Boolean {
         return list?.any { it.equals(locale.displayLanguage, ignoreCase = true) } ?: false
+    }
+
+    fun hasReachedMaxTranslationCount(): Boolean {
+        return screenShotRepository.hasReachedMaxTranslationCount()
     }
 
     companion object {

@@ -18,10 +18,6 @@ import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.teachmeprint.language.R
 import com.teachmeprint.language.core.helper.StatusMessage.getErrorMessage
-import com.teachmeprint.language.core.helper.observeOnError
-import com.teachmeprint.language.core.helper.observeOnLoading
-import com.teachmeprint.language.core.helper.observeOnSuccess
-import com.teachmeprint.language.core.helper.setLifecycleOwner
 import com.teachmeprint.language.core.util.snackBarAlert
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
@@ -33,6 +29,7 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
+import com.teachmeprint.language.core.helper.*
 import com.teachmeprint.language.core.util.limitCharactersWithEllipsize
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -53,6 +50,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
 
     private val viewModel: ScreenShotViewModel by viewModel()
     private val screenShotFloatingWindow: ScreenShotFloatingWindow by inject()
+    private val mobileAdsFacade: MobileAdsFacade by inject()
 
     private val requestPickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -63,11 +61,6 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
                 Timber.d(NO_MEDIA_SELECTED)
             }
         }
-
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,11 +80,16 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         screenShotFloatingWindow.showOrHide()
     }
 
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+    }
+
     private fun setupObservable() {
         viewModel.response.setLifecycleOwner(this)
             .observeOnSuccess { data ->
                 performActionWithLoadingIndicator {
-                    setupBalloonTranslate(data)
+                    showTranslateOrOpenAds(data)
                 }
             }
             .observeOnError {
@@ -101,6 +99,14 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
             .observeOnLoading {
                 performActionWithLoadingIndicator(true)
             }
+    }
+
+    private fun showTranslateOrOpenAds(text: String) {
+        if (!viewModel.hasReachedMaxTranslationCount()) {
+            setupBalloonTranslate(text)
+            return
+        }
+        mobileAdsFacade.setupInterstitialAds(this)
     }
 
     private fun setupBalloonTranslate(text: String) =

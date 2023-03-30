@@ -21,8 +21,7 @@ class NotificationClearScreenshot(private val context: Context) {
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(NOTIFICATION_CLEAR_SCREEN_SHOT_ID, notification)
-
-            numScreenShotsTaken = NUM_SCREENSHOTS_TAKEN_INITIAL
+            clear()
         }
     }
 
@@ -32,7 +31,7 @@ class NotificationClearScreenshot(private val context: Context) {
 
     companion object {
         private const val NOTIFICATION_CLEAR_SCREEN_SHOT_ID = 2
-        private const val NUM_SCREENSHOTS_TAKEN_INITIAL = 0
+        private const val NUM_SCREENSHOTS_TAKEN_INITIAL = 1
         private const val NUM_SCREENSHOTS_TAKEN_MAX = 10
     }
 }

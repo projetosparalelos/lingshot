@@ -17,6 +17,7 @@ android {
 
         debug {
             resValue("string", "ADMOB_APP_ID", teachMePrintKeysProperties['ADMOB_APP_ID_DEBUG'])
+            buildConfigField("String", "ADMOB_INTERSTITIAL_ID", teachMePrintKeysProperties['ADMOB_INTERSTITIAL_ID_DEBUG'])
         }
     }
 }

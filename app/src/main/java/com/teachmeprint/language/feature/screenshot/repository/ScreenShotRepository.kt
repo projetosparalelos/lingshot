@@ -1,13 +1,15 @@
 package com.teachmeprint.language.feature.screenshot.repository
 
 import com.teachmeprint.language.data.local.storage.LanguageLocalStorage
+import com.teachmeprint.language.data.local.storage.TranslationCountLocalStore
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
 import com.teachmeprint.language.data.model.screenshot.entity.TranslateChatGPTResponse
 import com.teachmeprint.language.data.remote.api.TranslateChatGPTService
 
 class ScreenShotRepository(
     private val translateChatGPTService: TranslateChatGPTService,
-    private val languageLocalStorage: LanguageLocalStorage
+    private val languageLocalStorage: LanguageLocalStorage,
+    private val translationCountLocalStore: TranslationCountLocalStore
 ) {
 
     suspend fun getTranslatePhrase(message: RequestBody): TranslateChatGPTResponse {
@@ -20,5 +22,13 @@ class ScreenShotRepository(
 
     fun saveLanguage(languageSelected: String) {
         languageLocalStorage.saveLanguage(languageSelected)
+    }
+
+    fun saveTranslationCount() {
+        translationCountLocalStore.saveTranslationCount()
+    }
+
+    fun hasReachedMaxTranslationCount(): Boolean {
+        return translationCountLocalStore.hasReachedMaxTranslationCount()
     }
 }
