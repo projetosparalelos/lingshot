@@ -12,25 +12,26 @@ import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Environment
-import com.teachmeprint.language.TeachMePrintApplication
 import com.teachmeprint.language.core.util.NavigationIntentUtil
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class ScreenCaptureManager(private val reference: WeakReference<TeachMePrintApplication>,
-                           private val notificationClearScreenshot: NotificationClearScreenshot) {
+class ScreenCaptureManager @Inject constructor(
+    private val context: Context,
+    private val notificationClearScreenshot: NotificationClearScreenshot
+) {
 
    private val mediaProjectionManager: MediaProjectionManager =
-        reference.get()?.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+       context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
 
     private var mediaProjection: MediaProjection? = null
     private var virtualDisplay: VirtualDisplay? = null
     private var imageReader: ImageReader? = null
 
-    private val displayMetrics by lazy { reference.get()!!.resources.displayMetrics }
+    private val displayMetrics by lazy { context.resources.displayMetrics }
 
     @SuppressLint("WrongConstant")
     fun startCapture(resultCode: Int, data: Intent) {
@@ -96,7 +97,7 @@ class ScreenCaptureManager(private val reference: WeakReference<TeachMePrintAppl
                 && (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
             ) {
                 notificationClearScreenshot.start()
-                reference.get()?.let { NavigationIntentUtil.launchScreenShotActivity(it, file.absolutePath) }
+                context.let { NavigationIntentUtil.launchScreenShotActivity(it, file.absolutePath) }
             }
         } catch (e: Exception) {
             e.printStackTrace()

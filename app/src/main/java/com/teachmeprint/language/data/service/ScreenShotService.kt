@@ -21,15 +21,26 @@ import com.teachmeprint.language.core.helper.ScreenCaptureManager
 import com.teachmeprint.language.core.helper.ScreenShotDetection
 import com.teachmeprint.language.core.util.NavigationIntentUtil
 import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotFloatingWindow
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.ServiceScoped
+import javax.inject.Inject
 
+@AndroidEntryPoint
+@ServiceScoped
 class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
 
-    private val screenShotFloatingWindow: ScreenShotFloatingWindow by inject()
-    private val notificationClearScreenshot: NotificationClearScreenshot by inject()
-    private val screenshotDetection: ScreenShotDetection by inject {  parametersOf(this)  }
-    private val screenCaptureManager: ScreenCaptureManager by inject()
+    @Inject
+    lateinit var screenShotFloatingWindow: ScreenShotFloatingWindow
+
+    @Inject
+    lateinit var notificationClearScreenshot: NotificationClearScreenshot
+
+    @Inject
+    lateinit var screenshotDetectionFactory: ScreenShotDetection.Factory
+    private val screenshotDetection by lazy { screenshotDetectionFactory.create(this) }
+
+    @Inject
+    lateinit var screenCaptureManager: ScreenCaptureManager
 
     private var isOrientationPortrait: Boolean = true
 

@@ -4,6 +4,7 @@ plugins {
     alias libs.plugins.kotlin.kapt
     alias libs.plugins.google.services
     alias libs.plugins.firebase.crashlytics
+    alias libs.plugins.dagger.hilt.android
 }
 
 apply {
@@ -47,7 +48,8 @@ dependencies {
     implementation libs.hawk
     implementation libs.timber
 
-    implementation libs.bundles.koin
+    implementation libs.dagger.hilt.android
+    kapt libs.dagger.hilt.compiler
 
     implementation libs.play.services.ads
 

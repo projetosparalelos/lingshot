@@ -14,31 +14,27 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import androidx.core.content.ContextCompat
-import com.teachmeprint.language.TeachMePrintApplication
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.debounce
 import timber.log.Timber
-import java.lang.ref.WeakReference
 
-class ScreenShotDetection(
-    private val reference: WeakReference<TeachMePrintApplication>,
-    private val listener: ScreenshotDetectionListener
+class ScreenShotDetection @AssistedInject constructor(
+    @ApplicationContext private val context: Context,
+    @Assisted private val listener: ScreenshotDetectionListener
 ) {
 
     private var job: Job? = null
 
-    constructor(
-        onScreenCaptured: (path: String) -> Unit
-    ) : this(
-        WeakReference(TeachMePrintApplication.applicationContext()),
-        object : ScreenshotDetectionListener {
-            override fun onScreenCaptured(path: String) {
-                onScreenCaptured(path)
-            }
-        }
-    )
+    @AssistedFactory
+    interface Factory {
+        fun create(listener: ScreenshotDetectionListener): ScreenShotDetection
+    }
 
     @OptIn(FlowPreview::class)
     fun startScreenshotDetection() {
@@ -46,9 +42,7 @@ class ScreenShotDetection(
             createContentObserverFlow()
                 .debounce(500)
                 .collect { uri ->
-                    reference.get()?.let { activity ->
-                        onContentChanged(activity, uri)
-                    }
+                    onContentChanged(context, uri)
                 }
         }
     }
@@ -65,17 +59,13 @@ class ScreenShotDetection(
                 }
             }
         }
-        reference.get()
-            ?.contentResolver
-            ?.registerContentObserver(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                true,
-                contentObserver
-            )
+        context.contentResolver?.registerContentObserver(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            true,
+            contentObserver
+        )
         awaitClose {
-            reference.get()
-                ?.contentResolver
-                ?.unregisterContentObserver(contentObserver)
+            context.contentResolver?.unregisterContentObserver(contentObserver)
         }
     }
 
@@ -99,13 +89,14 @@ class ScreenShotDetection(
         val lowercasePath = path?.lowercase()
         val screenshotDirectory = getPublicScreenshotDirectoryName()?.lowercase()
         return (screenshotDirectory != null &&
-                lowercasePath?.contains(screenshotDirectory) == true) ||
-                lowercasePath?.contains(CONTAIN_SCREEN_SHOT) == true
+            lowercasePath?.contains(screenshotDirectory) == true) ||
+            lowercasePath?.contains(CONTAIN_SCREEN_SHOT) == true
     }
 
-    private fun getPublicScreenshotDirectoryName() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_SCREENSHOTS).name
-    } else null
+    private fun getPublicScreenshotDirectoryName() =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_SCREENSHOTS).name
+        } else null
 
     private fun getFilePathFromContentResolver(context: Context, uri: Uri): String? {
         try {
@@ -136,7 +127,7 @@ class ScreenShotDetection(
         } else {
             READ_EXTERNAL_STORAGE
         }
-        return reference.get()?.let { activity ->
+        return context.let { activity ->
             ContextCompat.checkSelfPermission(
                 activity,
                 permission

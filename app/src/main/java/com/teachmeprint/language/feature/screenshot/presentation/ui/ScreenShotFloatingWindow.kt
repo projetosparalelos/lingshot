@@ -15,8 +15,9 @@ import androidx.core.view.isVisible
 import com.teachmeprint.language.R
 import com.teachmeprint.language.core.util.isViewOverlapping
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
-class ScreenShotFloatingWindow(private val context: Context) {
+class ScreenShotFloatingWindow @Inject constructor(private val context: Context) {
 
     private val windowManager: WindowManager by lazy {
         context.getSystemService(Context.WINDOW_SERVICE) as WindowManager

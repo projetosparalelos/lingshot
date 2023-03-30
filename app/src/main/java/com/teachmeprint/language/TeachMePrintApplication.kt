@@ -5,12 +5,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.os.Build
-import com.teachmeprint.language.core.di.module.addModule
 import com.orhanobut.hawk.Hawk
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.GlobalContext.startKoin
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class TeachMePrintApplication : Application() {
 
     init {
@@ -19,17 +18,9 @@ class TeachMePrintApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        setupKoin()
         setupNotificationChannel()
         setupHawk()
         setupTimber()
-    }
-
-    private fun setupKoin() {
-        startKoin {
-            androidContext(this@TeachMePrintApplication)
-            modules(addModule)
-        }
     }
 
     private fun setupNotificationChannel() {

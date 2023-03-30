@@ -21,13 +21,17 @@ import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
 import com.teachmeprint.language.feature.screenshot.repository.ScreenShotRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import javax.inject.Inject
 
-class ScreenShotViewModel(
-    context: Context,
+@HiltViewModel
+class ScreenShotViewModel @Inject constructor(
+    @ApplicationContext context: Context,
     private val screenShotRepository: ScreenShotRepository,
     private val textRecognizer: TextRecognizer,
     private val languageIdentifier: LanguageIdentifier
@@ -148,10 +152,10 @@ class ScreenShotViewModel(
         return screenShotRepository.getLanguage()
     }
 
-     fun saveLanguage(languageSelected: suspend () -> String) {
-         viewModelScope.launch {
-             screenShotRepository.saveLanguage(languageSelected())
-         }
+    fun saveLanguage(languageSelected: suspend () -> String) {
+        viewModelScope.launch {
+            screenShotRepository.saveLanguage(languageSelected())
+        }
     }
 
     suspend fun getLanguageList(): List<String> {

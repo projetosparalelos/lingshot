@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
@@ -31,12 +32,13 @@ import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.teachmeprint.language.core.helper.*
 import com.teachmeprint.language.core.util.limitCharactersWithEllipsize
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageCompleteListener {
 
     private val binding by lazy {
@@ -48,9 +50,13 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         Uri.fromFile(File(path))
     }
 
-    private val viewModel: ScreenShotViewModel by viewModel()
-    private val screenShotFloatingWindow: ScreenShotFloatingWindow by inject()
-    private val mobileAdsFacade: MobileAdsFacade by inject()
+    private val viewModel: ScreenShotViewModel by viewModels()
+
+    @Inject
+    lateinit var screenShotFloatingWindow: ScreenShotFloatingWindow
+
+    @Inject
+    lateinit var mobileAdsFacade: MobileAdsFacade
 
     private val requestPickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -67,6 +73,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         setContentView(binding.root)
         setupBottomNavigation()
         setupCropImage()
+
         setupObservable()
     }
 

@@ -2,8 +2,9 @@
 package com.teachmeprint.language.data.local.storage
 
 import com.orhanobut.hawk.Hawk
+import javax.inject.Inject
 
-class LanguageLocalStorage {
+class LanguageLocalStorage @Inject constructor() {
 
     fun getLanguage(): String? = Hawk.get(LANGUAGE_DATA_KEY)
     fun saveLanguage(languageSelected: String) = Hawk.put(LANGUAGE_DATA_KEY, languageSelected)

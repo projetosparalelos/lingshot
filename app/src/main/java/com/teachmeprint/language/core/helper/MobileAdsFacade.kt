@@ -9,8 +9,9 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.teachmeprint.language.BuildConfig.ADMOB_INTERSTITIAL_ID
 import timber.log.Timber
+import javax.inject.Inject
 
-class MobileAdsFacade {
+class MobileAdsFacade @Inject constructor() {
 
     fun setupInterstitialAds(activity: Activity) {
         val adRequest = AdRequest.Builder().build()
