@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.os.Build
-import com.google.android.gms.ads.MobileAds
 import com.teachmeprint.language.core.di.module.addModule
 import com.orhanobut.hawk.Hawk
 import org.koin.android.ext.koin.androidContext
@@ -24,7 +23,6 @@ class TeachMePrintApplication : Application() {
         setupNotificationChannel()
         setupHawk()
         setupTimber()
-        setupMobileAds()
     }
 
     private fun setupKoin() {
@@ -52,12 +50,6 @@ class TeachMePrintApplication : Application() {
     private fun setupTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        }
-    }
-
-    private fun setupMobileAds() {
-        MobileAds.initialize(this) {
-            Timber.d(it.toString())
         }
     }
 
