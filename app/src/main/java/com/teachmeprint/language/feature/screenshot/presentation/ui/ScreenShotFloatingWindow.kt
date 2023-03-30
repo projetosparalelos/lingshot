@@ -55,7 +55,7 @@ class ScreenShotFloatingWindow(private val context: Context) {
             setOnClickListener {
                 showOrHide(false)
                 coroutineScope.launch {
-                    delay(50L)
+                    delay(100L)
                     withContext(Dispatchers.IO) {
                         onScreenShot.invoke()
                     }
