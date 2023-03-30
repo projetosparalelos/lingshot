@@ -1,7 +1,7 @@
 *.iml
 .gradle
 /local.properties
-/api-chatgpt.properties
+/teach-me-print-keys.properties
 .DS_Store
 /build
 /captures

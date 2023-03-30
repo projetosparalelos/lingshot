@@ -2,6 +2,7 @@
 gradlePlugin = "7.4.2"
 kotlin = "1.8.0"
 googleServices = "4.3.15"
+playServicesAds = "21.5.0"
 firebaseCrashylytics = "2.9.4"
 
 coreKTX = "1.9.0"
@@ -52,6 +53,8 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }

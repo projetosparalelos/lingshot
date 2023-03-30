@@ -1,10 +1,22 @@
-def apiChatGPTPropertiesFile = rootProject.file("api-chatgpt.properties")
-def apiChatGPTProperties = new Properties()
-apiChatGPTProperties.load(new FileInputStream(apiChatGPTPropertiesFile))
+def teachMePrintKeys = rootProject.file("teach-me-print-keys.properties")
+def teachMePrintKeysProperties = new Properties()
+teachMePrintKeysProperties.load(new FileInputStream(teachMePrintKeys))
 
 android {
     defaultConfig {
-        buildConfigField("String", "CHAT_GPT_KEY", apiChatGPTProperties['CHAT_GPT_KEY'])
+        buildConfigField("String", "CHAT_GPT_KEY", teachMePrintKeysProperties['CHAT_GPT_KEY'])
         buildConfigField("String", "BASE_API", '"https://api.openai.com/v1/"')
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            resValue("string", "ADMOB_APP_ID", teachMePrintKeysProperties['ADMOB_APP_ID_RELEASE'])
+        }
+
+        debug {
+            resValue("string", "ADMOB_APP_ID", teachMePrintKeysProperties['ADMOB_APP_ID_DEBUG'])
+        }
     }
 }
