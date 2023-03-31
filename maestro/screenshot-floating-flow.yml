@@ -1,0 +1,7 @@
+appId: com.teachmeprint.language
+---
+- assertVisible: "Iniciar"
+- tapOn: "Iniciar"
+- tapOn: "Start now"
+- tapOn:
+    id: image_button_screen_shot_floating

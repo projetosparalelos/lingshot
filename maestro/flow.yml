@@ -1,5 +1,8 @@
 appId: com.teachmeprint.language
 ---
-- launchApp
-- assertVisible: "Iniciar"
-- tapOn: "Iniciar"
+- launchApp:
+      appId: "com.teachmeprint.language"
+      stopApp: true
+      clearState: true
+- runFlow: screenshot-floating-flow.yml
+- runFlow: translate-flow.yml
