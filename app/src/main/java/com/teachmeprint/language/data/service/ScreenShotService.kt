@@ -22,11 +22,9 @@ import com.teachmeprint.language.core.helper.ScreenShotDetection
 import com.teachmeprint.language.core.util.NavigationIntentUtil
 import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotFloatingWindow
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.scopes.ServiceScoped
 import javax.inject.Inject
 
 @AndroidEntryPoint
-@ServiceScoped
 class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
 
     @Inject
