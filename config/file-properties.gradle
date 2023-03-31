@@ -4,7 +4,6 @@ teachMePrintKeysProperties.load(new FileInputStream(teachMePrintKeys))
 
 android {
     defaultConfig {
-        buildConfigField("String", "CHAT_GPT_KEY", teachMePrintKeysProperties['CHAT_GPT_KEY'])
         buildConfigField("String", "BASE_API", '"https://api.openai.com/v1/"')
     }
 
@@ -14,11 +13,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             resValue("string", "ADMOB_APP_ID", teachMePrintKeysProperties['ADMOB_APP_ID_RELEASE'])
+            buildConfigField("String", "CHAT_GPT_KEY", teachMePrintKeysProperties['CHAT_GPT_KEY_RELEASE'])
             buildConfigField("String", "ADMOB_INTERSTITIAL_ID", teachMePrintKeysProperties['ADMOB_INTERSTITIAL_ID_RELEASE'])
         }
 
         debug {
             resValue("string", "ADMOB_APP_ID", teachMePrintKeysProperties['ADMOB_APP_ID_DEBUG'])
+            buildConfigField("String", "CHAT_GPT_KEY", teachMePrintKeysProperties['CHAT_GPT_KEY_DEBUG'])
             buildConfigField("String", "ADMOB_INTERSTITIAL_ID", teachMePrintKeysProperties['ADMOB_INTERSTITIAL_ID_DEBUG'])
         }
     }
