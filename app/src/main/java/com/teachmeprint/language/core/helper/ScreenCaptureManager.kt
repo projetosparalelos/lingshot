@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.Image
 import android.media.ImageReader
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import com.teachmeprint.language.core.util.NavigationIntentUtil
@@ -20,8 +22,7 @@ import java.util.*
 import javax.inject.Inject
 
 class ScreenCaptureManager @Inject constructor(
-    private val context: Context,
-    private val notificationClearScreenshot: NotificationClearScreenshot
+    private val context: Context
 ) {
 
    private val mediaProjectionManager: MediaProjectionManager =
@@ -59,7 +60,8 @@ class ScreenCaptureManager @Inject constructor(
         val image: Image? = imageReader?.acquireLatestImage()
         val bitmap: Bitmap? = image?.let { imageToBitmap(it) }
         image?.close()
-        saveBitmap(bitmap)
+        val cropBitmap: Bitmap? = bitmap?.let { cropBitmap(it) }
+        saveBitmap(cropBitmap)
         return bitmap
     }
 
@@ -76,6 +78,19 @@ class ScreenCaptureManager @Inject constructor(
         )
         bitmap.copyPixelsFromBuffer(buffer)
         return bitmap
+    }
+
+    private fun cropBitmap(bitmap: Bitmap): Bitmap? {
+        val topHeight = cropPeace(28)
+        val bottomHeight = cropPeace(48)
+        val croppedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height - topHeight - bottomHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(croppedBitmap)
+        canvas.drawBitmap(bitmap, 0f, (-topHeight).toFloat(), null)
+        return croppedBitmap
+    }
+
+    private fun cropPeace(px: Int): Int {
+        return (px * context.resources.displayMetrics.density).toInt()
     }
 
     private fun saveBitmap(bitmap: Bitmap?) {
@@ -96,8 +111,7 @@ class ScreenCaptureManager @Inject constructor(
             if (file.exists()
                 && (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
             ) {
-                notificationClearScreenshot.start()
-                context.let { NavigationIntentUtil.launchScreenShotActivity(it, file.absolutePath) }
+                context.let { NavigationIntentUtil.launchScreenShotActivity(it, Uri.fromFile(File(file.absolutePath))) }
             }
         } catch (e: Exception) {
             e.printStackTrace()

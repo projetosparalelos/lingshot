@@ -1,7 +1,9 @@
 package com.teachmeprint.language.feature.screenshot.presentation.ui
 
+import android.content.Intent.EXTRA_STREAM
 import android.graphics.Rect
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -9,6 +11,9 @@ import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.net.toFile
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.canhub.cropper.CropImageOptions
@@ -17,26 +22,25 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
-import com.teachmeprint.language.R
-import com.teachmeprint.language.core.helper.StatusMessage.getErrorMessage
-import com.teachmeprint.language.core.util.snackBarAlert
-import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
-import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
-import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
-import com.teachmeprint.language.data.service.ScreenShotService.Companion.EXTRA_PATH_SCREEN_SHOT
-import com.teachmeprint.language.databinding.ActivityScreenShotBinding
-import com.teachmeprint.language.feature.screenshot.presentation.ScreenShotViewModel
 import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
+import com.teachmeprint.language.R
 import com.teachmeprint.language.core.helper.*
+import com.teachmeprint.language.core.helper.StatusMessage.getErrorMessage
 import com.teachmeprint.language.core.util.limitCharactersWithEllipsize
+import com.teachmeprint.language.core.util.snackBarAlert
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
+import com.teachmeprint.language.databinding.ActivityScreenShotBinding
+import com.teachmeprint.language.feature.screenshot.presentation.ScreenShotViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageCompleteListener {
@@ -46,8 +50,12 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     }
 
     private val imageUriPath by lazy {
-        val path = intent.getStringExtra(EXTRA_PATH_SCREEN_SHOT) ?: ""
-        Uri.fromFile(File(path))
+        val data: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_STREAM, Uri::class.java)
+        } else {
+            intent.getParcelableExtra(EXTRA_STREAM)
+        }
+        data
     }
 
     private val viewModel: ScreenShotViewModel by viewModels()
@@ -71,9 +79,9 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        hideSystemUI()
         setupBottomNavigation()
         setupCropImage()
-
         setupObservable()
     }
 
@@ -233,12 +241,18 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     }
 
     private fun setupImageCropOptions() {
+        val width = resources.displayMetrics.widthPixels
+        val height = resources.displayMetrics.heightPixels
+
         val cropImageOptions = CropImageOptions(
             guidelines = CropImageView.Guidelines.OFF,
             cornerShape = CropImageView.CropCornerShape.OVAL,
+            maxCropResultWidth = (width / MAX_CROP_RESULT.toFloat()).roundToInt() * MAX_CROP_RESULT,
+            maxCropResultHeight = (height / MAX_CROP_RESULT.toFloat()).roundToInt() * MAX_CROP_RESULT,
             showProgressBar = false
         )
-        binding.cropImageScreenShot.cropRect = Rect(RECT_CUSTOM_LEFT, RECT_CUSTOM_TOP, RECT_CUSTOM_RIGHT, RECT_CUSTOM_BOTTOM)
+        binding.cropImageScreenShot.cropRect =
+            Rect(RECT_CUSTOM_LEFT, RECT_CUSTOM_TOP, RECT_CUSTOM_RIGHT, RECT_CUSTOM_BOTTOM)
         binding.cropImageScreenShot.setImageCropOptions(cropImageOptions)
     }
 
@@ -250,8 +264,16 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         viewModel.fetchTextRecognizer(result.bitmap)
     }
 
+    private fun hideSystemUI() {
+        WindowInsetsControllerCompat(window, binding.root).apply {
+            hide(WindowInsetsCompat.Type.statusBars())
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
+
     override fun onDestroy() {
         viewModel.stopTextToSpeech()
+        imageUriPath?.toFile()?.delete()
         super.onDestroy()
     }
 
@@ -266,9 +288,11 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         private const val BALLOON_CORNER_RADIUS = 24F
         private const val BALLOON_LIMIT_CHARACTERS = 280
 
-        private const val RECT_CUSTOM_RIGHT = 500
-        private const val RECT_CUSTOM_LEFT = 100
-        private const val RECT_CUSTOM_TOP = 300
-        private const val RECT_CUSTOM_BOTTOM = 700
+        private const val RECT_CUSTOM_RIGHT = 871
+        private const val RECT_CUSTOM_LEFT = 188
+        private const val RECT_CUSTOM_TOP = 340
+        private const val RECT_CUSTOM_BOTTOM = 962
+
+        private const val MAX_CROP_RESULT = 1000
     }
 }

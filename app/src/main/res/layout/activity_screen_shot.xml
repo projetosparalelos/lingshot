@@ -9,9 +9,9 @@
 
     <com.canhub.cropper.CropImageView
         android:id="@+id/crop_image_screen_shot"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_marginHorizontal="-16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

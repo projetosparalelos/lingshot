@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -22,6 +23,7 @@ import com.teachmeprint.language.core.helper.ScreenShotDetection
 import com.teachmeprint.language.core.util.NavigationIntentUtil
 import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotFloatingWindow
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -105,7 +107,7 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
     override fun onScreenCaptured(path: String) {
         if (isOrientationPortrait) {
             notificationClearScreenshot.start()
-            NavigationIntentUtil.launchScreenShotActivity(this, path)
+            NavigationIntentUtil.launchScreenShotActivity(this, Uri.fromFile(File(path)))
         }
     }
 
@@ -118,7 +120,6 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
     }
 
     companion object {
-        const val EXTRA_PATH_SCREEN_SHOT = "EXTRA_PATH_SCREEN_SHOT"
         private const val SCREEN_CAPTURE_DATA = "SCREEN_CAPTURE_DATA"
         private const val STOP_SERVICE = "STOP_SERVICE"
         private const val NOTIFICATION_FOREGROUND_ID = 1

@@ -53,9 +53,8 @@ object AppModule {
     @Singleton
     @Provides
     fun provideScreenCaptureManager(
-        @ApplicationContext context: Context,
-        notificationClearScreenshot: NotificationClearScreenshot
-    ) = ScreenCaptureManager(context, notificationClearScreenshot)
+        @ApplicationContext context: Context
+    ) = ScreenCaptureManager(context)
 
     @Singleton
     @Provides
