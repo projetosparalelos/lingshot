@@ -11,7 +11,7 @@ import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
@@ -50,7 +50,7 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
         screenshotDetection.startScreenshotDetection()
         screenShotFloatingWindow.onFloating(lifecycleScope,
             onScreenShot = {
-                screenCaptureManager.captureScreenshot()
+                screenCaptureManager.captureScreenshot(lifecycleScope)
             },
             onStopService = {
                 stopSelf()
@@ -71,6 +71,7 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == STOP_SERVICE) {
+            screenCaptureManager.deleteScreenShot()
             stopSelf()
         }
         setupNotificationForeground()
@@ -84,7 +85,7 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
         } else {
             this?.getParcelableExtra(SCREEN_CAPTURE_DATA)
         }
-        data?.let { screenCaptureManager.startCapture(AppCompatActivity.RESULT_OK, it) }
+        data?.let { screenCaptureManager.startCapture(RESULT_OK, it) }
     }
 
     private fun setupNotificationForeground() {
@@ -117,6 +118,7 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
         notificationClearScreenshot.clear()
         screenshotDetection.stopScreenshotDetection()
         screenCaptureManager.stopCapture()
+        screenCaptureManager.deleteScreenShot()
     }
 
     companion object {

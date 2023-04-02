@@ -1,3 +1,5 @@
+@file:Suppress("Deprecation")
+
 package com.teachmeprint.language.feature.screenshot.presentation.ui
 
 import android.content.Intent.EXTRA_STREAM
@@ -11,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.net.toFile
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
@@ -50,12 +51,11 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     }
 
     private val imageUriPath by lazy {
-        val data: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(EXTRA_STREAM, Uri::class.java)
         } else {
             intent.getParcelableExtra(EXTRA_STREAM)
         }
-        data
     }
 
     private val viewModel: ScreenShotViewModel by viewModels()
@@ -273,7 +273,6 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
 
     override fun onDestroy() {
         viewModel.stopTextToSpeech()
-        imageUriPath?.toFile()?.delete()
         super.onDestroy()
     }
 

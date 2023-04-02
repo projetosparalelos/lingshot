@@ -13,11 +13,15 @@ import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
+import android.os.Environment.DIRECTORY_PICTURES
+import android.os.Environment.getExternalStoragePublicDirectory
 import com.teachmeprint.language.core.util.NavigationIntentUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -56,12 +60,12 @@ class ScreenCaptureManager @Inject constructor(
         mediaProjection = null
     }
 
-    fun captureScreenshot(): Bitmap? {
+    fun captureScreenshot(coroutineScope: CoroutineScope): Bitmap? {
         val image: Image? = imageReader?.acquireLatestImage()
         val bitmap: Bitmap? = image?.let { imageToBitmap(it) }
         image?.close()
         val cropBitmap: Bitmap? = bitmap?.let { cropBitmap(it) }
-        saveBitmap(cropBitmap)
+        saveBitmap(cropBitmap, coroutineScope)
         return bitmap
     }
 
@@ -93,32 +97,45 @@ class ScreenCaptureManager @Inject constructor(
         return (px * context.resources.displayMetrics.density).toInt()
     }
 
-    private fun saveBitmap(bitmap: Bitmap?) {
+    private fun saveBitmap(bitmap: Bitmap?, coroutineScope: CoroutineScope) {
         if (bitmap == null) return
-        val timeStamp: String =
-            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val fileName = "Screenshot_$timeStamp.jpg"
-        val file = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            fileName
-        )
-        try {
-            val fos = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-            fos.flush()
-            fos.close()
+        val file = fileScreenShot()
 
-            if (file.exists()
-                && (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
-            ) {
-                context.let { NavigationIntentUtil.launchScreenShotActivity(it, Uri.fromFile(File(file.absolutePath))) }
+        coroutineScope.launch {
+            if (file.exists()) { file.delete() }
+
+            withContext(Dispatchers.IO) {
+                val newFile = fileScreenShot()
+                try {
+                    val fos = FileOutputStream(newFile)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                    fos.flush()
+                    fos.close()
+
+                    if (newFile.exists()
+                        && (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
+                    ) {
+                        context.let { NavigationIntentUtil.launchScreenShotActivity(it, Uri.fromFile(newFile)) }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        }
+    }
+
+    private fun fileScreenShot(): File {
+        return File(getExternalStoragePublicDirectory(DIRECTORY_PICTURES), FILE_NAME)
+    }
+
+    fun deleteScreenShot() {
+        if (fileScreenShot().exists()) {
+            fileScreenShot().delete()
         }
     }
 
     companion object {
+        private const val FILE_NAME = "TeachMePrint_Screenshot.jpg"
         private const val VIRTUAL_NAME_DISPLAY = "ScreenCapture"
     }
 }
