@@ -7,6 +7,8 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+import android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.canhub.cropper.CropImageOptions
@@ -38,10 +41,10 @@ import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLA
 import com.teachmeprint.language.databinding.ActivityScreenShotBinding
 import com.teachmeprint.language.feature.screenshot.presentation.ScreenShotViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageCompleteListener {
@@ -241,14 +244,9 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     }
 
     private fun setupImageCropOptions() {
-        val width = resources.displayMetrics.widthPixels
-        val height = resources.displayMetrics.heightPixels
-
         val cropImageOptions = CropImageOptions(
             guidelines = CropImageView.Guidelines.OFF,
             cornerShape = CropImageView.CropCornerShape.OVAL,
-            maxCropResultWidth = (width / MAX_CROP_RESULT.toFloat()).roundToInt() * MAX_CROP_RESULT,
-            maxCropResultHeight = (height / MAX_CROP_RESULT.toFloat()).roundToInt() * MAX_CROP_RESULT,
             showProgressBar = false
         )
         binding.cropImageScreenShot.cropRect =
@@ -265,10 +263,21 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     }
 
     private fun hideSystemUI() {
-        WindowInsetsControllerCompat(window, binding.root).apply {
-            hide(WindowInsetsCompat.Type.statusBars())
-            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        changeStatusBarColor()
+        lifecycleScope.launch {
+            delay(1000L)
+            WindowInsetsControllerCompat(window, binding.root).apply {
+                hide(WindowInsetsCompat.Type.statusBars())
+                systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
         }
+    }
+
+    private fun changeStatusBarColor() {
+        val window = window
+        window.clearFlags(FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = getColor(this, R.color.black)
     }
 
     override fun onDestroy() {
@@ -291,7 +300,5 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         private const val RECT_CUSTOM_LEFT = 188
         private const val RECT_CUSTOM_TOP = 340
         private const val RECT_CUSTOM_BOTTOM = 962
-
-        private const val MAX_CROP_RESULT = 1000
     }
 }
