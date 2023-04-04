@@ -82,7 +82,6 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
                     initialY = windowParamsFloating.y
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
-
                 }
                 MotionEvent.ACTION_MOVE -> {
                     windowParamsFloating.x = (initialX + event.rawX - initialTouchX).toInt()
