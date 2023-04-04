@@ -19,6 +19,7 @@ import com.teachmeprint.language.R
 import com.teachmeprint.language.TeachMePrintApplication.Companion.CHANNEL_ID
 import com.teachmeprint.language.core.helper.NotificationClearScreenshot
 import com.teachmeprint.language.core.helper.ScreenCaptureManager
+import com.teachmeprint.language.core.helper.ScreenCaptureManager.Companion.FILE_NAME
 import com.teachmeprint.language.core.helper.ScreenShotDetection
 import com.teachmeprint.language.core.util.NavigationIntentUtil
 import com.teachmeprint.language.feature.screenshot.presentation.ui.ScreenShotFloatingWindow
@@ -107,7 +108,9 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
 
     override fun onScreenCaptured(path: String) {
         if (isOrientationPortrait) {
-            notificationClearScreenshot.start()
+            if (!path.contains(FILE_NAME)) {
+                notificationClearScreenshot.start()
+            }
             NavigationIntentUtil.launchScreenShotActivity(this, Uri.fromFile(File(path)))
         }
     }

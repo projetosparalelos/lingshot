@@ -135,7 +135,7 @@ class ScreenCaptureManager @Inject constructor(
     }
 
     companion object {
-        private const val FILE_NAME = "TeachMePrint_Screenshot.jpg"
+        const val FILE_NAME = "TeachMePrint_Screenshot.jpg"
         private const val VIRTUAL_NAME_DISPLAY = "ScreenCapture"
     }
 }
