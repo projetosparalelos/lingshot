@@ -249,7 +249,6 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
             cornerShape = CropImageView.CropCornerShape.OVAL,
             showProgressBar = false
         )
-
         binding.cropImageScreenShot.cropRect =
             Rect(RECT_CUSTOM_LEFT, RECT_CUSTOM_TOP, RECT_CUSTOM_RIGHT, RECT_CUSTOM_BOTTOM)
         binding.cropImageScreenShot.setImageCropOptions(cropImageOptions)
