@@ -297,7 +297,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         private const val BALLOON_LIMIT_CHARACTERS = 280
 
         private const val RECT_CUSTOM_RIGHT = 800
-        private const val RECT_CUSTOM_LEFT = 190
+        private const val RECT_CUSTOM_LEFT = 270
         private const val RECT_CUSTOM_TOP = 350
         private const val RECT_CUSTOM_BOTTOM = 850
     }

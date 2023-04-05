@@ -87,14 +87,9 @@ class ScreenCaptureManager @Inject constructor(
     private fun cropBitmap(bitmap: Bitmap): Bitmap? {
         val topHeight = cropPeace(28)
         val bottomHeight = cropPeace(46)
-        val extraWidth = (16 * displayMetrics.density).toInt()
-        val croppedBitmap = Bitmap.createBitmap(
-            bitmap.width - extraWidth * 2,
-            bitmap.height - topHeight - bottomHeight,
-            Bitmap.Config.ARGB_8888
-        )
+        val croppedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height - topHeight - bottomHeight, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(croppedBitmap)
-        canvas.drawBitmap(bitmap, (-extraWidth).toFloat(), (-topHeight).toFloat(), null)
+        canvas.drawBitmap(bitmap, 0f, (-topHeight).toFloat(), null)
         return croppedBitmap
     }
 
