@@ -56,7 +56,7 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
             setOnClickListener {
                 showOrHide(false)
                 coroutineScope.launch {
-                    delay(100L)
+                    delay(DELAY_BUTTON_FLOATING_VISIBILITY)
                     withContext(Dispatchers.IO) {
                         onScreenShot.invoke()
                     }
@@ -106,7 +106,7 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
     }
 
     private fun MotionEvent.setTouchSensitivity() {
-        setLocation(x * 1.0f, y * 1.0f)
+        setLocation(x * TOUCH_SENSITIVITY, y * TOUCH_SENSITIVITY)
     }
 
     private fun setupWindowParamsFloating() {
@@ -117,7 +117,9 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
             } else {
                 WindowManager.LayoutParams.TYPE_PHONE
             },
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
@@ -164,4 +166,9 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
         windowManager.removeView(rootViewFloating)
         windowManager.removeView(rootViewFloatingClose)
     }.getOrNull()
+
+    companion object {
+        private const val DELAY_BUTTON_FLOATING_VISIBILITY = 100L
+        private const val TOUCH_SENSITIVITY = 1.0F
+    }
 }

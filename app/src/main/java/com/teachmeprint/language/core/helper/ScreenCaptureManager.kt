@@ -83,7 +83,9 @@ class ScreenCaptureManager @Inject constructor(
             displayMetrics.heightPixels, Bitmap.Config.ARGB_8888
         )
         bitmap.copyPixelsFromBuffer(buffer)
-        return bitmap
+        return Bitmap.createBitmap(bitmap, 0, 0,
+            displayMetrics.widthPixels,
+            displayMetrics.heightPixels)
     }
 
     private fun cropBitmap(bitmap: Bitmap): Bitmap? {

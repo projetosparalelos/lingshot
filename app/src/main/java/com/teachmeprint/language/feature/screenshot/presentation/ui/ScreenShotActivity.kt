@@ -249,6 +249,8 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
             cornerShape = CropImageView.CropCornerShape.OVAL,
             showProgressBar = false
         )
+        binding.cropImageScreenShot.cropRect =
+            Rect(RECT_CUSTOM_LEFT, RECT_CUSTOM_TOP, RECT_CUSTOM_RIGHT, RECT_CUSTOM_BOTTOM)
         binding.cropImageScreenShot.setImageCropOptions(cropImageOptions)
     }
 
@@ -263,7 +265,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     private fun hideSystemUI() {
         changeStatusBarColor()
         lifecycleScope.launch {
-            delay(1000L)
+            delay(DELAY_STATUS_BAR_HIDE)
             WindowInsetsControllerCompat(window, binding.root).apply {
                 hide(WindowInsetsCompat.Type.statusBars())
                 systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -293,5 +295,12 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         private const val BALLOON_PADDING = 12
         private const val BALLOON_CORNER_RADIUS = 24F
         private const val BALLOON_LIMIT_CHARACTERS = 280
+
+        private const val RECT_CUSTOM_RIGHT = 350
+        private const val RECT_CUSTOM_BOTTOM = 250
+        private const val RECT_CUSTOM_LEFT = 0
+        private const val RECT_CUSTOM_TOP = 0
+
+        private const val DELAY_STATUS_BAR_HIDE = 1000L
     }
 }
