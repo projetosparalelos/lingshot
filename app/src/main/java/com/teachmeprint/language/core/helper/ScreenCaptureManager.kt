@@ -86,7 +86,7 @@ class ScreenCaptureManager @Inject constructor(
 
     private fun cropBitmap(bitmap: Bitmap): Bitmap? {
         val topHeight = cropPeace(28)
-        val bottomHeight = cropPeace(48)
+        val bottomHeight = cropPeace(46)
         val extraWidth = (16 * displayMetrics.density).toInt()
         val croppedBitmap = Bitmap.createBitmap(
             bitmap.width - extraWidth * 2,
@@ -140,7 +140,7 @@ class ScreenCaptureManager @Inject constructor(
     }
 
     companion object {
-        const val FILE_NAME = "TeachMePrint_Screenshot.jpg"
+        const val FILE_NAME = "TeachMePrint_Screenshot.png"
         private const val VIRTUAL_NAME_DISPLAY = "ScreenCapture"
     }
 }
