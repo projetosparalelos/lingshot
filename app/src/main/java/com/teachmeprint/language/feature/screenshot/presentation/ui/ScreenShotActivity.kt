@@ -249,8 +249,6 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
             cornerShape = CropImageView.CropCornerShape.OVAL,
             showProgressBar = false
         )
-        binding.cropImageScreenShot.cropRect =
-            Rect(RECT_CUSTOM_LEFT, RECT_CUSTOM_TOP, RECT_CUSTOM_RIGHT, RECT_CUSTOM_BOTTOM)
         binding.cropImageScreenShot.setImageCropOptions(cropImageOptions)
     }
 
@@ -295,10 +293,5 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         private const val BALLOON_PADDING = 12
         private const val BALLOON_CORNER_RADIUS = 24F
         private const val BALLOON_LIMIT_CHARACTERS = 280
-
-        private const val RECT_CUSTOM_RIGHT = 800
-        private const val RECT_CUSTOM_LEFT = 270
-        private const val RECT_CUSTOM_TOP = 350
-        private const val RECT_CUSTOM_BOTTOM = 850
     }
 }
