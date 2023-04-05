@@ -5,7 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.hardware.display.DisplayManager
+import android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY
+import android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC
 import android.hardware.display.VirtualDisplay
 import android.media.Image
 import android.media.ImageReader
@@ -48,7 +49,8 @@ class ScreenCaptureManager @Inject constructor(
         virtualDisplay = mediaProjection?.createVirtualDisplay(
             VIRTUAL_NAME_DISPLAY,
             displayMetrics.widthPixels, displayMetrics.heightPixels,
-            displayMetrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+            displayMetrics.densityDpi,
+            VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or VIRTUAL_DISPLAY_FLAG_PUBLIC,
             imageReader?.surface, null, null
         )
     }
