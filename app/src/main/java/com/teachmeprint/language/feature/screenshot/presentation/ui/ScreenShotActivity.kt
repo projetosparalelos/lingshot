@@ -217,7 +217,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         binding.cropImageScreenShot.setImageUriAsync(imageUriPath)
         binding.cropImageScreenShot.setOnCropImageCompleteListener(this)
         binding.cropImageScreenShot.cropRect =
-            Rect(RECT_CUSTOM_LEFT, RECT_CUSTOM_TOP, RECT_CUSTOM_RIGHT, RECT_CUSTOM_BOTTOM)
+            Rect(resources.displayMetrics.widthPixels - RECT_CUSTOM_RIGHT, RECT_CUSTOM_TOP, resources.displayMetrics.widthPixels, RECT_CUSTOM_BOTTOM)
         setupImageCropOptions()
     }
 
@@ -296,9 +296,8 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         private const val BALLOON_CORNER_RADIUS = 24F
         private const val BALLOON_LIMIT_CHARACTERS = 280
 
-        private const val RECT_CUSTOM_RIGHT = 450
-        private const val RECT_CUSTOM_BOTTOM = 350
-        private const val RECT_CUSTOM_LEFT = 0
+        private const val RECT_CUSTOM_RIGHT = 500
+        private const val RECT_CUSTOM_BOTTOM = 450
         private const val RECT_CUSTOM_TOP = 0
 
         private const val DELAY_STATUS_BAR_HIDE = 1000L
