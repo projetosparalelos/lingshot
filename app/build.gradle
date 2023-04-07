@@ -61,6 +61,4 @@ dependencies {
     implementation libs.lottie
 
     testImplementation libs.junit
-    androidTestImplementation libs.junit.ext
-    androidTestImplementation libs.espresso.core
 }
