@@ -34,6 +34,7 @@ import com.teachmeprint.language.R
 import com.teachmeprint.language.core.helper.*
 import com.teachmeprint.language.core.helper.StatusMessage.getErrorMessage
 import com.teachmeprint.language.core.util.limitCharactersWithEllipsize
+import com.teachmeprint.language.core.util.setOnItemSelectedWithDebounceListener
 import com.teachmeprint.language.core.util.snackBarAlert
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
@@ -169,7 +170,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
     private fun setupBottomNavigation() =
         with(binding.bottomNavigationScreenShot) {
             setupShapeDrawableBottomNavigation()
-            setOnItemSelectedListener { item ->
+            setOnItemSelectedWithDebounceListener { item ->
                 when (item.itemId) {
                     R.id.ic_translate -> {
                         viewModel.getLanguage()?.let {
