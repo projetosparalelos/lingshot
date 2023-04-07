@@ -1,19 +1,15 @@
 appId: com.teachmeprint.language
 ---
-- tapOn: "Focus"
 - tapOn: "Translate"
-- tapOn: "Add"
+- tapOn: "Select"
 - tapOn: "Armenian"
 - tapOn: "SELECT"
 - tapOn: "Translate"
 - assertVisible:
     id: animation_screen_shot_loading_translate
-- waitForAnimationToEnd:
-    timeout: 1500
+- waitForAnimationToEnd
 - assertVisible:
     id: balloon
 - back
-- waitForAnimationToEnd:
-    timeout: 500
+- waitForAnimationToEnd
 - back
-- stopApp

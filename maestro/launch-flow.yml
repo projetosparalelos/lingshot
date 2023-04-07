@@ -1,0 +1,6 @@
+appId: com.teachmeprint.language
+---
+- launchApp:
+    stopApp: true
+    clearState: true
+- tapOn: "Iniciar"

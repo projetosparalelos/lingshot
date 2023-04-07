@@ -1,0 +1,9 @@
+appId: com.teachmeprint.language
+---
+- runFlow: launch-flow.yml
+- runFlow: screenshot/floating-window-flow.yml
+- runFlow: screenshot/menu/translate-flow.yml
+
+- runFlow: launch-flow.yml
+- runFlow: screenshot/floating-window-flow.yml
+- runFlow: screenshot/menu/speak-flow.yml
