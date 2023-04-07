@@ -1,3 +1,9 @@
+# To use, you need to install Maestro on your system:
+# https://maestro.mobile.dev/getting-started/installing-maestro
+---
+# And then use the command:
+# maestro test example.yml
+
 appId: com.teachmeprint.language
 ---
 - runFlow: launch-flow.yml
