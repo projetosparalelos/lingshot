@@ -188,7 +188,7 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
                     R.id.ic_image_gallery -> {
                         requestPickMedia.launch(PickVisualMediaRequest(ImageOnly))
                     }
-                    R.id.ic_language -> {
+                    R.id.ic_speak -> {
                         setupDialogChooseLanguage()
                     }
                 }
@@ -207,8 +207,8 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
 
     private fun BottomNavigationView.setupFirstChooseLanguage() {
         snackBarAlert(
-            R.string.text_select_language_translate_message,
-            R.string.text_button_action_add_snack_bar, true
+            R.string.text_select_language_speak_message,
+            R.string.text_button_action_select_snack_bar, true
         ) {
             setupDialogChooseLanguage()
         }
@@ -218,7 +218,9 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         binding.cropImageScreenShot.setImageUriAsync(imageUriPath)
         binding.cropImageScreenShot.setOnCropImageCompleteListener(this)
         binding.cropImageScreenShot.cropRect =
-            Rect(resources.displayMetrics.widthPixels - RECT_CUSTOM_RIGHT, RECT_CUSTOM_TOP, resources.displayMetrics.widthPixels, RECT_CUSTOM_BOTTOM)
+            Rect(resources.displayMetrics.widthPixels - RECT_CUSTOM_RIGHT,
+                RECT_CUSTOM_TOP,
+                resources.displayMetrics.widthPixels, RECT_CUSTOM_BOTTOM)
         setupImageCropOptions()
     }
 

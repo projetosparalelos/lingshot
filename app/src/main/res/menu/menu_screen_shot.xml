@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/ic_translate"
+    <item
+        android:id="@+id/ic_translate"
         android:icon="@drawable/ic_translate_24"
-        android:title="Translate"></item>
+        android:title="Translate" />
 
-    <item android:id="@+id/ic_listen"
+    <item
+        android:id="@+id/ic_listen"
         android:icon="@drawable/ic_listen_24"
-        android:title="Listen"></item>
+        android:title="Listen" />
 
-    <item android:id="@+id/ic_reset_focus"
+    <item
+        android:id="@+id/ic_reset_focus"
         android:icon="@drawable/ic_focus_out_24"
-        android:title="Focus"></item>
+        android:title="Focus" />
 
-    <item android:id="@+id/ic_image_gallery"
+    <item
+        android:id="@+id/ic_image_gallery"
         android:icon="@drawable/ic_image_gallery_24"
-        android:title="Gallery"></item>
+        android:title="Gallery" />
 
-    <item android:id="@+id/ic_language"
-        android:icon="@drawable/ic_language_24"
-        android:title="Language"></item>
+    <item
+        android:id="@+id/ic_speak"
+        android:icon="@drawable/ic_speak_24"
+        android:title="I speak" />
 </menu>

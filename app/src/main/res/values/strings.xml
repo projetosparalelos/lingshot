@@ -12,7 +12,7 @@
     <string name="text_message_alert_permission">Permission is required.</string>
 
     <!-- UtilExtension -->
-    <string name="text_button_action_add_snack_bar">Add</string>
+    <string name="text_button_action_select_snack_bar">Select</string>
     <string name="text_button_action_close_snack_bar">Close</string>
 
     <!-- MaterialAlertDialog -->
@@ -28,7 +28,7 @@
     <string name="text_status_message_processing_request">An error occurred while processing your request.</string>
 
     <!-- ScreenShotActivity -->
-    <string name="text_select_language_translate_message">Select the language you want to translate.</string>
+    <string name="text_select_language_speak_message">Select a language you speak.</string>
     <string name="text_title_dialog_choose_language">Choose Language</string>
     <string name="text_button_select_dialog_choose_language">Select</string>
 
