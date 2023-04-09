@@ -147,24 +147,22 @@ class ScreenShotActivity : AppCompatActivity(), CropImageView.OnCropImageComplet
         }
 
     private fun setupDialogChooseLanguage() {
-        lifecycleScope.launch {
-            var languageSelectedIndex = viewModel.getLanguageSelectedIndex()
+        var languageSelectedIndex = viewModel.getLanguageSelectedIndex()
 
-            MaterialAlertDialogBuilder(this@ScreenShotActivity)
-                .setTitle(getString(R.string.text_title_dialog_choose_language))
-                .setSingleChoiceItems(
-                    viewModel.getLanguageList().toTypedArray(),
-                    languageSelectedIndex
-                ) { _, index ->
-                    languageSelectedIndex = index
-                }
-                .setPositiveButton(getString(R.string.text_button_select_dialog_choose_language)) { dialog, _ ->
-                    viewModel.saveLanguage { viewModel.getLanguageList()[languageSelectedIndex] }
-                    dialog.dismiss()
-                }
-                .setNegativeButton(getString(R.string.text_button_dialog_cancel)) { _, _ -> }
-                .show()
-        }
+        MaterialAlertDialogBuilder(this@ScreenShotActivity)
+            .setTitle(getString(R.string.text_title_dialog_choose_language))
+            .setSingleChoiceItems(
+                viewModel.getLanguageList().toTypedArray(),
+                languageSelectedIndex
+            ) { _, index ->
+                languageSelectedIndex = index
+            }
+            .setPositiveButton(getString(R.string.text_button_select_dialog_choose_language)) { dialog, _ ->
+                viewModel.saveLanguage { viewModel.getLanguageList()[languageSelectedIndex] }
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.text_button_dialog_cancel)) { _, _ -> }
+            .show()
     }
 
     private fun setupBottomNavigation() =

@@ -16,6 +16,7 @@ import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_RECOGNIZE
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
+import com.teachmeprint.language.data.model.language.AvalaibleLanguage
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
@@ -158,28 +159,15 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    suspend fun getLanguageList(): List<String> {
-        val languageLocaleFilterList = arrayListOf<String>()
-        withContext(Dispatchers.IO) {
-            val languageLocaleList =
-                Locale.getAvailableLocales().sortedBy { it.displayLanguage }
-
-            languageLocaleList.forEach {
-                if (!isLanguageLocaleInList(languageLocaleFilterList, it)) {
-                    languageLocaleFilterList.add(it.displayLanguage);
-                }
-            }
-
-        }
-        return languageLocaleFilterList
+    fun getLanguageList(): List<String> {
+        return enumValues<AvalaibleLanguage>()
+            .toList()
+            .sortedBy { it.displayName }
+            .map { it.displayName }
     }
 
-    suspend fun getLanguageSelectedIndex(): Int {
+     fun getLanguageSelectedIndex(): Int {
         return getLanguageList().indexOf(getLanguage())
-    }
-
-    private fun isLanguageLocaleInList(list: List<String>?, locale: Locale): Boolean {
-        return list?.any { it.equals(locale.displayLanguage, ignoreCase = true) } ?: false
     }
 
     fun hasReachedMaxTranslationCount(): Boolean {
