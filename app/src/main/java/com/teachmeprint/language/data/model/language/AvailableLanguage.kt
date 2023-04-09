@@ -2,7 +2,7 @@
 
 package com.teachmeprint.language.data.model.language
 
-enum class AvalaibleLanguage(
+enum class AvailableLanguage(
     val displayName: String,
     val languageCode: String
 ) {

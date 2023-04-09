@@ -16,7 +16,7 @@ import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_RECOGNIZE
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
-import com.teachmeprint.language.data.model.language.AvalaibleLanguage
+import com.teachmeprint.language.data.model.language.AvailableLanguage
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
@@ -160,7 +160,7 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     fun getLanguageList(): List<String> {
-        return enumValues<AvalaibleLanguage>()
+        return enumValues<AvailableLanguage>()
             .toList()
             .sortedBy { it.displayName }
             .map { it.displayName }
