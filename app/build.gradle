@@ -20,11 +20,20 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
+    }
     buildFeatures {
         viewBinding = true
+        compose true
     }
     kapt {
         correctErrorTypes true
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 }
 
@@ -34,7 +43,12 @@ dependencies {
     implementation libs.material
     implementation libs.constraintlayout
     implementation libs.activity.ktx
-    implementation libs.lifecycle.extensions
+    implementation libs.bundles.lifecyle
+
+    implementation 'androidx.activity:activity-compose:1.7.0'
+    implementation "androidx.compose.ui:ui:1.4.1"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.4.1"
+    implementation 'androidx.compose.material3:material3:1.1.0-beta02'
 
     implementation libs.text.recognition
     implementation libs.language.id
@@ -58,4 +72,7 @@ dependencies {
     implementation libs.lottie
 
     testImplementation libs.junit
+
+    debugImplementation "androidx.compose.ui:ui-tooling:1.4.1"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:1.4.1"
 }

@@ -1,16 +1,18 @@
 [versions]
 gradlePlugin = "7.4.2"
-kotlin = "1.8.0"
+kotlin = "1.8.10"
 googleServices = "4.3.15"
 playServicesAds = "21.5.0"
 firebaseCrashylytics = "2.9.4"
 
-coreKTX = "1.9.0"
+coreKTX = "1.10.0"
 appCompat = "1.6.1"
 material = "1.8.0"
 constraintLayout = "2.1.4"
 activityKTX = "1.6.1"
-lifecycle = "2.2.0"
+lifecycle = "2.6.1"
+
+composeCompiler = "1.4.4"
 
 textRecognition = "18.0.2"
 languageID = "17.0.4"
@@ -36,7 +38,8 @@ appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat"
 material = { module = "com.google.android.material:material", version.ref = "material" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintLayout" }
 activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKTX" }
-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle" }
+lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
 
 text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognition" }
 language-id = { module = "com.google.mlkit:language-id", version.ref = "languageID" }
@@ -65,6 +68,7 @@ lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 junit = { module = "junit:junit", version.ref = "jUnit" }
 
 [bundles]
+lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service"]
 retrofit = ["retrofit", "retrofit-converter-gson"]
 coroutines = ["coroutines-android", "coroutines-android"]
 firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx"]
