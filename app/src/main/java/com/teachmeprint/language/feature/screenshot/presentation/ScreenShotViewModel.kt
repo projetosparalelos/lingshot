@@ -73,8 +73,9 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun String.checkTextAndFormat(): String {
-        val textFormatted = this.replace("\n", " ")
-        return textFormatted.ifBlank { ILLEGIBLE_TEXT }
+        return replace("\n", " ")
+            .replaceFirstChar { it.titlecase() }
+            .ifBlank { ILLEGIBLE_TEXT }
     }
 
     private fun fetchPhraseToTranslate(text: String) {
