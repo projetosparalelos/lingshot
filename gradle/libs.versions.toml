@@ -2,17 +2,18 @@
 gradlePlugin = "7.4.2"
 kotlin = "1.8.10"
 googleServices = "4.3.15"
-playServicesAds = "21.5.0"
+playServicesAds = "22.0.0"
 firebaseCrashylytics = "2.9.4"
+benManesVersions = "0.46.0"
 
 coreKTX = "1.10.0"
 appCompat = "1.6.1"
-material = "1.8.0"
-activity = "1.7.0"
+material = "1.9.0-rc01"
+activity = "1.7.1"
 lifecycle = "2.6.1"
 
 composeCompiler = "1.4.4"
-composeBom = "2023.03.00"
+composeBom = "2023.04.01"
 composeMaterial3 = "1.1.0-rc01"
 composeHiltNavigation = "1.0.0"
 
@@ -22,17 +23,17 @@ languageID = "17.0.4"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 kotlinxSerializationJson = "1.5.0"
-okHttp = "4.10.0"
-coroutines = "1.6.4"
+okHttp = "4.11.0"
+coroutines = "1.7.0-RC"
 hawk = "2.0.1"
 timber = "5.0.1"
-daggerHilt = "2.44"
+daggerHilt = "2.45"
 
-firebaseBom = "31.3.0"
+firebaseBom = "31.5.0"
 
 imageCropper = "4.5.0"
-balloon = "1.5.2"
-lottie = "3.4.0"
+balloon = "1.5.3"
+lottie = "6.0.0"
 
 jUnit = "4.13.2"
 
@@ -99,3 +100,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashylytics" }
+ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "benManesVersions" }
