@@ -8,11 +8,13 @@ firebaseCrashylytics = "2.9.4"
 coreKTX = "1.10.0"
 appCompat = "1.6.1"
 material = "1.8.0"
-constraintLayout = "2.1.4"
-activityKTX = "1.6.1"
+activity = "1.7.0"
 lifecycle = "2.6.1"
 
 composeCompiler = "1.4.4"
+composeBom = "2023.03.00"
+composeMaterial3 = "1.1.0-rc01"
+composeHiltNavigation = "1.0.0"
 
 textRecognition = "18.0.2"
 languageID = "17.0.4"
@@ -26,7 +28,7 @@ hawk = "2.0.1"
 timber = "5.0.1"
 daggerHilt = "2.44"
 
-firebase = "31.3.0"
+firebaseBom = "31.3.0"
 
 imageCropper = "4.5.0"
 balloon = "1.5.2"
@@ -38,10 +40,23 @@ jUnit = "4.13.2"
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKTX" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintLayout" }
-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKTX" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
+
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
+compose-material-iconsExtended = { module = "androidx.compose.material:material-icons-extended" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3" }
+compose-material3-windowSizeClass = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "composeMaterial3" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
+lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigation" }
 
 text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognition" }
 language-id = { module = "com.google.mlkit:language-id", version.ref = "languageID" }
@@ -60,7 +75,7 @@ dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref
 
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
@@ -71,7 +86,7 @@ lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 junit = { module = "junit:junit", version.ref = "jUnit" }
 
 [bundles]
-lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service"]
+lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service", "lifecycle-runtimeCompose", "lifecycle-viewModelCompose"]
 coroutines = ["coroutines-android", "coroutines-android"]
 firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx"]
 

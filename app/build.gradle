@@ -42,14 +42,18 @@ dependencies {
     implementation libs.core.ktx
     implementation libs.appcompat
     implementation libs.material
-    implementation libs.constraintlayout
-    implementation libs.activity.ktx
     implementation libs.bundles.lifecyle
 
-    implementation 'androidx.activity:activity-compose:1.7.0'
-    implementation "androidx.compose.ui:ui:1.4.1"
-    implementation "androidx.compose.ui:ui-tooling-preview:1.4.1"
-    implementation 'androidx.compose.material3:material3:1.1.0-beta02'
+    implementation libs.activity.compose
+    implementation platform(libs.compose.bom)
+    implementation libs.compose.foundation
+    implementation libs.compose.foundation.layout
+    implementation libs.compose.material.iconsExtended
+    implementation libs.compose.material3
+    implementation libs.compose.material3.windowSizeClass
+    implementation libs.compose.ui
+    implementation libs.compose.ui.tooling.preview
+    implementation libs.hilt.navigation.compose
 
     implementation libs.text.recognition
     implementation libs.language.id
@@ -76,6 +80,6 @@ dependencies {
 
     testImplementation libs.junit
 
-    debugImplementation "androidx.compose.ui:ui-tooling:1.4.1"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:1.4.1"
+    debugImplementation libs.compose.ui.tooling
+    debugImplementation libs.compose.ui.testManifest
 }
