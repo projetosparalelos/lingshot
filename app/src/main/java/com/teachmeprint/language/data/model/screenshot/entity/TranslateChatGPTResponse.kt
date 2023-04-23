@@ -1,76 +1,80 @@
 package com.teachmeprint.language.data.model.screenshot.entity
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.*
 
+@Serializable
 data class TranslateChatGPTResponse(
-    @SerializedName("choices")
-    val choices: List<Choice>,
+    @SerialName("choices")
+    val choices: List<Choice>?,
 
-    @SerializedName("created")
-    val created: Int,
+    @SerialName("created")
+    val created: Int?,
 
-    @SerializedName("id")
-    val id: String,
+    @SerialName("id")
+    val id: String?,
 
-    @SerializedName("model")
-    val model: String,
+    @SerialName("model")
+    val model: String?,
 
-    @SerializedName("object")
-    val `object`: String,
+    @SerialName("object")
+    val `object`: String?,
 
-    @SerializedName("usage")
-    val usage: Usage
+    @SerialName("usage")
+    val usage: Usage?
 )
 
+@Serializable
 data class Choice(
-    @SerializedName("finish_reason")
-    val finish_reason: String,
+    @SerialName("finish_reason")
+    val finish_reason: String?,
 
-    @SerializedName("index")
-    val index: Int,
+    @SerialName("logprobs")
+    val logprobs: Int?,
 
-    @SerializedName("logprobs")
-    val logprobs: Any,
+    @SerialName("index")
+    val index: Int?,
 
-    @SerializedName("text")
-    val text: String
+    @SerialName("text")
+    val text: String?
 )
 
+@Serializable
 data class Usage(
-    @SerializedName("completion_tokens")
-    val completion_tokens: Int,
+    @SerialName("completion_tokens")
+    val completion_tokens: Int?,
 
-    @SerializedName("prompt_tokens")
-    val prompt_tokens: Int,
+    @SerialName("prompt_tokens")
+    val prompt_tokens: Int?,
 
-    @SerializedName("total_tokens")
-    val total_tokens: Int
+    @SerialName("total_tokens")
+    val total_tokens: Int?
 )
 
+@Serializable
 data class RequestBody(
-    @SerializedName("model")
-    val model: String = MODEL_DEFAULT,
+    @SerialName("model")
+    val model: String? = MODEL_DEFAULT,
 
-    @SerializedName("prompt")
-    val prompt: String,
+    @SerialName("prompt")
+    val prompt: String?,
 
-    @SerializedName("max_tokens")
-    val maxTokens: Int = MAX_TOKENS_DEFAULT,
+    @SerialName("max_tokens")
+    val maxTokens: Int? = MAX_TOKENS_DEFAULT,
 
-    @SerializedName("temperature")
-    var temperature: Float = TEMPERATURE_DEFAULT,
+    @SerialName("temperature")
+    val temperature: Float? = TEMPERATURE_DEFAULT,
 
-    @SerializedName("top_p")
-    val topP: Float = TOP_P_DEFAULT,
+    @SerialName("top_p")
+    val topP: Float? = TOP_P_DEFAULT,
 
-    @SerializedName("frequency_penalty")
-    val frequencyPenalty: Int = 0,
+    @SerialName("frequency_penalty")
+    val frequencyPenalty: Int? = 0,
 
-    @SerializedName("presence_penalty")
-    val presencePenalty: Int = 0,
+    @SerialName("presence_penalty")
+    val presencePenalty: Int? = 0,
 
-    @SerializedName("stop")
-    val stop: String = STOP_DEFAULT
+    @SerialName("stop")
+    val stop: String? = STOP_DEFAULT
 )
 
 private const val MODEL_DEFAULT = "text-davinci-003"
