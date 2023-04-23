@@ -87,7 +87,7 @@ class ScreenShotViewModel @Inject constructor(
                     val requestBody = RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
                     val response = screenShotRepository.getTranslatePhrase(requestBody)
 
-                    response.choices[0].text
+                    response.choices?.get(0)?.text
                 }
             })
         } else {

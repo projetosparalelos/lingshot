@@ -1,16 +1,18 @@
 package com.teachmeprint.language.core.di.module
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import com.teachmeprint.language.BuildConfig
 import com.teachmeprint.language.data.remote.api.TranslateChatGPTService
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -41,10 +43,15 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
+        val contentType = "application/json".toMediaType()
+        val json = Json {
+            encodeDefaults = true
+            ignoreUnknownKeys = true
+        }
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_API)
-            .addConverterFactory(GsonConverterFactory.create())
             .client(client)
+            .addConverterFactory(json.asConverterFactory(contentType))
+            .baseUrl(BuildConfig.BASE_API)
             .build()
     }
 
