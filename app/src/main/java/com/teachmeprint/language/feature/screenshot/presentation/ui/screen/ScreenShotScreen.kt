@@ -5,20 +5,18 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.airbnb.lottie.compose.*
+import com.teachmeprint.language.R
 import com.teachmeprint.language.core.util.findActivity
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent
@@ -49,6 +47,8 @@ fun ScreenShotScreen(
     uiState: ScreenShotUiState,
     handleEvent: (event: ScreenShotEvent) -> Unit
 ) {
+    val status = uiState.screenShotStatus
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -65,6 +65,11 @@ fun ScreenShotScreen(
         )
         Column(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.weight(1f))
+            if (status is ScreenShotStatus.Loading) {
+                ScreenShotLottieLoading(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                )
+            }
             ScreenShotBalloon(
                 text = uiState.textTranslate,
                 showBalloon = uiState.showBalloon,
@@ -80,29 +85,28 @@ fun ScreenShotScreen(
             )
         }
     }
-    ScreenShotStatus(
-        screenShotStatus = uiState.screenShotStatus,
-        onShowBalloon = {
-            handleEvent(ScreenShotEvent.ShowBalloon(it))
-        })
+
+    LaunchedEffect(status) {
+        if (status is ScreenShotStatus.Success) {
+            status.text?.let { handleEvent(ScreenShotEvent.ShowBalloon(it)) }
+        }
+    }
 }
 
-
 @Composable
-private fun ScreenShotStatus(
-    screenShotStatus: ScreenShotStatus,
-    onShowBalloon: (String) -> Unit
-) {
-    when (screenShotStatus) {
-        is ScreenShotStatus.Success -> {
-            screenShotStatus.text?.let {
-                onShowBalloon(it)
-            }
-        }
-        is ScreenShotStatus.Error -> {}
-        is ScreenShotStatus.Loading -> {}
-        else -> {}
-    }
+fun ScreenShotLottieLoading(modifier: Modifier = Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_translate))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever
+    )
+    LottieAnimation(
+        modifier = modifier
+            .width(100.dp)
+            .height(100.dp),
+        composition = composition,
+        progress = { progress },
+    )
 }
 
 @Composable

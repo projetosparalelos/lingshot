@@ -59,6 +59,7 @@ lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-comp
 lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigation" }
 balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognition" }
 language-id = { module = "com.google.mlkit:language-id", version.ref = "languageID" }
