@@ -1,7 +1,9 @@
 package com.teachmeprint.language.core.util
 
+import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
@@ -73,4 +75,10 @@ fun BottomNavigationView.setOnItemSelectedWithDebounceListener(block: (MenuItem)
         }
         true
     }
+}
+
+fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }

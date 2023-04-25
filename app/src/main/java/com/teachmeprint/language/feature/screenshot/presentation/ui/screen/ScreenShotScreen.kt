@@ -1,6 +1,9 @@
 package com.teachmeprint.language.feature.screenshot.presentation.ui.screen
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,11 +11,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teachmeprint.language.core.util.findActivity
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotStatus
@@ -24,12 +31,12 @@ import com.teachmeprint.language.feature.screenshot.presentation.ui.component.Sc
 import com.teachmeprint.language.ui.theme.TeachMePrintTheme
 
 @Composable
-fun ScreenShotRoute(viewModel: ScreenShotViewModel = hiltViewModel(), imageUri: Uri?) {
+fun ScreenShotRoute(viewModel: ScreenShotViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TeachMePrintTheme {
         ScreenShotScreen(
-            imageUri = imageUri,
+            imageUri = rememberImageUriPath(),
             uiState = uiState,
             handleEvent = viewModel::handleEvent
         )
@@ -82,7 +89,7 @@ fun ScreenShotScreen(
 
 
 @Composable
-fun ScreenShotStatus(
+private fun ScreenShotStatus(
     screenShotStatus: ScreenShotStatus,
     onShowBalloon: (String) -> Unit
 ) {
@@ -98,8 +105,20 @@ fun ScreenShotStatus(
     }
 }
 
+@Composable
+@Suppress("Deprecation")
+private fun rememberImageUriPath(context: Context = LocalContext.current) = remember {
+    val activity = context.findActivity()
+    val intent = activity?.intent
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        intent?.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+    } else {
+        intent?.getParcelableExtra(Intent.EXTRA_STREAM)
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-fun Preview_ScreenShotScreen() {
+private fun ScreenShotScreenPreview() {
     ScreenShotScreen(uiState = ScreenShotUiState(), handleEvent = {})
 }
