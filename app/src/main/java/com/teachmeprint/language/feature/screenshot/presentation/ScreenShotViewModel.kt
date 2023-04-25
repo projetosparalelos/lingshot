@@ -12,6 +12,7 @@ import com.google.mlkit.vision.common.InputImage.fromBitmap
 import com.google.mlkit.vision.text.TextRecognizer
 import com.teachmeprint.language.core.helper.*
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_IDENTIFY_LANGUAGE_FAILED
+import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_ERROR_GENERIC
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_RECOGNIZER_FAILED
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
@@ -21,12 +22,19 @@ import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
+import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent
+import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotStatus.*
+import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotUiState
 import com.teachmeprint.language.feature.screenshot.repository.ScreenShotRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import java.util.*
 import javax.inject.Inject
 
@@ -41,6 +49,9 @@ class ScreenShotViewModel @Inject constructor(
     private val _response = MutableLiveResource<String>()
     val response by getLiveData(_response)
 
+    private val _uiState = MutableStateFlow(ScreenShotUiState())
+    val uiState = _uiState.asStateFlow()
+
     private val textToSpeech: TextToSpeech by lazy {
         TextToSpeech(context) { status ->
             if (status != SUCCESS) {
@@ -49,13 +60,33 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    var typeIndicatorEnum: TypeIndicatorEnum = TRANSLATE
-
     init {
         setupTextToSpeech()
     }
 
-    fun fetchTextRecognizer(imageBitmap: Bitmap?) {
+    fun handleEvent(screenShotEvent: ScreenShotEvent) {
+        when (screenShotEvent) {
+            is ScreenShotEvent.FetchTextRecognizer -> {
+                fetchTextRecognizer(screenShotEvent.imageBitmap, screenShotEvent.typeIndicatorEnum)
+            }
+            is ScreenShotEvent.ShowBalloon -> {
+                showBalloon(screenShotEvent.textTranslate)
+            }
+            is ScreenShotEvent.CroppedImage -> {
+                croppedImage()
+            }
+        }
+    }
+
+    private fun croppedImage() {
+        _uiState.update { it.copy(croppedImage = !it.croppedImage) }
+    }
+
+    private fun showBalloon(textTranslate: String) {
+        _uiState.update { it.copy(showBalloon = !it.showBalloon, textTranslate = textTranslate) }
+    }
+
+    private fun fetchTextRecognizer(imageBitmap: Bitmap?, typeIndicatorEnum: TypeIndicatorEnum?) {
         val inputImage = imageBitmap?.let { fromBitmap(it, 0) }
         inputImage?.let {
             textRecognizer.process(it)
@@ -64,10 +95,13 @@ class ScreenShotViewModel @Inject constructor(
                     when (typeIndicatorEnum) {
                         TRANSLATE -> fetchPhraseToTranslate(textFormatted)
                         LISTEN -> fetchLanguageIdentifier(textFormatted)
+                        else -> {}
                     }
                 }
                 .addOnFailureListener {
-                    _response.error(STATUS_TEXT_RECOGNIZER_FAILED)
+                    _uiState.update { value ->
+                        value.copy(screenShotStatus = Error(STATUS_TEXT_RECOGNIZER_FAILED))
+                    }
                 }
         }
     }
@@ -80,18 +114,25 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun fetchPhraseToTranslate(text: String) {
         if (text != ILLEGIBLE_TEXT) {
-            _response.loading()
-            viewModelScope.launchResource(_response, {
-                screenShotRepository.saveTranslationCount()
-                withContext(Dispatchers.IO) {
-                    val requestBody = RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
-                    val response = screenShotRepository.getTranslatePhrase(requestBody)
+            _uiState.update { it.copy(screenShotStatus = Loading) }
+            viewModelScope.launch {
+                try {
+                    screenShotRepository.saveTranslationCount()
+                    withContext(Dispatchers.IO) {
+                        val requestBody = RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
+                        val response = screenShotRepository.getTranslatePhrase(requestBody)
+                        val textResponse = response.choices?.get(0)?.text
+                        _uiState.update { it.copy(screenShotStatus = Success(textResponse)) }
+                    }
+                } catch (e: HttpException) {
+                    _uiState.update { it.copy(screenShotStatus = Error(e.code())) }
 
-                    response.choices?.get(0)?.text
+                } catch (e: Exception) {
+                    _uiState.update { it.copy(screenShotStatus = Error(STATUS_TEXT_ERROR_GENERIC)) }
                 }
-            })
+            }
         } else {
-            _response.success(text)
+            _uiState.update { it.copy(screenShotStatus = Success(text)) }
         }
     }
 
@@ -101,7 +142,9 @@ class ScreenShotViewModel @Inject constructor(
                 fetchTextToSpeech(text, languageCode)
             }
             .addOnFailureListener {
-                _response.error(STATUS_IDENTIFY_LANGUAGE_FAILED)
+                _uiState.update { value ->
+                    value.copy(screenShotStatus = Error(STATUS_IDENTIFY_LANGUAGE_FAILED))
+                }
             }
     }
 
@@ -112,7 +155,9 @@ class ScreenShotViewModel @Inject constructor(
 
             val result = setLanguage(languageLocale)
             if (result == LANG_MISSING_DATA || result == LANG_NOT_SUPPORTED) {
-                _response.error(STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED)
+                _uiState.update { value ->
+                    value.copy(screenShotStatus = Error(STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED))
+                }
             }
 
             speak(text, QUEUE_FLUSH, null, "")
