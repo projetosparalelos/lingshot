@@ -55,12 +55,12 @@ fun ScreenShotScreen(
             .background(Color.Black)
     ) {
         ScreenShotCropImage(imageUri = imageUri,
-            croppedImage = uiState.croppedImage,
+            actionCropImageType = uiState.actionCropImageType,
             onCropImageResult = {
                 handleEvent(ScreenShotEvent.FetchTextRecognizer(it, TypeIndicatorEnum.TRANSLATE))
             },
             onCroppedImage = {
-                handleEvent(ScreenShotEvent.CroppedImage)
+                handleEvent(ScreenShotEvent.CroppedImage(it))
             }
         )
         Column(modifier = Modifier.fillMaxSize()) {
@@ -80,7 +80,7 @@ fun ScreenShotScreen(
             ScreenShotNavigationBar(
                 navigationBarItemsType = uiState.navigationBarItemsType,
                 onCroppedImage = {
-                    handleEvent(ScreenShotEvent.CroppedImage)
+                    handleEvent(ScreenShotEvent.CroppedImage(it))
                 }
             )
         }

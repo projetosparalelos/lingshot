@@ -12,14 +12,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
 import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType
-import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType.TRANSLATE
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType.*
 
 @Composable
 fun ScreenShotNavigationBar(
     modifier: Modifier = Modifier,
     navigationBarItemsType: List<NavigationBarItemType>,
-    onCroppedImage: () -> Unit
+    onCroppedImage: (ActionCropImageType?) -> Unit
 ) {
     var selectedItem by remember { mutableStateOf(TRANSLATE) }
 
@@ -38,8 +39,15 @@ fun ScreenShotNavigationBar(
                 selected = selectedItem == item,
                 onClick = {
                     selectedItem = item
-                    if (item == TRANSLATE) {
-                        onCroppedImage()
+                    when(item) {
+                        TRANSLATE -> {
+                            onCroppedImage(ActionCropImageType.CROPPED_IMAGE)
+                        }
+                        LISTEN -> {}
+                        FOCUS -> {
+                            onCroppedImage(ActionCropImageType.FOCUS_IMAGE)
+                        }
+                        LANGUAGE -> {}
                     }
                 }
             )

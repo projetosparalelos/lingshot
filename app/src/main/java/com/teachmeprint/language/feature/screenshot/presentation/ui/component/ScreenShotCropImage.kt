@@ -7,6 +7,7 @@ import android.net.Uri
 import android.widget.LinearLayout.LayoutParams
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,13 +16,15 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.CropImageView.CropCornerShape.OVAL
 import com.canhub.cropper.CropImageView.Guidelines.OFF
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
+import timber.log.Timber
 
 @Composable
 fun ScreenShotCropImage(
     modifier: Modifier = Modifier,
     imageUri: Uri?,
-    croppedImage: Boolean,
-    onCroppedImage: () -> Unit,
+    actionCropImageType: ActionCropImageType?,
+    onCroppedImage: (ActionCropImageType?) -> Unit,
     onCropImageResult: (Bitmap?) -> Unit
 ) {
     val cropImage = rememberCropImage()
@@ -31,17 +34,25 @@ fun ScreenShotCropImage(
         factory = {
             cropImage.apply {
                 setImageUriAsync(imageUri)
-                cropRectCustom()
+                cropRectDefault()
             }
         },
     ) { cropImageView ->
-        if (croppedImage) {
-            cropImageView.croppedImageAsync()
+        when (actionCropImageType) {
+            ActionCropImageType.CROPPED_IMAGE -> {
+                cropImage.croppedImageAsync()
+            }
+            ActionCropImageType.FOCUS_IMAGE -> {
+                cropImage.cropRect = Rect(null)
+            }
+            else -> { Timber.i("Clear crop action of image.") }
         }
         cropImageView.setOnCropImageCompleteListener { _, result ->
             onCropImageResult(result.bitmap)
-            onCroppedImage()
         }
+    }
+    LaunchedEffect(actionCropImageType) {
+        onCroppedImage(null)
     }
 }
 
@@ -58,7 +69,7 @@ private fun rememberCropImage(context: Context = LocalContext.current) = remembe
     }
 }
 
-private fun CropImageView.cropRectCustom() {
+private fun CropImageView.cropRectDefault() {
     val rectRight = 500
     val rectBottom = 450
     val width = resources.displayMetrics.widthPixels

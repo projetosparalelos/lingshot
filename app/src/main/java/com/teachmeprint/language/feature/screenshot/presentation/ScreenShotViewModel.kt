@@ -22,6 +22,7 @@ import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
 import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotStatus.*
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotUiState
@@ -73,13 +74,13 @@ class ScreenShotViewModel @Inject constructor(
                 showBalloon(screenShotEvent.textTranslate)
             }
             is ScreenShotEvent.CroppedImage -> {
-                croppedImage()
+                croppedImage(screenShotEvent.actionCropImageType)
             }
         }
     }
 
-    private fun croppedImage() {
-        _uiState.update { it.copy(croppedImage = !it.croppedImage) }
+    private fun croppedImage(actionCropImageType: ActionCropImageType?) {
+        _uiState.update { it.copy(actionCropImageType = actionCropImageType) }
     }
 
     private fun showBalloon(textTranslate: String) {
