@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.skydoves.balloon.BalloonAnimation.ELASTIC
 import com.skydoves.balloon.BalloonCenterAlign.START
@@ -49,10 +50,16 @@ fun ScreenShotBalloon(
 
 @Composable
 private fun rememberBalloonBuilder() = rememberBalloonBuilder {
-    setArrowPosition(0.14f)
+    setArrowPosition(0.16f)
     setMarginHorizontal(16)
     setPadding(12)
     setCornerRadius(24f)
     setBalloonAnimation(ELASTIC)
     setBackgroundColor(OthersButton)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ScreenShotBalloonPreview() {
+    ScreenShotBalloon(text = "Balloon Preview", showBalloon = true) {}
 }

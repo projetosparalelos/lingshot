@@ -16,23 +16,24 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.*
-import com.teachmeprint.language.R
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.teachmeprint.language.core.util.findActivity
-import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotStatus
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotUiState
 import com.teachmeprint.language.feature.screenshot.presentation.ScreenShotViewModel
-import com.teachmeprint.language.feature.screenshot.presentation.ui.component.ScreenShotBalloon
-import com.teachmeprint.language.feature.screenshot.presentation.ui.component.ScreenShotCropImage
-import com.teachmeprint.language.feature.screenshot.presentation.ui.component.ScreenShotNavigationBar
+import com.teachmeprint.language.feature.screenshot.presentation.ui.component.*
 import com.teachmeprint.language.ui.theme.TeachMePrintTheme
 
 @Composable
 fun ScreenShotRoute(viewModel: ScreenShotViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val systemUiController = rememberSystemUiController()
 
     TeachMePrintTheme {
+        SideEffect {
+            systemUiController.setStatusBarColor(Color.Black)
+        }
         ScreenShotScreen(
             imageUri = rememberImageUriPath(),
             uiState = uiState,
@@ -56,19 +57,28 @@ fun ScreenShotScreen(
     ) {
         ScreenShotCropImage(imageUri = imageUri,
             actionCropImageType = uiState.actionCropImageType,
-            onCropImageResult = {
-                handleEvent(ScreenShotEvent.FetchTextRecognizer(it, TypeIndicatorEnum.TRANSLATE))
+            onCropImageResult = { bitmap ->
+                handleEvent(ScreenShotEvent.FetchTextRecognizer(bitmap))
             },
             onCroppedImage = {
                 handleEvent(ScreenShotEvent.CroppedImage(it))
             }
         )
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxSize()
+        ) {
             Spacer(modifier = Modifier.weight(1f))
             if (status is ScreenShotStatus.Loading) {
                 ScreenShotLottieLoading(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                 )
+            }
+            if (status is ScreenShotStatus.Error) {
+                status.code?.let {
+                    ScreenShotSnackBarError(modifier = Modifier.padding(bottom = 16.dp), code = it)
+                }
             }
             ScreenShotBalloon(
                 text = uiState.textTranslate,
@@ -81,32 +91,18 @@ fun ScreenShotScreen(
                 navigationBarItemsType = uiState.navigationBarItemsType,
                 onCroppedImage = {
                     handleEvent(ScreenShotEvent.CroppedImage(it))
+                },
+                onToggleTypeIndicatorEnum = {
+                    handleEvent(ScreenShotEvent.ToggleTypeIndicatorEnum(it))
                 }
             )
         }
     }
-
     LaunchedEffect(status) {
         if (status is ScreenShotStatus.Success) {
             status.text?.let { handleEvent(ScreenShotEvent.ShowBalloon(it)) }
         }
     }
-}
-
-@Composable
-fun ScreenShotLottieLoading(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_translate))
-    val progress by animateLottieCompositionAsState(
-        composition = composition,
-        iterations = LottieConstants.IterateForever
-    )
-    LottieAnimation(
-        modifier = modifier
-            .width(100.dp)
-            .height(100.dp),
-        composition = composition,
-        progress = { progress },
-    )
 }
 
 @Composable

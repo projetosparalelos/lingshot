@@ -16,6 +16,7 @@ composeCompiler = "1.4.4"
 composeBom = "2023.04.01"
 composeMaterial3 = "1.1.0-rc01"
 composeHiltNavigation = "1.0.0"
+accompanistSystemUiController = "0.28.0"
 
 textRecognition = "18.0.2"
 languageID = "17.0.4"
@@ -57,9 +58,7 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigation" }
-balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
-lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemUiController"}
 
 text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognition" }
 language-id = { module = "com.google.mlkit:language-id", version.ref = "languageID" }
@@ -73,6 +72,7 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 hawk = { module = "com.orhanobut:hawk", version.ref = "hawk" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigation" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "daggerHilt" }
 
@@ -83,8 +83,8 @@ firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx"
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
-balloon = { module = "com.github.skydoves:balloon", version.ref = "balloon" }
-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 junit = { module = "junit:junit", version.ref = "jUnit" }
 

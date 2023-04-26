@@ -17,5 +17,5 @@ sealed class ScreenShotStatus {
     object Default : ScreenShotStatus()
     object Loading : ScreenShotStatus()
     data class Success(val text: String?): ScreenShotStatus()
-    data class Error(val statusCode: Int?) : ScreenShotStatus()
+    data class Error(val code: Int?) : ScreenShotStatus()
 }

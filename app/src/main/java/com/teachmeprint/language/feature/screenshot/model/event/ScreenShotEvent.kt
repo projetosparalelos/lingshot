@@ -7,8 +7,9 @@ import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
 sealed class ScreenShotEvent {
     data class CroppedImage(val actionCropImageType: ActionCropImageType?) : ScreenShotEvent()
     data class ShowBalloon(val textTranslate: String) : ScreenShotEvent()
+    data class ToggleTypeIndicatorEnum(val typeIndicatorEnum: TypeIndicatorEnum) : ScreenShotEvent()
+
     data class FetchTextRecognizer(
-        val imageBitmap: Bitmap?,
-        val typeIndicatorEnum: TypeIndicatorEnum? = null
+        val imageBitmap: Bitmap?
     ) : ScreenShotEvent()
 }

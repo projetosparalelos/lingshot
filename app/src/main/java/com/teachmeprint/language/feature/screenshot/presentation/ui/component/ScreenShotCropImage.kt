@@ -1,5 +1,6 @@
 package com.teachmeprint.language.feature.screenshot.presentation.ui.component
 
+import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
@@ -11,11 +12,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.CropImageView.CropCornerShape.OVAL
 import com.canhub.cropper.CropImageView.Guidelines.OFF
+import com.teachmeprint.language.R
 import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
 import timber.log.Timber
 
@@ -45,7 +48,9 @@ fun ScreenShotCropImage(
             ActionCropImageType.FOCUS_IMAGE -> {
                 cropImage.cropRect = Rect(null)
             }
-            else -> { Timber.i("Clear crop action of image.") }
+            else -> {
+                Timber.i("Clear crop action of image.")
+            }
         }
         cropImageView.setOnCropImageCompleteListener { _, result ->
             onCropImageResult(result.bitmap)
@@ -74,4 +79,24 @@ private fun CropImageView.cropRectDefault() {
     val rectBottom = 450
     val width = resources.displayMetrics.widthPixels
     cropRect = Rect(width - rectRight, 0, width, rectBottom)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ScreenShotCropImagePreview() {
+    val resources = LocalContext.current.resources
+    val cropImagePreview = R.drawable.crop_image_preview
+
+    val imageUri = Uri.Builder()
+        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+        .authority(resources.getResourcePackageName(cropImagePreview))
+        .appendPath(resources.getResourceTypeName(cropImagePreview))
+        .appendPath(resources.getResourceEntryName(cropImagePreview))
+        .build()
+
+    ScreenShotCropImage(
+        imageUri = imageUri,
+        actionCropImageType = ActionCropImageType.FOCUS_IMAGE,
+        onCroppedImage = {},
+        onCropImageResult = {})
 }

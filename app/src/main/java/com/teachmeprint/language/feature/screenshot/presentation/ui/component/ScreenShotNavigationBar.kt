@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
 import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType
 import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType.*
@@ -20,13 +22,14 @@ import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType.
 fun ScreenShotNavigationBar(
     modifier: Modifier = Modifier,
     navigationBarItemsType: List<NavigationBarItemType>,
-    onCroppedImage: (ActionCropImageType?) -> Unit
+    onCroppedImage: (ActionCropImageType?) -> Unit,
+    onToggleTypeIndicatorEnum: (TypeIndicatorEnum) -> Unit
 ) {
     var selectedItem by remember { mutableStateOf(TRANSLATE) }
 
     NavigationBar(
         modifier = modifier
-            .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+            .padding(bottom = 16.dp)
             .clip(CircleShape)
     ) {
         Spacer(modifier = Modifier.width(8.dp))
@@ -39,11 +42,15 @@ fun ScreenShotNavigationBar(
                 selected = selectedItem == item,
                 onClick = {
                     selectedItem = item
-                    when(item) {
+                    when (item) {
                         TRANSLATE -> {
                             onCroppedImage(ActionCropImageType.CROPPED_IMAGE)
+                            onToggleTypeIndicatorEnum(TypeIndicatorEnum.TRANSLATE)
                         }
-                        LISTEN -> {}
+                        LISTEN -> {
+                            onCroppedImage(ActionCropImageType.CROPPED_IMAGE)
+                            onToggleTypeIndicatorEnum(TypeIndicatorEnum.LISTEN)
+                        }
                         FOCUS -> {
                             onCroppedImage(ActionCropImageType.FOCUS_IMAGE)
                         }
@@ -54,4 +61,14 @@ fun ScreenShotNavigationBar(
         }
         Spacer(modifier = Modifier.width(8.dp))
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ScreenShotNavigationBarPreview() {
+    ScreenShotNavigationBar(
+        navigationBarItemsType = enumValues<NavigationBarItemType>().toList(),
+        onCroppedImage = {},
+        onToggleTypeIndicatorEnum = {}
+    )
 }

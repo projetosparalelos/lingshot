@@ -23,6 +23,7 @@ import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
 import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType
 import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotStatus.*
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotUiState
@@ -68,13 +69,16 @@ class ScreenShotViewModel @Inject constructor(
     fun handleEvent(screenShotEvent: ScreenShotEvent) {
         when (screenShotEvent) {
             is ScreenShotEvent.FetchTextRecognizer -> {
-                fetchTextRecognizer(screenShotEvent.imageBitmap, screenShotEvent.typeIndicatorEnum)
+                fetchTextRecognizer(screenShotEvent.imageBitmap)
             }
             is ScreenShotEvent.ShowBalloon -> {
                 showBalloon(screenShotEvent.textTranslate)
             }
             is ScreenShotEvent.CroppedImage -> {
                 croppedImage(screenShotEvent.actionCropImageType)
+            }
+            is ScreenShotEvent.ToggleTypeIndicatorEnum -> {
+                toggleTypeIndicatorEnum(screenShotEvent.typeIndicatorEnum)
             }
         }
     }
@@ -83,20 +87,23 @@ class ScreenShotViewModel @Inject constructor(
         _uiState.update { it.copy(actionCropImageType = actionCropImageType) }
     }
 
+    private fun toggleTypeIndicatorEnum(typeIndicatorEnum: TypeIndicatorEnum) {
+        _uiState.update { it.copy(typeIndicatorEnum = typeIndicatorEnum) }
+    }
+
     private fun showBalloon(textTranslate: String) {
         _uiState.update { it.copy(showBalloon = !it.showBalloon, textTranslate = textTranslate) }
     }
 
-    private fun fetchTextRecognizer(imageBitmap: Bitmap?, typeIndicatorEnum: TypeIndicatorEnum?) {
+    private fun fetchTextRecognizer(imageBitmap: Bitmap?) {
         val inputImage = imageBitmap?.let { fromBitmap(it, 0) }
         inputImage?.let {
             textRecognizer.process(it)
                 .addOnSuccessListener { value ->
                     val textFormatted = value.text.checkTextAndFormat()
-                    when (typeIndicatorEnum) {
+                    when (_uiState.value.typeIndicatorEnum) {
                         TRANSLATE -> fetchPhraseToTranslate(textFormatted)
                         LISTEN -> fetchLanguageIdentifier(textFormatted)
-                        else -> {}
                     }
                 }
                 .addOnFailureListener {
