@@ -62,6 +62,8 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
+    val typeIndicatorEnum: TypeIndicatorEnum = TRANSLATE
+
     init {
         setupTextToSpeech()
     }
@@ -77,24 +79,27 @@ class ScreenShotViewModel @Inject constructor(
             is ScreenShotEvent.CroppedImage -> {
                 croppedImage(screenShotEvent.actionCropImageType)
             }
-            is ScreenShotEvent.ToggleTypeIndicatorEnum -> {
-                toggleTypeIndicatorEnum(screenShotEvent.typeIndicatorEnum)
-            }
             is ScreenShotEvent.OptionSelectedLanguage -> {
                 selectedOptionLanguage(screenShotEvent.selectedOptionLanguage)
+            }
+            is ScreenShotEvent.OptionSelectedNavigationBar -> {
+                selectedOptionNavigationBar(screenShotEvent.selectedOptionNavigationBar)
             }
             is ScreenShotEvent.SaveLanguage -> {
                 saveLanguage(screenShotEvent.availableLanguage)
             }
             is ScreenShotEvent.ShowDialogLanguage -> {
                 showDialogLanguage()
-                selectedOptionLanguage(getLanguage())
             }
         }
     }
 
     private fun showDialogLanguage() {
-        _uiState.update { it.copy(showDialogLanguage = !it.showDialogLanguage) }
+        _uiState.update { it.copy(showDialogLanguage = !it.showDialogLanguage, selectedOptionLanguage = getLanguage()) }
+    }
+
+    private fun selectedOptionNavigationBar(navigationBarItemType: NavigationBarItemType) {
+        _uiState.update { it.copy(selectedOptionNavigationBar = navigationBarItemType) }
     }
 
     private fun selectedOptionLanguage(availableLanguage: AvailableLanguage?) {
@@ -103,10 +108,6 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun croppedImage(actionCropImageType: ActionCropImageType?) {
         _uiState.update { it.copy(actionCropImageType = actionCropImageType) }
-    }
-
-    private fun toggleTypeIndicatorEnum(typeIndicatorEnum: TypeIndicatorEnum) {
-        _uiState.update { it.copy(typeIndicatorEnum = typeIndicatorEnum) }
     }
 
     private fun showBalloon(textTranslate: String) {
@@ -119,7 +120,7 @@ class ScreenShotViewModel @Inject constructor(
             textRecognizer.process(it)
                 .addOnSuccessListener { value ->
                     val textFormatted = value.text.checkTextAndFormat()
-                    when (_uiState.value.typeIndicatorEnum) {
+                    when (typeIndicatorEnum) {
                         TRANSLATE -> fetchPhraseToTranslate(textFormatted)
                         LISTEN -> fetchLanguageIdentifier(textFormatted)
                     }

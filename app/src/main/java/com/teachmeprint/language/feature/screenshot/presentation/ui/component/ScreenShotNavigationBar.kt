@@ -13,22 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
-import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
 import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType
 import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType.*
 
 @Composable
 fun ScreenShotNavigationBar(
     modifier: Modifier = Modifier,
-    isNotLoading: Boolean,
+    selectedOptionNavigationBar: NavigationBarItemType,
     navigationBarItemsType: List<NavigationBarItemType>,
-    onCroppedImage: (ActionCropImageType?) -> Unit,
-    onToggleTypeIndicatorEnum: (TypeIndicatorEnum) -> Unit,
-    onShowDialogLanguage: () -> Unit
+    onOptionSelectedNavigationBar: (NavigationBarItemType) -> Unit
 ) {
-    var selectedItem by remember { mutableStateOf(TRANSLATE) }
-
     NavigationBar(
         modifier = modifier
             .padding(bottom = 16.dp)
@@ -41,27 +35,9 @@ fun ScreenShotNavigationBar(
                     Icon(imageVector = item.icon, contentDescription = item.name)
                 },
                 label = { Text(item.label) },
-                selected = selectedItem == item,
+                selected = selectedOptionNavigationBar == item,
                 onClick = {
-                    if (isNotLoading) {
-                        selectedItem = item
-                        when (item) {
-                            TRANSLATE -> {
-                                onCroppedImage(ActionCropImageType.CROPPED_IMAGE)
-                                onToggleTypeIndicatorEnum(TypeIndicatorEnum.TRANSLATE)
-                            }
-                            LISTEN -> {
-                                onCroppedImage(ActionCropImageType.CROPPED_IMAGE)
-                                onToggleTypeIndicatorEnum(TypeIndicatorEnum.LISTEN)
-                            }
-                            FOCUS -> {
-                                onCroppedImage(ActionCropImageType.FOCUS_IMAGE)
-                            }
-                            LANGUAGE -> {
-                                onShowDialogLanguage()
-                            }
-                        }
-                    }
+                    onOptionSelectedNavigationBar(item)
                 }
             )
         }
@@ -73,10 +49,8 @@ fun ScreenShotNavigationBar(
 @Composable
 private fun ScreenShotNavigationBarPreview() {
     ScreenShotNavigationBar(
+        selectedOptionNavigationBar = TRANSLATE,
         navigationBarItemsType = enumValues<NavigationBarItemType>().toList(),
-        isNotLoading = true,
-        onCroppedImage = {},
-        onToggleTypeIndicatorEnum = {},
-        onShowDialogLanguage = {}
+        onOptionSelectedNavigationBar = {}
     )
 }

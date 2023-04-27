@@ -22,7 +22,6 @@ import com.teachmeprint.language.ui.theme.OthersButton
 fun ScreenShotBalloon(
     modifier: Modifier = Modifier,
     text: String,
-    showBalloon: Boolean,
     onShowBalloon: () -> Unit
 ) {
     Balloon(
@@ -38,12 +37,8 @@ fun ScreenShotBalloon(
             )
         }
     ) { balloonWindow ->
-        if (showBalloon) {
-            balloonWindow.showAtCenter(centerAlign = START)
-        }
-        balloonWindow.setOnBalloonDismissListener {
-            onShowBalloon()
-        }
+        balloonWindow.showAtCenter(centerAlign = START)
+        balloonWindow.setOnBalloonDismissListener(onShowBalloon)
         Divider(color = Color.Transparent)
     }
 }
@@ -61,5 +56,5 @@ private fun rememberBalloonBuilder() = rememberBalloonBuilder {
 @Preview(showBackground = true)
 @Composable
 private fun ScreenShotBalloonPreview() {
-    ScreenShotBalloon(text = "Balloon Preview", showBalloon = true) {}
+    ScreenShotBalloon(text = "Balloon Preview") {}
 }

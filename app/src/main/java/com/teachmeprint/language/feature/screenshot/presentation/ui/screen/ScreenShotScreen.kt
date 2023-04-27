@@ -16,9 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.*
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.teachmeprint.language.core.util.findActivity
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType.CROPPED_IMAGE
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType.FOCUS_IMAGE
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType.*
 import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent
+import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent.*
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotStatus
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotUiState
 import com.teachmeprint.language.feature.screenshot.presentation.ScreenShotViewModel
@@ -54,10 +57,10 @@ fun ScreenShotScreen(
         ScreenShotCropImage(imageUri = imageUri,
             actionCropImageType = uiState.actionCropImageType,
             onCropImageResult = { bitmap ->
-                handleEvent(ScreenShotEvent.FetchTextRecognizer(bitmap))
+                handleEvent(FetchTextRecognizer(bitmap))
             },
             onCroppedImage = {
-                handleEvent(ScreenShotEvent.CroppedImage(it))
+                handleEvent(CroppedImage(it))
             }
         )
         Column(
@@ -76,24 +79,35 @@ fun ScreenShotScreen(
                     ScreenShotSnackBarError(modifier = Modifier.padding(bottom = 16.dp), code = it)
                 }
             }
-            ScreenShotBalloon(
-                text = uiState.textTranslate,
-                showBalloon = uiState.showBalloon,
-                onShowBalloon = {
-                    handleEvent(ScreenShotEvent.ShowBalloon(""))
-                }
-            )
+            if (uiState.showBalloon) {
+                ScreenShotBalloon(
+                    text = uiState.textTranslate,
+                    onShowBalloon = {
+                        handleEvent(ShowBalloon(""))
+                    }
+                )
+            }
             ScreenShotNavigationBar(
                 navigationBarItemsType = uiState.navigationBarItemsType,
-                isNotLoading = (status !is ScreenShotStatus.Loading),
-                onCroppedImage = {
-                    handleEvent(ScreenShotEvent.CroppedImage(it))
-                },
-                onToggleTypeIndicatorEnum = {
-                    handleEvent(ScreenShotEvent.ToggleTypeIndicatorEnum(it))
-                },
-                onShowDialogLanguage = {
-                    handleEvent(ScreenShotEvent.ShowDialogLanguage)
+                selectedOptionNavigationBar = uiState.selectedOptionNavigationBar,
+                onOptionSelectedNavigationBar = { item ->
+                    if (status !is ScreenShotStatus.Loading) {
+                        handleEvent(OptionSelectedNavigationBar(item))
+                        when (item) {
+                            TRANSLATE -> {
+                                handleEvent(CroppedImage(CROPPED_IMAGE))
+                            }
+                            LISTEN -> {
+                                handleEvent(CroppedImage(CROPPED_IMAGE))
+                            }
+                            FOCUS -> {
+                                handleEvent(CroppedImage(FOCUS_IMAGE))
+                            }
+                            LANGUAGE -> {
+                                handleEvent(ShowDialogLanguage)
+                            }
+                        }
+                    }
                 }
             )
         }
@@ -102,20 +116,20 @@ fun ScreenShotScreen(
                 availableLanguages = uiState.availableLanguages,
                 selectedOptionLanguage = uiState.selectedOptionLanguage,
                 onOptionSelectedLanguage = {
-                    handleEvent(ScreenShotEvent.OptionSelectedLanguage(it))
+                    handleEvent(OptionSelectedLanguage(it))
                 },
                 onSaveLanguage = {
-                    handleEvent(ScreenShotEvent.SaveLanguage(it))
+                    handleEvent(SaveLanguage(it))
                 },
                 onDismiss = {
-                    handleEvent(ScreenShotEvent.ShowDialogLanguage)
+                    handleEvent(ShowDialogLanguage)
                 }
             )
         }
     }
     LaunchedEffect(status) {
         if (status is ScreenShotStatus.Success) {
-            status.text?.let { handleEvent(ScreenShotEvent.ShowBalloon(it)) }
+            status.text?.let { handleEvent(ShowBalloon(it)) }
         }
     }
 }
