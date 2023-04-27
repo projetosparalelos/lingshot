@@ -21,9 +21,11 @@ import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType.
 @Composable
 fun ScreenShotNavigationBar(
     modifier: Modifier = Modifier,
+    isNotLoading: Boolean,
     navigationBarItemsType: List<NavigationBarItemType>,
     onCroppedImage: (ActionCropImageType?) -> Unit,
-    onToggleTypeIndicatorEnum: (TypeIndicatorEnum) -> Unit
+    onToggleTypeIndicatorEnum: (TypeIndicatorEnum) -> Unit,
+    onShowDialogLanguage: () -> Unit
 ) {
     var selectedItem by remember { mutableStateOf(TRANSLATE) }
 
@@ -41,20 +43,24 @@ fun ScreenShotNavigationBar(
                 label = { Text(item.label) },
                 selected = selectedItem == item,
                 onClick = {
-                    selectedItem = item
-                    when (item) {
-                        TRANSLATE -> {
-                            onCroppedImage(ActionCropImageType.CROPPED_IMAGE)
-                            onToggleTypeIndicatorEnum(TypeIndicatorEnum.TRANSLATE)
+                    if (isNotLoading) {
+                        selectedItem = item
+                        when (item) {
+                            TRANSLATE -> {
+                                onCroppedImage(ActionCropImageType.CROPPED_IMAGE)
+                                onToggleTypeIndicatorEnum(TypeIndicatorEnum.TRANSLATE)
+                            }
+                            LISTEN -> {
+                                onCroppedImage(ActionCropImageType.CROPPED_IMAGE)
+                                onToggleTypeIndicatorEnum(TypeIndicatorEnum.LISTEN)
+                            }
+                            FOCUS -> {
+                                onCroppedImage(ActionCropImageType.FOCUS_IMAGE)
+                            }
+                            LANGUAGE -> {
+                                onShowDialogLanguage()
+                            }
                         }
-                        LISTEN -> {
-                            onCroppedImage(ActionCropImageType.CROPPED_IMAGE)
-                            onToggleTypeIndicatorEnum(TypeIndicatorEnum.LISTEN)
-                        }
-                        FOCUS -> {
-                            onCroppedImage(ActionCropImageType.FOCUS_IMAGE)
-                        }
-                        LANGUAGE -> {}
                     }
                 }
             )
@@ -68,7 +74,9 @@ fun ScreenShotNavigationBar(
 private fun ScreenShotNavigationBarPreview() {
     ScreenShotNavigationBar(
         navigationBarItemsType = enumValues<NavigationBarItemType>().toList(),
+        isNotLoading = true,
         onCroppedImage = {},
-        onToggleTypeIndicatorEnum = {}
+        onToggleTypeIndicatorEnum = {},
+        onShowDialogLanguage = {}
     )
 }

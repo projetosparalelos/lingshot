@@ -2,12 +2,13 @@
 package com.teachmeprint.language.data.local.storage
 
 import com.orhanobut.hawk.Hawk
+import com.teachmeprint.language.data.model.language.AvailableLanguage
 import javax.inject.Inject
 
 class LanguageLocalStorage @Inject constructor() {
 
-    fun getLanguage(): String? = Hawk.get(LANGUAGE_DATA_KEY)
-    fun saveLanguage(languageSelected: String) = Hawk.put(LANGUAGE_DATA_KEY, languageSelected)
+    fun getLanguage(): AvailableLanguage? = Hawk.get(LANGUAGE_DATA_KEY)
+    fun saveLanguage(availableLanguage: AvailableLanguage?) = Hawk.put(LANGUAGE_DATA_KEY, availableLanguage)
     fun deleteLanguage() = Hawk.delete(LANGUAGE_DATA_KEY)
 
     companion object {

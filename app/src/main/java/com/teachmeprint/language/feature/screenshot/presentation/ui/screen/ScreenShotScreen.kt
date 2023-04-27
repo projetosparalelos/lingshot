@@ -28,12 +28,8 @@ import com.teachmeprint.language.ui.theme.TeachMePrintTheme
 @Composable
 fun ScreenShotRoute(viewModel: ScreenShotViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val systemUiController = rememberSystemUiController()
 
     TeachMePrintTheme {
-        SideEffect {
-            systemUiController.setStatusBarColor(Color.Black)
-        }
         ScreenShotScreen(
             imageUri = rememberImageUriPath(),
             uiState = uiState,
@@ -89,11 +85,30 @@ fun ScreenShotScreen(
             )
             ScreenShotNavigationBar(
                 navigationBarItemsType = uiState.navigationBarItemsType,
+                isNotLoading = (status !is ScreenShotStatus.Loading),
                 onCroppedImage = {
                     handleEvent(ScreenShotEvent.CroppedImage(it))
                 },
                 onToggleTypeIndicatorEnum = {
                     handleEvent(ScreenShotEvent.ToggleTypeIndicatorEnum(it))
+                },
+                onShowDialogLanguage = {
+                    handleEvent(ScreenShotEvent.ShowDialogLanguage)
+                }
+            )
+        }
+        if (uiState.showDialogLanguage) {
+            ScreenShotDialogLanguage(
+                availableLanguages = uiState.availableLanguages,
+                selectedOptionLanguage = uiState.selectedOptionLanguage,
+                onOptionSelectedLanguage = {
+                    handleEvent(ScreenShotEvent.OptionSelectedLanguage(it))
+                },
+                onSaveLanguage = {
+                    handleEvent(ScreenShotEvent.SaveLanguage(it))
+                },
+                onDismiss = {
+                    handleEvent(ScreenShotEvent.ShowDialogLanguage)
                 }
             )
         }

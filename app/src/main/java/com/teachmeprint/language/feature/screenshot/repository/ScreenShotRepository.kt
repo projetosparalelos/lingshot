@@ -2,6 +2,7 @@ package com.teachmeprint.language.feature.screenshot.repository
 
 import com.teachmeprint.language.data.local.storage.LanguageLocalStorage
 import com.teachmeprint.language.data.local.storage.TranslationCountLocalStore
+import com.teachmeprint.language.data.model.language.AvailableLanguage
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
 import com.teachmeprint.language.data.model.screenshot.entity.TranslateChatGPTResponse
 import com.teachmeprint.language.data.remote.api.TranslateChatGPTService
@@ -19,12 +20,12 @@ class ScreenShotRepository @Inject constructor(
         return translateChatGPTService.getTranslatePhrase(message)
     }
 
-    fun getLanguage(): String? {
+    fun getLanguage(): AvailableLanguage? {
         return languageLocalStorage.getLanguage()
     }
 
-    fun saveLanguage(languageSelected: String) {
-        languageLocalStorage.saveLanguage(languageSelected)
+    fun saveLanguage(availableLanguage: AvailableLanguage?) {
+        languageLocalStorage.saveLanguage(availableLanguage)
     }
 
     fun saveTranslationCount() {

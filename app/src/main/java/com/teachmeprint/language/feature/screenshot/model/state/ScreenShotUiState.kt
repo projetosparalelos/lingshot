@@ -1,5 +1,6 @@
 package com.teachmeprint.language.feature.screenshot.model.state
 
+import com.teachmeprint.language.data.model.language.AvailableLanguage
 import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
 import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
 import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType
@@ -9,8 +10,11 @@ data class ScreenShotUiState(
     val typeIndicatorEnum: TypeIndicatorEnum = TypeIndicatorEnum.TRANSLATE,
     val textTranslate: String = "",
     val showBalloon: Boolean = false,
+    val showDialogLanguage: Boolean = false,
     val actionCropImageType: ActionCropImageType? = null,
-    val navigationBarItemsType: List<NavigationBarItemType> = enumValues<NavigationBarItemType>().toList()
+    val navigationBarItemsType: List<NavigationBarItemType> = enumValues<NavigationBarItemType>().toList(),
+    val selectedOptionLanguage: AvailableLanguage? = null,
+    val availableLanguages: List<AvailableLanguage> = enumValues<AvailableLanguage>().toList()
 )
 
 sealed class ScreenShotStatus {

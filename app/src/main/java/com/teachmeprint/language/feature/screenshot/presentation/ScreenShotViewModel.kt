@@ -80,7 +80,25 @@ class ScreenShotViewModel @Inject constructor(
             is ScreenShotEvent.ToggleTypeIndicatorEnum -> {
                 toggleTypeIndicatorEnum(screenShotEvent.typeIndicatorEnum)
             }
+            is ScreenShotEvent.OptionSelectedLanguage -> {
+                selectedOptionLanguage(screenShotEvent.selectedOptionLanguage)
+            }
+            is ScreenShotEvent.SaveLanguage -> {
+                saveLanguage(screenShotEvent.availableLanguage)
+            }
+            is ScreenShotEvent.ShowDialogLanguage -> {
+                showDialogLanguage()
+                selectedOptionLanguage(getLanguage())
+            }
         }
+    }
+
+    private fun showDialogLanguage() {
+        _uiState.update { it.copy(showDialogLanguage = !it.showDialogLanguage) }
+    }
+
+    private fun selectedOptionLanguage(availableLanguage: AvailableLanguage?) {
+        _uiState.update { it.copy(selectedOptionLanguage = availableLanguage) }
     }
 
     private fun croppedImage(actionCropImageType: ActionCropImageType?) {
@@ -203,13 +221,13 @@ class ScreenShotViewModel @Inject constructor(
         textToSpeech.shutdown()
     }
 
-    fun getLanguage(): String? {
+    private fun getLanguage(): AvailableLanguage? {
         return screenShotRepository.getLanguage()
     }
 
-    fun saveLanguage(languageSelected: suspend () -> String) {
+    private fun saveLanguage(availableLanguage: AvailableLanguage?) {
         viewModelScope.launch {
-            screenShotRepository.saveLanguage(languageSelected())
+            screenShotRepository.saveLanguage(availableLanguage)
         }
     }
 
@@ -220,10 +238,6 @@ class ScreenShotViewModel @Inject constructor(
             .map { it.displayName }
     }
 
-     fun getLanguageSelectedIndex(): Int {
-        return getLanguageList().indexOf(getLanguage())
-    }
-
     fun hasReachedMaxTranslationCount(): Boolean {
         return screenShotRepository.hasReachedMaxTranslationCount()
     }
@@ -231,8 +245,8 @@ class ScreenShotViewModel @Inject constructor(
     companion object {
         private const val ILLEGIBLE_TEXT = "There isn't any legible text."
         private const val LANGUAGE_CODE_UNAVAILABLE = "und"
-        private val PROMPT_TRANSLATE: (String?, String) -> String = { language, text ->
-            "Translate this into 1. ${language}:\\n\\n${text}\\n\\n1."
+        private val PROMPT_TRANSLATE: (AvailableLanguage?, String) -> String = { language, text ->
+            "Translate this into 1. ${language?.displayName}:\\n\\n${text}\\n\\n1."
         }
     }
 }

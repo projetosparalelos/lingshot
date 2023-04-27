@@ -6,13 +6,11 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Rect
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.google.android.material.R.id.snackbar_action
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.teachmeprint.language.R
 
@@ -59,21 +57,6 @@ fun String.limitCharactersWithEllipsize(limit: Int): String {
         stringBuilder.toString()
     } else {
         this
-    }
-}
-
-fun BottomNavigationView.setOnItemSelectedWithDebounceListener(block: (MenuItem) -> Unit) {
-    val debounceInterval = 500L
-    var lastClickTime = 0L
-
-    setOnItemSelectedListener { item ->
-        val now = System.currentTimeMillis()
-
-        if (now - lastClickTime >= debounceInterval) {
-            lastClickTime = now
-            block.invoke(item)
-        }
-        true
     }
 }
 
