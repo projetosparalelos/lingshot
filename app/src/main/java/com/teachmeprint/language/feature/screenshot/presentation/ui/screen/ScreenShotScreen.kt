@@ -92,6 +92,8 @@ fun ScreenShotScreen(
                 selectedOptionNavigationBar = uiState.selectedOptionNavigationBar,
                 onOptionSelectedNavigationBar = { item ->
                     if (status !is ScreenShotStatus.Loading) {
+                        handleEvent(OptionSelectedNavigationBar(item))
+
                         when (item) {
                             TRANSLATE -> {
                                 handleEvent(CroppedImage(CROPPED_IMAGE))
@@ -106,7 +108,6 @@ fun ScreenShotScreen(
                                 handleEvent(ShowDialogLanguage)
                             }
                         }
-                        handleEvent(OptionSelectedNavigationBar(item))
                     }
                 }
             )
