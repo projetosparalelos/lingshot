@@ -47,42 +47,44 @@ fun ScreenShotScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-            ScreenShotCropImage(
-                actionCropImageType = uiState.actionCropImageType,
-                onCropImageResult = { bitmap ->
-                    handleEvent(FetchTextRecognizer(bitmap))
-                },
-                onCroppedImage = {
-                    handleEvent(CroppedImage(it))
+        ScreenShotCropImage(
+            actionCropImageType = uiState.actionCropImageType,
+            onCropImageResult = { bitmap ->
+                handleEvent(FetchTextRecognizer(bitmap))
+            },
+            onCroppedImage = {
+                handleEvent(CroppedImage(it))
+            }
+        )
+    }
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxSize()
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+        if (status is ScreenShotStatus.Loading) {
+            ScreenShotLottieLoading(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+        }
+        if (status is ScreenShotStatus.Error) {
+            status.code?.let {
+                ScreenShotSnackBarError(modifier = Modifier.padding(bottom = 16.dp), code = it)
+            }
+        }
+        if (uiState.showBalloon) {
+            ScreenShotBalloon(
+                text = uiState.textTranslate,
+                onShowBalloon = {
+                    handleEvent(ShowBalloon(""))
                 }
             )
         }
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxSize()
+        ScreenShotNavigationBar(
+            modifier = Modifier.padding(bottom = 16.dp)
         ) {
-            Spacer(modifier = Modifier.weight(1f))
-            if (status is ScreenShotStatus.Loading) {
-                ScreenShotLottieLoading(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                )
-            }
-            if (status is ScreenShotStatus.Error) {
-                status.code?.let {
-                    ScreenShotSnackBarError(modifier = Modifier.padding(bottom = 16.dp), code = it)
-                }
-            }
-            if (uiState.showBalloon) {
-                ScreenShotBalloon(
-                    text = uiState.textTranslate,
-                    onShowBalloon = {
-                        handleEvent(ShowBalloon(""))
-                    }
-                )
-            }
-            ScreenShotNavigationBar(
-                modifier = Modifier.padding(bottom = 16.dp),
+            ScreenShotNavigationBarItem(
                 navigationBarItemsType = uiState.navigationBarItemsType,
                 selectedOptionNavigationBar = uiState.selectedOptionNavigationBar,
                 onOptionSelectedNavigationBar = { item ->
@@ -109,22 +111,22 @@ fun ScreenShotScreen(
                 }
             )
         }
-        if (uiState.showDialogLanguage) {
-            ScreenShotDialogLanguage(
-                availableLanguages = uiState.availableLanguages,
-                selectedOptionLanguage = uiState.selectedOptionLanguage,
-                onOptionSelectedLanguage = {
-                    handleEvent(OptionSelectedLanguage(it))
-                },
-                onSaveLanguage = {
-                    handleEvent(SaveLanguage(it))
-                },
-                onDismiss = {
-                    handleEvent(ShowDialogLanguage)
-                }
-            )
-        }
-
+    }
+    if (uiState.showDialogLanguage) {
+        ScreenShotDialogLanguage(
+            availableLanguages = uiState.availableLanguages,
+            selectedOptionLanguage = uiState.selectedOptionLanguage,
+            onOptionSelectedLanguage = {
+                handleEvent(OptionSelectedLanguage(it))
+            },
+            onSaveLanguage = {
+                handleEvent(SaveLanguage(it))
+            },
+            onDismiss = {
+                handleEvent(ShowDialogLanguage)
+            }
+        )
+    }
     LaunchedEffect(status) {
         if (status is ScreenShotStatus.Success) {
             status.text?.let { handleEvent(ShowBalloon(it)) }
