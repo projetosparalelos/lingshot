@@ -2,9 +2,11 @@ package com.teachmeprint.language.feature.screenshot.presentation.ui.component
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
+import android.os.Build
 import android.widget.LinearLayout.LayoutParams
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import androidx.compose.runtime.Composable
@@ -19,13 +21,16 @@ import com.canhub.cropper.CropImageView
 import com.canhub.cropper.CropImageView.CropCornerShape.OVAL
 import com.canhub.cropper.CropImageView.Guidelines.OFF
 import com.teachmeprint.language.R
+import com.teachmeprint.language.core.util.findActivity
 import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType.CROPPED_IMAGE
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType.FOCUS_IMAGE
 import timber.log.Timber
 
 @Composable
 fun ScreenShotCropImage(
     modifier: Modifier = Modifier,
-    imageUri: Uri?,
+    imageUri: Uri? = rememberImageUriPath(),
     actionCropImageType: ActionCropImageType?,
     onCroppedImage: (ActionCropImageType?) -> Unit,
     onCropImageResult: (Bitmap?) -> Unit
@@ -42,12 +47,14 @@ fun ScreenShotCropImage(
         },
     ) { cropImageView ->
         when (actionCropImageType) {
-            ActionCropImageType.CROPPED_IMAGE -> {
+            CROPPED_IMAGE -> {
                 cropImage.croppedImageAsync()
             }
-            ActionCropImageType.FOCUS_IMAGE -> {
+
+            FOCUS_IMAGE -> {
                 cropImage.cropRect = Rect(null)
             }
+
             else -> {
                 Timber.i("Clear crop action of image.")
             }
@@ -58,6 +65,17 @@ fun ScreenShotCropImage(
     }
     LaunchedEffect(actionCropImageType) {
         onCroppedImage(null)
+    }
+}
+@Composable
+@Suppress("Deprecation")
+private fun rememberImageUriPath(context: Context = LocalContext.current) = remember {
+    val activity = context.findActivity()
+    val intent = activity?.intent
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        intent?.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+    } else {
+        intent?.getParcelableExtra(Intent.EXTRA_STREAM)
     }
 }
 
@@ -96,7 +114,7 @@ private fun ScreenShotCropImagePreview() {
 
     ScreenShotCropImage(
         imageUri = imageUri,
-        actionCropImageType = ActionCropImageType.FOCUS_IMAGE,
+        actionCropImageType = FOCUS_IMAGE,
         onCroppedImage = {},
         onCropImageResult = {})
 }

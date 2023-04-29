@@ -1,7 +1,6 @@
 package com.teachmeprint.language.feature.screenshot.presentation.ui.component
 
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -24,9 +23,7 @@ fun ScreenShotNavigationBar(
     onOptionSelectedNavigationBar: (NavigationBarItemType) -> Unit
 ) {
     NavigationBar(
-        modifier = modifier
-            .padding(bottom = 16.dp)
-            .clip(CircleShape)
+        modifier = modifier.clip(CircleShape)
     ) {
         Spacer(modifier = Modifier.width(8.dp))
         navigationBarItemsType.forEach { item ->
@@ -35,7 +32,7 @@ fun ScreenShotNavigationBar(
                     Icon(imageVector = item.icon, contentDescription = item.name)
                 },
                 label = { Text(item.label) },
-                selected = selectedOptionNavigationBar == item,
+                selected = (selectedOptionNavigationBar == item),
                 onClick = {
                     onOptionSelectedNavigationBar(item)
                 }

@@ -31,7 +31,6 @@ import com.teachmeprint.language.feature.screenshot.repository.ScreenShotReposit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -49,16 +48,15 @@ class ScreenShotViewModel @Inject constructor(
     private val languageIdentifier: LanguageIdentifier
 ) : ViewModel() {
 
-    private val _response = MutableLiveResource<String>()
-    val response by getLiveData(_response)
-
     private val _uiState = MutableStateFlow(ScreenShotUiState())
     val uiState = _uiState.asStateFlow()
 
     private val textToSpeech: TextToSpeech by lazy {
         TextToSpeech(context) { status ->
             if (status != SUCCESS) {
-                _response.error(STATUS_TEXT_TO_SPEECH_FAILED)
+                _uiState.update {
+                    it.copy(screenShotStatus = Error(STATUS_TEXT_TO_SPEECH_FAILED))
+                }
             }
         }
     }
@@ -134,12 +132,6 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun String.checkTextAndFormat(): String {
-        return replace("\n", " ")
-            .replaceFirstChar { it.titlecase() }
-            .ifBlank { ILLEGIBLE_TEXT }
-    }
-
     private fun fetchPhraseToTranslate(text: String) {
         if (text != ILLEGIBLE_TEXT) {
             _uiState.update { it.copy(screenShotStatus = Loading) }
@@ -199,26 +191,24 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun onSpeechListener() = object : UtteranceProgressListener() {
         override fun onStart(p0: String?) {
-            viewModelScope.launch {
-                _response.loading()
-            }
+            _uiState.update { it.copy(screenShotStatus = Loading) }
+
         }
 
-        override fun onDone(p0: String?) {
-            viewModelScope.launch {
-                _response.success(p0)
-            }
+        override fun onDone(value: String?) {
+            _uiState.update { it.copy(screenShotStatus = Success(value)) }
         }
 
         @Deprecated("Deprecated in Java")
         override fun onError(p0: String?) {
-            viewModelScope.launch {
-                _response.error(STATUS_TEXT_TO_SPEECH_ERROR)
+            _uiState.update {
+                it.copy(screenShotStatus = Error(STATUS_TEXT_TO_SPEECH_ERROR))
             }
         }
     }
 
-    fun stopTextToSpeech() {
+    override fun onCleared() {
+        super.onCleared()
         textToSpeech.stop()
         textToSpeech.shutdown()
     }
@@ -233,15 +223,14 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    fun getLanguageList(): List<String> {
-        return enumValues<AvailableLanguage>()
-            .toList()
-            .sortedBy { it.displayName }
-            .map { it.displayName }
-    }
-
     fun hasReachedMaxTranslationCount(): Boolean {
         return screenShotRepository.hasReachedMaxTranslationCount()
+    }
+
+    private fun String.checkTextAndFormat(): String {
+        return replace("\n", " ")
+            .replaceFirstChar { it.titlecase() }
+            .ifBlank { ILLEGIBLE_TEXT }
     }
 
     companion object {
