@@ -1,6 +1,6 @@
 package com.teachmeprint.language.feature.screenshot.model
 
-enum class ActionCropImageType {
+enum class ActionCropImage {
     CROPPED_IMAGE,
     FOCUS_IMAGE
 }

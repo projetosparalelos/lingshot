@@ -25,29 +25,25 @@ import com.teachmeprint.language.R
 import com.teachmeprint.language.data.model.language.AvailableLanguage
 
 @Composable
-fun ScreenShotDialogLanguage(
+fun ScreenShotLanguageDialog(
     modifier: Modifier = Modifier,
-    availableLanguages: List<AvailableLanguage>,
-    selectedOptionLanguage: AvailableLanguage?,
-    onOptionSelectedLanguage: (AvailableLanguage?) -> Unit,
+    availableLanguage: AvailableLanguage?,
+    availableLanguageList: List<AvailableLanguage>,
     onSaveLanguage: (AvailableLanguage?) -> Unit,
+    onSelectedOptionsLanguage: (AvailableLanguage?) -> Unit,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
         modifier = modifier.height(500.dp),
-        onDismissRequest = {
-            onDismiss()
-        },
+        onDismissRequest = onDismiss,
         dismissButton = {
-            TextButton(onClick = {
-                onDismiss()
-            }) {
+            TextButton(onClick = onDismiss) {
                 Text(text = stringResource(id = R.string.text_button_dialog_cancel))
             }
         },
         confirmButton = {
             TextButton(onClick = {
-                onSaveLanguage(selectedOptionLanguage)
+                onSaveLanguage(availableLanguage)
                 onDismiss()
             }) {
                 Text(text = stringResource(id = R.string.text_button_select_dialog_choose_language))
@@ -60,40 +56,40 @@ fun ScreenShotDialogLanguage(
             )
         },
         text = {
-            ScreenShotRadioButtonLanguage(
-                availableLanguages = availableLanguages,
-                selectedOptionLanguage = selectedOptionLanguage,
-                onOptionSelectedLanguage = onOptionSelectedLanguage
+            ScreenShotLanguageRadioButton(
+                availableLanguage = availableLanguage,
+                availableLanguageList = availableLanguageList,
+                onSelectedOptionsLanguage = onSelectedOptionsLanguage
             )
         }
     )
 }
 
 @Composable
-private fun ScreenShotRadioButtonLanguage(
-    availableLanguages: List<AvailableLanguage>,
-    selectedOptionLanguage: AvailableLanguage?,
-    onOptionSelectedLanguage: (AvailableLanguage?) -> Unit
+private fun ScreenShotLanguageRadioButton(
+    availableLanguage: AvailableLanguage?,
+    availableLanguageList: List<AvailableLanguage>,
+    onSelectedOptionsLanguage: (AvailableLanguage?) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
     LazyColumn(
         state = lazyListState,
         modifier = Modifier.fillMaxSize()
     ) {
-        items(availableLanguages, key = { it.languageCode }) {language ->
+        items(availableLanguageList, key = { it.languageCode }) {language ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .selectable(
-                        selected = (language == selectedOptionLanguage),
+                        selected = (language == availableLanguage),
                         onClick = {
-                            onOptionSelectedLanguage(language)
+                            onSelectedOptionsLanguage(language)
                         }
                     ).padding(14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
-                    selected = (language == selectedOptionLanguage),
+                    selected = (language == availableLanguage),
                     onClick = null
                 )
                 Text(
@@ -104,8 +100,8 @@ private fun ScreenShotRadioButtonLanguage(
         }
     }
     LaunchedEffect(Unit) {
-        selectedOptionLanguage?.let {
-            val index = availableLanguages.indexOf(it)
+        availableLanguage?.let {
+            val index = availableLanguageList.indexOf(it)
             if (index >= 0) {
                 lazyListState.scrollToItem(index)
             }
@@ -115,12 +111,12 @@ private fun ScreenShotRadioButtonLanguage(
 
 @Preview
 @Composable
-fun ScreenShotDialogLanguagePreview() {
-    ScreenShotDialogLanguage(
-        availableLanguages = enumValues<AvailableLanguage>().toList(),
-        selectedOptionLanguage = AvailableLanguage.ENGLISH,
-        onOptionSelectedLanguage = {},
+private fun ScreenShotLanguageDialogPreview() {
+    ScreenShotLanguageDialog(
+        availableLanguage = AvailableLanguage.ENGLISH,
+        availableLanguageList = enumValues<AvailableLanguage>().toList(),
         onSaveLanguage = {},
+        onSelectedOptionsLanguage = {},
         onDismiss = {}
     )
 }

@@ -22,17 +22,17 @@ import com.canhub.cropper.CropImageView.CropCornerShape.OVAL
 import com.canhub.cropper.CropImageView.Guidelines.OFF
 import com.teachmeprint.language.R
 import com.teachmeprint.language.core.util.findActivity
-import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
-import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType.CROPPED_IMAGE
-import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType.FOCUS_IMAGE
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImage
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImage.CROPPED_IMAGE
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImage.FOCUS_IMAGE
 import timber.log.Timber
 
 @Composable
 fun ScreenShotCropImage(
     modifier: Modifier = Modifier,
     imageUri: Uri? = rememberImageUriPath(),
-    actionCropImageType: ActionCropImageType?,
-    onCroppedImage: (ActionCropImageType?) -> Unit,
+    actionCropImage: ActionCropImage?,
+    onCroppedImage: (ActionCropImage?) -> Unit,
     onCropImageResult: (Bitmap?) -> Unit
 ) {
     val cropImage = rememberCropImage()
@@ -46,7 +46,7 @@ fun ScreenShotCropImage(
             }
         },
     ) { cropImageView ->
-        when (actionCropImageType) {
+        when (actionCropImage) {
             CROPPED_IMAGE -> {
                 cropImage.croppedImageAsync()
             }
@@ -63,7 +63,7 @@ fun ScreenShotCropImage(
             onCropImageResult(result.bitmap)
         }
     }
-    LaunchedEffect(actionCropImageType) {
+    LaunchedEffect(actionCropImage) {
         onCroppedImage(null)
     }
 }
@@ -114,7 +114,7 @@ private fun ScreenShotCropImagePreview() {
 
     ScreenShotCropImage(
         imageUri = imageUri,
-        actionCropImageType = FOCUS_IMAGE,
+        actionCropImage = FOCUS_IMAGE,
         onCroppedImage = {},
         onCropImageResult = {})
 }

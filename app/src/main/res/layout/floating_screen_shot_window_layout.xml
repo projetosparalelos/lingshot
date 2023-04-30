@@ -12,6 +12,5 @@
         android:adjustViewBounds="true"
         android:background="@drawable/shape_round_button_screen_shot"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_app_shortcut_24"
-        android:text="Button" />
+        android:src="@drawable/ic_app_shortcut_24" />
 </LinearLayout>

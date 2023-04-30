@@ -11,9 +11,9 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/space_size_medium"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/shape_round_button_close_service"
-        android:elevation="@dimen/space_size_xsmall"
+        android:elevation="8dp"
         android:scaleType="centerInside"
         android:src="@drawable/ic_close_24"
         tools:ignore="ContentDescription" />

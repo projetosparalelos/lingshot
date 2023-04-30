@@ -19,10 +19,10 @@ import com.teachmeprint.language.core.util.limitCharactersWithEllipsize
 import com.teachmeprint.language.ui.theme.OthersButton
 
 @Composable
-fun ScreenShotBalloon(
+fun ScreenShotTranslateBalloon(
     modifier: Modifier = Modifier,
     text: String,
-    onShowBalloon: () -> Unit
+    onToggleTranslateBalloon: () -> Unit
 ) {
     Balloon(
         modifier = modifier,
@@ -38,7 +38,7 @@ fun ScreenShotBalloon(
         }
     ) { balloonWindow ->
         balloonWindow.showAtCenter(centerAlign = START)
-        balloonWindow.setOnBalloonDismissListener(onShowBalloon)
+        balloonWindow.setOnBalloonDismissListener(onToggleTranslateBalloon)
         Divider(color = Color.Transparent)
     }
 }
@@ -55,6 +55,6 @@ private fun rememberBalloonBuilder() = rememberBalloonBuilder {
 
 @Preview(showBackground = true)
 @Composable
-private fun ScreenShotBalloonPreview() {
-    ScreenShotBalloon(text = "Balloon Preview") {}
+private fun ScreenShotTranslateBalloonPreview() {
+    ScreenShotTranslateBalloon(text = "Balloon Preview") {}
 }

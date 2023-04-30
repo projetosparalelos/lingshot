@@ -1,20 +1,21 @@
 package com.teachmeprint.language.feature.screenshot.model.state
 
 import com.teachmeprint.language.data.model.language.AvailableLanguage
-import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
-import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImage
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItem
 
 data class ScreenShotUiState(
     val screenShotStatus: ScreenShotStatus = ScreenShotStatus.Default,
     val textTranslate: String = "",
-    val showBalloon: Boolean = false,
-    val showDialogLanguage: Boolean = false,
-    val actionCropImageType: ActionCropImageType? = null,
-    val selectedOptionNavigationBar: NavigationBarItemType = NavigationBarItemType.TRANSLATE,
-    val navigationBarItemsType: List<NavigationBarItemType> = enumValues<NavigationBarItemType>().toList(),
-    val selectedOptionLanguage: AvailableLanguage? = null
+    val isBalloonTranslateVisible: Boolean = false,
+    val isLanguageSelectionAlertVisible: Boolean = false,
+    val isLanguageDialogVisible: Boolean = false,
+    val actionCropImage: ActionCropImage? = null,
+    val availableLanguage: AvailableLanguage? = null,
+    val navigationBarItem: NavigationBarItem = NavigationBarItem.TRANSLATE,
+    val navigationBarItemList: List<NavigationBarItem> = enumValues<NavigationBarItem>().toList(),
 ) {
-    val availableLanguages: List<AvailableLanguage>
+    val availableLanguageList: List<AvailableLanguage>
         get() = enumValues<AvailableLanguage>().toList()
             .sortedBy { it }
             .map { it }

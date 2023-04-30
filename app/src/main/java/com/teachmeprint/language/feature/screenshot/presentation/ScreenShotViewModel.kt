@@ -18,12 +18,15 @@ import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.language.core.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
 import com.teachmeprint.language.data.model.language.AvailableLanguage
-import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum
-import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.LISTEN
-import com.teachmeprint.language.data.model.screenshot.TypeIndicatorEnum.TRANSLATE
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
-import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType
-import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImage
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImage.CROPPED_IMAGE
+import com.teachmeprint.language.feature.screenshot.model.ActionCropImage.FOCUS_IMAGE
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItem
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItem.FOCUS
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItem.LANGUAGE
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItem.LISTEN
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItem.TRANSLATE
 import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotStatus.*
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotUiState
@@ -61,56 +64,106 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    val typeIndicatorEnum: TypeIndicatorEnum = TRANSLATE
-
     init {
         setupTextToSpeech()
+        selectedOptionsLanguage(getLanguage())
     }
 
     fun handleEvent(screenShotEvent: ScreenShotEvent) {
         when (screenShotEvent) {
+            is ScreenShotEvent.CroppedImage -> {
+                croppedImage(screenShotEvent.actionCropImage)
+            }
+
             is ScreenShotEvent.FetchTextRecognizer -> {
                 fetchTextRecognizer(screenShotEvent.imageBitmap)
             }
-            is ScreenShotEvent.ShowBalloon -> {
-                showBalloon(screenShotEvent.textTranslate)
-            }
-            is ScreenShotEvent.CroppedImage -> {
-                croppedImage(screenShotEvent.actionCropImageType)
-            }
-            is ScreenShotEvent.OptionSelectedLanguage -> {
-                selectedOptionLanguage(screenShotEvent.selectedOptionLanguage)
-            }
-            is ScreenShotEvent.OptionSelectedNavigationBar -> {
-                selectedOptionNavigationBar(screenShotEvent.selectedOptionNavigationBar)
-            }
+
             is ScreenShotEvent.SaveLanguage -> {
                 saveLanguage(screenShotEvent.availableLanguage)
             }
-            is ScreenShotEvent.ShowDialogLanguage -> {
-                showDialogLanguage()
+
+            is ScreenShotEvent.SelectedOptionsLanguage -> {
+                selectedOptionsLanguage(screenShotEvent.availableLanguage)
+            }
+
+            is ScreenShotEvent.SelectedOptionsNavigationBar -> {
+                selectedOptionsNavigationBar(screenShotEvent.navigationBarItem)
+            }
+
+            is ScreenShotEvent.ToggleLanguageDialog -> {
+                toggleLanguageDialog()
+            }
+
+            is ScreenShotEvent.ToggleLanguageDialogAndHideSelectionAlert -> {
+                toggleLanguageDialogAndHideSelectionAlert()
+            }
+
+            is ScreenShotEvent.ToggleTranslateBalloon -> {
+                toggleTranslateBalloon(screenShotEvent.textTranslate)
             }
         }
     }
 
-    private fun showDialogLanguage() {
-        _uiState.update { it.copy(showDialogLanguage = !it.showDialogLanguage, selectedOptionLanguage = getLanguage()) }
+    private fun croppedImage(actionCropImageType: ActionCropImage?) {
+        _uiState.update { it.copy(actionCropImage = actionCropImageType) }
     }
 
-    private fun selectedOptionNavigationBar(navigationBarItemType: NavigationBarItemType) {
-        _uiState.update { it.copy(selectedOptionNavigationBar = navigationBarItemType) }
+    private fun selectedOptionsLanguage(availableLanguage: AvailableLanguage?) {
+        _uiState.update { it.copy(availableLanguage = availableLanguage) }
     }
 
-    private fun selectedOptionLanguage(availableLanguage: AvailableLanguage?) {
-        _uiState.update { it.copy(selectedOptionLanguage = availableLanguage) }
+    private fun selectedOptionsNavigationBar(navigationBarItem: NavigationBarItem) {
+        when (navigationBarItem) {
+            TRANSLATE -> {
+                getLanguage()?.let {
+                    croppedImage(CROPPED_IMAGE)
+                } ?: run {
+                   showLanguageSelectionAlert()
+                }
+            }
+
+            LISTEN -> {
+                croppedImage(CROPPED_IMAGE)
+            }
+
+            FOCUS -> {
+                croppedImage(FOCUS_IMAGE)
+            }
+
+            LANGUAGE -> {
+                toggleLanguageDialog()
+            }
+        }
+        _uiState.update { it.copy(navigationBarItem = navigationBarItem) }
     }
 
-    private fun croppedImage(actionCropImageType: ActionCropImageType?) {
-        _uiState.update { it.copy(actionCropImageType = actionCropImageType) }
+    private fun showLanguageSelectionAlert() {
+        _uiState.update { it.copy(isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible) }
     }
 
-    private fun showBalloon(textTranslate: String) {
-        _uiState.update { it.copy(showBalloon = !it.showBalloon, textTranslate = textTranslate) }
+    private fun toggleLanguageDialog() {
+        _uiState.update {
+            it.copy(isLanguageDialogVisible = !it.isLanguageDialogVisible)
+        }
+    }
+
+    private fun toggleLanguageDialogAndHideSelectionAlert() {
+        _uiState.update {
+            it.copy(
+                isLanguageDialogVisible = !it.isLanguageDialogVisible,
+                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible
+            )
+        }
+    }
+
+    private fun toggleTranslateBalloon(textTranslate: String) {
+        _uiState.update {
+            it.copy(
+                isBalloonTranslateVisible = !it.isBalloonTranslateVisible,
+                textTranslate = textTranslate
+            )
+        }
     }
 
     private fun fetchTextRecognizer(imageBitmap: Bitmap?) {
@@ -119,9 +172,10 @@ class ScreenShotViewModel @Inject constructor(
             textRecognizer.process(it)
                 .addOnSuccessListener { value ->
                     val textFormatted = value.text.checkTextAndFormat()
-                    when (typeIndicatorEnum) {
+                    when (_uiState.value.navigationBarItem) {
                         TRANSLATE -> fetchPhraseToTranslate(textFormatted)
                         LISTEN -> fetchLanguageIdentifier(textFormatted)
+                        else -> {}
                     }
                 }
                 .addOnFailureListener {
@@ -139,7 +193,8 @@ class ScreenShotViewModel @Inject constructor(
                 try {
                     screenShotRepository.saveTranslationCount()
                     withContext(Dispatchers.IO) {
-                        val requestBody = RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
+                        val requestBody =
+                            RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
                         val response = screenShotRepository.getTranslatePhrase(requestBody)
                         val textResponse = response.choices?.get(0)?.text
                         _uiState.update { it.copy(screenShotStatus = Success(textResponse)) }

@@ -1,5 +1,6 @@
 package com.teachmeprint.language.feature.screenshot.presentation.ui.component
 
+import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -14,8 +15,11 @@ import com.airbnb.lottie.compose.*
 import com.teachmeprint.language.R
 
 @Composable
-fun ScreenShotLottieLoading(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_translate))
+fun ScreenShotLottieLoading(
+    modifier: Modifier = Modifier,
+    @RawRes loading: Int
+) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(loading))
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever
@@ -33,6 +37,9 @@ fun ScreenShotLottieLoading(modifier: Modifier = Modifier) {
 @Composable
 private fun ScreenShotLottieLoadingPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
-        ScreenShotLottieLoading(modifier = Modifier.align(Alignment.TopCenter))
+        ScreenShotLottieLoading(
+            modifier = Modifier.align(Alignment.TopCenter),
+            loading = R.raw.loading_translate
+        )
     }
 }

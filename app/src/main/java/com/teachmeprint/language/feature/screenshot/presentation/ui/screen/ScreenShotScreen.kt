@@ -9,9 +9,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType.CROPPED_IMAGE
-import com.teachmeprint.language.feature.screenshot.model.ActionCropImageType.FOCUS_IMAGE
-import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teachmeprint.language.R
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItem.*
 import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent
 import com.teachmeprint.language.feature.screenshot.model.event.ScreenShotEvent.*
 import com.teachmeprint.language.feature.screenshot.model.state.ScreenShotStatus
@@ -24,7 +24,7 @@ import com.teachmeprint.language.ui.theme.TeachMePrintTheme
 fun ScreenShotRoute(
     viewModel: ScreenShotViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TeachMePrintTheme {
         ScreenShotScreen(
@@ -48,7 +48,7 @@ fun ScreenShotScreen(
             .background(Color.Black)
     ) {
         ScreenShotCropImage(
-            actionCropImageType = uiState.actionCropImageType,
+            actionCropImage = uiState.actionCropImage,
             onCropImageResult = { bitmap ->
                 handleEvent(FetchTextRecognizer(bitmap))
             },
@@ -64,20 +64,35 @@ fun ScreenShotScreen(
     ) {
         Spacer(modifier = Modifier.weight(1f))
         if (status is ScreenShotStatus.Loading) {
+            val loading = uiState.navigationBarItem
+                .takeIf { it == TRANSLATE }
+                ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
+
             ScreenShotLottieLoading(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
+                loading = loading
             )
         }
         if (status is ScreenShotStatus.Error) {
             status.code?.let {
-                ScreenShotSnackBarError(modifier = Modifier.padding(bottom = 16.dp), code = it)
+                ScreenShotSnackBarError(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    code = it
+                )
             }
         }
-        if (uiState.showBalloon) {
-            ScreenShotBalloon(
+        if (uiState.isLanguageSelectionAlertVisible) {
+            ScreenShotSnackBarSelectLanguage(
+                modifier = Modifier.padding(bottom = 16.dp),
+                onToggleLanguageDialogAndHideSelectionAlert = {
+                    handleEvent(ToggleLanguageDialogAndHideSelectionAlert)
+                })
+        }
+        if (uiState.isBalloonTranslateVisible) {
+            ScreenShotTranslateBalloon(
                 text = uiState.textTranslate,
-                onShowBalloon = {
-                    handleEvent(ShowBalloon(""))
+                onToggleTranslateBalloon = {
+                    handleEvent(ToggleTranslateBalloon(""))
                 }
             )
         }
@@ -85,51 +100,36 @@ fun ScreenShotScreen(
             modifier = Modifier.padding(bottom = 16.dp)
         ) {
             ScreenShotNavigationBarItem(
-                navigationBarItemsType = uiState.navigationBarItemsType,
-                selectedOptionNavigationBar = uiState.selectedOptionNavigationBar,
-                onOptionSelectedNavigationBar = { item ->
+                navigationBarItem = uiState.navigationBarItem,
+                navigationBarItemList = uiState.navigationBarItemList,
+                onSelectedOptionsNavigationBar = { item ->
                     if (status !is ScreenShotStatus.Loading) {
-                        when (item) {
-                            TRANSLATE -> {
-                                handleEvent(CroppedImage(CROPPED_IMAGE))
-                            }
-
-                            LISTEN -> {
-                                handleEvent(CroppedImage(CROPPED_IMAGE))
-                            }
-
-                            FOCUS -> {
-                                handleEvent(CroppedImage(FOCUS_IMAGE))
-                            }
-
-                            LANGUAGE -> {
-                                handleEvent(ShowDialogLanguage)
-                            }
-                        }
-                        handleEvent(OptionSelectedNavigationBar(item))
+                        handleEvent(SelectedOptionsNavigationBar(item))
                     }
                 }
             )
         }
     }
-    if (uiState.showDialogLanguage) {
-        ScreenShotDialogLanguage(
-            availableLanguages = uiState.availableLanguages,
-            selectedOptionLanguage = uiState.selectedOptionLanguage,
-            onOptionSelectedLanguage = {
-                handleEvent(OptionSelectedLanguage(it))
-            },
+    if (uiState.isLanguageDialogVisible) {
+        ScreenShotLanguageDialog(
+            availableLanguage = uiState.availableLanguage,
+            availableLanguageList = uiState.availableLanguageList,
             onSaveLanguage = {
                 handleEvent(SaveLanguage(it))
             },
+            onSelectedOptionsLanguage = {
+                handleEvent(SelectedOptionsLanguage(it))
+            },
             onDismiss = {
-                handleEvent(ShowDialogLanguage)
+                handleEvent(ToggleLanguageDialog)
             }
         )
     }
     LaunchedEffect(status) {
-        if (status is ScreenShotStatus.Success) {
-            status.text?.let { handleEvent(ShowBalloon(it)) }
+        if ((status is ScreenShotStatus.Success) &&
+            uiState.navigationBarItem == TRANSLATE
+        ) {
+            status.text?.let { handleEvent(ToggleTranslateBalloon(it)) }
         }
     }
 }
@@ -137,5 +137,7 @@ fun ScreenShotScreen(
 @Preview(showBackground = true)
 @Composable
 private fun ScreenShotScreenPreview() {
-    ScreenShotScreen(uiState = ScreenShotUiState(), handleEvent = {})
+    ScreenShotScreen(
+        uiState = ScreenShotUiState(),
+        handleEvent = {})
 }

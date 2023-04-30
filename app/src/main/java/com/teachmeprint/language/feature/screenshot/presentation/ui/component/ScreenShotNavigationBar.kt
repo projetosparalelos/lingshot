@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType
-import com.teachmeprint.language.feature.screenshot.model.NavigationBarItemType.*
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItem
+import com.teachmeprint.language.feature.screenshot.model.NavigationBarItem.*
 
 @Composable
 fun ScreenShotNavigationBar(
@@ -32,19 +32,19 @@ fun ScreenShotNavigationBar(
 
 @Composable
 fun RowScope.ScreenShotNavigationBarItem(
-    selectedOptionNavigationBar: NavigationBarItemType,
-    navigationBarItemsType: List<NavigationBarItemType>,
-    onOptionSelectedNavigationBar: (NavigationBarItemType) -> Unit
+    navigationBarItem: NavigationBarItem,
+    navigationBarItemList: List<NavigationBarItem>,
+    onSelectedOptionsNavigationBar: (NavigationBarItem) -> Unit
 ) {
-    navigationBarItemsType.forEach { item ->
+    navigationBarItemList.forEach { item ->
         NavigationBarItem(
             icon = {
                 Icon(imageVector = item.icon, contentDescription = item.name)
             },
             label = { Text(item.label) },
-            selected = (selectedOptionNavigationBar == item),
+            selected = (navigationBarItem == item),
             onClick = {
-                onOptionSelectedNavigationBar(item)
+                onSelectedOptionsNavigationBar(item)
             }
         )
     }
@@ -55,9 +55,9 @@ fun RowScope.ScreenShotNavigationBarItem(
 private fun ScreenShotNavigationBarPreview() {
     ScreenShotNavigationBar {
         ScreenShotNavigationBarItem(
-            selectedOptionNavigationBar = TRANSLATE,
-            navigationBarItemsType = enumValues<NavigationBarItemType>().toList(),
-            onOptionSelectedNavigationBar = {}
+            navigationBarItem = TRANSLATE,
+            navigationBarItemList = enumValues<NavigationBarItem>().toList(),
+            onSelectedOptionsNavigationBar = {}
         )
     }
 }

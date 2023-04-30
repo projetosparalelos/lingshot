@@ -7,7 +7,7 @@ import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.filled.ZoomOutMap
 import androidx.compose.ui.graphics.vector.ImageVector
 
-enum class NavigationBarItemType(val icon: ImageVector) {
+enum class NavigationBarItem(val icon: ImageVector) {
     TRANSLATE(Icons.Default.Translate),
     LISTEN(Icons.Default.VolumeUp),
     FOCUS(Icons.Default.ZoomOutMap),
