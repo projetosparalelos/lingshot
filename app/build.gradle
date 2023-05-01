@@ -6,11 +6,13 @@ plugins {
     alias libs.plugins.google.services
     alias libs.plugins.firebase.crashlytics
     alias libs.plugins.dagger.hilt.android
+    alias libs.plugins.ben.manes.versions
 }
 
 apply {
     from "$rootDir/config/file-properties.gradle"
     from "$rootDir/config/app-versions.gradle"
+    from "$rootDir/config/filter-version-release-library.gradle"
 }
 
 android {
@@ -21,11 +23,20 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
+    }
     buildFeatures {
         viewBinding = true
+        compose true
     }
     kapt {
         correctErrorTypes true
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 }
 
@@ -33,9 +44,18 @@ dependencies {
     implementation libs.core.ktx
     implementation libs.appcompat
     implementation libs.material
-    implementation libs.constraintlayout
-    implementation libs.activity.ktx
-    implementation libs.lifecycle.extensions
+    implementation libs.bundles.lifecyle
+
+    implementation libs.activity.compose
+    implementation platform(libs.compose.bom)
+    implementation libs.compose.foundation
+    implementation libs.compose.foundation.layout
+    implementation libs.compose.material.iconsExtended
+    implementation libs.compose.material3
+    implementation libs.compose.material3.windowSizeClass
+    implementation libs.compose.ui
+    implementation libs.compose.ui.tooling.preview
+    implementation libs.accompanist.systemuicontroller
 
     implementation libs.text.recognition
     implementation libs.language.id
@@ -48,6 +68,7 @@ dependencies {
     implementation libs.hawk
     implementation libs.timber
 
+    implementation libs.hilt.navigation.compose
     implementation libs.dagger.hilt.android
     kapt libs.dagger.hilt.compiler
 
@@ -57,8 +78,11 @@ dependencies {
     implementation libs.bundles.firebase
 
     implementation libs.image.cropper
-    implementation libs.balloon
-    implementation libs.lottie
+    implementation libs.balloon.compose
+    implementation libs.lottie.compose
 
     testImplementation libs.junit
+
+    debugImplementation libs.compose.ui.tooling
+    debugImplementation libs.compose.ui.testManifest
 }

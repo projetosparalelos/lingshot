@@ -9,10 +9,12 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/textButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#FF6D23F9"
+        android:textColor="@android:color/white"
         android:text="Iniciar"
         android:textAllCaps="false" />
 </LinearLayout>

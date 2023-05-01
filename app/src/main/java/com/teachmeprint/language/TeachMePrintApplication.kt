@@ -12,10 +12,6 @@ import timber.log.Timber
 @HiltAndroidApp
 class TeachMePrintApplication : Application() {
 
-    init {
-        instance = this
-    }
-
     override fun onCreate() {
         super.onCreate()
         setupNotificationChannel()
@@ -45,9 +41,6 @@ class TeachMePrintApplication : Application() {
     }
 
     companion object {
-        private var instance: TeachMePrintApplication? = null
-        fun applicationContext() = instance as TeachMePrintApplication
-
         const val CHANNEL_ID = "teach_me_print_notification"
         private const val CHANNEL_NAME = "Teach Me Print"
         private const val CHANNEL_DESCRIPTION = "Language Learning"
