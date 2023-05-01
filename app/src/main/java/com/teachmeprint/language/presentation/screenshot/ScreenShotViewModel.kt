@@ -28,6 +28,7 @@ import com.teachmeprint.language.data.repository.ScreenShotRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -157,7 +158,7 @@ class ScreenShotViewModel @Inject constructor(
     private fun hideTranslateBalloon() {
         _uiState.update {
             it.copy(
-                isBalloonTranslateVisible = !it.isBalloonTranslateVisible,
+                isBalloonTranslateVisible = !it.isBalloonTranslateVisible
             )
         }
     }
@@ -174,7 +175,7 @@ class ScreenShotViewModel @Inject constructor(
     private fun fetchTextRecognizer(imageBitmap: Bitmap?) {
         screenShotRepository.fetchTextRecognizer(imageBitmap)
             ?.addOnSuccessListener { value ->
-                val textFormatted = value.text.checkTextAndFormat()
+                val textFormatted = value.text.formatText()
                 when (_uiState.value.navigationBarItem) {
                     TRANSLATE -> fetchPhraseToTranslate(textFormatted)
                     LISTEN -> fetchLanguageIdentifier(textFormatted)
@@ -189,12 +190,15 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun fetchPhraseToTranslate(text: String) {
-        if (text != ILLEGIBLE_TEXT) {
-            _uiState.update { it.copy(screenShotStatus = Loading) }
-            viewModelScope.launch {
+        _uiState.update { it.copy(screenShotStatus = Loading) }
+        viewModelScope.launch {
                 runCatching {
                     screenShotRepository.saveTranslationCount()
                     withContext(Dispatchers.IO) {
+                        if (text.isBlank()) {
+                            delay(ILLEGIBLE_TEXT_DELAY)
+                            return@withContext ILLEGIBLE_TEXT
+                        }
                        screenShotRepository.getTranslatePhrase(text)
                     }
                 }.onSuccess { text ->
@@ -210,15 +214,12 @@ class ScreenShotViewModel @Inject constructor(
                     }
                 }
             }
-        } else {
-            _uiState.update { it.copy(screenShotStatus = Success(text)) }
-        }
     }
 
     private fun fetchLanguageIdentifier(text: String) {
         screenShotRepository.fetchLanguageIdentifier(text)
             .addOnSuccessListener { languageCode ->
-                fetchTextToSpeech(text, languageCode)
+                fetchTextToSpeech(text.ifBlank { ILLEGIBLE_TEXT }, languageCode)
             }
             .addOnFailureListener {
                 _uiState.update { value ->
@@ -285,14 +286,14 @@ class ScreenShotViewModel @Inject constructor(
         return screenShotRepository.hasReachedMaxTranslationCount()
     }
 
-    private fun String.checkTextAndFormat(): String {
+    private fun String.formatText(): String {
         return replace("\n", " ")
             .lowercase()
             .replaceFirstChar { it.uppercase() }
-            .ifBlank { ILLEGIBLE_TEXT }
     }
 
     companion object {
+        private const val ILLEGIBLE_TEXT_DELAY = 500L
         private const val ILLEGIBLE_TEXT = "There isn't any legible text."
         private const val LANGUAGE_CODE_UNAVAILABLE = "und"
     }
