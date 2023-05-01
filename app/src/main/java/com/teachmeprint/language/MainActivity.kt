@@ -19,7 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teachmeprint.language.data.service.ScreenShotService
 import com.teachmeprint.language.databinding.ActivityMainBinding
-import com.teachmeprint.language.core.util.snackBarAlert
+import com.teachmeprint.language.core.common.util.snackBarAlert
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
