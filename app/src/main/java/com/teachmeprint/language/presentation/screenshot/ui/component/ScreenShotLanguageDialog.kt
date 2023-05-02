@@ -1,26 +1,39 @@
 package com.teachmeprint.language.presentation.screenshot.ui.component
 
+import android.content.Context
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 import com.teachmeprint.language.R
 import com.teachmeprint.language.data.model.language.AvailableLanguage
 
@@ -56,7 +69,7 @@ fun ScreenShotLanguageDialog(
             )
         },
         text = {
-            ScreenShotLanguageRadioButton(
+            ScreenShotLanguageList(
                 availableLanguage = availableLanguage,
                 availableLanguageList = availableLanguageList,
                 onSelectedOptionsLanguage = onSelectedOptionsLanguage
@@ -66,7 +79,7 @@ fun ScreenShotLanguageDialog(
 }
 
 @Composable
-private fun ScreenShotLanguageRadioButton(
+private fun ScreenShotLanguageList(
     availableLanguage: AvailableLanguage?,
     availableLanguageList: List<AvailableLanguage>,
     onSelectedOptionsLanguage: (AvailableLanguage?) -> Unit
@@ -76,7 +89,7 @@ private fun ScreenShotLanguageRadioButton(
         state = lazyListState,
         modifier = Modifier.fillMaxSize()
     ) {
-        items(availableLanguageList, key = { it.languageCode }) {language ->
+        items(availableLanguageList, key = { it.languageCode }) { language ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -85,13 +98,16 @@ private fun ScreenShotLanguageRadioButton(
                         onClick = {
                             onSelectedOptionsLanguage(language)
                         }
-                    ).padding(14.dp),
+                    )
+                    .background(
+                        if (language == availableLanguage)
+                            MaterialTheme.colorScheme.primaryContainer
+                        else Color.Transparent
+                    )
+                    .padding(14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                RadioButton(
-                    selected = (language == availableLanguage),
-                    onClick = null
-                )
+                ScreenShotImageFlag(url = language.flag)
                 Text(
                     text = language.displayName,
                     modifier = Modifier.padding(start = 14.dp)
@@ -107,6 +123,35 @@ private fun ScreenShotLanguageRadioButton(
             }
         }
     }
+}
+
+@Composable
+private fun ScreenShotImageFlag(
+    modifier: Modifier = Modifier,
+    context: Context = LocalContext.current,
+    url: String,
+) {
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(url)
+            .size(Size.ORIGINAL)
+            .crossfade(true)
+            .placeholder(R.drawable.ic_image_placeholder)
+            .build()
+    )
+
+    Image(
+        painter = painter,
+        contentDescription = null,
+        contentScale = ContentScale.FillBounds,
+        modifier = modifier
+            .width(54.dp)
+            .height(36.dp)
+            .placeholder(
+                visible = true,
+                highlight = PlaceholderHighlight.shimmer(),
+            )
+    )
 }
 
 @Preview

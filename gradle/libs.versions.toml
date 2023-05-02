@@ -16,7 +16,7 @@ composeCompiler = "1.4.4"
 composeBom = "2023.04.01"
 composeMaterial3 = "1.1.0-rc01"
 composeHiltNavigation = "1.0.0"
-accompanistSystemUiController = "0.28.0"
+accompanist = "0.30.1"
 
 textRecognition = "18.0.2"
 languageID = "17.0.4"
@@ -33,6 +33,7 @@ daggerHilt = "2.45"
 firebaseBom = "31.5.0"
 
 imageCropper = "4.5.0"
+coil = "2.3.0"
 balloon = "1.5.3"
 lottie = "6.0.0"
 
@@ -58,7 +59,8 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemUiController"}
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanist-placeholder-material = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
 
 text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognition" }
 language-id = { module = "com.google.mlkit:language-id", version.ref = "languageID" }
@@ -83,6 +85,7 @@ firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx"
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 

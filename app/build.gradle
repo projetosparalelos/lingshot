@@ -56,6 +56,7 @@ dependencies {
     implementation libs.compose.ui
     implementation libs.compose.ui.tooling.preview
     implementation libs.accompanist.systemuicontroller
+    implementation libs.accompanist.placeholder.material
 
     implementation libs.text.recognition
     implementation libs.language.id
@@ -78,6 +79,7 @@ dependencies {
     implementation libs.bundles.firebase
 
     implementation libs.image.cropper
+    implementation libs.coil.compose
     implementation libs.balloon.compose
     implementation libs.lottie.compose
 

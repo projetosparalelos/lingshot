@@ -60,7 +60,6 @@ class ScreenShotViewModel @Inject constructor(
 
     init {
         setupTextToSpeech()
-        selectedOptionsLanguage(getLanguage())
     }
 
     fun handleEvent(screenShotEvent: ScreenShotEvent) {
@@ -142,7 +141,10 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun toggleLanguageDialog() {
         _uiState.update {
-            it.copy(isLanguageDialogVisible = !it.isLanguageDialogVisible)
+            it.copy(
+                isLanguageDialogVisible = !it.isLanguageDialogVisible,
+                availableLanguage = getLanguage()
+            )
         }
     }
 
