@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class ScreenShotActivity: ComponentActivity() {
@@ -41,7 +42,7 @@ class ScreenShotActivity: ComponentActivity() {
 
     private fun hideSystemUI() {
         lifecycleScope.launch {
-            delay(1000L)
+            delay(1.seconds)
             WindowInsetsControllerCompat(window, window.decorView).apply {
                 hide(WindowInsetsCompat.Type.statusBars())
                 systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE

@@ -38,6 +38,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class ScreenShotViewModel @Inject constructor(
@@ -198,7 +199,7 @@ class ScreenShotViewModel @Inject constructor(
                     screenShotRepository.saveTranslationCount()
                     withContext(Dispatchers.IO) {
                         if (text.isBlank()) {
-                            delay(ILLEGIBLE_TEXT_DELAY)
+                            delay(500.milliseconds)
                             return@withContext ILLEGIBLE_TEXT
                         }
                        screenShotRepository.getTranslatePhrase(text)
@@ -295,7 +296,6 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     companion object {
-        private const val ILLEGIBLE_TEXT_DELAY = 500L
         private const val ILLEGIBLE_TEXT = "There isn't any legible text."
         private const val LANGUAGE_CODE_UNAVAILABLE = "und"
     }

@@ -16,6 +16,7 @@ import com.teachmeprint.language.R
 import com.teachmeprint.language.core.common.util.isViewOverlapping
 import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 class ScreenShotFloatingWindow @Inject constructor(private val context: Context) {
 
@@ -56,7 +57,7 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
             setOnClickListener {
                 showOrHide(false)
                 coroutineScope.launch {
-                    delay(DELAY_BUTTON_FLOATING_VISIBILITY)
+                    delay(100.milliseconds)
                     withContext(Dispatchers.IO) {
                         onScreenShot.invoke()
                     }
@@ -168,7 +169,6 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
     }.getOrNull()
 
     companion object {
-        private const val DELAY_BUTTON_FLOATING_VISIBILITY = 100L
         private const val TOUCH_SENSITIVITY = 1.0F
     }
 }
