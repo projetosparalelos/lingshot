@@ -1,5 +1,5 @@
 [versions]
-gradlePlugin = "8.0.0"
+gradlePlugin = "7.4.2"
 kotlin = "1.8.10"
 googleServices = "4.3.15"
 playServicesAds = "22.0.0"
