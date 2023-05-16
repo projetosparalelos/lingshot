@@ -3,7 +3,7 @@ package com.teachmeprint.language.core.common.util
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.teachmeprint.language.presentation.screenshot.ui.ScreenShotActivity
+import com.teachmeprint.language.screenshot.presentation.ui.ScreenShotActivity
 
 object NavigationIntentUtil {
     fun launchScreenShotActivity(context: Context, uri: Uri?) {

@@ -22,7 +22,7 @@ import com.teachmeprint.language.core.common.helper.ScreenCaptureManager
 import com.teachmeprint.language.core.common.helper.ScreenCaptureManager.Companion.FILE_NAME
 import com.teachmeprint.language.core.common.helper.ScreenShotDetection
 import com.teachmeprint.language.core.common.util.NavigationIntentUtil
-import com.teachmeprint.language.presentation.screenshot.ui.ScreenShotFloatingWindow
+import com.teachmeprint.language.presentation.screenshot.ScreenShotFloatingWindow
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.teachmeprint.language.data.repository
+package com.teachmeprint.language.screenshot.data.repository
 
 import android.graphics.Bitmap
 import com.google.android.gms.tasks.Task
@@ -11,30 +11,29 @@ import com.teachmeprint.language.data.local.storage.TranslationCountLocalStore
 import com.teachmeprint.language.data.model.language.AvailableLanguage
 import com.teachmeprint.language.data.model.screenshot.entity.RequestBody
 import com.teachmeprint.language.data.remote.api.TranslateChatGPTService
-import dagger.hilt.android.scopes.ActivityScoped
+import com.teachmeprint.language.screenshot.domain.repository.ScreenShotRepository
 import javax.inject.Inject
 
-@ActivityScoped
-class ScreenShotRepository @Inject constructor(
+class ScreenShotRepositoryImpl @Inject constructor(
     private val translateChatGPTService: TranslateChatGPTService,
     private val languageLocalStorage: LanguageLocalStorage,
     private val translationCountLocalStore: TranslationCountLocalStore,
     private val textRecognizer: TextRecognizer,
     private val languageIdentifier: LanguageIdentifier
-) {
+): ScreenShotRepository {
 
-    suspend fun getTranslatePhrase(text: String): String? {
+    override suspend fun getTranslatePhrase(text: String): String? {
         val requestBody = RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
         val response = translateChatGPTService.getTranslatePhrase(requestBody)
         return response.choices?.get(0)?.text
     }
 
-    fun fetchTextRecognizer(imageBitmap: Bitmap?): Task<Text>? {
+    override fun fetchTextRecognizer(imageBitmap: Bitmap?): Task<Text>? {
         val inputImage = imageBitmap?.let { InputImage.fromBitmap(it, 0) }
         return inputImage?.let { textRecognizer.process(it) }
     }
 
-    fun fetchLanguageIdentifier(text: String): Task<String> {
+    override fun fetchLanguageIdentifier(text: String): Task<String> {
         return languageIdentifier.identifyLanguage(text)
     }
 

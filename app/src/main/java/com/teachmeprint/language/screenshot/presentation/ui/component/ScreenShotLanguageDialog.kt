@@ -1,4 +1,4 @@
-package com.teachmeprint.language.presentation.screenshot.ui.component
+package com.teachmeprint.language.screenshot.presentation.ui.component
 
 import android.content.Context
 import androidx.compose.foundation.Image

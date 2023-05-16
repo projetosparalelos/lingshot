@@ -1,9 +1,9 @@
-package com.teachmeprint.language.presentation.screenshot
+package com.teachmeprint.language.screenshot.presentation
 
 import android.graphics.Bitmap
 import com.teachmeprint.language.data.model.language.AvailableLanguage
-import com.teachmeprint.language.presentation.screenshot.ui.component.ActionCropImage
-import com.teachmeprint.language.presentation.screenshot.ui.component.NavigationBarItem
+import com.teachmeprint.language.screenshot.presentation.ui.component.ActionCropImage
+import com.teachmeprint.language.screenshot.presentation.ui.component.NavigationBarItem
 
 sealed class ScreenShotEvent {
     object HideTranslateBalloon : ScreenShotEvent()

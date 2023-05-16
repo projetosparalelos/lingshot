@@ -1,6 +1,6 @@
 @file:Suppress("Deprecation", "InflateParams", "ClickableViewAccessibility")
 
-package com.teachmeprint.language.presentation.screenshot.ui
+package com.teachmeprint.language.presentation.screenshot
 
 import android.content.Context
 import android.graphics.PixelFormat

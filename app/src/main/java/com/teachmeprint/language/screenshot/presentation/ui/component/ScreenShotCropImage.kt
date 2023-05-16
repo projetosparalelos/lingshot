@@ -1,4 +1,4 @@
-package com.teachmeprint.language.presentation.screenshot.ui.component
+package com.teachmeprint.language.screenshot.presentation.ui.component
 
 import android.content.ContentResolver
 import android.content.Context
@@ -22,7 +22,7 @@ import com.canhub.cropper.CropImageView.CropCornerShape.OVAL
 import com.canhub.cropper.CropImageView.Guidelines.OFF
 import com.teachmeprint.language.R
 import com.teachmeprint.language.core.common.util.findActivity
-import com.teachmeprint.language.presentation.screenshot.ui.component.ActionCropImage.FOCUS_IMAGE
+import com.teachmeprint.language.screenshot.presentation.ui.component.ActionCropImage.FOCUS_IMAGE
 import timber.log.Timber
 
 @Composable

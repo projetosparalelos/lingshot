@@ -1,4 +1,4 @@
-package com.teachmeprint.language.presentation.screenshot.ui.component
+package com.teachmeprint.language.screenshot.presentation.ui.component
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teachmeprint.language.presentation.screenshot.ui.component.NavigationBarItem.TRANSLATE
+import com.teachmeprint.language.screenshot.presentation.ui.component.NavigationBarItem.TRANSLATE
 
 @Composable
 fun ScreenShotNavigationBar(

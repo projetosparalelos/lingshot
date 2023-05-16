@@ -1,4 +1,4 @@
-package com.teachmeprint.language.presentation.screenshot.ui.component
+package com.teachmeprint.language.screenshot.presentation.ui.component
 
 import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.Box

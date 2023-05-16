@@ -14,8 +14,9 @@ import dagger.Provides
 import com.teachmeprint.language.data.local.storage.LanguageLocalStorage
 import com.teachmeprint.language.data.local.storage.TranslationCountLocalStore
 import com.teachmeprint.language.data.remote.api.TranslateChatGPTService
-import com.teachmeprint.language.presentation.screenshot.ui.ScreenShotFloatingWindow
-import com.teachmeprint.language.data.repository.ScreenShotRepository
+import com.teachmeprint.language.presentation.screenshot.ScreenShotFloatingWindow
+import com.teachmeprint.language.screenshot.data.repository.ScreenShotRepositoryImpl
+import com.teachmeprint.language.screenshot.domain.repository.ScreenShotRepository
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -33,10 +34,11 @@ object AppModule {
         translationCountLocalStore: TranslationCountLocalStore,
         textRecognizer: TextRecognizer,
         languageIdentifier: LanguageIdentifier
-    ) = ScreenShotRepository(
-        api, languageLocalStorage,
-        translationCountLocalStore, textRecognizer, languageIdentifier
-    )
+    ): ScreenShotRepository =
+        ScreenShotRepositoryImpl(
+            api, languageLocalStorage,
+            translationCountLocalStore, textRecognizer, languageIdentifier
+        )
 
     @Singleton
     @Provides

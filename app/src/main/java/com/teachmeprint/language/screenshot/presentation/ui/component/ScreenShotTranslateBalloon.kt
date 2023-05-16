@@ -1,4 +1,4 @@
-package com.teachmeprint.language.presentation.screenshot.ui.component
+package com.teachmeprint.language.screenshot.presentation.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Divider

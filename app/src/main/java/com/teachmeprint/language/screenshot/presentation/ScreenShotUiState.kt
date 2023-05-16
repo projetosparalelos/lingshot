@@ -1,8 +1,8 @@
-package com.teachmeprint.language.presentation.screenshot
+package com.teachmeprint.language.screenshot.presentation
 
 import com.teachmeprint.language.data.model.language.AvailableLanguage
-import com.teachmeprint.language.presentation.screenshot.ui.component.ActionCropImage
-import com.teachmeprint.language.presentation.screenshot.ui.component.NavigationBarItem
+import com.teachmeprint.language.screenshot.presentation.ui.component.ActionCropImage
+import com.teachmeprint.language.screenshot.presentation.ui.component.NavigationBarItem
 
 data class ScreenShotUiState(
     val screenShotStatus: ScreenShotStatus = ScreenShotStatus.Default,

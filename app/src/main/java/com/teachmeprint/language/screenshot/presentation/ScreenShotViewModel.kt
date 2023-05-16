@@ -1,4 +1,4 @@
-package com.teachmeprint.language.presentation.screenshot
+package com.teachmeprint.language.screenshot.presentation
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -15,16 +15,16 @@ import com.teachmeprint.language.core.common.helper.StatusMessage.STATUS_TEXT_TO
 import com.teachmeprint.language.core.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.language.core.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
 import com.teachmeprint.language.data.model.language.AvailableLanguage
-import com.teachmeprint.language.presentation.screenshot.ScreenShotStatus.*
-import com.teachmeprint.language.presentation.screenshot.ui.component.ActionCropImage
-import com.teachmeprint.language.presentation.screenshot.ui.component.ActionCropImage.CROPPED_IMAGE
-import com.teachmeprint.language.presentation.screenshot.ui.component.ActionCropImage.FOCUS_IMAGE
-import com.teachmeprint.language.presentation.screenshot.ui.component.NavigationBarItem
-import com.teachmeprint.language.presentation.screenshot.ui.component.NavigationBarItem.FOCUS
-import com.teachmeprint.language.presentation.screenshot.ui.component.NavigationBarItem.LANGUAGE
-import com.teachmeprint.language.presentation.screenshot.ui.component.NavigationBarItem.LISTEN
-import com.teachmeprint.language.presentation.screenshot.ui.component.NavigationBarItem.TRANSLATE
-import com.teachmeprint.language.data.repository.ScreenShotRepository
+import com.teachmeprint.language.screenshot.presentation.ScreenShotStatus.*
+import com.teachmeprint.language.screenshot.presentation.ui.component.ActionCropImage
+import com.teachmeprint.language.screenshot.presentation.ui.component.ActionCropImage.CROPPED_IMAGE
+import com.teachmeprint.language.screenshot.presentation.ui.component.ActionCropImage.FOCUS_IMAGE
+import com.teachmeprint.language.screenshot.presentation.ui.component.NavigationBarItem
+import com.teachmeprint.language.screenshot.presentation.ui.component.NavigationBarItem.FOCUS
+import com.teachmeprint.language.screenshot.presentation.ui.component.NavigationBarItem.LANGUAGE
+import com.teachmeprint.language.screenshot.presentation.ui.component.NavigationBarItem.LISTEN
+import com.teachmeprint.language.screenshot.presentation.ui.component.NavigationBarItem.TRANSLATE
+import com.teachmeprint.language.screenshot.data.repository.ScreenShotRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +43,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @HiltViewModel
 class ScreenShotViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    private val screenShotRepository: ScreenShotRepository
+    private val screenShotRepository: ScreenShotRepositoryImpl
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScreenShotUiState())

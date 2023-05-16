@@ -1,4 +1,4 @@
-package com.teachmeprint.language.presentation.screenshot.ui
+package com.teachmeprint.language.screenshot.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,13 +11,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teachmeprint.language.R
-import com.teachmeprint.language.presentation.screenshot.ScreenShotEvent
-import com.teachmeprint.language.presentation.screenshot.ScreenShotEvent.*
-import com.teachmeprint.language.presentation.screenshot.ScreenShotStatus
-import com.teachmeprint.language.presentation.screenshot.ScreenShotUiState
-import com.teachmeprint.language.presentation.screenshot.ScreenShotViewModel
-import com.teachmeprint.language.presentation.screenshot.ui.component.*
-import com.teachmeprint.language.presentation.screenshot.ui.component.NavigationBarItem.TRANSLATE
+import com.teachmeprint.language.screenshot.presentation.ScreenShotEvent
+import com.teachmeprint.language.screenshot.presentation.ScreenShotEvent.*
+import com.teachmeprint.language.screenshot.presentation.ScreenShotStatus
+import com.teachmeprint.language.screenshot.presentation.ScreenShotUiState
+import com.teachmeprint.language.screenshot.presentation.ScreenShotViewModel
+import com.teachmeprint.language.screenshot.presentation.ui.component.*
+import com.teachmeprint.language.screenshot.presentation.ui.component.NavigationBarItem.TRANSLATE
 import com.teachmeprint.language.core.designsystem.theme.TeachMePrintTheme
 
 @Composable
