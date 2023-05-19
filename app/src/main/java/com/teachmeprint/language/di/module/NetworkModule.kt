@@ -4,7 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import dagger.Module
 import dagger.Provides
 import com.teachmeprint.language.BuildConfig
-import com.teachmeprint.language.data.remote.api.TranslateChatGPTService
+import com.teachmeprint.language.core.data.remote.api.TranslateChatGPTService
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
