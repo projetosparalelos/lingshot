@@ -1,0 +1,15 @@
+android {
+    kapt {
+        correctErrorTypes true
+    }
+    dependencies {
+        implementation libs.core.ktx
+        implementation libs.appcompat
+        implementation libs.material
+        implementation libs.bundles.lifecyle
+        implementation libs.bundles.coroutines
+        implementation libs.timber
+
+        testImplementation libs.junit
+    }
+}

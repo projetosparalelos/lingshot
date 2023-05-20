@@ -17,9 +17,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.teachmeprint.language.data.service.ScreenShotService
 import com.teachmeprint.language.databinding.ActivityMainBinding
-import com.teachmeprint.language.core.common.util.snackBarAlert
+import com.teachmeprint.common.util.snackBarAlert
+import com.teachmeprint.screencapture.service.ScreenShotService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

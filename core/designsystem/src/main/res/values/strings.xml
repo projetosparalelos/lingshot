@@ -1,0 +1,4 @@
+<resources>
+    <!-- SnackBarComponent -->
+    <string name="text_button_action_close_snack_bar">Close</string>
+</resources>
