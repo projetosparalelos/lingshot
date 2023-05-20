@@ -1,9 +1,7 @@
 android {
-    namespace 'com.teachmeprint.language'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.teachmeprint.language"
         minSdk 24
         targetSdkVersion 33
         versionCode 2

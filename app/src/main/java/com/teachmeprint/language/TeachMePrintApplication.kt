@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.os.Build
 import com.orhanobut.hawk.Hawk
+import com.teachmeprint.common.CommonConstant.CHANNEL_ID
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -41,7 +42,6 @@ class TeachMePrintApplication : Application() {
     }
 
     companion object {
-        const val CHANNEL_ID = "teach_me_print_notification"
         private const val CHANNEL_NAME = "Teach Me Print"
         private const val CHANNEL_DESCRIPTION = "Language Learning"
     }

@@ -1,7 +1,6 @@
 <resources>
     <!-- App -->
     <string name="app_name">TeachMePrint - Language</string>
-    <string name="app_mobile_ads_id">ca-app-pub-3940256099942544~3347511713</string>
 
     <!-- HomeScreen -->
     <string name="text_title_read_dialog_permission">Read Permission Required</string>
@@ -10,31 +9,4 @@
     <string name="text_message_display_dialog_permission">This app needs to use permissions display on other applications.\n\nPlease turn on in settings!</string>
     <string name="text_button_settings_dialog_permission">Settings</string>
     <string name="text_message_alert_permission">Permission is required.</string>
-
-    <!-- SnackBarComponent -->
-    <string name="text_button_action_select_snack_bar">Select</string>
-    <string name="text_button_action_close_snack_bar">Close</string>
-
-    <!-- AlertDialogComponent -->
-    <string name="text_button_dialog_cancel">Cancel</string>
-
-    <!-- StatusMessage -->
-    <string name="text_status_message_error_generic">An unknown error occurred.</string>
-    <string name="text_status_message_recognition_failed">Text recognition failed.</string>
-    <string name="text_status_message_speech_failed">Text to speech failed.</string>
-    <string name="text_status_message_speech_error">An error occurred while using text to speech.</string>
-    <string name="text_status_message_speech_not_supported">Text to speech not supported.</string>
-    <string name="text_status_language_identification_failed">Language identification failed.</string>
-    <string name="text_status_message_processing_request">An error occurred while processing your request.</string>
-
-    <!-- ScreenShotScreen -->
-    <string name="text_select_language_speak_message">Select a language you speak.</string>
-    <string name="text_title_dialog_choose_language">Choose Language</string>
-    <string name="text_button_select_dialog_choose_language">Select</string>
-
-    <!-- ScreenShotService -->
-    <string name="text_notification_title_display_display_tuned_on">Display Turned On!</string>
-    <string name="text_notification_message_display_reading_is_ready_to_use">Your reading is ready to use.</string>
-    <string name="text_notification_message_clean_up_gallery">Clean up your screenshots in the gallery.</string>
-    <string name="text_notification_button_display_turn_off">Turn Off</string>
 </resources>

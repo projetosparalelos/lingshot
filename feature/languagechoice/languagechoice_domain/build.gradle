@@ -1,0 +1,13 @@
+plugins {
+    id 'com.android.library'
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.kapt
+}
+
+android {
+    namespace 'com.teachmeprint.languagechoice_domain'
+}
+
+apply {
+    from "$rootDir/plugins/app-versions.gradle"
+}

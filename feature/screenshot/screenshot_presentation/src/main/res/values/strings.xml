@@ -1,0 +1,5 @@
+<resources>
+    <!-- ScreenShotScreen -->
+    <string name="text_select_language_speak_message">Select a language you speak.</string>
+    <string name="text_button_action_select_snack_bar">Select</string>
+</resources>

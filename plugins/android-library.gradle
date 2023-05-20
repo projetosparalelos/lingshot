@@ -8,6 +8,7 @@ android {
         implementation libs.material
         implementation libs.bundles.lifecyle
         implementation libs.bundles.coroutines
+        implementation libs.timber
 
         testImplementation libs.junit
     }
