@@ -4,8 +4,8 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.teachmeprint.remote.BuildConfig
 import dagger.Module
 import dagger.Provides
-import com.teachmeprint.remote.api.TranslateChatGPTService
-import com.teachmeprint.remote.repository.TranslateChatGPTRepository
+import com.teachmeprint.remote.api.ChatGPTService
+import com.teachmeprint.remote.repository.ChatGPTRepository
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object DataModule {
 
     @Singleton
     @Provides
@@ -58,14 +58,14 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideTranslateChatGPTService(retrofit: Retrofit): TranslateChatGPTService =
-        retrofit.create(TranslateChatGPTService::class.java)
+    fun provideChatGPTService(retrofit: Retrofit): ChatGPTService =
+        retrofit.create(ChatGPTService::class.java)
 
     @Singleton
     @Provides
-    fun provideTranslateChatGPTRepository(
-        api: TranslateChatGPTService,
-    ): TranslateChatGPTRepository = TranslateChatGPTRepository(api)
+    fun provideChatGPTRepository(
+        api: ChatGPTService,
+    ): ChatGPTRepository = ChatGPTRepository(api)
 
     private const val CONTENT_TYPE = "Content-Type"
     private const val APPLICATION_JSON = "application/json"

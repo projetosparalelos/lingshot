@@ -3,7 +3,7 @@ package com.teachmeprint.remote.model.chatgpt
 import kotlinx.serialization.*
 
 @Serializable
-data class TranslateChatGPTResponse(
+data class ChatGPTResponse(
     @SerialName("choices")
     val choices: List<Choice>?,
 

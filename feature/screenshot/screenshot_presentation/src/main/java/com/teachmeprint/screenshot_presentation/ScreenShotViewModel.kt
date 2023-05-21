@@ -16,7 +16,7 @@ import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SU
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepository
 import com.teachmeprint.remote.model.chatgpt.RequestBody
-import com.teachmeprint.remote.repository.TranslateChatGPTRepository
+import com.teachmeprint.remote.repository.ChatGPTRepository
 import com.teachmeprint.screenshot_presentation.ScreenShotStatus.*
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
@@ -45,7 +45,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @HiltViewModel
 class ScreenShotViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    private val translateChatGPTRepository: TranslateChatGPTRepository,
+    private val chatGPTRepository: ChatGPTRepository,
     private val screenShotRepository: ScreenShotRepository,
     private val languageChoiceRepository: LanguageChoiceRepository
 ) : ViewModel() {
@@ -206,7 +206,7 @@ class ScreenShotViewModel @Inject constructor(
                         return@withContext ILLEGIBLE_TEXT
                     }
                     val requestBody = RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
-                    translateChatGPTRepository.getTranslate(requestBody)
+                    chatGPTRepository.get(requestBody)
                 }
             }.onSuccess { text ->
                 _uiState.update { it.copy(screenShotStatus = Success(text)) }
