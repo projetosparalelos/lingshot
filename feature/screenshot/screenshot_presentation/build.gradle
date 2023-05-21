@@ -18,11 +18,13 @@ android {
 dependencies {
     implementation project(':core:common')
     implementation project(':core:designsystem')
-    implementation project(':data:remote')
+    implementation project(':domain')
     implementation project(':feature:languagechoice:languagechoice_domain')
     implementation project(':feature:languagechoice:languagechoice_presentation')
     implementation project(':feature:screencapture')
     implementation project(':feature:screenshot:screenshot_domain')
+
+    implementation libs.retrofit
 
     implementation libs.hilt.navigation.compose
     implementation libs.dagger.hilt.android

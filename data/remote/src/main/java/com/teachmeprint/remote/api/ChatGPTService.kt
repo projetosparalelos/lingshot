@@ -1,7 +1,7 @@
 package com.teachmeprint.remote.api
 
-import com.teachmeprint.remote.model.chatgpt.ChatGPTResponse
-import com.teachmeprint.remote.model.chatgpt.RequestBody
+import com.teachmeprint.remote.model.ChatGPTResponse
+import com.teachmeprint.remote.model.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.POST
 

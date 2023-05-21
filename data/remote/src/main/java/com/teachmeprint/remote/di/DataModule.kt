@@ -5,7 +5,8 @@ import com.teachmeprint.remote.BuildConfig
 import dagger.Module
 import dagger.Provides
 import com.teachmeprint.remote.api.ChatGPTService
-import com.teachmeprint.remote.repository.ChatGPTRepository
+import com.teachmeprint.domain.repository.ChatGPTRepository
+import com.teachmeprint.remote.repository.ChatGPTRepositoryImpl
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
@@ -65,7 +66,7 @@ object DataModule {
     @Provides
     fun provideChatGPTRepository(
         api: ChatGPTService,
-    ): ChatGPTRepository = ChatGPTRepository(api)
+    ): ChatGPTRepository = ChatGPTRepositoryImpl(api)
 
     private const val CONTENT_TYPE = "Content-Type"
     private const val APPLICATION_JSON = "application/json"

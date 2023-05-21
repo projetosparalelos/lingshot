@@ -1,4 +1,4 @@
-package com.teachmeprint.remote.model.chatgpt
+package com.teachmeprint.remote.model
 
 import kotlinx.serialization.*
 
@@ -53,32 +53,26 @@ data class Usage(
 @Serializable
 data class RequestBody(
     @SerialName("model")
-    val model: String? = MODEL_DEFAULT,
+    val model: String?,
 
     @SerialName("prompt")
     val prompt: String?,
 
     @SerialName("max_tokens")
-    val maxTokens: Int? = MAX_TOKENS_DEFAULT,
+    val maxTokens: Int?,
 
     @SerialName("temperature")
-    val temperature: Float? = TEMPERATURE_DEFAULT,
+    val temperature: Float?,
 
     @SerialName("top_p")
-    val topP: Float? = TOP_P_DEFAULT,
+    val topP: Float?,
 
     @SerialName("frequency_penalty")
-    val frequencyPenalty: Int? = 0,
+    val frequencyPenalty: Int?,
 
     @SerialName("presence_penalty")
-    val presencePenalty: Int? = 0,
+    val presencePenalty: Int?,
 
     @SerialName("stop")
-    val stop: String? = STOP_DEFAULT
+    val stop: String?
 )
-
-private const val MODEL_DEFAULT = "text-davinci-003"
-private const val MAX_TOKENS_DEFAULT = 100
-private const val TEMPERATURE_DEFAULT = 0.3f
-private const val TOP_P_DEFAULT = 1F
-private const val STOP_DEFAULT = "\n"

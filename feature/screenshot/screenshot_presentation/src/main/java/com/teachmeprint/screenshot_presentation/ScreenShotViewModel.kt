@@ -13,10 +13,10 @@ import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_RECOGNIZER_FAILE
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
+import com.teachmeprint.domain.model.ChatGPTPromptBodyDomain
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepository
-import com.teachmeprint.remote.model.chatgpt.RequestBody
-import com.teachmeprint.remote.repository.ChatGPTRepository
+import com.teachmeprint.domain.repository.ChatGPTRepository
 import com.teachmeprint.screenshot_presentation.ScreenShotStatus.*
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
@@ -205,7 +205,7 @@ class ScreenShotViewModel @Inject constructor(
                         delay(500.milliseconds)
                         return@withContext ILLEGIBLE_TEXT
                     }
-                    val requestBody = RequestBody(prompt = PROMPT_TRANSLATE(getLanguage(), text))
+                    val requestBody = ChatGPTPromptBodyDomain(prompt = PROMPT_TRANSLATE(getLanguage(), text))
                     chatGPTRepository.get(requestBody)
                 }
             }.onSuccess { text ->
