@@ -11,7 +11,6 @@ enum class AvailableLanguage(
     FRENCH("French", "fr", "tn_fr-flag.gif"),
     GERMAN("German", "de", "tn_gm-flag.gif"),
     ITALIAN("Italian", "it", "tn_it-flag.gif"),
-    KOREAN("Korean", "ko", "tn_ks-flag.gif"),
     PORTUGUESE("Portuguese", "br", "tn_br-flag.gif"),
     RUSSIAN("Russian", "ru", "tn_rs-flag.gif"),
     SPANISH("Spanish", "es", "tn_sp-flag.gif");
