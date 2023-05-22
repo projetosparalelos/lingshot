@@ -26,7 +26,7 @@ import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
+class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
 
     @Inject
     lateinit var screenCaptureFloatingWindow: ScreenCaptureFloatingWindow
@@ -44,13 +44,15 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
         super.onCreate()
         screenCaptureFloatingWindow.start()
         screenshotDetection.startScreenshotDetection()
-        screenCaptureFloatingWindow.onFloating(lifecycleScope,
+        screenCaptureFloatingWindow.onFloating(
+            lifecycleScope,
             onScreenShot = {
                 screenCaptureManager.captureScreenshot(lifecycleScope)
             },
             onStopService = {
                 stopSelf()
-            })
+            }
+        )
     }
 
     override fun onConfigurationChanged(configuration: Configuration) {
@@ -97,8 +99,12 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
     private fun intentStopScreenShot() =
         Intent(this, ScreenShotService::class.java).run {
             action = STOP_SERVICE
-            PendingIntent.getService(this@ScreenShotService,
-                0, this, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
+            PendingIntent.getService(
+                this@ScreenShotService,
+                0,
+                this,
+                FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+            )
         }
 
     override fun onScreenCaptured(path: String) {
@@ -121,8 +127,8 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
         private const val NOTIFICATION_FOREGROUND_ID = 1
 
         fun getStartIntent(context: Context?, data: Intent?): Intent {
-           return Intent(context, ScreenShotService::class.java).apply {
-               putExtra(SCREEN_CAPTURE_DATA, data)
+            return Intent(context, ScreenShotService::class.java).apply {
+                putExtra(SCREEN_CAPTURE_DATA, data)
             }
         }
     }

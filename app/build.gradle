@@ -5,13 +5,11 @@ plugins {
     alias libs.plugins.google.services
     alias libs.plugins.firebase.crashlytics
     alias libs.plugins.dagger.hilt.android
-    alias libs.plugins.ben.manes.versions
 }
 
 apply {
     from "$rootDir/plugins/app-versions.gradle"
     from "$rootDir/plugins/android-library.gradle"
-    from "$rootDir/plugins/find-version-library.gradle"
 }
 
 android {

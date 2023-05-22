@@ -29,7 +29,7 @@ fun ScreenShotLottieLoading(
             .width(100.dp)
             .height(100.dp),
         composition = composition,
-        progress = { progress },
+        progress = { progress }
     )
 }
 

@@ -89,10 +89,14 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
 
                     if (windowParamsFloating.x < 0) windowParamsFloating.x = 0
                     if (windowParamsFloating.y < 0) windowParamsFloating.y = 0
-                    if (windowParamsFloating.x > screenWidth - rootViewFloating.width) windowParamsFloating.x =
-                        screenWidth - rootViewFloating.width
-                    if (windowParamsFloating.y > screenHeight - rootViewFloating.height) windowParamsFloating.y =
-                        screenHeight - rootViewFloating.height
+                    if (windowParamsFloating.x > screenWidth - rootViewFloating.width) {
+                        windowParamsFloating.x =
+                            screenWidth - rootViewFloating.width
+                    }
+                    if (windowParamsFloating.y > screenHeight - rootViewFloating.height) {
+                        windowParamsFloating.y =
+                            screenHeight - rootViewFloating.height
+                    }
                     if (event.rawY > initialTouchY) rootViewFloatingClose.isVisible = true
                     windowManager.updateViewLayout(rootViewFloating, windowParamsFloating)
                 }
@@ -111,7 +115,8 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
 
     private fun setupWindowParamsFloating() {
         windowParamsFloating = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             } else {
@@ -130,7 +135,8 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
 
     private fun setupWindowParamsFloatingClose() {
         windowParamsFloatingClose = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             } else {

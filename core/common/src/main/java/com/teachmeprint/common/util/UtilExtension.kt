@@ -24,7 +24,8 @@ fun Context.fadeAnimation(): Bundle? =
 fun View.snackBarAlert(
     @StringRes text: Int,
     @StringRes textAction: Int = R.string.text_button_action_close_snack_bar_util,
-    isActionVisible: Boolean = false, onAction: () -> Unit = {}
+    isActionVisible: Boolean = false,
+    onAction: () -> Unit = {}
 ) =
     Snackbar.make(this, text, Snackbar.LENGTH_LONG).also { snackBar ->
         snackBar.setAnchorView(this)
@@ -38,16 +39,18 @@ fun View.snackBarAlert(
     }
 
 fun View.isViewOverlapping(other: View, deltaX: Int = 0, deltaY: Int = 0): Boolean {
-    val thisXY  = IntArray(2).apply { getLocationOnScreen(this) }
+    val thisXY = IntArray(2).apply { getLocationOnScreen(this) }
     val otherXY = IntArray(2).apply {
         other.getLocationOnScreen(this)
         this[0] += deltaX
         this[1] += deltaY
     }
     return thisXY.let { Rect(it[0], it[1], it[0] + width, it[1] + height) }
-        .intersect(otherXY.let {
-            Rect(it[0], it[1], it[0] + other.width, it[1] + other.height)
-        })
+        .intersect(
+            otherXY.let {
+                Rect(it[0], it[1], it[0] + other.width, it[1] + other.height)
+            }
+        )
 }
 
 fun String.limitCharactersWithEllipsize(limit: Int): String {

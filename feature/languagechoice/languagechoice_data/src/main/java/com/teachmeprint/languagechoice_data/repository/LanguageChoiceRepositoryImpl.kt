@@ -6,8 +6,8 @@ import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepositor
 import javax.inject.Inject
 
 class LanguageChoiceRepositoryImpl @Inject constructor(
-    private val languageChoiceLocalStorage: LanguageChoiceLocalStorage,
-): LanguageChoiceRepository {
+    private val languageChoiceLocalStorage: LanguageChoiceLocalStorage
+) : LanguageChoiceRepository {
 
     override fun getLanguage(): AvailableLanguage? {
         return languageChoiceLocalStorage.getLanguage()

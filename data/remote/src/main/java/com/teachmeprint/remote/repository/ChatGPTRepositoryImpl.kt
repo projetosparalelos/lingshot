@@ -7,8 +7,8 @@ import com.teachmeprint.remote.mapper.toRequestBodyEntity
 import javax.inject.Inject
 
 class ChatGPTRepositoryImpl @Inject constructor(
-    private val chatGPTService: ChatGPTService,
-): ChatGPTRepository {
+    private val chatGPTService: ChatGPTService
+) : ChatGPTRepository {
 
     override suspend fun get(chatGPTPromptBodyDomain: ChatGPTPromptBodyDomain): String? {
         val response = chatGPTService.get(chatGPTPromptBodyDomain.toRequestBodyEntity())

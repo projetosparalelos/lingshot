@@ -14,9 +14,10 @@ import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
 import com.teachmeprint.domain.model.ChatGPTPromptBodyDomain
+import com.teachmeprint.domain.repository.ChatGPTRepository
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepository
-import com.teachmeprint.domain.repository.ChatGPTRepository
+import com.teachmeprint.screenshot_domain.repository.ScreenShotRepository
 import com.teachmeprint.screenshot_presentation.ScreenShotStatus.*
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
@@ -26,7 +27,6 @@ import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.F
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.LANGUAGE
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.LISTEN
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
-import com.teachmeprint.screenshot_domain.repository.ScreenShotRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -121,7 +121,7 @@ class ScreenShotViewModel @Inject constructor(
                 getLanguage()?.let {
                     croppedImage(CROPPED_IMAGE)
                 } ?: run {
-                   showLanguageSelectionAlert()
+                    showLanguageSelectionAlert()
                 }
             }
 
@@ -238,8 +238,11 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun fetchTextToSpeech(text: String, languageCode: String) =
         with(textToSpeech) {
-            val languageLocale = if (languageCode == LANGUAGE_CODE_UNAVAILABLE) Locale.US
-            else Locale.forLanguageTag(languageCode)
+            val languageLocale = if (languageCode == LANGUAGE_CODE_UNAVAILABLE) {
+                Locale.US
+            } else {
+                Locale.forLanguageTag(languageCode)
+            }
 
             val result = setLanguage(languageLocale)
             if (result == LANG_MISSING_DATA || result == LANG_NOT_SUPPORTED) {

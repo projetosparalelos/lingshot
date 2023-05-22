@@ -13,18 +13,17 @@ data class ScreenShotUiState(
     val actionCropImage: ActionCropImage? = null,
     val availableLanguage: AvailableLanguage? = null,
     val navigationBarItem: NavigationBarItem = NavigationBarItem.TRANSLATE,
-    val navigationBarItemList: List<NavigationBarItem> = enumValues<NavigationBarItem>().toList(),
+    val navigationBarItemList: List<NavigationBarItem> = enumValues<NavigationBarItem>().toList()
 ) {
     val availableLanguageList: List<AvailableLanguage>
         get() = enumValues<AvailableLanguage>().toList()
             .sortedBy { it }
             .map { it }
-
 }
 
 sealed class ScreenShotStatus {
     object Default : ScreenShotStatus()
     object Loading : ScreenShotStatus()
-    data class Success(val text: String?): ScreenShotStatus()
+    data class Success(val text: String?) : ScreenShotStatus()
     data class Error(val code: Int?) : ScreenShotStatus()
 }

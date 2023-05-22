@@ -19,7 +19,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
-class ScreenShotActivity: ComponentActivity() {
+class ScreenShotActivity : ComponentActivity() {
 
     @Inject
     lateinit var screenCaptureFloatingWindow: ScreenCaptureFloatingWindow

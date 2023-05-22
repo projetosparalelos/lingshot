@@ -93,7 +93,8 @@ fun ScreenShotScreen(
                 modifier = Modifier.padding(bottom = 16.dp),
                 onToggleLanguageDialogAndHideSelectionAlert = {
                     handleEvent(ToggleLanguageDialogAndHideSelectionAlert)
-                })
+                }
+            )
         }
         if (uiState.isBalloonTranslateVisible) {
             ScreenShotTranslateBalloon(
@@ -146,5 +147,6 @@ fun ScreenShotScreen(
 private fun ScreenShotScreenPreview() {
     ScreenShotScreen(
         uiState = ScreenShotUiState(),
-        handleEvent = {})
+        handleEvent = {}
+    )
 }

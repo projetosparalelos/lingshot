@@ -1,8 +1,8 @@
 package com.teachmeprint.screencapture.di
 
 import android.content.Context
-import com.teachmeprint.screencapture.helper.ScreenCaptureManager
 import com.teachmeprint.screencapture.ScreenCaptureFloatingWindow
+import com.teachmeprint.screencapture.helper.ScreenCaptureManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

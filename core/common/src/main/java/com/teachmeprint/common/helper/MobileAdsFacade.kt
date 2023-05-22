@@ -16,7 +16,10 @@ class MobileAdsFacade @Inject constructor() {
     fun setupInterstitialAds(activity: Activity) {
         val adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(activity, ADMOB_INTERSTITIAL_ID, adRequest,
+        InterstitialAd.load(
+            activity,
+            ADMOB_INTERSTITIAL_ID,
+            adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     Timber.w(adError.message)
@@ -26,7 +29,8 @@ class MobileAdsFacade @Inject constructor() {
                     activity.showInterstitialAd(interstitialAd)
                     setupInterstitialAdListener(interstitialAd)
                 }
-            })
+            }
+        )
     }
 
     private fun Activity.showInterstitialAd(interstitialAd: InterstitialAd) {

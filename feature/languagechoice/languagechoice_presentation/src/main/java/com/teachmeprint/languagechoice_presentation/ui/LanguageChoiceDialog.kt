@@ -101,9 +101,11 @@ private fun LanguageChoiceList(
                         }
                     )
                     .background(
-                        if (language == availableLanguage)
+                        if (language == availableLanguage) {
                             MaterialTheme.colorScheme.primaryContainer
-                        else Color.Transparent
+                        } else {
+                            Color.Transparent
+                        }
                     )
                     .padding(14.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -130,7 +132,7 @@ private fun LanguageChoiceList(
 private fun LanguageChoiceImageFlag(
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
-    url: String,
+    url: String
 ) {
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context)
@@ -150,7 +152,7 @@ private fun LanguageChoiceImageFlag(
             .height(36.dp)
             .placeholder(
                 visible = painter.state is AsyncImagePainter.State.Loading,
-                highlight = PlaceholderHighlight.shimmer(),
+                highlight = PlaceholderHighlight.shimmer()
             )
     )
 }

@@ -39,9 +39,8 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = md_theme_light_inversePrimary,
     surfaceTint = md_theme_light_surfaceTint,
     outlineVariant = md_theme_light_outlineVariant,
-    scrim = md_theme_light_scrim,
+    scrim = md_theme_light_scrim
 )
-
 
 private val DarkColorScheme = darkColorScheme(
     primary = md_theme_dark_primary,
@@ -72,14 +71,14 @@ private val DarkColorScheme = darkColorScheme(
     inversePrimary = md_theme_dark_inversePrimary,
     surfaceTint = md_theme_dark_surfaceTint,
     outlineVariant = md_theme_dark_outlineVariant,
-    scrim = md_theme_dark_scrim,
+    scrim = md_theme_dark_scrim
 )
 
 @Composable
 fun TeachMePrintTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     isDynamicColor: Boolean = true,
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit
 ) {
     val dynamicColor = isDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val colorScheme = when {
@@ -92,6 +91,6 @@ fun TeachMePrintTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content,
+        content = content
     )
 }

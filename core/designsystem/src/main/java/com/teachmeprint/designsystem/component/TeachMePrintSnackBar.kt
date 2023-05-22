@@ -30,19 +30,22 @@ fun TeachMePrintSnackBar(
         enter = fadeIn(),
         exit = fadeOut()
     ) {
-        Snackbar(modifier = modifier,
+        Snackbar(
+            modifier = modifier,
             dismissAction = {
                 TextButton(
                     onClick = {
                         onClick?.invoke()
                         isVisibleState = !isVisibleState
-                    }) {
+                    }
+                ) {
                     Text(
                         text = textButton,
                         color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
-            }) {
+            }
+        ) {
             Text(text = message)
         }
     }

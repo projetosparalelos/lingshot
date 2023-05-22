@@ -1,12 +1,12 @@
 package com.teachmeprint.remote.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.teachmeprint.domain.repository.ChatGPTRepository
 import com.teachmeprint.remote.BuildConfig
+import com.teachmeprint.remote.api.ChatGPTService
+import com.teachmeprint.remote.repository.ChatGPTRepositoryImpl
 import dagger.Module
 import dagger.Provides
-import com.teachmeprint.remote.api.ChatGPTService
-import com.teachmeprint.domain.repository.ChatGPTRepository
-import com.teachmeprint.remote.repository.ChatGPTRepositoryImpl
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
@@ -65,7 +65,7 @@ object DataModule {
     @Singleton
     @Provides
     fun provideChatGPTRepository(
-        api: ChatGPTService,
+        api: ChatGPTService
     ): ChatGPTRepository = ChatGPTRepositoryImpl(api)
 
     private const val CONTENT_TYPE = "Content-Type"

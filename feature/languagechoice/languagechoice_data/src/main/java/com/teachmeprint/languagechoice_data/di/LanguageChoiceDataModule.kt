@@ -16,7 +16,7 @@ object LanguageChoiceDataModule {
     @Singleton
     @Provides
     fun provideLanguageChoiceRepository(
-        languageChoiceLocalStorage: LanguageChoiceLocalStorage,
+        languageChoiceLocalStorage: LanguageChoiceLocalStorage
     ): LanguageChoiceRepository =
         LanguageChoiceRepositoryImpl(languageChoiceLocalStorage)
 }

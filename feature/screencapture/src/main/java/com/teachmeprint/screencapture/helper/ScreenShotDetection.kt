@@ -88,15 +88,19 @@ class ScreenShotDetection @AssistedInject constructor(
     private fun isScreenshotPath(path: String?): Boolean {
         val lowercasePath = path?.lowercase()
         val screenshotDirectory = getPublicScreenshotDirectoryName()?.lowercase()
-        return (screenshotDirectory != null &&
-            lowercasePath?.contains(screenshotDirectory) == true) ||
+        return (
+            screenshotDirectory != null &&
+                lowercasePath?.contains(screenshotDirectory) == true
+            ) ||
             lowercasePath?.contains(CONTAIN_SCREEN_SHOT) == true
     }
 
     private fun getPublicScreenshotDirectoryName() =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_SCREENSHOTS).name
-        } else null
+        } else {
+            null
+        }
 
     private fun getFilePathFromContentResolver(context: Context, uri: Uri): String? {
         try {

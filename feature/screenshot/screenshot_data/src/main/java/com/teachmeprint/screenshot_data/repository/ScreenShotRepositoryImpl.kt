@@ -12,7 +12,7 @@ import javax.inject.Inject
 class ScreenShotRepositoryImpl @Inject constructor(
     private val textRecognizer: TextRecognizer,
     private val languageIdentifier: LanguageIdentifier
-): ScreenShotRepository {
+) : ScreenShotRepository {
 
     override fun fetchTextRecognizer(imageBitmap: Bitmap?): Task<Text>? {
         val inputImage = imageBitmap?.let { InputImage.fromBitmap(it, 0) }

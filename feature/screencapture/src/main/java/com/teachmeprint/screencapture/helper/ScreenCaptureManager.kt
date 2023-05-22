@@ -30,8 +30,8 @@ class ScreenCaptureManager @Inject constructor(
     private val context: Context
 ) {
 
-   private val mediaProjectionManager: MediaProjectionManager =
-       context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+    private val mediaProjectionManager: MediaProjectionManager =
+        context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
 
     private var mediaProjection: MediaProjection? = null
     private var virtualDisplay: VirtualDisplay? = null
@@ -43,15 +43,20 @@ class ScreenCaptureManager @Inject constructor(
     fun startCapture(resultCode: Int, data: Intent) {
         mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data)
         imageReader = ImageReader.newInstance(
-            displayMetrics.widthPixels, displayMetrics.heightPixels,
-            android.graphics.PixelFormat.RGBA_8888, 2
+            displayMetrics.widthPixels,
+            displayMetrics.heightPixels,
+            android.graphics.PixelFormat.RGBA_8888,
+            2
         )
         virtualDisplay = mediaProjection?.createVirtualDisplay(
             VIRTUAL_NAME_DISPLAY,
-            displayMetrics.widthPixels, displayMetrics.heightPixels,
+            displayMetrics.widthPixels,
+            displayMetrics.heightPixels,
             displayMetrics.densityDpi,
             VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or VIRTUAL_DISPLAY_FLAG_PUBLIC,
-            imageReader?.surface, null, null
+            imageReader?.surface,
+            null,
+            null
         )
     }
 
@@ -80,12 +85,17 @@ class ScreenCaptureManager @Inject constructor(
 
         val bitmap = Bitmap.createBitmap(
             displayMetrics.widthPixels + rowPadding / pixelStride,
-            displayMetrics.heightPixels, Bitmap.Config.ARGB_8888
+            displayMetrics.heightPixels,
+            Bitmap.Config.ARGB_8888
         )
         bitmap.copyPixelsFromBuffer(buffer)
-        return Bitmap.createBitmap(bitmap, 0, 0,
+        return Bitmap.createBitmap(
+            bitmap,
+            0,
+            0,
             displayMetrics.widthPixels,
-            displayMetrics.heightPixels)
+            displayMetrics.heightPixels
+        )
     }
 
     private fun cropBitmap(bitmap: Bitmap): Bitmap? {
@@ -116,8 +126,8 @@ class ScreenCaptureManager @Inject constructor(
                     fos.flush()
                     fos.close()
 
-                    if (newFile.exists()
-                        && (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
+                    if (newFile.exists() &&
+                        (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
                     ) {
                         context.let { NavigationIntent.launchScreenShotActivity(it, Uri.fromFile(newFile)) }
                     }

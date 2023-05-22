@@ -42,7 +42,7 @@ fun ScreenShotCropImage(
                 setImageUriAsync(imageUri)
                 cropRectDefault()
             }
-        },
+        }
     ) { cropImageView ->
         when (actionCropImage) {
             ActionCropImage.CROPPED_IMAGE -> {
@@ -65,6 +65,7 @@ fun ScreenShotCropImage(
         onCroppedImage(null)
     }
 }
+
 @Composable
 @Suppress("Deprecation")
 private fun rememberImageUriPath(context: Context = LocalContext.current) = remember {
@@ -114,7 +115,8 @@ private fun ScreenShotCropImagePreview() {
         imageUri = imageUri,
         actionCropImage = FOCUS_IMAGE,
         onCroppedImage = {},
-        onCropImageResult = {})
+        onCropImageResult = {}
+    )
 }
 
 enum class ActionCropImage {
