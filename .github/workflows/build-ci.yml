@@ -1,0 +1,91 @@
+name: Build CI
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup checkout
+        uses: actions/checkout@v3
+
+      - name: Build the app
+        run: ./gradlew build
+
+  staticAnalysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup checkout
+        uses: actions/checkout@v3
+
+      - name: Check code formatting
+        run: ./gradlew ktlintCheck
+
+      - name: Upload code formatting
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifact ktlint
+          path: '**/reports/ktlint/ktlintMainSourceSetCheck/'
+
+      - name: Check code smells
+        if: always()
+        run: ./gradlew detekt
+
+      - name: Upload code smells
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifact detekt
+          path: '**/reports/detekt/'
+
+  danger:
+    runs-on: ubuntu-latest
+
+    if: always()
+    needs: [staticAnalysis]
+    steps:
+      - name: Setup checkout
+        uses: actions/checkout@v3
+
+      - name: Setup ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Download code formatting
+        uses: actions/download-artifact@v3
+        with:
+          name: Artifact ktlint
+          path: '**/reports/ktlint/ktlintMainSourceSetCheck/'
+
+      - name: Download code smells
+        uses: actions/download-artifact@v3
+        with:
+          name: Artifact detekt
+          path: '**/reports/detekt/'
+
+      - name: Install bundler gems
+        run: gem install bundler
+
+      - name: Cache gems
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Setup danger
+        uses: MeilCli/danger-action@v5
+        with:
+          plugins_file: 'Gemfile'
+          install_path: 'vendor/bundle'
+          danger_file: 'Dangerfile'
+          danger_id: 'danger-ci'
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
