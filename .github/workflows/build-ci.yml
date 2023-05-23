@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
 
     if: always()
-    needs: [staticAnalysis]
+    needs: [qualityAnalysis]
     steps:
       - name: Setup checkout
         uses: actions/checkout@v3
