@@ -1,3 +1,5 @@
+![build](https://github.com/CharlesMoreira1/teachmeprint/actions/workflows/build-ci.yml/badge.svg)
+
 ## 📃 License
 
 ```
