@@ -16,7 +16,7 @@ jobs:
       - name: Build the app
         run: ./gradlew build
 
-  qualityAnalysis:
+  quality:
     runs-on: ubuntu-latest
 
     steps:
