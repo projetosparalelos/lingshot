@@ -6,8 +6,7 @@ enum class AvailableLanguage(
     val displayName: String,
     val languageCode: String,
     _flag: String
-) {
-    ENGLISH("English", "en", "tn_us-flag.gif"),
+) {     ENGLISH("English", "en", "tn_us-flag.gif"),
     FRENCH("French", "fr", "tn_fr-flag.gif"),
     GERMAN("German", "de", "tn_gm-flag.gif"),
     ITALIAN("Italian", "it", "tn_it-flag.gif"),
