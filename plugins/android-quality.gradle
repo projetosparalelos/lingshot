@@ -7,4 +7,8 @@ detekt {
 
 ktlint {
     disabledRules = ["filename", "no-wildcard-imports", "package-name", "final-newline"]
+    reporters {
+        reporter "checkstyle"
+        reporter "plain"
+    }
 }
