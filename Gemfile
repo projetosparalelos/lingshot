@@ -2,4 +2,4 @@ source "https://rubygems.org"
 
 gem "danger"
 gem "danger-checkstyle_format"
-gem "danger-kotlin_detekt"
+gem "danger-detekt-instacart"
