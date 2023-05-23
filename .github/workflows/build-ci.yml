@@ -56,7 +56,8 @@ jobs:
       - name: Setup ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: 2.6
+          ruby-version: 3.0
+          bundler-cache: true
 
       - name: Download code formatting
         uses: actions/download-artifact@v3
