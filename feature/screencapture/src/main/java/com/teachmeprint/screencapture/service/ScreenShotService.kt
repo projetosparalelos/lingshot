@@ -89,8 +89,14 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
     private fun setupNotificationForeground() {
         NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.text_notification_title_display_display_tuned_on))
-            .setContentText(getString(R.string.text_notification_message_display_reading_is_ready_to_use))
-            .addAction(0, getString(R.string.text_notification_button_display_turn_off), intentStopScreenShot())
+            .setContentText(
+                getString(R.string.text_notification_message_display_reading_is_ready_to_use)
+            )
+            .addAction(
+                0,
+                getString(R.string.text_notification_button_display_turn_off),
+                intentStopScreenShot()
+            )
             .setSmallIcon(R.drawable.ic_translate_24).run {
                 startForeground(NOTIFICATION_FOREGROUND_ID, build())
             }

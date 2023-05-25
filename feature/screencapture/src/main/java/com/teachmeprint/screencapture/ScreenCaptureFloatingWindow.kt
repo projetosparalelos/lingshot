@@ -13,9 +13,9 @@ import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.core.view.isVisible
 import com.teachmeprint.common.util.isViewOverlapping
-import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.*
 
 class ScreenCaptureFloatingWindow @Inject constructor(private val context: Context) {
 

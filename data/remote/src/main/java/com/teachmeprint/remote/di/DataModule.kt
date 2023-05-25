@@ -9,13 +9,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -38,8 +38,11 @@ object DataModule {
                     .addHeader(AUTHORIZATION, BEARER)
                     .build()
             chain.proceed(newRequest)
-        }.addInterceptor(loggingInterceptor)
-            .build()
+        }.apply {
+            if (BuildConfig.DEBUG) {
+                addInterceptor(loggingInterceptor)
+            }
+        }.build()
     }
 
     @Singleton

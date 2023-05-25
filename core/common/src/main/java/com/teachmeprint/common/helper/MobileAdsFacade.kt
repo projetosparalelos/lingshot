@@ -8,8 +8,8 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.teachmeprint.common.BuildConfig.ADMOB_INTERSTITIAL_ID
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class MobileAdsFacade @Inject constructor() {
 

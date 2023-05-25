@@ -29,6 +29,10 @@ import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.L
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.IOException
+import java.util.*
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,10 +41,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import java.io.IOException
-import java.util.*
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class ScreenShotViewModel @Inject constructor(
@@ -141,7 +141,11 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun showLanguageSelectionAlert() {
-        _uiState.update { it.copy(isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible) }
+        _uiState.update {
+            it.copy(
+                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible
+            )
+        }
     }
 
     private fun toggleLanguageDialog() {
@@ -205,7 +209,9 @@ class ScreenShotViewModel @Inject constructor(
                         delay(500.milliseconds)
                         return@withContext ILLEGIBLE_TEXT
                     }
-                    val requestBody = ChatGPTPromptBodyDomain(prompt = PROMPT_TRANSLATE(getLanguage(), text))
+                    val requestBody = ChatGPTPromptBodyDomain(
+                        prompt = PROMPT_TRANSLATE(getLanguage(), text)
+                    )
                     chatGPTRepository.get(requestBody)
                 }
             }.onSuccess { text ->
@@ -217,7 +223,11 @@ class ScreenShotViewModel @Inject constructor(
                     }
 
                     is IOException -> {
-                        _uiState.update { it.copy(screenShotStatus = Error(STATUS_TEXT_ERROR_GENERIC)) }
+                        _uiState.update {
+                            it.copy(
+                                screenShotStatus = Error(STATUS_TEXT_ERROR_GENERIC)
+                            )
+                        }
                     }
                 }
             }

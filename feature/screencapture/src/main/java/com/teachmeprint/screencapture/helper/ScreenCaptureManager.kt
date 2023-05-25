@@ -17,14 +17,14 @@ import android.os.Build
 import android.os.Environment.DIRECTORY_PICTURES
 import android.os.Environment.getExternalStoragePublicDirectory
 import com.teachmeprint.navigation.NavigationIntent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ScreenCaptureManager @Inject constructor(
     private val context: Context
@@ -101,7 +101,11 @@ class ScreenCaptureManager @Inject constructor(
     private fun cropBitmap(bitmap: Bitmap): Bitmap? {
         val topHeight = cropPeace(28)
         val bottomHeight = cropPeace(46)
-        val croppedBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height - topHeight - bottomHeight, Bitmap.Config.ARGB_8888)
+        val croppedBitmap = Bitmap.createBitmap(
+            bitmap.width,
+            bitmap.height - topHeight - bottomHeight,
+            Bitmap.Config.ARGB_8888
+        )
         val canvas = Canvas(croppedBitmap)
         canvas.drawBitmap(bitmap, 0f, (-topHeight).toFloat(), null)
         return croppedBitmap
@@ -129,7 +133,12 @@ class ScreenCaptureManager @Inject constructor(
                     if (newFile.exists() &&
                         (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
                     ) {
-                        context.let { NavigationIntent.launchScreenShotActivity(it, Uri.fromFile(newFile)) }
+                        context.let {
+                            NavigationIntent.launchScreenShotActivity(
+                                it,
+                                Uri.fromFile(newFile)
+                            )
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
