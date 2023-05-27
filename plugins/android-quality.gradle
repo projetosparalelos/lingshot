@@ -6,15 +6,20 @@ detekt {
 }
 ktlint {
     android = true
-    ignoreFailures = true
-    disabledRules = ["filename", "no-wildcard-imports", "package-name", "final-newline"]
+    ignoreFailures = false
+    disabledRules = ["filename", "no-wildcard-imports",
+                     "package-name", "final-newline",
+                     "max-line-length"]
     reporters {
         reporter "checkstyle"
         reporter "plain"
     }
 }
+dependencies {
+    detektPlugins libs.compose.detekt
+}
 tasks.whenTaskAdded { task ->
-    if (task.name == 'preBuild') {
-        task.dependsOn(tasks.getByName("ktlintFormat"), tasks.getByName("detekt"))
+    if (task.name == "preBuild") {
+        task.dependsOn(tasks.getByName("ktlintFormat"))
     }
 }

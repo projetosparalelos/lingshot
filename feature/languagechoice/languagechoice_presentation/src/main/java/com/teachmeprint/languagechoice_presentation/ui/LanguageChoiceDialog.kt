@@ -37,14 +37,16 @@ import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_presentation.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun LanguageChoiceDialog(
-    modifier: Modifier = Modifier,
     availableLanguage: AvailableLanguage?,
-    availableLanguageList: List<AvailableLanguage>,
+    availableLanguageList: ImmutableList<AvailableLanguage>,
     onSaveLanguage: (AvailableLanguage?) -> Unit,
     onSelectedOptionsLanguage: (AvailableLanguage?) -> Unit,
+    modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
@@ -82,7 +84,7 @@ fun LanguageChoiceDialog(
 @Composable
 private fun LanguageChoiceList(
     availableLanguage: AvailableLanguage?,
-    availableLanguageList: List<AvailableLanguage>,
+    availableLanguageList: ImmutableList<AvailableLanguage>,
     onSelectedOptionsLanguage: (AvailableLanguage?) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
@@ -130,9 +132,9 @@ private fun LanguageChoiceList(
 
 @Composable
 private fun LanguageChoiceImageFlag(
+    url: String,
     modifier: Modifier = Modifier,
-    context: Context = LocalContext.current,
-    url: String
+    context: Context = LocalContext.current
 ) {
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context)
@@ -162,7 +164,7 @@ private fun LanguageChoiceImageFlag(
 private fun LanguageChoiceDialogPreview() {
     LanguageChoiceDialog(
         availableLanguage = AvailableLanguage.ENGLISH,
-        availableLanguageList = enumValues<AvailableLanguage>().toList(),
+        availableLanguageList = enumValues<AvailableLanguage>().toList().toImmutableList(),
         onSaveLanguage = {},
         onSelectedOptionsLanguage = {},
         onDismiss = {}

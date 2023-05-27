@@ -6,6 +6,7 @@ android {
         implementation libs.core.ktx
         implementation libs.appcompat
         implementation libs.material
+        implementation libs.kotlinx.collections.immutable
         implementation libs.bundles.lifecyle
         implementation libs.bundles.coroutines
         implementation libs.timber

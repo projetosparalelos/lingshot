@@ -16,8 +16,8 @@ import com.teachmeprint.screenshot_presentation.R
 
 @Composable
 fun ScreenShotLottieLoading(
-    modifier: Modifier = Modifier,
-    @RawRes loading: Int
+    @RawRes loading: Int,
+    modifier: Modifier = Modifier
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(loading))
     val progress by animateLottieCompositionAsState(

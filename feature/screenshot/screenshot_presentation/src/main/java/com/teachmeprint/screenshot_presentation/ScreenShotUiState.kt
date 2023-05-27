@@ -3,6 +3,8 @@ package com.teachmeprint.screenshot_presentation
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 data class ScreenShotUiState(
     val screenShotStatus: ScreenShotStatus = ScreenShotStatus.Default,
@@ -13,12 +15,15 @@ data class ScreenShotUiState(
     val actionCropImage: ActionCropImage? = null,
     val availableLanguage: AvailableLanguage? = null,
     val navigationBarItem: NavigationBarItem = NavigationBarItem.TRANSLATE,
-    val navigationBarItemList: List<NavigationBarItem> = enumValues<NavigationBarItem>().toList()
+    val navigationBarItemList: ImmutableList<NavigationBarItem> =
+        enumValues<NavigationBarItem>().toList().toImmutableList()
 ) {
-    val availableLanguageList: List<AvailableLanguage>
-        get() = enumValues<AvailableLanguage>().toList()
+    val availableLanguageList: ImmutableList<AvailableLanguage>
+        get() = enumValues<AvailableLanguage>()
+            .toList()
             .sortedBy { it }
             .map { it }
+            .toImmutableList()
 }
 
 sealed class ScreenShotStatus {

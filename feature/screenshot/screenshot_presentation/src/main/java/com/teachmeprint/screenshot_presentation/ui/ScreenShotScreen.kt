@@ -26,6 +26,7 @@ import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotNavigatio
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotSnackBarError
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotSnackBarSelectLanguage
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotTranslateBalloon
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ScreenShotRoute(
@@ -42,9 +43,9 @@ fun ScreenShotRoute(
 }
 
 @Composable
-fun ScreenShotScreen(
-    modifier: Modifier = Modifier,
+private fun ScreenShotScreen(
     uiState: ScreenShotUiState,
+    modifier: Modifier = Modifier,
     handleEvent: (event: ScreenShotEvent) -> Unit
 ) {
     val status = uiState.screenShotStatus
@@ -63,65 +64,65 @@ fun ScreenShotScreen(
                 handleEvent(CroppedImage(it))
             }
         )
-    }
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxSize()
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
-        if (status is ScreenShotStatus.Loading) {
-            val loading = uiState.navigationBarItem
-                .takeIf { it == TRANSLATE }
-                ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxSize()
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
+            if (status is ScreenShotStatus.Loading) {
+                val loading = uiState.navigationBarItem
+                    .takeIf { it == TRANSLATE }
+                    ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
 
-            ScreenShotLottieLoading(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                loading = loading
-            )
-        }
-        if (status is ScreenShotStatus.Error) {
-            status.code?.let {
-                ScreenShotSnackBarError(
-                    modifier = Modifier.padding(bottom = 16.dp),
-                    code = it
+                ScreenShotLottieLoading(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    loading = loading
                 )
             }
-        }
-        if (uiState.isLanguageSelectionAlertVisible) {
-            ScreenShotSnackBarSelectLanguage(
-                modifier = Modifier.padding(bottom = 16.dp),
-                onToggleLanguageDialogAndHideSelectionAlert = {
-                    handleEvent(ToggleLanguageDialogAndHideSelectionAlert)
+            if (status is ScreenShotStatus.Error) {
+                status.code?.let {
+                    ScreenShotSnackBarError(
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        code = it
+                    )
                 }
-            )
-        }
-        if (uiState.isBalloonTranslateVisible) {
-            ScreenShotTranslateBalloon(
-                text = uiState.textTranslate,
-                onHideTranslateBalloon = {
-                    handleEvent(HideTranslateBalloon)
-                }
-            )
-        }
-        ScreenShotNavigationBar(
-            modifier = Modifier.padding(bottom = 16.dp)
-        ) {
-            ScreenShotNavigationBarItem(
-                navigationBarItem = uiState.navigationBarItem,
-                navigationBarItemList = uiState.navigationBarItemList,
-                onSelectedOptionsNavigationBar = { item ->
-                    if (status !is ScreenShotStatus.Loading) {
-                        handleEvent(SelectedOptionsNavigationBar(item))
+            }
+            if (uiState.isLanguageSelectionAlertVisible) {
+                ScreenShotSnackBarSelectLanguage(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    onToggleLanguageDialogAndHideSelectionAlert = {
+                        handleEvent(ToggleLanguageDialogAndHideSelectionAlert)
                     }
-                }
-            )
+                )
+            }
+            if (uiState.isBalloonTranslateVisible) {
+                ScreenShotTranslateBalloon(
+                    text = uiState.textTranslate,
+                    onHideTranslateBalloon = {
+                        handleEvent(HideTranslateBalloon)
+                    }
+                )
+            }
+            ScreenShotNavigationBar(
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                ScreenShotNavigationBarItem(
+                    navigationBarItem = uiState.navigationBarItem,
+                    navigationBarItemList = uiState.navigationBarItemList,
+                    onSelectedOptionsNavigationBar = { item ->
+                        if (status !is ScreenShotStatus.Loading) {
+                            handleEvent(SelectedOptionsNavigationBar(item))
+                        }
+                    }
+                )
+            }
         }
     }
     if (uiState.isLanguageDialogVisible) {
         LanguageChoiceDialog(
             availableLanguage = uiState.availableLanguage,
-            availableLanguageList = uiState.availableLanguageList,
+            availableLanguageList = uiState.availableLanguageList.toImmutableList(),
             onSaveLanguage = {
                 handleEvent(SaveLanguage(it))
             },

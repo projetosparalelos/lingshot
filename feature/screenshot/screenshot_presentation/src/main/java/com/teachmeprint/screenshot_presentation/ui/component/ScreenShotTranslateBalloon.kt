@@ -20,8 +20,8 @@ import com.teachmeprint.designsystem.theme.OthersButton
 
 @Composable
 fun ScreenShotTranslateBalloon(
-    modifier: Modifier = Modifier,
     text: String,
+    modifier: Modifier = Modifier,
     onHideTranslateBalloon: () -> Unit
 ) {
     Balloon(

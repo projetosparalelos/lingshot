@@ -18,8 +18,8 @@ import com.teachmeprint.designsystem.R
 
 @Composable
 fun TeachMePrintSnackBar(
-    modifier: Modifier = Modifier,
     message: String,
+    modifier: Modifier = Modifier,
     textButton: String = stringResource(id = R.string.text_button_action_close_snack_bar),
     onClick: (() -> Unit)? = null
 ) {

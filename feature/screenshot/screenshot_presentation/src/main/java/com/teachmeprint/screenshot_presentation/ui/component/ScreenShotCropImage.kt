@@ -27,10 +27,10 @@ import timber.log.Timber
 
 @Composable
 fun ScreenShotCropImage(
-    modifier: Modifier = Modifier,
-    imageUri: Uri? = rememberImageUriPath(),
     actionCropImage: ActionCropImage?,
     onCroppedImage: (ActionCropImage?) -> Unit,
+    modifier: Modifier = Modifier,
+    imageUri: Uri? = rememberImageUriPath(),
     onCropImageResult: (Bitmap?) -> Unit
 ) {
     val cropImage = rememberCropImage()

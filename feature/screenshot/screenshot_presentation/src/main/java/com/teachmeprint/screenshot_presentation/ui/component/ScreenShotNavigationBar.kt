@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ScreenShotNavigationBar(
@@ -38,11 +40,13 @@ fun ScreenShotNavigationBar(
 @Composable
 fun RowScope.ScreenShotNavigationBarItem(
     navigationBarItem: NavigationBarItem,
-    navigationBarItemList: List<NavigationBarItem>,
+    navigationBarItemList: ImmutableList<NavigationBarItem>,
+    modifier: Modifier = Modifier,
     onSelectedOptionsNavigationBar: (NavigationBarItem) -> Unit
 ) {
     navigationBarItemList.forEach { item ->
         NavigationBarItem(
+            modifier = modifier,
             icon = {
                 Icon(imageVector = item.icon, contentDescription = item.name)
             },
@@ -61,7 +65,10 @@ private fun ScreenShotNavigationBarPreview() {
     ScreenShotNavigationBar {
         ScreenShotNavigationBarItem(
             navigationBarItem = TRANSLATE,
-            navigationBarItemList = enumValues<NavigationBarItem>().toList(),
+            navigationBarItemList =
+            enumValues<NavigationBarItem>()
+                .toList()
+                .toImmutableList(),
             onSelectedOptionsNavigationBar = {}
         )
     }
