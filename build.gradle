@@ -9,10 +9,6 @@ plugins {
     alias libs.plugins.dagger.hilt.android apply false
     alias libs.plugins.detekt apply false
     alias libs.plugins.ktlint apply false
-    alias libs.plugins.ben.manes.versions
-}
-apply {
-    from "$rootDir/plugins/find-version-library.gradle"
 }
 subprojects {
     apply {
