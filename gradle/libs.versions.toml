@@ -5,6 +5,7 @@ googleServices = "4.3.15"
 playServicesAds = "22.0.0"
 firebaseCrashylytics = "2.9.4"
 benManesVersions = "0.46.0"
+dependencyAnalysis = "1.20.0"
 
 coreKTX = "1.10.0"
 appCompat = "1.6.1"
@@ -114,5 +115,6 @@ dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "da
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashylytics" }
 ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "benManesVersions" }
+dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

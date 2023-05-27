@@ -1,6 +1,4 @@
 //./gradlew dependencyUpdates
-apply plugin: "com.github.ben-manes.versions"
-
 dependencyUpdates {
     resolutionStrategy {
         componentSelection { rules ->
