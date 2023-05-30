@@ -19,13 +19,13 @@ import com.teachmeprint.screenshot_presentation.ScreenShotStatus
 import com.teachmeprint.screenshot_presentation.ScreenShotUiState
 import com.teachmeprint.screenshot_presentation.ScreenShotViewModel
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
-import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotBottomSheet
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotLottieLoading
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotNavigationBar
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotNavigationBarItem
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotSnackBarError
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotSnackBarSelectLanguage
+import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotTranslateBottomSheet
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
@@ -96,11 +96,11 @@ private fun ScreenShotScreen(
                     }
                 )
             }
-            if (uiState.isBalloonTranslateVisible) {
-                ScreenShotBottomSheet(
+            if (uiState.isBottomSheetTranslateVisible) {
+                ScreenShotTranslateBottomSheet(
                     text = uiState.textTranslate,
-                    onHideTranslateBalloon = {
-                        handleEvent(HideTranslateBalloon)
+                    onHideTranslateBottomSheet = {
+                        handleEvent(HideTranslateBottomSheet)
                     }
                 )
             }
@@ -138,7 +138,7 @@ private fun ScreenShotScreen(
         if ((status is ScreenShotStatus.Success) &&
             uiState.navigationBarItem == TRANSLATE
         ) {
-            status.text?.let { handleEvent(ShowTranslateBalloon(it)) }
+            status.text?.let { handleEvent(ShowTranslateBottomSheet(it)) }
         }
     }
 }

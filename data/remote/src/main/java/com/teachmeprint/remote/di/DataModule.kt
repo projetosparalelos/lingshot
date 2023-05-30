@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -42,7 +43,9 @@ object DataModule {
             if (BuildConfig.DEBUG) {
                 addInterceptor(loggingInterceptor)
             }
-        }.build()
+        }.readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .build()
     }
 
     @Singleton

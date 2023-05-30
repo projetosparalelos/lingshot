@@ -89,12 +89,12 @@ class ScreenShotViewModel @Inject constructor(
                 selectedOptionsNavigationBar(screenShotEvent.navigationBarItem)
             }
 
-            is ScreenShotEvent.HideTranslateBalloon -> {
-                hideTranslateBalloon()
+            is ScreenShotEvent.HideTranslateBottomSheet -> {
+                hideTranslateBottomSheet()
             }
 
-            is ScreenShotEvent.ShowTranslateBalloon -> {
-                showTranslateBalloon(screenShotEvent.textTranslate)
+            is ScreenShotEvent.ShowTranslateBottomSheet -> {
+                showTranslateBottomSheet(screenShotEvent.textTranslate)
             }
 
             is ScreenShotEvent.ToggleLanguageDialog -> {
@@ -166,18 +166,18 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun hideTranslateBalloon() {
+    private fun hideTranslateBottomSheet() {
         _uiState.update {
             it.copy(
-                isBalloonTranslateVisible = !it.isBalloonTranslateVisible
+                isBottomSheetTranslateVisible = !it.isBottomSheetTranslateVisible
             )
         }
     }
 
-    private fun showTranslateBalloon(textTranslate: String) {
+    private fun showTranslateBottomSheet(textTranslate: String) {
         _uiState.update {
             it.copy(
-                isBalloonTranslateVisible = !it.isBalloonTranslateVisible,
+                isBottomSheetTranslateVisible = !it.isBottomSheetTranslateVisible,
                 textTranslate = textTranslate
             )
         }
