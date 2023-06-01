@@ -16,6 +16,8 @@ android {
 }
 
 dependencies {
+    implementation libs.retrofit
+
     implementation libs.play.services.ads
 
     implementation libs.dagger.hilt.android

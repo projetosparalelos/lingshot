@@ -10,12 +10,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teachmeprint.common.helper.Status
 import com.teachmeprint.designsystem.theme.TeachMePrintTheme
 import com.teachmeprint.languagechoice_presentation.ui.LanguageChoiceDialog
 import com.teachmeprint.screenshot_presentation.R
 import com.teachmeprint.screenshot_presentation.ScreenShotEvent
 import com.teachmeprint.screenshot_presentation.ScreenShotEvent.*
-import com.teachmeprint.screenshot_presentation.ScreenShotStatus
 import com.teachmeprint.screenshot_presentation.ScreenShotUiState
 import com.teachmeprint.screenshot_presentation.ScreenShotViewModel
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
@@ -70,7 +70,8 @@ private fun ScreenShotScreen(
                 .fillMaxSize()
         ) {
             Spacer(modifier = Modifier.weight(1f))
-            if (status is ScreenShotStatus.Loading) {
+
+            if (status is Status.Loading) {
                 val loading = uiState.navigationBarItem
                     .takeIf { it == TRANSLATE }
                     ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
@@ -80,8 +81,8 @@ private fun ScreenShotScreen(
                     loading = loading
                 )
             }
-            if (status is ScreenShotStatus.Error) {
-                status.code?.let {
+            if (status is Status.Error) {
+                status.statusCode?.let {
                     ScreenShotSnackBarError(
                         modifier = Modifier.padding(bottom = 16.dp),
                         code = it
@@ -111,7 +112,7 @@ private fun ScreenShotScreen(
                     navigationBarItem = uiState.navigationBarItem,
                     navigationBarItemList = uiState.navigationBarItemList,
                     onSelectedOptionsNavigationBar = { item ->
-                        if (status !is ScreenShotStatus.Loading) {
+                        if (status !is Status.Loading) {
                             handleEvent(SelectedOptionsNavigationBar(item))
                         }
                     }
@@ -135,10 +136,10 @@ private fun ScreenShotScreen(
         )
     }
     LaunchedEffect(status) {
-        if ((status is ScreenShotStatus.Success) &&
+        if ((status is Status.Success) &&
             uiState.navigationBarItem == TRANSLATE
         ) {
-            status.text?.let { handleEvent(ShowTranslateBottomSheet(it)) }
+            status.data?.let { handleEvent(ShowTranslateBottomSheet(it)) }
         }
     }
 }

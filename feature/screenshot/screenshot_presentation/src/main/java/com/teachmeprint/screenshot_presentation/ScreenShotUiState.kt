@@ -1,5 +1,7 @@
 package com.teachmeprint.screenshot_presentation
 
+import com.teachmeprint.common.helper.Status
+import com.teachmeprint.common.helper.statusDefault
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem
@@ -7,7 +9,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 data class ScreenShotUiState(
-    val screenShotStatus: ScreenShotStatus = ScreenShotStatus.Default,
+    val screenShotStatus: Status<String> = statusDefault(),
     val textTranslate: String = "",
     val isBottomSheetTranslateVisible: Boolean = false,
     val isLanguageSelectionAlertVisible: Boolean = false,
@@ -24,11 +26,4 @@ data class ScreenShotUiState(
             .sortedBy { it }
             .map { it }
             .toImmutableList()
-}
-
-sealed class ScreenShotStatus {
-    object Default : ScreenShotStatus()
-    object Loading : ScreenShotStatus()
-    data class Success(val text: String?) : ScreenShotStatus()
-    data class Error(val code: Int?) : ScreenShotStatus()
 }

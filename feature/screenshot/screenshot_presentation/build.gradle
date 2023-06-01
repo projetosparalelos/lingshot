@@ -24,8 +24,6 @@ dependencies {
     implementation project(':feature:screencapture')
     implementation project(':feature:screenshot:screenshot_domain')
 
-    implementation libs.retrofit
-
     implementation libs.hilt.navigation.compose
     implementation libs.dagger.hilt.android
     kapt libs.dagger.hilt.compiler
