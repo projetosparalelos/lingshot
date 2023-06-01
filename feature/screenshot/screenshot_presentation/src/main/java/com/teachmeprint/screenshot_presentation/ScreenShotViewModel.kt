@@ -13,6 +13,7 @@ import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
 import com.teachmeprint.common.helper.launchWithStatus
+import com.teachmeprint.common.helper.statusDefault
 import com.teachmeprint.common.helper.statusError
 import com.teachmeprint.common.helper.statusLoading
 import com.teachmeprint.common.helper.statusSuccess
@@ -33,8 +34,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.*
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -87,12 +86,8 @@ class ScreenShotViewModel @Inject constructor(
                 selectedOptionsNavigationBar(screenShotEvent.navigationBarItem)
             }
 
-            is ScreenShotEvent.HideTranslateBottomSheet -> {
-                hideTranslateBottomSheet()
-            }
-
-            is ScreenShotEvent.ShowTranslateBottomSheet -> {
-                showTranslateBottomSheet(screenShotEvent.textTranslate)
+            is ScreenShotEvent.ClearStatus -> {
+                clearStatus()
             }
 
             is ScreenShotEvent.ToggleLanguageDialog -> {
@@ -164,19 +159,10 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun hideTranslateBottomSheet() {
+    private fun clearStatus() {
         _uiState.update {
             it.copy(
-                isBottomSheetTranslateVisible = !it.isBottomSheetTranslateVisible
-            )
-        }
-    }
-
-    private fun showTranslateBottomSheet(textTranslate: String) {
-        _uiState.update {
-            it.copy(
-                isBottomSheetTranslateVisible = !it.isBottomSheetTranslateVisible,
-                textTranslate = textTranslate
+                screenShotStatus = statusDefault()
             )
         }
     }
@@ -202,10 +188,8 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun fetchPhraseToTranslate(text: String) {
         viewModelScope.launchWithStatus({
-            if (text.isBlank()) {
-                delay(500.milliseconds)
-                return@launchWithStatus ILLEGIBLE_TEXT
-            }
+            text.ifBlank { return@launchWithStatus ILLEGIBLE_TEXT }
+
             val requestBody = ChatGPTPromptBodyDomain(
                 prompt = PROMPT_TRANSLATE(getLanguage(), text)
             )

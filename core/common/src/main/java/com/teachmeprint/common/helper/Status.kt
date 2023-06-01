@@ -1,5 +1,6 @@
 package com.teachmeprint.common.helper
 
+import androidx.compose.runtime.Composable
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_ERROR_GENERIC
 import java.io.IOException
 import kotlinx.coroutines.CoroutineScope
@@ -35,21 +36,42 @@ fun <T> CoroutineScope.launchWithStatus(
 ) {
     onCopy(Status.Loading())
     launch {
-        runCatching {
-            data()
-        }.onSuccess { value ->
+        try {
+            val value = data()
             onCopy(Status.Success(value))
-        }.onFailure { e ->
+        } catch (e: Exception) {
             when (e) {
                 is HttpException -> {
                     onCopy(Status.Error(e.code()))
                 }
                 is IOException -> {
-                    onCopy(
-                        Status.Error(STATUS_TEXT_ERROR_GENERIC)
-                    )
+                    onCopy(Status.Error(STATUS_TEXT_ERROR_GENERIC))
                 }
             }
         }
     }
+}
+
+@Composable
+fun <T> Status<T>.onLoading(content: @Composable () -> Unit): Status<T> {
+    if (this is Status.Loading) {
+        content()
+    }
+    return this
+}
+
+@Composable
+fun <T> Status<T>.onSuccess(content: @Composable (T) -> Unit): Status<T> {
+    if (this is Status.Success) {
+        data?.let { content(it) }
+    }
+    return this
+}
+
+@Composable
+fun <T> Status<T>.onError(content: @Composable (Int) -> Unit): Status<T> {
+    if (this is Status.Error) {
+        statusCode?.let { content(it) }
+    }
+    return this
 }

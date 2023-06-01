@@ -16,7 +16,7 @@ fun ScreenShotSnackBarSelectLanguage(
         modifier = modifier,
         message = stringResource(id = R.string.text_select_language_speak_message),
         textButton = stringResource(id = R.string.text_button_action_select_snack_bar),
-        onClick = onToggleLanguageDialogAndHideSelectionAlert
+        onDismiss = onToggleLanguageDialogAndHideSelectionAlert
     )
 }
 

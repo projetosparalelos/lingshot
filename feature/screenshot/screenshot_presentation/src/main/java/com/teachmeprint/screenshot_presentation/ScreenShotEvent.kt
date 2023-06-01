@@ -6,7 +6,7 @@ import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem
 
 sealed class ScreenShotEvent {
-    object HideTranslateBottomSheet : ScreenShotEvent()
+    object ClearStatus : ScreenShotEvent()
 
     object ToggleLanguageDialog : ScreenShotEvent()
 
@@ -26,10 +26,6 @@ sealed class ScreenShotEvent {
 
     data class SelectedOptionsNavigationBar(
         val navigationBarItem: NavigationBarItem
-    ) : ScreenShotEvent()
-
-    data class ShowTranslateBottomSheet(
-        val textTranslate: String
     ) : ScreenShotEvent()
 
     data class FetchTextRecognizer(

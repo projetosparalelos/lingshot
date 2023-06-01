@@ -11,6 +11,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teachmeprint.common.helper.Status
+import com.teachmeprint.common.helper.onError
+import com.teachmeprint.common.helper.onLoading
+import com.teachmeprint.common.helper.onSuccess
 import com.teachmeprint.designsystem.theme.TeachMePrintTheme
 import com.teachmeprint.languagechoice_presentation.ui.LanguageChoiceDialog
 import com.teachmeprint.screenshot_presentation.R
@@ -71,7 +74,7 @@ private fun ScreenShotScreen(
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
-            if (status is Status.Loading) {
+            status.onLoading {
                 val loading = uiState.navigationBarItem
                     .takeIf { it == TRANSLATE }
                     ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
@@ -80,28 +83,29 @@ private fun ScreenShotScreen(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     loading = loading
                 )
-            }
-            if (status is Status.Error) {
-                status.statusCode?.let {
-                    ScreenShotSnackBarError(
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        code = it
+            }.onSuccess {
+                if (uiState.navigationBarItem == TRANSLATE) {
+                    ScreenShotTranslateBottomSheet(
+                        text = it,
+                        onDismiss = {
+                            handleEvent(ClearStatus)
+                        }
                     )
                 }
+            }.onError {
+                ScreenShotSnackBarError(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    code = it,
+                    onDismiss = {
+                        handleEvent(ClearStatus)
+                    }
+                )
             }
             if (uiState.isLanguageSelectionAlertVisible) {
                 ScreenShotSnackBarSelectLanguage(
                     modifier = Modifier.padding(bottom = 16.dp),
                     onToggleLanguageDialogAndHideSelectionAlert = {
                         handleEvent(ToggleLanguageDialogAndHideSelectionAlert)
-                    }
-                )
-            }
-            if (uiState.isBottomSheetTranslateVisible) {
-                ScreenShotTranslateBottomSheet(
-                    text = uiState.textTranslate,
-                    onHideTranslateBottomSheet = {
-                        handleEvent(HideTranslateBottomSheet)
                     }
                 )
             }
@@ -134,13 +138,6 @@ private fun ScreenShotScreen(
                 handleEvent(ToggleLanguageDialog)
             }
         )
-    }
-    LaunchedEffect(status) {
-        if ((status is Status.Success) &&
-            uiState.navigationBarItem == TRANSLATE
-        ) {
-            status.data?.let { handleEvent(ShowTranslateBottomSheet(it)) }
-        }
     }
 }
 

@@ -10,8 +10,6 @@ import kotlinx.collections.immutable.toImmutableList
 
 data class ScreenShotUiState(
     val screenShotStatus: Status<String> = statusDefault(),
-    val textTranslate: String = "",
-    val isBottomSheetTranslateVisible: Boolean = false,
     val isLanguageSelectionAlertVisible: Boolean = false,
     val isLanguageDialogVisible: Boolean = false,
     val actionCropImage: ActionCropImage? = null,

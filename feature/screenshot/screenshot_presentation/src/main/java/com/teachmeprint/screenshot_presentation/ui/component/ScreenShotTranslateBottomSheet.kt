@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 fun ScreenShotTranslateBottomSheet(
     text: String?,
     modifier: Modifier = Modifier,
-    onHideTranslateBottomSheet: () -> Unit
+    onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -39,13 +39,13 @@ fun ScreenShotTranslateBottomSheet(
     ModalBottomSheet(
         modifier = modifier,
         sheetState = sheetState,
-        onDismissRequest = onHideTranslateBottomSheet
+        onDismissRequest = onDismiss
     ) {
         Row(horizontalArrangement = Arrangement.SpaceAround) {
             CenterAlignedTopAppBar(navigationIcon = {
                 IconButton(onClick = {
                     scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        onHideTranslateBottomSheet()
+                        onDismiss()
                     }
                 }) {
                     Icon(Icons.Rounded.Close, contentDescription = "Cancel")
