@@ -6,17 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.teachmeprint.screencapture.ScreenCaptureFloatingWindow
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ScreenShotActivity : ComponentActivity() {
@@ -26,7 +19,6 @@ class ScreenShotActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideSystemUI()
         setContent {
             ScreenShotStatusBarColor()
             ScreenShotRoute()
@@ -38,16 +30,6 @@ class ScreenShotActivity : ComponentActivity() {
         val systemUiController = rememberSystemUiController()
         SideEffect {
             systemUiController.setStatusBarColor(Color.Black)
-        }
-    }
-
-    private fun hideSystemUI() {
-        lifecycleScope.launch {
-            delay(1.seconds)
-            WindowInsetsControllerCompat(window, window.decorView).apply {
-                hide(WindowInsetsCompat.Type.statusBars())
-                systemBarsBehavior = BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
         }
     }
 

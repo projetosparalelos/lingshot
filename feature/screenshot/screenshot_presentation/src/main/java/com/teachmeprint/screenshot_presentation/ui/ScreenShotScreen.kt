@@ -10,12 +10,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teachmeprint.common.helper.isLoadingStatus
+import com.teachmeprint.common.helper.onError
+import com.teachmeprint.common.helper.onLoading
+import com.teachmeprint.common.helper.onSuccess
 import com.teachmeprint.designsystem.theme.TeachMePrintTheme
 import com.teachmeprint.languagechoice_presentation.ui.LanguageChoiceDialog
 import com.teachmeprint.screenshot_presentation.R
 import com.teachmeprint.screenshot_presentation.ScreenShotEvent
 import com.teachmeprint.screenshot_presentation.ScreenShotEvent.*
-import com.teachmeprint.screenshot_presentation.ScreenShotStatus
 import com.teachmeprint.screenshot_presentation.ScreenShotUiState
 import com.teachmeprint.screenshot_presentation.ScreenShotViewModel
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
@@ -25,7 +28,7 @@ import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotNavigatio
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotNavigationBarItem
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotSnackBarError
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotSnackBarSelectLanguage
-import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotTranslateBalloon
+import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotTranslateBottomSheet
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
@@ -48,8 +51,6 @@ private fun ScreenShotScreen(
     modifier: Modifier = Modifier,
     handleEvent: (event: ScreenShotEvent) -> Unit
 ) {
-    val status = uiState.screenShotStatus
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -70,7 +71,8 @@ private fun ScreenShotScreen(
                 .fillMaxSize()
         ) {
             Spacer(modifier = Modifier.weight(1f))
-            if (status is ScreenShotStatus.Loading) {
+
+            uiState.screenShotStatus.onLoading {
                 val loading = uiState.navigationBarItem
                     .takeIf { it == TRANSLATE }
                     ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
@@ -79,28 +81,29 @@ private fun ScreenShotScreen(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     loading = loading
                 )
-            }
-            if (status is ScreenShotStatus.Error) {
-                status.code?.let {
-                    ScreenShotSnackBarError(
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        code = it
+            }.onSuccess {
+                if (uiState.navigationBarItem == TRANSLATE) {
+                    ScreenShotTranslateBottomSheet(
+                        text = it,
+                        onDismiss = {
+                            handleEvent(ClearStatus)
+                        }
                     )
                 }
+            }.onError {
+                ScreenShotSnackBarError(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    code = it,
+                    onDismiss = {
+                        handleEvent(ClearStatus)
+                    }
+                )
             }
             if (uiState.isLanguageSelectionAlertVisible) {
                 ScreenShotSnackBarSelectLanguage(
                     modifier = Modifier.padding(bottom = 16.dp),
                     onToggleLanguageDialogAndHideSelectionAlert = {
                         handleEvent(ToggleLanguageDialogAndHideSelectionAlert)
-                    }
-                )
-            }
-            if (uiState.isBalloonTranslateVisible) {
-                ScreenShotTranslateBalloon(
-                    text = uiState.textTranslate,
-                    onHideTranslateBalloon = {
-                        handleEvent(HideTranslateBalloon)
                     }
                 )
             }
@@ -111,7 +114,7 @@ private fun ScreenShotScreen(
                     navigationBarItem = uiState.navigationBarItem,
                     navigationBarItemList = uiState.navigationBarItemList,
                     onSelectedOptionsNavigationBar = { item ->
-                        if (status !is ScreenShotStatus.Loading) {
+                        if (!uiState.screenShotStatus.isLoadingStatus) {
                             handleEvent(SelectedOptionsNavigationBar(item))
                         }
                     }
@@ -133,13 +136,6 @@ private fun ScreenShotScreen(
                 handleEvent(ToggleLanguageDialog)
             }
         )
-    }
-    LaunchedEffect(status) {
-        if ((status is ScreenShotStatus.Success) &&
-            uiState.navigationBarItem == TRANSLATE
-        ) {
-            status.text?.let { handleEvent(ShowTranslateBalloon(it)) }
-        }
     }
 }
 

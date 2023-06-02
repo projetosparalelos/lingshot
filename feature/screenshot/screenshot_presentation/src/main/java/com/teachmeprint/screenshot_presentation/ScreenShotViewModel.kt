@@ -8,17 +8,20 @@ import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teachmeprint.common.helper.StatusMessage.STATUS_IDENTIFY_LANGUAGE_FAILED
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_ERROR_GENERIC
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_RECOGNIZER_FAILED
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
+import com.teachmeprint.common.helper.launchWithStatus
+import com.teachmeprint.common.helper.statusDefault
+import com.teachmeprint.common.helper.statusError
+import com.teachmeprint.common.helper.statusLoading
+import com.teachmeprint.common.helper.statusSuccess
 import com.teachmeprint.domain.model.ChatGPTPromptBodyDomain
 import com.teachmeprint.domain.repository.ChatGPTRepository
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepository
 import com.teachmeprint.screenshot_domain.repository.ScreenShotRepository
-import com.teachmeprint.screenshot_presentation.ScreenShotStatus.*
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
@@ -29,18 +32,12 @@ import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.L
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.io.IOException
 import java.util.*
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 
 @HiltViewModel
 class ScreenShotViewModel @Inject constructor(
@@ -57,7 +54,7 @@ class ScreenShotViewModel @Inject constructor(
         TextToSpeech(context) { status ->
             if (status != SUCCESS) {
                 _uiState.update {
-                    it.copy(screenShotStatus = Error(STATUS_TEXT_TO_SPEECH_FAILED))
+                    it.copy(screenShotStatus = statusError(STATUS_TEXT_TO_SPEECH_FAILED))
                 }
             }
         }
@@ -89,12 +86,8 @@ class ScreenShotViewModel @Inject constructor(
                 selectedOptionsNavigationBar(screenShotEvent.navigationBarItem)
             }
 
-            is ScreenShotEvent.HideTranslateBalloon -> {
-                hideTranslateBalloon()
-            }
-
-            is ScreenShotEvent.ShowTranslateBalloon -> {
-                showTranslateBalloon(screenShotEvent.textTranslate)
+            is ScreenShotEvent.ClearStatus -> {
+                clearStatus()
             }
 
             is ScreenShotEvent.ToggleLanguageDialog -> {
@@ -166,19 +159,10 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun hideTranslateBalloon() {
+    private fun clearStatus() {
         _uiState.update {
             it.copy(
-                isBalloonTranslateVisible = !it.isBalloonTranslateVisible
-            )
-        }
-    }
-
-    private fun showTranslateBalloon(textTranslate: String) {
-        _uiState.update {
-            it.copy(
-                isBalloonTranslateVisible = !it.isBalloonTranslateVisible,
-                textTranslate = textTranslate
+                screenShotStatus = statusDefault()
             )
         }
     }
@@ -195,43 +179,24 @@ class ScreenShotViewModel @Inject constructor(
             }
             ?.addOnFailureListener {
                 _uiState.update { value ->
-                    value.copy(screenShotStatus = Error(STATUS_TEXT_RECOGNIZER_FAILED))
+                    value.copy(
+                        screenShotStatus = statusError(STATUS_TEXT_RECOGNIZER_FAILED)
+                    )
                 }
             }
     }
 
     private fun fetchPhraseToTranslate(text: String) {
-        _uiState.update { it.copy(screenShotStatus = Loading) }
-        viewModelScope.launch {
-            runCatching {
-                withContext(Dispatchers.IO) {
-                    if (text.isBlank()) {
-                        delay(500.milliseconds)
-                        return@withContext ILLEGIBLE_TEXT
-                    }
-                    val requestBody = ChatGPTPromptBodyDomain(
-                        prompt = PROMPT_TRANSLATE(getLanguage(), text)
-                    )
-                    chatGPTRepository.get(requestBody)
-                }
-            }.onSuccess { text ->
-                _uiState.update { it.copy(screenShotStatus = Success(text)) }
-            }.onFailure { e ->
-                when (e) {
-                    is HttpException -> {
-                        _uiState.update { it.copy(screenShotStatus = Error(e.code())) }
-                    }
+        viewModelScope.launchWithStatus({
+            text.ifBlank { return@launchWithStatus ILLEGIBLE_TEXT }
 
-                    is IOException -> {
-                        _uiState.update {
-                            it.copy(
-                                screenShotStatus = Error(STATUS_TEXT_ERROR_GENERIC)
-                            )
-                        }
-                    }
-                }
-            }
-        }
+            val requestBody = ChatGPTPromptBodyDomain(
+                prompt = PROMPT_TRANSLATE(getLanguage(), text)
+            )
+            chatGPTRepository.get(requestBody)
+        }, { status ->
+            _uiState.update { it.copy(screenShotStatus = status) }
+        })
     }
 
     private fun fetchLanguageIdentifier(text: String) {
@@ -241,7 +206,9 @@ class ScreenShotViewModel @Inject constructor(
             }
             .addOnFailureListener {
                 _uiState.update { value ->
-                    value.copy(screenShotStatus = Error(STATUS_IDENTIFY_LANGUAGE_FAILED))
+                    value.copy(
+                        screenShotStatus = statusError(STATUS_IDENTIFY_LANGUAGE_FAILED)
+                    )
                 }
             }
     }
@@ -257,7 +224,11 @@ class ScreenShotViewModel @Inject constructor(
             val result = setLanguage(languageLocale)
             if (result == LANG_MISSING_DATA || result == LANG_NOT_SUPPORTED) {
                 _uiState.update { value ->
-                    value.copy(screenShotStatus = Error(STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED))
+                    value.copy(
+                        screenShotStatus = statusError(
+                            STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
+                        )
+                    )
                 }
             }
 
@@ -272,17 +243,17 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun onSpeechListener() = object : UtteranceProgressListener() {
         override fun onStart(p0: String?) {
-            _uiState.update { it.copy(screenShotStatus = Loading) }
+            _uiState.update { it.copy(screenShotStatus = statusLoading()) }
         }
 
         override fun onDone(value: String?) {
-            _uiState.update { it.copy(screenShotStatus = Success(value)) }
+            _uiState.update { it.copy(screenShotStatus = statusSuccess(value)) }
         }
 
         @Deprecated("Deprecated in Java")
         override fun onError(p0: String?) {
             _uiState.update {
-                it.copy(screenShotStatus = Error(STATUS_TEXT_TO_SPEECH_ERROR))
+                it.copy(screenShotStatus = statusError(STATUS_TEXT_TO_SPEECH_ERROR))
             }
         }
     }

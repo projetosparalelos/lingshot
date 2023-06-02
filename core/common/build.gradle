@@ -13,9 +13,18 @@ apply {
 
 android {
     namespace 'com.teachmeprint.common'
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
+    }
+    buildFeatures {
+        compose true
+    }
 }
 
 dependencies {
+    implementation libs.retrofit
+
     implementation libs.play.services.ads
 
     implementation libs.dagger.hilt.android

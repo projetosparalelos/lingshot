@@ -8,15 +8,20 @@ import com.teachmeprint.common.helper.StatusMessage.getErrorMessage
 import com.teachmeprint.designsystem.component.TeachMePrintSnackBar
 
 @Composable
-fun ScreenShotSnackBarError(code: Int, modifier: Modifier = Modifier) {
+fun ScreenShotSnackBarError(
+    code: Int,
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit
+) {
     TeachMePrintSnackBar(
         modifier = modifier,
-        message = stringResource(id = getErrorMessage(code))
+        message = stringResource(id = getErrorMessage(code)),
+        onDismiss = onDismiss
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun ScreenShotSnackBarErrorPreview() {
-    ScreenShotSnackBarError(code = 0)
+    ScreenShotSnackBarError(code = 0) {}
 }
