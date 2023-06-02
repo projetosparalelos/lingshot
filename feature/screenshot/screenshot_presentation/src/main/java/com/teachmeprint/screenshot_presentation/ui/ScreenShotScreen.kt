@@ -10,7 +10,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teachmeprint.common.helper.Status
 import com.teachmeprint.common.helper.isLoadingStatus
 import com.teachmeprint.common.helper.onError
 import com.teachmeprint.common.helper.onLoading
