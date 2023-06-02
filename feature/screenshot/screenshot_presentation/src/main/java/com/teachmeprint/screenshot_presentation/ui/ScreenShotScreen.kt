@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teachmeprint.common.helper.Status
+import com.teachmeprint.common.helper.isLoadingStatus
 import com.teachmeprint.common.helper.onError
 import com.teachmeprint.common.helper.onLoading
 import com.teachmeprint.common.helper.onSuccess
@@ -51,8 +52,6 @@ private fun ScreenShotScreen(
     modifier: Modifier = Modifier,
     handleEvent: (event: ScreenShotEvent) -> Unit
 ) {
-    val status = uiState.screenShotStatus
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -74,7 +73,7 @@ private fun ScreenShotScreen(
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
-            status.onLoading {
+            uiState.screenShotStatus.onLoading {
                 val loading = uiState.navigationBarItem
                     .takeIf { it == TRANSLATE }
                     ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
@@ -116,7 +115,7 @@ private fun ScreenShotScreen(
                     navigationBarItem = uiState.navigationBarItem,
                     navigationBarItemList = uiState.navigationBarItemList,
                     onSelectedOptionsNavigationBar = { item ->
-                        if (status !is Status.Loading) {
+                        if (!uiState.screenShotStatus.isLoadingStatus) {
                             handleEvent(SelectedOptionsNavigationBar(item))
                         }
                     }

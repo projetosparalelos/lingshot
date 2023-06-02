@@ -14,6 +14,10 @@ sealed class Status<T> {
     data class Error<T>(val statusCode: Int?) : Status<T>()
 }
 
+val <T> Status<T>.isLoadingStatus get() =
+    this is Status.Loading
+
+
 fun <T> statusDefault(): Status<T> {
     return Status.Default()
 }
