@@ -9,6 +9,7 @@ import retrofit2.HttpException
 
 sealed class Status<T> {
     class Default<T> : Status<T>()
+    class Empty<T> : Status<T>()
     class Loading<T> : Status<T>()
     data class Success<T>(val data: T?) : Status<T>()
     data class Error<T>(val statusCode: Int?) : Status<T>()
@@ -19,6 +20,10 @@ val <T> Status<T>.isLoadingStatus get() =
 
 fun <T> statusDefault(): Status<T> {
     return Status.Default()
+}
+
+fun <T> statusEmpty(): Status<T> {
+    return Status.Empty()
 }
 
 fun <T> statusLoading(): Status<T> {
@@ -53,6 +58,14 @@ fun <T> CoroutineScope.launchWithStatus(
             }
         }
     }
+}
+
+@Composable
+fun <T> Status<T>.onEmpty(content: @Composable () -> Unit): Status<T> {
+    if (this is Status.Empty) {
+        content()
+    }
+    return this
 }
 
 @Composable

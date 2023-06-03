@@ -2,4 +2,5 @@
     <!-- ScreenShotScreen -->
     <string name="text_select_language_speak_message">Select a language you speak.</string>
     <string name="text_button_action_select_snack_bar">Select</string>
+    <string name="text_title_translate_bottom_sheet">Your translate</string>
 </resources>

@@ -3,13 +3,15 @@ package com.teachmeprint.screenshot_presentation
 import com.teachmeprint.common.helper.Status
 import com.teachmeprint.common.helper.statusDefault
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
+import com.teachmeprint.screenshot_domain.model.LanguageTranslationDomain
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 data class ScreenShotUiState(
-    val screenShotStatus: Status<String> = statusDefault(),
+    val screenShotStatus: Status<LanguageTranslationDomain> = statusDefault(),
+    val correctedOriginalTextStatus: Status<String> = statusDefault(),
     val isLanguageSelectionAlertVisible: Boolean = false,
     val isLanguageDialogVisible: Boolean = false,
     val actionCropImage: ActionCropImage? = null,

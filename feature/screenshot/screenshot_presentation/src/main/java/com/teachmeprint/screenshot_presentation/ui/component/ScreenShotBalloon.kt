@@ -2,7 +2,6 @@ package com.teachmeprint.screenshot_presentation.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,46 +15,47 @@ import com.skydoves.balloon.compose.Balloon
 import com.skydoves.balloon.compose.rememberBalloonBuilder
 import com.skydoves.balloon.compose.setBackgroundColor
 import com.teachmeprint.common.util.limitCharactersWithEllipsize
-import com.teachmeprint.designsystem.theme.OthersButton
+import com.teachmeprint.designsystem.theme.LocalBalloonTheme
 
 @Composable
-fun ScreenShotTranslateBalloon(
+fun ScreenShotBalloon(
     text: String,
     modifier: Modifier = Modifier,
-    onHideTranslateBalloon: () -> Unit
+    onDismiss: () -> Unit
 ) {
+    val background = LocalBalloonTheme.current.content
     Balloon(
         modifier = modifier,
-        builder = rememberBalloonBuilder(),
+        builder = rememberBalloonBuilder(background),
         balloonContent = {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 fontSize = 14.sp,
                 lineHeight = 16.sp,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = LocalBalloonTheme.current.onContent,
                 text = text.limitCharactersWithEllipsize(280)
             )
         }
     ) { balloonWindow ->
         balloonWindow.showAtCenter(centerAlign = START)
-        balloonWindow.setOnBalloonDismissListener(onHideTranslateBalloon)
+        balloonWindow.setOnBalloonDismissListener(onDismiss)
         Divider(color = Color.Transparent)
     }
 }
 
 @Composable
-private fun rememberBalloonBuilder() = rememberBalloonBuilder {
+private fun rememberBalloonBuilder(background: Color) = rememberBalloonBuilder {
     setArrowPosition(0.16f)
     setMarginHorizontal(16)
     setPadding(12)
     setCornerRadius(24f)
     setBalloonAnimation(ELASTIC)
-    setBackgroundColor(OthersButton)
+    setBackgroundColor(background)
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ScreenShotTranslateBalloonPreview() {
-    ScreenShotTranslateBalloon(text = "Balloon Preview") {}
+private fun ScreenShotBalloonPreview() {
+    ScreenShotBalloon(text = "Balloon Preview") {}
 }
