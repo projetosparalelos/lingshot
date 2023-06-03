@@ -53,6 +53,7 @@ fun ScreenShotTranslateBottomSheet(
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.height(24.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -67,6 +68,7 @@ fun ScreenShotTranslateBottomSheet(
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.width(8.dp))
+
                 Column {
                     Text(
                         text = text.orEmpty(),
@@ -74,6 +76,7 @@ fun ScreenShotTranslateBottomSheet(
                         color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.height(8.dp))
+
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             modifier = Modifier.size(20.dp),
@@ -81,6 +84,7 @@ fun ScreenShotTranslateBottomSheet(
                             contentDescription = null
                         )
                         Spacer(modifier = Modifier.width(4.dp))
+
                         Text(
                             modifier = Modifier
                                 .widthIn(min = 100.dp)
