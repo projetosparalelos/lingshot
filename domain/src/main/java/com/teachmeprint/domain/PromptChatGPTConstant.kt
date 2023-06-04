@@ -5,6 +5,6 @@ object PromptChatGPTConstant {
         "Translate this into 1. $language and improve the meaning:\\n\\n${text}\\n\\n1."
     }
     val PROMPT_CORRECT_SPELLING: (String) -> String = { originalText ->
-        "Correct the spelling: \\n\\n${originalText}\\n\\n"
+        "Correct the spelling 1. \\n\\n$originalText\\n\\n\\n1."
     }
 }
