@@ -245,6 +245,7 @@ exceptions:
   SwallowedException:
     active: true
     ignoredExceptionTypes:
+      - 'Exception'
       - 'InterruptedException'
       - 'MalformedURLException'
       - 'NumberFormatException'

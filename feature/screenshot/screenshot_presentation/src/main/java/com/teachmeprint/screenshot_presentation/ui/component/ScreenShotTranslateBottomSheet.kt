@@ -136,7 +136,10 @@ private fun ScreenShotButtonAddToList(modifier: Modifier = Modifier) {
                 visible = added,
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
-                Text(modifier = Modifier.padding(start = 8.dp), text = stringResource(R.string.text_button_add_to_list_bottom_sheet))
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = stringResource(R.string.text_button_add_to_list_bottom_sheet)
+                )
             }
         }
     }
