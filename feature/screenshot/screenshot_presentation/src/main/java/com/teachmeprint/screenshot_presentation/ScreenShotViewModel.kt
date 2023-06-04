@@ -14,13 +14,17 @@ import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
 import com.teachmeprint.common.helper.launchWithStatus
 import com.teachmeprint.common.helper.statusDefault
+import com.teachmeprint.common.helper.statusEmpty
 import com.teachmeprint.common.helper.statusError
 import com.teachmeprint.common.helper.statusLoading
 import com.teachmeprint.common.helper.statusSuccess
+import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
+import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.teachmeprint.domain.model.ChatGPTPromptBodyDomain
 import com.teachmeprint.domain.repository.ChatGPTRepository
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepository
+import com.teachmeprint.screenshot_domain.model.LanguageTranslationDomain
 import com.teachmeprint.screenshot_domain.repository.ScreenShotRepository
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
@@ -68,6 +72,10 @@ class ScreenShotViewModel @Inject constructor(
         when (screenShotEvent) {
             is ScreenShotEvent.CroppedImage -> {
                 croppedImage(screenShotEvent.actionCropImage)
+            }
+
+            is ScreenShotEvent.FetchCorrectedOriginalText -> {
+                fetchCorrectedOriginalText(screenShotEvent.originalText)
             }
 
             is ScreenShotEvent.FetchTextRecognizer -> {
@@ -187,15 +195,31 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun fetchPhraseToTranslate(text: String) {
-        viewModelScope.launchWithStatus({
-            text.ifBlank { return@launchWithStatus ILLEGIBLE_TEXT }
+        if (text.isNotBlank()) {
+            viewModelScope.launchWithStatus({
+                val requestBody = ChatGPTPromptBodyDomain(
+                    prompt = PROMPT_TRANSLATE(getLanguage()?.displayName, text)
+                )
+                LanguageTranslationDomain(
+                    originalText = text,
+                    translatedText = chatGPTRepository.get(requestBody)
+                )
+            }, { status ->
+                _uiState.update { it.copy(screenShotStatus = status) }
+            })
+        } else {
+            _uiState.update { it.copy(screenShotStatus = statusEmpty()) }
+        }
+    }
 
+    private fun fetchCorrectedOriginalText(originalText: String) {
+        viewModelScope.launchWithStatus({
             val requestBody = ChatGPTPromptBodyDomain(
-                prompt = PROMPT_TRANSLATE(getLanguage(), text)
+                prompt = PROMPT_CORRECT_SPELLING(originalText)
             )
             chatGPTRepository.get(requestBody)
         }, { status ->
-            _uiState.update { it.copy(screenShotStatus = status) }
+            _uiState.update { it.copy(correctedOriginalTextStatus = status) }
         })
     }
 
@@ -247,7 +271,7 @@ class ScreenShotViewModel @Inject constructor(
         }
 
         override fun onDone(value: String?) {
-            _uiState.update { it.copy(screenShotStatus = statusSuccess(value)) }
+            _uiState.update { it.copy(screenShotStatus = statusSuccess(null)) }
         }
 
         @Deprecated("Deprecated in Java")
@@ -281,10 +305,7 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     companion object {
-        private val PROMPT_TRANSLATE: (AvailableLanguage?, String) -> String = { language, text ->
-            "Translate this into 1. ${language?.displayName}:\\n\\n${text}\\n\\n1."
-        }
-        private const val ILLEGIBLE_TEXT = "There isn't any legible text."
+        const val ILLEGIBLE_TEXT = "There isn't any legible text."
         private const val LANGUAGE_CODE_UNAVAILABLE = "und"
     }
 }

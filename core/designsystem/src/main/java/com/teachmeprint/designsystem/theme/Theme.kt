@@ -11,6 +11,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 
 private val LightColorScheme = lightColorScheme(
@@ -77,6 +78,15 @@ private val DarkColorScheme = darkColorScheme(
     scrim = md_theme_dark_scrim
 )
 
+private val LightAndroidBalloonTheme = BalloonTheme(
+    content = light_balloonContainer,
+    onContent = light_onBalloonContainer
+)
+private val DarkAndroidBalloonTheme = BalloonTheme(
+    content = dark_balloonContainer,
+    onContent = dark_onBalloonContainer
+)
+
 @Composable
 fun TeachMePrintTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
@@ -91,9 +101,18 @@ fun TeachMePrintTheme(
         else -> LightColorScheme
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    val balloonTheme = when {
+        isDarkTheme -> DarkAndroidBalloonTheme
+        else -> LightAndroidBalloonTheme
+    }
+
+    CompositionLocalProvider(
+        LocalBalloonTheme provides balloonTheme
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content
+        )
+    }
 }

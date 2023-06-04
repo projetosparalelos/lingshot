@@ -687,6 +687,7 @@ TwitterCompose:
     active: true
     # You can optionally define a list of CompositionLocals that are allowed here
     # allowedCompositionLocals: LocalSomething,LocalSomethingElse
+    allowedCompositionLocals: LocalBalloonTheme
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

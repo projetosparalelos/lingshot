@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teachmeprint.common.helper.isLoadingStatus
+import com.teachmeprint.common.helper.onEmpty
 import com.teachmeprint.common.helper.onError
 import com.teachmeprint.common.helper.onLoading
 import com.teachmeprint.common.helper.onSuccess
@@ -21,7 +22,9 @@ import com.teachmeprint.screenshot_presentation.ScreenShotEvent
 import com.teachmeprint.screenshot_presentation.ScreenShotEvent.*
 import com.teachmeprint.screenshot_presentation.ScreenShotUiState
 import com.teachmeprint.screenshot_presentation.ScreenShotViewModel
+import com.teachmeprint.screenshot_presentation.ScreenShotViewModel.Companion.ILLEGIBLE_TEXT
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
+import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotBalloon
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotCropImage
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotLottieLoading
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotNavigationBar
@@ -72,7 +75,14 @@ private fun ScreenShotScreen(
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
-            uiState.screenShotStatus.onLoading {
+            uiState.screenShotStatus.onEmpty {
+                ScreenShotBalloon(
+                    text = ILLEGIBLE_TEXT,
+                    onDismiss = {
+                        handleEvent(ClearStatus)
+                    }
+                )
+            }.onLoading {
                 val loading = uiState.navigationBarItem
                     .takeIf { it == TRANSLATE }
                     ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
@@ -84,7 +94,11 @@ private fun ScreenShotScreen(
             }.onSuccess {
                 if (uiState.navigationBarItem == TRANSLATE) {
                     ScreenShotTranslateBottomSheet(
-                        text = it,
+                        languageTranslationDomain = it,
+                        correctedOriginalTextStatus = uiState.correctedOriginalTextStatus,
+                        onCorrectedOriginalText = { original ->
+                            handleEvent(FetchCorrectedOriginalText(original))
+                        },
                         onDismiss = {
                             handleEvent(ClearStatus)
                         }

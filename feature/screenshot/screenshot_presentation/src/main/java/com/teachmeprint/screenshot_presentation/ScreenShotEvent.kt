@@ -28,6 +28,10 @@ sealed class ScreenShotEvent {
         val navigationBarItem: NavigationBarItem
     ) : ScreenShotEvent()
 
+    data class FetchCorrectedOriginalText(
+        val originalText: String
+    ) : ScreenShotEvent()
+
     data class FetchTextRecognizer(
         val imageBitmap: Bitmap?
     ) : ScreenShotEvent()
