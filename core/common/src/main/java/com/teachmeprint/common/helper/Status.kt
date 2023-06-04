@@ -2,7 +2,6 @@ package com.teachmeprint.common.helper
 
 import androidx.compose.runtime.Composable
 import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_ERROR_GENERIC
-import java.io.IOException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -52,7 +51,7 @@ fun <T> CoroutineScope.launchWithStatus(
                 is HttpException -> {
                     onCopy(Status.Error(e.code()))
                 }
-                is IOException -> {
+                else -> {
                     onCopy(Status.Error(STATUS_TEXT_ERROR_GENERIC))
                 }
             }
