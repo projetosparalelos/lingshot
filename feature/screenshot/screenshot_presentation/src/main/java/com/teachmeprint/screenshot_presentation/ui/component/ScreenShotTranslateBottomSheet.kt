@@ -2,7 +2,9 @@
 
 package com.teachmeprint.screenshot_presentation.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.SubdirectoryArrowRight
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -29,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,10 +70,17 @@ fun ScreenShotTranslateBottomSheet(
             modifier = Modifier.padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            Text(
-                text = stringResource(R.string.text_title_translate_bottom_sheet),
-                style = MaterialTheme.typography.titleLarge
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.text_title_translate_bottom_sheet),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                ScreenShotButtonAddToList()
+            }
             Spacer(modifier = Modifier.height(24.dp))
 
             Row(
@@ -101,6 +113,31 @@ fun ScreenShotTranslateBottomSheet(
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+private fun ScreenShotButtonAddToList(modifier: Modifier = Modifier) {
+    var added by remember { mutableStateOf(false) }
+    val iconTint = if (added) { Color.Red } else { MaterialTheme.colorScheme.onSecondaryContainer }
+
+    FilledTonalButton(
+        modifier = modifier,
+        onClick = { added = !added }
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = Icons.Default.Favorite,
+                tint = iconTint,
+                contentDescription = null
+            )
+            AnimatedVisibility(
+                visible = added,
+                modifier = Modifier.align(Alignment.CenterVertically)
+            ) {
+                Text(modifier = Modifier.padding(start = 8.dp), text = "Added")
+            }
         }
     }
 }
