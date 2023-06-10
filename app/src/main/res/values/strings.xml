@@ -4,9 +4,19 @@
 
     <!-- HomeScreen -->
     <string name="text_title_read_dialog_permission">Read Permission Required</string>
-    <string name="text_message_read_dialog_permission">This app needs you to allow this permission in order to function.\n\nPlease turn on in settings!</string>
+    <string name="text_message_read_dialog_permission">This app needs you to allow this permission in order to function.</string>
     <string name="text_title_display_dialog_permission">Display Permission Required</string>
     <string name="text_message_display_dialog_permission">This app needs to use permissions display on other applications.\n\nPlease turn on in settings!</string>
     <string name="text_button_settings_dialog_permission">Settings</string>
     <string name="text_message_alert_permission">Permission is required.</string>
+
+    <!-- SwipePermissionScreen -->
+    <string name="text_title_swipe_initial">Welcome to TeacheMePrint!</string>
+    <string name="text_message_swipe_initial">Explore the screen and let our\nartificial intelligence translate for you,\nmaking learning even easier and\nmore engaging.</string>
+    <string name="text_title_swipe_read_and_write">Intelligent Translation with a Screenshot!</string>
+    <string name="text_message_swipe_read_and_write">To translate your screenshots, we request your permission to save the images on your device.\n\nWe guarantee the privacy of your data, which\nwill be used exclusively for this purpose!</string>
+    <string name="text_second_message_swipe_read_and_write">To ensure full functionality, it is necessary to\ngrant permission to save the screenshots.\n\nPlease review your decision and\ngrant permission to continue!</string>
+    <string name="text_title_swipe_overlay">Capture Screens with Ease</string>
+    <string name="text_message_swipe_overlay">To generate the screenshots, we request your permission to use the overlay feature.\n\nThis permission allows us to capture\nthe screen quickly and conveniently.</string>
+    <string name="text_button_swipe">Continue</string>
 </resources>
