@@ -2,14 +2,9 @@
 
 package com.teachmeprint.language.swipeable_permission
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.READ_MEDIA_IMAGES
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import android.provider.Settings
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -30,12 +25,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -46,30 +39,28 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.teachmeprint.language.R
-import com.teachmeprint.language.swipeable_permission.SwipePermissionEvent.HasOverlayPermission
 import com.teachmeprint.language.swipeable_permission.SwipePermissionItem.DISPLAY_OVERLAY
 import com.teachmeprint.language.swipeable_permission.SwipePermissionItem.INITIAL
 import com.teachmeprint.language.swipeable_permission.SwipePermissionItem.READ_AND_WRITE
 import com.teachmeprint.language.swipeable_permission.component.SwipePermissionAnimationIcon
+import com.teachmeprint.language.swipeable_permission.util.PERMISSIONS
+import com.teachmeprint.language.swipeable_permission.util.hasOverlayPermission
 import kotlinx.coroutines.launch
 
-@Suppress("ModifierMissing")
 @Composable
 fun SwipePermissionRoute(
     context: Context = LocalContext.current,
-    background: Color = MaterialTheme.colorScheme.surface,
-    viewModel: SwipePermissionViewModel = hiltViewModel()
+    viewModel: SwipePermissionViewModel = hiltViewModel(),
+    onNavigation: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val systemUiController = rememberSystemUiController()
     val permissionState = rememberMultiplePermissionsState(PERMISSIONS)
 
     val launcherOverlayPermission =
         rememberLauncherForActivityResult(StartActivityForResult()) {
-            if (canDrawOverlays(context)) {
-                viewModel.handleEvent(HasOverlayPermission)
+            if (hasOverlayPermission(context)) {
+                onNavigation()
             }
         }
 
@@ -81,19 +72,16 @@ fun SwipePermissionRoute(
         }
     )
 
-    SideEffect {
-        systemUiController.setStatusBarColor(background)
-    }
-
     SwipePermissionScreen(
-        modifier = Modifier.background(color = background),
         uiState = uiState,
         permissionState = permissionState,
         pagerState = pagerState,
         onOverlayPermission = {
-            launcherOverlayPermission.launch(
-                intentOverlayPermission()
-            )
+            if (!hasOverlayPermission(context)) {
+                launcherOverlayPermission.launch(
+                    intentOverlayPermission()
+                )
+            }
         },
         onReadAndWritePermission = {
             context.startActivity(intentReadAndWritePermission(context))
@@ -113,7 +101,9 @@ fun SwipePermissionScreen(
     val scope = rememberCoroutineScope()
 
     HorizontalPager(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface),
         pageCount = uiState.swipePermissionItemList.size,
         state = pagerState,
         userScrollEnabled = false,
@@ -155,6 +145,7 @@ fun SwipePermissionScreen(
                             pagerState.animateScrollToPage(READ_AND_WRITE.ordinal)
                         }
                     }
+
                     READ_AND_WRITE -> {
                         if (permissionState.shouldShowRationale) {
                             onReadAndWritePermission()
@@ -162,10 +153,9 @@ fun SwipePermissionScreen(
                             permissionState.launchMultiplePermissionRequest()
                         }
                     }
+
                     DISPLAY_OVERLAY -> {
-                        if (!uiState.hasOverlayPermission) {
-                            onOverlayPermission()
-                        }
+                        onOverlayPermission()
                     }
                 }
             }) {
@@ -226,15 +216,3 @@ private fun intentReadAndWritePermission(context: Context) =
         ACTION_APPLICATION_DETAILS_SETTINGS,
         Uri.parse("package:${context.packageName}")
     )
-
-private fun canDrawOverlays(context: Context) =
-    Settings.canDrawOverlays(context)
-
-private val PERMISSIONS = listOf(
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        READ_MEDIA_IMAGES
-    } else {
-        READ_EXTERNAL_STORAGE
-    },
-    WRITE_EXTERNAL_STORAGE
-)

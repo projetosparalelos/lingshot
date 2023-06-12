@@ -21,7 +21,8 @@ import com.teachmeprint.language.R
 fun HomeToggleScreenCaptureButton(
     permissionsGranted: Boolean,
     modifier: Modifier = Modifier,
-    onPermissions: () -> Unit
+    onPermissions: () -> Unit,
+    onFinishActivity: () -> Unit
 ) {
     var firstTime by remember { mutableStateOf(true) }
 
@@ -56,6 +57,9 @@ fun HomeToggleScreenCaptureButton(
                 speed = 1.5f,
                 clipSpec = if (permissionsGranted) on else off
             )
+            if (anim.progress == 0.5f) {
+                onFinishActivity()
+            }
         }
     }
 }

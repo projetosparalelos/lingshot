@@ -45,7 +45,7 @@ dependencies {
     implementation project(':feature:screenshot:screenshot_data')
     implementation project(':feature:screenshot:screenshot_domain')
     implementation project(':feature:screenshot:screenshot_presentation')
-
+    implementation "androidx.navigation:navigation-compose:2.6.0"
     implementation libs.core.splash.screen
     implementation libs.accompanist.permissions
 
