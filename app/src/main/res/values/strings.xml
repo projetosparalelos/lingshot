@@ -1,12 +1,2 @@
 <resources>
-    <!-- App -->
-    <string name="app_name">TeachMePrint - Language</string>
-
-    <!-- HomeScreen -->
-    <string name="text_title_read_dialog_permission">Read Permission Required</string>
-    <string name="text_message_read_dialog_permission">This app needs you to allow this permission in order to function.\n\nPlease turn on in settings!</string>
-    <string name="text_title_display_dialog_permission">Display Permission Required</string>
-    <string name="text_message_display_dialog_permission">This app needs to use permissions display on other applications.\n\nPlease turn on in settings!</string>
-    <string name="text_button_settings_dialog_permission">Settings</string>
-    <string name="text_message_alert_permission">Permission is required.</string>
 </resources>

@@ -1,171 +1,73 @@
 package com.teachmeprint.language
 
-import android.Manifest.permission.*
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.media.projection.MediaProjectionManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.checkSelfPermission
-import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.teachmeprint.common.util.snackBarAlert
-import com.teachmeprint.language.databinding.ActivityMainBinding
-import com.teachmeprint.screencapture.service.ScreenShotService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.teachmeprint.designsystem.theme.TeachMePrintTheme
+import com.teachmeprint.home_presentation.ui.HomeRoute
+import com.teachmeprint.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
+import com.teachmeprint.swipepermission_presentation.ui.SwipePermissionRoute
+import com.teachmeprint.swipepermission_presentation.util.allPermissionsGranted
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
 
-    private val binding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
-
-    private val requestMultiplePermissions = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        permissions.entries.forEach {
-            if (!it.value) {
-                tryAgainReadAndWritePermission()
-                return@registerForActivityResult
-            }
-        }
-    }
-
-    private val registerForActivityResult = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (!hasOverlayPermission() && !hasPermissions()) {
-            binding.linearMainContainer.snackBarAlert(R.string.text_message_alert_permission)
-        }
-    }
-
-    private val requestScreenShotService = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            lifecycleScope.launch {
-                setupScreenShotService(result.data)
-                withContext(Dispatchers.Main) {
-                    finish()
-                }
-            }
-        }
-    }
+    @Inject
+    lateinit var screenCaptureFloatingWindowLifecycle: ScreenCaptureFloatingWindowLifecycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        binding.textButton.setOnClickListener {
-            startService()
-        }
-    }
-
-    private fun startService() {
-        setupPermissions()
-    }
-
-    private fun setupPermissions() {
-        if (!hasPermissions()) {
-            requestMultiplePermissions.launch(PERMISSIONS)
-            return
-        }
-
-        if (!hasOverlayPermission()) {
-            requestOverlayPermission()
-            return
-        }
-        launchMediaProjectionManagerPermission()
-    }
-
-    private fun setupScreenShotService(resultData: Intent?) {
-        ScreenShotService.getStartIntent(this, resultData).also {
-            startService(it)
-        }
-    }
-
-    private fun requestOverlayPermission() {
-        if (!hasOverlayPermission()) {
-            setupDialogPermission(
-                title = R.string.text_title_display_dialog_permission,
-                message = R.string.text_message_display_dialog_permission
-            ) {
-                launchOverlayPermission()
+        installSplashScreen()
+        setContent {
+            StatusBarColor()
+            TeachMePrintTheme {
+                AppNavigation()
             }
-        } else {
-            startService()
         }
+        screenCaptureFloatingWindowLifecycle(this)
     }
 
-    private fun launchOverlayPermission() {
-        val intent = Intent(ACTION_MANAGE_OVERLAY_PERMISSION)
-        registerForActivityResult.launch(intent)
-    }
+    @Composable
+    fun AppNavigation() {
+        val navController = rememberNavController()
 
-    private fun tryAgainReadAndWritePermission() {
-        setupDialogPermission(
-            title = R.string.text_title_read_dialog_permission,
-            message = R.string.text_message_read_dialog_permission
-        ) {
-            launchActionApplicationDetailsSettings()
-        }
-    }
-
-    private fun launchActionApplicationDetailsSettings() =
-        with(Intent(ACTION_APPLICATION_DETAILS_SETTINGS)) {
-            val uri = Uri.fromParts(SCHEME_PACKAGE, packageName, null)
-            data = uri
-            registerForActivityResult.launch(this)
-        }
-
-    private fun launchMediaProjectionManagerPermission() {
-        val mediaProjectionManager: MediaProjectionManager =
-            getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-        requestScreenShotService.launch(mediaProjectionManager.createScreenCaptureIntent())
-    }
-
-    private fun setupDialogPermission(
-        @StringRes title: Int,
-        @StringRes message: Int,
-        block: () -> Unit
-    ) {
-        MaterialAlertDialogBuilder(this).apply {
-            setTitle(getString(title))
-            setMessage(getString(message))
-                .setPositiveButton(getString(R.string.text_button_settings_dialog_permission)) { dialog, _ ->
-                    block.invoke()
-                    dialog.dismiss()
+        NavHost(navController, startDestination = "start") {
+            composable("start") {
+                if (allPermissionsGranted(this@MainActivity)) {
+                    HomeRoute()
+                } else {
+                    SwipePermissionRoute {
+                        navController.navigate("home") {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                inclusive = true
+                            }
+                        }
+                    }
                 }
-        }.show()
+            }
+            composable("home") {
+                HomeRoute()
+            }
+        }
     }
 
-    private fun hasPermissions() =
-        PERMISSIONS.filter { it != WRITE_EXTERNAL_STORAGE }.all {
-            checkSelfPermission(this, it) == PERMISSION_GRANTED
+    @Composable
+    private fun StatusBarColor(color: Color = MaterialTheme.colorScheme.surface) {
+        val systemUiController = rememberSystemUiController()
+        SideEffect {
+            systemUiController.setStatusBarColor(color)
         }
-
-    private fun hasOverlayPermission() =
-        Settings.canDrawOverlays(this)
-
-    companion object {
-        private const val SCHEME_PACKAGE = "package"
-        private val PERMISSIONS = arrayOf(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                READ_MEDIA_IMAGES
-            } else {
-                READ_EXTERNAL_STORAGE
-            },
-            WRITE_EXTERNAL_STORAGE
-        )
     }
 }

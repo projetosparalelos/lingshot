@@ -1,4 +1,7 @@
 <resources>
+    <!-- App -->
+    <string name="app_name">TeachMePrint - Language</string>
+
     <!-- StatusMessage -->
     <string name="text_status_message_error_generic">An unknown error occurred.</string>
     <string name="text_status_message_recognition_failed">Text recognition failed.</string>

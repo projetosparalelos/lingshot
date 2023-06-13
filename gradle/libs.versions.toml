@@ -6,6 +6,7 @@ playServicesAds = "22.0.0"
 firebaseCrashylytics = "2.9.4"
 
 coreKTX = "1.10.1"
+coreSplashScreen = "1.0.1"
 appCompat = "1.6.1"
 material = "1.9.0-rc01"
 activity = "1.7.1"
@@ -15,6 +16,7 @@ composeCompiler = "1.4.4"
 composeBom = "2023.04.01"
 composeMaterial3 = "1.1.0"
 composeHiltNavigation = "1.0.0"
+navigationCompose = "2.6.0"
 accompanist = "0.30.1"
 
 textRecognition = "18.0.2"
@@ -45,7 +47,9 @@ composeDetekt = "0.0.26"
 
 [libraries]
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKTX" }
+core-splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashScreen" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
+
 material = { module = "com.google.android.material:material", version.ref = "material" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
@@ -63,8 +67,10 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-placeholder-material = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
 text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognition" }
 language-id = { module = "com.google.mlkit:language-id", version.ref = "languageID" }

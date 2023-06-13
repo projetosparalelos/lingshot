@@ -137,5 +137,9 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
                 putExtra(SCREEN_CAPTURE_DATA, data)
             }
         }
+
+        fun getStopIntent(context: Context): Intent {
+            return Intent(context, ScreenShotService::class.java)
+        }
     }
 }

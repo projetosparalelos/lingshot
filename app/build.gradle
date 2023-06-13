@@ -12,6 +12,7 @@ plugins {
 apply {
     from "$rootDir/plugins/app-versions.gradle"
     from "$rootDir/plugins/android-library.gradle"
+    from "$rootDir/plugins/android-compose.gradle"
 }
 
 android {
@@ -37,6 +38,7 @@ dependencies {
     implementation project(':data:local')
     implementation project(':data:remote')
     implementation project(':domain')
+    implementation project(':feature:home:home_presentation')
     implementation project(':feature:languagechoice:languagechoice_data')
     implementation project(':feature:languagechoice:languagechoice_domain')
     implementation project(':feature:languagechoice:languagechoice_presentation')
@@ -44,6 +46,11 @@ dependencies {
     implementation project(':feature:screenshot:screenshot_data')
     implementation project(':feature:screenshot:screenshot_domain')
     implementation project(':feature:screenshot:screenshot_presentation')
+    implementation project(':feature:swipepermission:swipepermission_presentation')
+
+    implementation libs.navigation.compose
+
+    implementation libs.core.splash.screen
 
     implementation libs.play.services.ads
 

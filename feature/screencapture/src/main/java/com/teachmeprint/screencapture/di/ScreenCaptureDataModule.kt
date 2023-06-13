@@ -2,6 +2,7 @@ package com.teachmeprint.screencapture.di
 
 import android.content.Context
 import com.teachmeprint.screencapture.ScreenCaptureFloatingWindow
+import com.teachmeprint.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
 import com.teachmeprint.screencapture.helper.ScreenCaptureManager
 import dagger.Module
 import dagger.Provides
@@ -24,4 +25,10 @@ object ScreenCaptureDataModule {
     fun provideScreenCaptureManager(
         @ApplicationContext context: Context
     ) = ScreenCaptureManager(context)
+
+    @Singleton
+    @Provides
+    fun provideScreenCaptureFloatingWindowLifecycle(
+        screenCaptureFloatingWindow: ScreenCaptureFloatingWindow
+    ) = ScreenCaptureFloatingWindowLifecycle(screenCaptureFloatingWindow)
 }

@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.teachmeprint.screencapture.ScreenCaptureFloatingWindow
+import com.teachmeprint.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class ScreenShotActivity : ComponentActivity() {
 
     @Inject
-    lateinit var screenCaptureFloatingWindow: ScreenCaptureFloatingWindow
+    lateinit var screenCaptureFloatingWindowLifecycle: ScreenCaptureFloatingWindowLifecycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +23,7 @@ class ScreenShotActivity : ComponentActivity() {
             ScreenShotStatusBarColor()
             ScreenShotRoute()
         }
+        screenCaptureFloatingWindowLifecycle(this)
     }
 
     @Composable
@@ -31,15 +32,5 @@ class ScreenShotActivity : ComponentActivity() {
         SideEffect {
             systemUiController.setStatusBarColor(Color.Black)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        screenCaptureFloatingWindow.showOrHide(false)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        screenCaptureFloatingWindow.showOrHide()
     }
 }

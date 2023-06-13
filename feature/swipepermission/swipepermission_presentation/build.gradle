@@ -2,6 +2,7 @@ plugins {
     alias libs.plugins.android.library
     alias libs.plugins.kotlin.android
     alias libs.plugins.kotlin.kapt
+    alias libs.plugins.dagger.hilt.android
 }
 
 apply {
@@ -11,10 +12,15 @@ apply {
 }
 
 android {
-    namespace 'com.teachmeprint.languagechoice_presentation'
+    namespace 'com.teachmeprint.swipepermission_presentation'
 }
 
 dependencies {
     implementation project(':core:designsystem')
-    implementation project(':feature:languagechoice:languagechoice_domain')
+
+    implementation libs.accompanist.permissions
+
+    implementation libs.hilt.navigation.compose
+    implementation libs.dagger.hilt.android
+    kapt libs.dagger.hilt.compiler
 }
