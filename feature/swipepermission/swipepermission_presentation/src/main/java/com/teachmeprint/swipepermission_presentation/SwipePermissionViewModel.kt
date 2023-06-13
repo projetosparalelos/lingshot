@@ -1,4 +1,4 @@
-package com.teachmeprint.language.swipeable_permission
+package com.teachmeprint.swipepermission_presentation
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

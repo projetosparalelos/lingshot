@@ -1,5 +1,6 @@
-package com.teachmeprint.language.swipeable_permission
+package com.teachmeprint.swipepermission_presentation
 
+import com.teachmeprint.swipepermission_presentation.ui.SwipePermissionItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 

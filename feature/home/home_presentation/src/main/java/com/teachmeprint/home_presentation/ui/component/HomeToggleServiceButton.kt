@@ -1,5 +1,6 @@
-package com.teachmeprint.language.component
+package com.teachmeprint.home_presentation.ui.component
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,13 +16,16 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.teachmeprint.designsystem.util.noRippleClickable
-import com.teachmeprint.language.R
+import com.teachmeprint.home_presentation.R
+import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
-fun HomeToggleScreenCaptureButton(
-    permissionsGranted: Boolean,
+fun HomeToggleServiceButton(
+    isServiceRunning: Boolean,
+    onToggleServiceButton: () -> Unit,
     modifier: Modifier = Modifier,
-    onPermissions: () -> Unit,
     onFinishActivity: () -> Unit
 ) {
     var firstTime by remember { mutableStateOf(true) }
@@ -30,7 +34,7 @@ fun HomeToggleScreenCaptureButton(
     val off = LottieClipSpec.Progress(0.5f, 1f)
 
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(R.raw.loading_button)
+        LottieCompositionSpec.RawRes(R.raw.toggle_service_button_animation)
     )
     val anim = rememberLottieAnimatable()
 
@@ -38,24 +42,25 @@ fun HomeToggleScreenCaptureButton(
         modifier = modifier
             .size(150.dp)
             .noRippleClickable {
-                onPermissions()
+                onToggleServiceButton()
             },
         composition = composition,
         progress = { anim.progress }
     )
 
-    LaunchedEffect(permissionsGranted) {
+    LaunchedEffect(isServiceRunning) {
         if (firstTime) {
-            firstTime = false
             anim.snapTo(
                 composition = composition,
-                progress = if (permissionsGranted) 0.5f else 0f
+                progress = if (isServiceRunning) 0.5f else 0f
             )
+            delay(100.milliseconds)
+            firstTime = false
         } else {
             anim.animate(
                 composition = composition,
                 speed = 1.5f,
-                clipSpec = if (permissionsGranted) on else off
+                clipSpec = if (isServiceRunning) on else off
             )
             if (anim.progress == 0.5f) {
                 onFinishActivity()

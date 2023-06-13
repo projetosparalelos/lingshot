@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
 
-package com.teachmeprint.language.swipeable_permission
+package com.teachmeprint.swipepermission_presentation.ui
 
 import android.content.Context
 import android.content.Intent
@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -37,24 +36,38 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.teachmeprint.language.R
-import com.teachmeprint.language.swipeable_permission.SwipePermissionItem.DISPLAY_OVERLAY
-import com.teachmeprint.language.swipeable_permission.SwipePermissionItem.INITIAL
-import com.teachmeprint.language.swipeable_permission.SwipePermissionItem.READ_AND_WRITE
-import com.teachmeprint.language.swipeable_permission.component.SwipePermissionAnimationIcon
-import com.teachmeprint.language.swipeable_permission.util.PERMISSIONS
-import com.teachmeprint.language.swipeable_permission.util.hasOverlayPermission
+import com.teachmeprint.swipepermission_presentation.R
+import com.teachmeprint.swipepermission_presentation.SwipePermissionUiState
+import com.teachmeprint.swipepermission_presentation.SwipePermissionViewModel
+import com.teachmeprint.swipepermission_presentation.ui.SwipePermissionItem.DISPLAY_OVERLAY
+import com.teachmeprint.swipepermission_presentation.ui.SwipePermissionItem.INITIAL
+import com.teachmeprint.swipepermission_presentation.ui.SwipePermissionItem.READ_AND_WRITE
+import com.teachmeprint.swipepermission_presentation.ui.component.SwipePermissionAnimationIcon
+import com.teachmeprint.swipepermission_presentation.util.PERMISSIONS
+import com.teachmeprint.swipepermission_presentation.util.hasOverlayPermission
 import kotlinx.coroutines.launch
 
 @Composable
 fun SwipePermissionRoute(
-    context: Context = LocalContext.current,
     viewModel: SwipePermissionViewModel = hiltViewModel(),
     onNavigation: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    SwipePermissionScreen(
+        uiState = uiState,
+        onNavigation = onNavigation
+    )
+}
+
+@Composable
+fun SwipePermissionScreen(
+    uiState: SwipePermissionUiState,
+    modifier: Modifier = Modifier,
+    context: Context = LocalContext.current,
+    onNavigation: () -> Unit
+) {
     val permissionState = rememberMultiplePermissionsState(PERMISSIONS)
 
     val launcherOverlayPermission =
@@ -71,33 +84,6 @@ fun SwipePermissionRoute(
             INITIAL.ordinal
         }
     )
-
-    SwipePermissionScreen(
-        uiState = uiState,
-        permissionState = permissionState,
-        pagerState = pagerState,
-        onOverlayPermission = {
-            if (!hasOverlayPermission(context)) {
-                launcherOverlayPermission.launch(
-                    intentOverlayPermission()
-                )
-            }
-        },
-        onReadAndWritePermission = {
-            context.startActivity(intentReadAndWritePermission(context))
-        }
-    )
-}
-
-@Composable
-fun SwipePermissionScreen(
-    permissionState: MultiplePermissionsState,
-    uiState: SwipePermissionUiState,
-    pagerState: PagerState,
-    onOverlayPermission: () -> Unit,
-    modifier: Modifier = Modifier,
-    onReadAndWritePermission: () -> Unit
-) {
     val scope = rememberCoroutineScope()
 
     HorizontalPager(
@@ -148,14 +134,18 @@ fun SwipePermissionScreen(
 
                     READ_AND_WRITE -> {
                         if (permissionState.shouldShowRationale) {
-                            onReadAndWritePermission()
+                            context.startActivity(intentReadAndWritePermission(context))
                         } else {
                             permissionState.launchMultiplePermissionRequest()
                         }
                     }
 
                     DISPLAY_OVERLAY -> {
-                        onOverlayPermission()
+                        if (!hasOverlayPermission(context)) {
+                            launcherOverlayPermission.launch(
+                                intentOverlayPermission()
+                            )
+                        }
                     }
                 }
             }) {
@@ -177,10 +167,7 @@ fun SwipePermissionScreen(
 fun SwipePermissionScreenPreview() {
     SwipePermissionScreen(
         uiState = SwipePermissionUiState(),
-        permissionState = rememberMultiplePermissionsState(permissions = PERMISSIONS),
-        pagerState = rememberPagerState(),
-        onOverlayPermission = {},
-        onReadAndWritePermission = {}
+        onNavigation = {}
     )
 }
 

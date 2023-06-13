@@ -1,4 +1,4 @@
-package com.teachmeprint.language.swipeable_permission.component
+package com.teachmeprint.swipepermission_presentation.ui.component
 
 import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.height
