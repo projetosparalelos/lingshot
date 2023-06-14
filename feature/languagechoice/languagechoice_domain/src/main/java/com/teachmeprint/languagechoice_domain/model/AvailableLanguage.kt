@@ -5,15 +5,13 @@ package com.teachmeprint.languagechoice_domain.model
 enum class AvailableLanguage(
     val displayName: String,
     val languageCode: String,
-    _flag: String
+    val flagEmoji: String
 ) {
-    ENGLISH("English", "en", "tn_us-flag.gif"),
-    FRENCH("French", "fr", "tn_fr-flag.gif"),
-    GERMAN("German", "de", "tn_gm-flag.gif"),
-    ITALIAN("Italian", "it", "tn_it-flag.gif"),
-    PORTUGUESE("Portuguese", "br", "tn_br-flag.gif"),
-    RUSSIAN("Russian", "ru", "tn_rs-flag.gif"),
-    SPANISH("Spanish", "es", "tn_sp-flag.gif");
-
-    val flag = "https://www.worldometers.info/img/flags/small/$_flag"
+    ENGLISH("English", "en", "\uD83C\uDDFA\uD83C\uDDF8"),
+    FRENCH("French", "fr", "\uD83C\uDDEB\uD83C\uDDF7"),
+    GERMAN("German", "de", "\uD83C\uDDE9\uD83C\uDDEA"),
+    ITALIAN("Italian", "it", "\uD83C\uDDEE\uD83C\uDDF9"),
+    PORTUGUESE("Portuguese", "br", "\uD83C\uDDE7\uD83C\uDDF7"),
+    RUSSIAN("Russian", "ru", "\uD83C\uDDF7\uD83C\uDDFA"),
+    SPANISH("Spanish", "es", "\uD83C\uDDEA\uD83C\uDDF8");
 }
