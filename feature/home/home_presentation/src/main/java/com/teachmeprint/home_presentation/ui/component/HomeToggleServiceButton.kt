@@ -41,9 +41,7 @@ fun HomeToggleServiceButton(
     LottieAnimation(
         modifier = modifier
             .size(150.dp)
-            .noRippleClickable {
-                onToggleServiceButton()
-            },
+            .noRippleClickable(onToggleServiceButton),
         composition = composition,
         progress = { anim.progress }
     )
