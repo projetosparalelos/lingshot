@@ -1,6 +1,5 @@
 package com.teachmeprint.home_presentation.ui.component
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,7 +19,6 @@ import com.teachmeprint.home_presentation.R
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun HomeToggleServiceButton(
     isServiceRunning: Boolean,

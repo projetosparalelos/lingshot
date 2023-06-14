@@ -9,7 +9,7 @@ import android.content.Intent
 import android.media.projection.MediaProjectionManager
 import androidx.activity.ComponentActivity.RESULT_OK
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -62,7 +62,7 @@ fun HomeScreen(
     val activity = context.findActivity()
 
     val launcherScreenShotService =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        rememberLauncherForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 activity?.startScreenShotService(result.data)
             }
