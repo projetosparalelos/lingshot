@@ -19,7 +19,7 @@ composeHiltNavigation = "1.0.0"
 navigationCompose = "2.6.0"
 accompanist = "0.30.1"
 
-textRecognition = "18.0.2"
+textRecognition = "19.0.0"
 languageID = "17.0.4"
 
 retrofit = "2.9.0"
