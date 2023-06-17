@@ -8,7 +8,7 @@ firebaseCrashylytics = "2.9.6"
 coreKTX = "1.10.1"
 coreSplashScreen = "1.0.1"
 appCompat = "1.6.1"
-material = "1.9.0-rc01"
+material = "1.9.0"
 activity = "1.7.2"
 lifecycle = "2.6.1"
 
