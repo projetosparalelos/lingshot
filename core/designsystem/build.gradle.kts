@@ -1,17 +1,10 @@
-@file:Suppress("DSL_SCOPE_VIOLATION")
-
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    id("teachmeprint.app.version.plugin")
+    id("teachmeprint.android.library.plugin")
+    id("teachmeprint.android.library.compose.plugin")
+    id("teachmeprint.android.quality.plugin")
 }
 
 android {
     namespace = "com.teachmeprint.designsystem"
-}
-
-apply {
-    from("$rootDir/plugins/app-versions.gradle")
-    from("$rootDir/plugins/android-library.gradle")
-    from("$rootDir/plugins/android-compose.gradle")
 }

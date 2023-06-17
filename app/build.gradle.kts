@@ -3,25 +3,27 @@
 import com.google.gms.googleservices.GoogleServicesTask
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    id("teachmeprint.android.application.plugin")
+    id("teachmeprint.android.hilt.plugin")
+    id("teachmeprint.android.library.plugin")
+    id("teachmeprint.android.quality.plugin")
+
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
-    alias(libs.plugins.dagger.hilt.android)
-}
-
-apply {
-    from("$rootDir/plugins/app-versions.gradle")
-    from("$rootDir/plugins/android-library.gradle")
-    from("$rootDir/plugins/android-compose.gradle")
 }
 
 android {
-    namespace = "com.teachmeprint.language"
+    namespace = AppVersionPlugin.APPLICATION_NAME_ID
+    compileSdk = AppVersionPlugin.COMPILE_SDK
 
     defaultConfig {
-        applicationId = "com.teachmeprint.language"
+        applicationId = AppVersionPlugin.APPLICATION_NAME_ID
+
+        versionCode = AppVersionPlugin.VERSION_CODE
+        versionName = AppVersionPlugin.VERSION_NAME
+
+        minSdk = AppVersionPlugin.MIN_SDK
+        targetSdk = AppVersionPlugin.TARGET_SDK
     }
     gradle.projectsEvaluated {
         tasks.withType<GoogleServicesTask> {
@@ -47,6 +49,8 @@ dependencies {
     implementation(project(":feature:screenshot:screenshot_presentation"))
     implementation(project(":feature:swipepermission:swipepermission_presentation"))
 
+    implementation(libs.compose.material3)
+    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.navigation.compose)
     implementation(libs.core.splash.screen)
     implementation(libs.hawk)
@@ -54,7 +58,4 @@ dependencies {
     implementation(libs.play.services.ads)
     implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)
-
-    implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.compiler)
 }

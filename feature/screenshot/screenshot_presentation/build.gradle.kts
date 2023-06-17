@@ -1,16 +1,9 @@
-@file:Suppress("DSL_SCOPE_VIOLATION")
-
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.dagger.hilt.android)
-}
-
-apply {
-    from("$rootDir/plugins/app-versions.gradle")
-    from("$rootDir/plugins/android-compose.gradle")
-    from("$rootDir/plugins/android-library.gradle")
+    id("teachmeprint.app.version.plugin")
+    id("teachmeprint.android.hilt.plugin")
+    id("teachmeprint.android.library.plugin")
+    id("teachmeprint.android.library.compose.plugin")
+    id("teachmeprint.android.quality.plugin")
 }
 
 android {
@@ -26,10 +19,13 @@ dependencies {
     implementation(project(":feature:screencapture"))
     implementation(project(":feature:screenshot:screenshot_domain"))
 
-    implementation(libs.hilt.navigation.compose)
-    implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.compiler)
+    implementation(libs.activity.compose)
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.placeholder.material)
 
+    implementation(libs.hilt.navigation.compose)
+
+    implementation(libs.lottie.compose)
     implementation(libs.image.cropper)
     implementation(libs.balloon.compose)
 }
