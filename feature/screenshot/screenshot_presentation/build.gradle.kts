@@ -25,7 +25,7 @@ dependencies {
 
     implementation(libs.hilt.navigation.compose)
 
-    implementation(libs.lottie.compose)
     implementation(libs.image.cropper)
     implementation(libs.balloon.compose)
+    implementation(libs.lottie.compose)
 }
