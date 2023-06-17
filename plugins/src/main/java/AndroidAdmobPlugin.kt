@@ -18,7 +18,7 @@ class AndroidAdmobPlugin : Plugin<Project> {
                 buildTypes {
                     getByName("release") {
                         resValue("string", "ADMOB_APP_ID", KeyHelper.getValue("ADMOB_APP_ID_RELEASE"))
-                        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", KeyHelper.getValue("ADMOB_INTERSTITIAL_RELEASE"))
+                        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", KeyHelper.getValue("ADMOB_INTERSTITIAL_ID_RELEASE"))
                     }
 
                     getByName("debug") {
