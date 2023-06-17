@@ -30,7 +30,7 @@ okHttp = "4.11.0"
 coroutines = "1.7.1"
 hawk = "2.0.1"
 timber = "5.0.1"
-daggerHilt = "2.45"
+daggerHilt = "2.46.1"
 
 firebaseBom = "31.5.0"
 
