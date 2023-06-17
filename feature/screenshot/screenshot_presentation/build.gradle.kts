@@ -19,8 +19,13 @@ dependencies {
     implementation(project(":feature:screencapture"))
     implementation(project(":feature:screenshot:screenshot_domain"))
 
+    implementation(libs.activity.compose)
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.placeholder.material)
+
     implementation(libs.hilt.navigation.compose)
 
+    implementation(libs.lottie.compose)
     implementation(libs.image.cropper)
     implementation(libs.balloon.compose)
 }

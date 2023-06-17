@@ -4,7 +4,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.util.Properties
 
-object KeyHelper {
+internal object KeyHelper {
     private val properties by lazy {
         Properties().apply { load(FileInputStream(File("teach-me-print-keys.properties"))) }
     }

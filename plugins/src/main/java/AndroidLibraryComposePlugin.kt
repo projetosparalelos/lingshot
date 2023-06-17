@@ -16,19 +16,13 @@ class AndroidLibraryComposePlugin : Plugin<Project> {
             configureAndroidCompose(extension)
 
             dependencies {
-                add("implementation", libs.getLibrary("activity-compose"))
                 add("implementation", platform(libs.getLibrary("compose-bom")))
                 add("implementation", libs.getLibrary("compose-foundation"))
                 add("implementation", libs.getLibrary("compose-foundation-layout"))
                 add("implementation", libs.getLibrary("compose-material-iconsExtended"))
                 add("implementation", libs.getLibrary("compose-material3"))
-                add("implementation", libs.getLibrary("compose-material3-windowSizeClass"))
                 add("implementation", libs.getLibrary("compose-ui"))
                 add("implementation", libs.getLibrary("compose-ui-tooling-preview"))
-                add("implementation", libs.getLibrary("accompanist-systemuicontroller"))
-                add("implementation", libs.getLibrary("accompanist-placeholder-material"))
-                add("implementation", libs.getLibrary("coil-compose"))
-                add("implementation", libs.getLibrary("lottie-compose"))
 
                 add("debugImplementation", libs.getLibrary("compose-ui-tooling"))
                 add("debugImplementation", libs.getLibrary("compose-ui-testManifest"))
