@@ -12,7 +12,7 @@ class AndroidNetworkPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("kotlinx-serialization")
             }
-            
+
             val extension = extensions.getByType<LibraryExtension>()
 
             extension.apply {
@@ -21,15 +21,14 @@ class AndroidNetworkPlugin : Plugin<Project> {
                 }
 
                 buildTypes {
-                    getByName("release") {
+                    release {
                         buildConfigField(
                             "String",
                             "CHAT_GPT_KEY",
                             KeyHelper.getValue("CHAT_GPT_KEY_RELEASE")
                         )
                     }
-
-                    getByName("debug") {
+                    debug {
                         buildConfigField(
                             "String",
                             "CHAT_GPT_KEY",

@@ -16,12 +16,11 @@ class AndroidAdmobPlugin : Plugin<Project> {
                 configureAndroidCompose(extension)
 
                 buildTypes {
-                    getByName("release") {
+                    release {
                         resValue("string", "ADMOB_APP_ID", KeyHelper.getValue("ADMOB_APP_ID_RELEASE"))
                         buildConfigField("String", "ADMOB_INTERSTITIAL_ID", KeyHelper.getValue("ADMOB_INTERSTITIAL_ID_RELEASE"))
                     }
-
-                    getByName("debug") {
+                    debug {
                         resValue("string", "ADMOB_APP_ID", KeyHelper.getValue("ADMOB_APP_ID_DEBUG"))
                         buildConfigField("String", "ADMOB_INTERSTITIAL_ID", KeyHelper.getValue("ADMOB_INTERSTITIAL_ID_DEBUG"))
                     }

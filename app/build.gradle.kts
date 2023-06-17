@@ -25,9 +25,13 @@ android {
         minSdk = AppVersionPlugin.MIN_SDK
         targetSdk = AppVersionPlugin.TARGET_SDK
     }
-    gradle.projectsEvaluated {
-        tasks.withType<GoogleServicesTask> {
-            enabled = false
+    buildTypes {
+        debug {
+            gradle.projectsEvaluated {
+                tasks.withType<GoogleServicesTask> {
+                    enabled = false
+                }
+            }
         }
     }
 }
