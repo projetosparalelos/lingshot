@@ -145,6 +145,8 @@ private fun SwipePermissionScreen(
                             launcherOverlayPermission.launch(
                                 intentOverlayPermission()
                             )
+                        } else {
+                            onUpPress()
                         }
                     }
                 }
