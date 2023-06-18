@@ -15,7 +15,6 @@ import com.teachmeprint.language.navigation.TeachMePrintNavHost
 import com.teachmeprint.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
