@@ -1,4 +1,4 @@
-package com.teachmeprint.navigation
+package com.teachmeprint.screencapture.navigation
 
 import android.content.Context
 import android.content.Intent

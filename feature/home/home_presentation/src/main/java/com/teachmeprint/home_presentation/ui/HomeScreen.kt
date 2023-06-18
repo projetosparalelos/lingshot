@@ -53,7 +53,7 @@ fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun HomeScreen(
+private fun HomeScreen(
     uiState: HomeUiState,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,

@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.teachmeprint.designsystem.theme.TeachMePrintTheme
 import com.teachmeprint.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -20,8 +21,10 @@ class ScreenShotActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ScreenShotStatusBarColor()
-            ScreenShotRoute()
+            TeachMePrintTheme {
+                ScreenShotStatusBarColor()
+                ScreenShotRoute()
+            }
         }
         screenCaptureFloatingWindowLifecycle(this)
     }

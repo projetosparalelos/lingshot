@@ -15,7 +15,6 @@ import com.teachmeprint.common.helper.onEmpty
 import com.teachmeprint.common.helper.onError
 import com.teachmeprint.common.helper.onLoading
 import com.teachmeprint.common.helper.onSuccess
-import com.teachmeprint.designsystem.theme.TeachMePrintTheme
 import com.teachmeprint.languagechoice_presentation.ui.LanguageChoiceDialog
 import com.teachmeprint.screenshot_presentation.R
 import com.teachmeprint.screenshot_presentation.ScreenShotEvent
@@ -35,17 +34,15 @@ import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotTranslate
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-fun ScreenShotRoute(
+internal fun ScreenShotRoute(
     viewModel: ScreenShotViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    TeachMePrintTheme {
-        ScreenShotScreen(
-            uiState = uiState,
-            handleEvent = viewModel::handleEvent
-        )
-    }
+    ScreenShotScreen(
+        uiState = uiState,
+        handleEvent = viewModel::handleEvent
+    )
 }
 
 @Composable
