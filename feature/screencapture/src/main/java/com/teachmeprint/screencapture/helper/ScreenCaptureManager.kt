@@ -16,7 +16,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment.DIRECTORY_PICTURES
 import android.os.Environment.getExternalStoragePublicDirectory
-import com.teachmeprint.navigation.NavigationIntent
+import com.teachmeprint.screencapture.navigation.NavigationIntent
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*

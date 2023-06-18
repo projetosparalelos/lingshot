@@ -16,11 +16,11 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.teachmeprint.common.CommonConstant.CHANNEL_ID
-import com.teachmeprint.navigation.NavigationIntent
 import com.teachmeprint.screencapture.R
 import com.teachmeprint.screencapture.ScreenCaptureFloatingWindow
 import com.teachmeprint.screencapture.helper.ScreenCaptureManager
 import com.teachmeprint.screencapture.helper.ScreenShotDetection
+import com.teachmeprint.screencapture.navigation.NavigationIntent
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject

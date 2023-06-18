@@ -51,29 +51,29 @@ import kotlinx.coroutines.launch
 @Composable
 fun SwipePermissionRoute(
     viewModel: SwipePermissionViewModel = hiltViewModel(),
-    onNavigation: () -> Unit
+    onUpPress: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     SwipePermissionScreen(
         uiState = uiState,
-        onNavigation = onNavigation
+        onUpPress = onUpPress
     )
 }
 
 @Composable
-fun SwipePermissionScreen(
+private fun SwipePermissionScreen(
     uiState: SwipePermissionUiState,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
-    onNavigation: () -> Unit
+    onUpPress: () -> Unit
 ) {
     val permissionState = rememberMultiplePermissionsState(PERMISSIONS)
 
     val launcherOverlayPermission =
         rememberLauncherForActivityResult(StartActivityForResult()) {
             if (hasOverlayPermission(context)) {
-                onNavigation()
+                onUpPress()
             }
         }
 
@@ -145,6 +145,8 @@ fun SwipePermissionScreen(
                             launcherOverlayPermission.launch(
                                 intentOverlayPermission()
                             )
+                        } else {
+                            onUpPress()
                         }
                     }
                 }
@@ -164,10 +166,10 @@ fun SwipePermissionScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun SwipePermissionScreenPreview() {
+private fun SwipePermissionScreenPreview() {
     SwipePermissionScreen(
         uiState = SwipePermissionUiState(),
-        onNavigation = {}
+        onUpPress = {}
     )
 }
 
