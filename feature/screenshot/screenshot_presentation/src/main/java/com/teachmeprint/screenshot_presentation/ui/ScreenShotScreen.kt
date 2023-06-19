@@ -54,6 +54,7 @@ private fun ScreenShotScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .navigationBarsPadding()
             .background(Color.Black)
     ) {
         ScreenShotCropImage(
