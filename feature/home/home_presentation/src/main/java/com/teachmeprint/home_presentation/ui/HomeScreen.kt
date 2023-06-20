@@ -35,6 +35,7 @@ import com.teachmeprint.common.R.*
 import com.teachmeprint.common.util.findActivity
 import com.teachmeprint.designsystem.component.TeachMePrintOnLifecycleEvent
 import com.teachmeprint.home_presentation.HomeEvent
+import com.teachmeprint.home_presentation.HomeScreen2
 import com.teachmeprint.home_presentation.HomeUiState
 import com.teachmeprint.home_presentation.HomeViewModel
 import com.teachmeprint.home_presentation.ui.component.HomeToggleServiceButton
@@ -117,7 +118,10 @@ private fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-            )
+            ) {
+                HomeScreen2()
+            }
+
         }
     )
 }
