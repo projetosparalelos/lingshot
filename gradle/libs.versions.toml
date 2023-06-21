@@ -36,7 +36,7 @@ firebaseBom = "32.1.1"
 
 imageCropper = "4.5.0"
 coil = "2.4.0"
-balloon = "1.5.3"
+balloon = "1.5.4"
 lottie = "6.0.1"
 
 jUnit = "4.13.2"
