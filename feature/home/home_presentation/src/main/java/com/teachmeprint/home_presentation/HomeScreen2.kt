@@ -244,7 +244,7 @@ fun DeckLanguage() {
 
                 Text(text = text)
                 LinearProgressIndicator(
-                    progress = 0.6f, // Defina o valor do progresso aqui (0.6f = 60%)
+                    progress = 0.5f, // Defina o valor do progresso aqui (0.6f = 60%)
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(20.dp)
