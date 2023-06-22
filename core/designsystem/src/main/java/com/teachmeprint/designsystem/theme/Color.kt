@@ -69,3 +69,6 @@ val light_balloonContainer = Color(0xFFF9A825)
 val light_onBalloonContainer = Color(0xFFFFFFFF)
 val dark_balloonContainer = Color(0xFFFFB957)
 val dark_onBalloonContainer = Color(0xFF462B00)
+
+val goals_pieChart = Color(0xFFFF4081)
+val completed_pieChart = Color(0xFF1976D2)
