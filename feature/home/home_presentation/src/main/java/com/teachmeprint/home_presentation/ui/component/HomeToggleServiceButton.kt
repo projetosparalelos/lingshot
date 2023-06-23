@@ -50,7 +50,7 @@ fun HomeToggleServiceButton(
                 composition = composition,
                 progress = if (isServiceRunning) 0.5f else 0f
             )
-            delay(100.milliseconds)
+            delay(200.milliseconds)
             firstTime = false
         } else {
             anim.animate(

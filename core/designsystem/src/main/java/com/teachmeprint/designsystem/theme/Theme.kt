@@ -87,6 +87,15 @@ private val DarkAndroidBalloonTheme = BalloonTheme(
     onContent = dark_onBalloonContainer
 )
 
+private val LightAndroidPieChartTheme = PieChartTheme(
+    completed = light_completed_pieChart,
+    goals = light_goals_pieChart
+)
+private val DarkAndroidPieChartTheme = PieChartTheme(
+    completed = dark_completed_pieChart,
+    goals = dark_goals_pieChart
+)
+
 @Composable
 fun TeachMePrintTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
@@ -106,8 +115,14 @@ fun TeachMePrintTheme(
         else -> LightAndroidBalloonTheme
     }
 
+    val pieChartTheme = when {
+        isDarkTheme -> DarkAndroidPieChartTheme
+        else -> LightAndroidPieChartTheme
+    }
+
     CompositionLocalProvider(
-        LocalBalloonTheme provides balloonTheme
+        LocalBalloonTheme provides balloonTheme,
+        LocalPieChartTheme provides pieChartTheme
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
