@@ -48,7 +48,7 @@ fun HomeNeedReviewCard(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineSmall
             )
             Text(
-                text = "frases pendentes para ser revisadas.",
+                text = "sentences pending review.",
                 style = MaterialTheme.typography.bodyMedium
             )
         }

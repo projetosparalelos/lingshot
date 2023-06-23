@@ -15,10 +15,10 @@ import com.teachmeprint.designsystem.theme.TeachMePrintTheme
 fun HomeOffensiveTitle(modifier: Modifier = Modifier) {
     val text = buildAnnotatedString {
         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-            append("Sua ofensiva é: ")
+            append("Your offence is: ")
         }
         withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
-            append("5 dias")
+            append("5 days")
         }
     }
     Text(
