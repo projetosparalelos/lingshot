@@ -1,11 +1,9 @@
 package com.teachmeprint.home_presentation
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,8 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -41,16 +37,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.teachmeprint.designsystem.theme.LocalPieChartTheme
 import com.teachmeprint.designsystem.theme.TeachMePrintTheme
-import com.teachmeprint.designsystem.theme.completed_pieChart
-import com.teachmeprint.designsystem.theme.goals_pieChart
 
 @Composable
 fun HomeScreen2() {
     TeachMePrintTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Surface {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -70,21 +63,18 @@ fun HomeScreen2() {
                     style = MaterialTheme.typography.titleLarge
                 )
                 ElevatedCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(68.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.onSecondary,
                     ),
                     shape = CircleShape
                 ) {
                     Row(
-                        Modifier
-                            .fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Spacer(modifier = Modifier)
                         Icon(
                             modifier = Modifier.size(32.dp),
                             imageVector = Icons.Default.ArrowRight, contentDescription = null
@@ -100,29 +90,29 @@ fun HomeScreen2() {
                         )
                     }
                 }
-                ElevatedCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp),
-                ) {
+                ElevatedCard {
                     Row(
-                        Modifier
-                            .fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Spacer(modifier = Modifier)
                         PieChart(
                             chartSize = 120.dp,
                             goals = 50,
                             completed = 20
                         )
                         Column {
-                            PieChartIndicator(value = "50", type = "goals", color = goals_pieChart)
+                            PieChartIndicator(
+                                value = "50",
+                                type = "goals",
+                                color = LocalPieChartTheme.current.goals
+                            )
                             PieChartIndicator(
                                 value = "20",
                                 type = "completed",
-                                color = completed_pieChart
+                                color = LocalPieChartTheme.current.completed
                             )
                         }
                         IconButton(
@@ -171,6 +161,7 @@ fun PieChart(
     goals: Int,
     completed: Int
 ) {
+    val pieChartTheme = LocalPieChartTheme.current
     Canvas(modifier = modifier.size(chartSize)) {
         val adjustedCompleted = if (completed > goals) goals else completed
         val chartData = listOf(
@@ -187,8 +178,8 @@ fun PieChart(
             val sweepAngle = chartDegrees * chartData[index]
 
             val color = when (index) {
-                0 -> completed_pieChart
-                1 -> goals_pieChart
+                0 -> pieChartTheme.completed
+                1 -> pieChartTheme.goals
                 else -> Color.White
             }
 
@@ -208,50 +199,36 @@ fun PieChart(
 @Composable
 fun DeckLanguage() {
     ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onSecondary,
         )
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Image(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(80.dp),
-                painter = painterResource(id = R.drawable.usa_flag),
-                contentScale = ContentScale.FillBounds,
-                contentDescription = null
-            )
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                val text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)) {
-                        append("English ")
-                    }
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
-                        append("from portuguese")
-                    }
+            val text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)) {
+                    append("\uD83C\uDDFA\uD83C\uDDF8 English ")
                 }
-
-                Text(text = text)
-                LinearProgressIndicator(
-                    progress = 0.5f, // Defina o valor do progresso aqui (0.6f = 60%)
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(20.dp)
-                        .clip(RoundedCornerShape(4.dp)),
-                    color = completed_pieChart, // Cor do progresso
-                )
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
+                    append("from portuguese")
+                }
             }
+            Text(text = text)
+            LinearProgressIndicator(
+                progress = 0.5f,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(12.dp)
+                    .clip(RoundedCornerShape(4.dp)),
+            )
+            Text(
+                text = "Playing 0 / 12.605 sentences",
+                style = MaterialTheme.typography.labelMedium
+            )
         }
     }
 }
