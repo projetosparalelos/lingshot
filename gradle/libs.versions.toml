@@ -3,6 +3,7 @@ gradlePlugin = "7.4.2"
 kotlin = "1.8.21"
 googleServices = "4.3.15"
 playServicesAds = "22.1.0"
+playServicesAuth = "20.5.0"
 firebaseCrashylytics = "2.9.6"
 
 coreKTX = "1.10.1"
@@ -95,10 +96,12 @@ dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref =
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "daggerHilt" }
 
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth"}
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
@@ -112,7 +115,7 @@ compose-detekt = { module = "com.twitter.compose.rules:detekt", version.ref = "c
 [bundles]
 lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service", "lifecycle-runtimeCompose", "lifecycle-viewModelCompose"]
 coroutines = ["coroutines-android", "coroutines-android"]
-firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx"]
+firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx", "firebase-auth-ktx"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradlePlugin" }
