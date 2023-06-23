@@ -35,10 +35,10 @@ import com.teachmeprint.common.R.*
 import com.teachmeprint.common.util.findActivity
 import com.teachmeprint.designsystem.component.TeachMePrintOnLifecycleEvent
 import com.teachmeprint.home_presentation.ui.HomeRoute
+import com.teachmeprint.home_presentation.ui.component.HomeToggleServiceButton
 import com.teachmeprint.language.presentation.MainEvent
 import com.teachmeprint.language.presentation.MainUiState
 import com.teachmeprint.language.presentation.MainViewModel
-import com.teachmeprint.home_presentation.ui.component.HomeToggleServiceButton
 import com.teachmeprint.screencapture.service.ScreenShotService.Companion.getStartIntent
 import com.teachmeprint.screencapture.service.ScreenShotService.Companion.getStopIntent
 import com.teachmeprint.screencapture.util.isServiceRunning
