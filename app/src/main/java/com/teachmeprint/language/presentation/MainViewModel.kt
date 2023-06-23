@@ -1,18 +1,18 @@
-package com.teachmeprint.home_presentation
+package com.teachmeprint.language.presentation
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class HomeViewModel : ViewModel() {
+class MainViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeUiState())
+    private val _uiState = MutableStateFlow(MainUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun handleEvent(homeEvent: HomeEvent) {
-        when (homeEvent) {
-            is HomeEvent.ToggleServiceButton -> {
+    fun handleEvent(mainEvent: MainEvent) {
+        when (mainEvent) {
+            is MainEvent.ToggleServiceButton -> {
                 toggleServiceButton()
             }
         }

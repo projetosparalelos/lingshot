@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.teachmeprint.home_presentation.navigation.homeScreen
-import com.teachmeprint.home_presentation.navigation.navigateToHome
 
 @Composable
 fun TeachMePrintNavHost(
@@ -18,7 +17,7 @@ fun TeachMePrintNavHost(
 ) {
     NavHost(navController, startDestination = START_ROUTE) {
         startScreen(context) {
-            navController.navigateToHome(
+            navController.navigateToMain(
                 navOptions {
                     popUpTo(navController.graph.findStartDestination().id) {
                         inclusive = true

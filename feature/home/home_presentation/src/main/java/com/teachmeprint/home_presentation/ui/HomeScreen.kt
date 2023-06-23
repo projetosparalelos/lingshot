@@ -1,141 +1,245 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.teachmeprint.home_presentation.ui
 
-import android.app.Activity
-import android.content.Context
-import android.content.Context.MEDIA_PROJECTION_SERVICE
-import android.content.Intent
-import android.media.projection.MediaProjectionManager
-import androidx.activity.ComponentActivity.RESULT_OK
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
+import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle.Event.ON_RESUME
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teachmeprint.common.R.*
-import com.teachmeprint.common.util.findActivity
-import com.teachmeprint.designsystem.component.TeachMePrintOnLifecycleEvent
-import com.teachmeprint.home_presentation.HomeEvent
-import com.teachmeprint.home_presentation.HomeScreen2
-import com.teachmeprint.home_presentation.HomeUiState
-import com.teachmeprint.home_presentation.HomeViewModel
-import com.teachmeprint.home_presentation.ui.component.HomeToggleServiceButton
-import com.teachmeprint.screencapture.service.ScreenShotService.Companion.getStartIntent
-import com.teachmeprint.screencapture.service.ScreenShotService.Companion.getStopIntent
-import com.teachmeprint.screencapture.util.isServiceRunning
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.teachmeprint.designsystem.theme.LocalPieChartTheme
+import com.teachmeprint.designsystem.theme.TeachMePrintTheme
 
 @Composable
-fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    HomeScreen(
-        uiState = uiState,
-        handleEvent = viewModel::handleEvent
-    )
+fun HomeRoute() {
+    HomeScreen()
 }
 
 @Composable
-private fun HomeScreen(
-    uiState: HomeUiState,
-    modifier: Modifier = Modifier,
-    context: Context = LocalContext.current,
-    handleEvent: (HomeEvent) -> Unit
-) {
-    val activity = context.findActivity()
-
-    val launcherScreenShotService =
-        rememberLauncherForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                activity?.startScreenShotService(result.data)
-            }
-        }
-
-    TeachMePrintOnLifecycleEvent { _, event ->
-        when (event) {
-            ON_RESUME -> {
-                if (isServiceRunning(context) != uiState.isServiceRunning) {
-                    handleEvent(HomeEvent.ToggleServiceButton)
+private fun HomeScreen() {
+    Surface {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            val annotatedString = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                    append("Sua ofensiva é: ")
+                }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
+                    append("5 dias")
                 }
             }
-            else -> {}
-        }
-    }
-
-    Scaffold(
-        modifier = modifier.systemBarsPadding(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        stringResource(id = string.app_name)
-                    )
-                },
-                actions = {
-                    IconButton(onClick = { }) {
-                        Icon(Icons.Rounded.Settings, contentDescription = null)
-                    }
-                }
+            Text(
+                text = annotatedString,
+                style = MaterialTheme.typography.titleLarge
             )
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = {
-            HomeToggleServiceButton(
-                isServiceRunning = uiState.isServiceRunning,
-                onToggleServiceButton = {
-                    if (uiState.isServiceRunning) {
-                        activity?.stopScreenShotService()
-                        handleEvent(HomeEvent.ToggleServiceButton)
-                    } else {
-                        launcherScreenShotService.launch(activity?.mediaProjectionIntent())
-                    }
-                },
-                onFinishActivity = {
-                    activity?.finish()
-                }
-            )
-        },
-        content = { innerPadding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
+            ElevatedCard(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.onSecondary,
+                ),
+                shape = CircleShape
             ) {
-                HomeScreen2()
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier.size(32.dp),
+                        imageVector = Icons.Default.ArrowRight, contentDescription = null
+                    )
+                    Text(
+                        text = "5",
+                        color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Text(
+                        text = "frases pendentes para ser revisadas.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
+            ElevatedCard {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    PieChart(
+                        chartSize = 120.dp,
+                        goals = 50,
+                        completed = 20
+                    )
+                    Column {
+                        PieChartIndicator(
+                            value = "50",
+                            type = "goals",
+                            color = LocalPieChartTheme.current.goals
+                        )
+                        PieChartIndicator(
+                            value = "20",
+                            type = "completed",
+                            color = LocalPieChartTheme.current.completed
+                        )
+                    }
+                    IconButton(
+                        onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                    }
+                }
+            }
+            Text(
+                text = "Decks",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
 
+            )
+            DeckLanguage()
         }
-    )
+    }
 }
 
-private fun Activity.startScreenShotService(resultData: Intent?) =
-    getStartIntent(this, resultData).also {
-        startService(it)
+@Composable
+fun PieChartIndicator(value: String, type: String, color: Color) {
+    val text = buildAnnotatedString {
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+            append("$value ")
+        }
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
+            append(type)
+        }
     }
-
-private fun Activity.stopScreenShotService() =
-    getStopIntent(this).also {
-        stopService(it)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Canvas(modifier = Modifier.size(8.dp)) {
+            drawCircle(color = color)
+        }
+        Text(text = text)
     }
+}
 
-private fun Activity.mediaProjectionIntent() =
-    (getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager)
-        .createScreenCaptureIntent()
+@Composable
+fun PieChart(
+    modifier: Modifier = Modifier,
+    chartSize: Dp,
+    goals: Int,
+    completed: Int
+) {
+    val pieChartTheme = LocalPieChartTheme.current
+    Canvas(modifier = modifier.size(chartSize)) {
+        val adjustedCompleted = if (completed > goals) goals else completed
+        val chartData = listOf(
+            adjustedCompleted.toFloat() / goals,
+            (goals - adjustedCompleted).toFloat() / goals
+        )
+
+        val chartDegrees = 360
+        val canvasSize = size
+        val radius = canvasSize.width / 2
+        var startAngle = 0f
+
+        chartData.indices.forEach { index ->
+            val sweepAngle = chartDegrees * chartData[index]
+
+            val color = when (index) {
+                0 -> pieChartTheme.completed
+                1 -> pieChartTheme.goals
+                else -> Color.White
+            }
+
+            drawArc(
+                color = color,
+                startAngle = startAngle,
+                sweepAngle = sweepAngle,
+                size = Size(radius * 2, radius * 2),
+                useCenter = true,
+                style = Fill
+            )
+            startAngle += sweepAngle
+        }
+    }
+}
+
+@Composable
+fun DeckLanguage() {
+    ElevatedCard(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.onSecondary,
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            val text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)) {
+                    append("\uD83C\uDDFA\uD83C\uDDF8 English ")
+                }
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
+                    append("from portuguese")
+                }
+            }
+            Text(text = text)
+            LinearProgressIndicator(
+                progress = 0.5f,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(12.dp)
+                    .clip(RoundedCornerShape(4.dp)),
+            )
+            Text(
+                text = "Playing 0 / 12.605 sentences",
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreen2Preview() {
+    TeachMePrintTheme {
+        HomeScreen()
+    }
+}
