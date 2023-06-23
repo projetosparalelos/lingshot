@@ -39,11 +39,7 @@ class AndroidQualityPlugin : Plugin<Project> {
                 }
             }
 
-            tasks.whenTaskAdded {
-                if (name == "preBuild") {
-                    dependsOn(tasks.getByName("ktlintFormat"))
-                }
-            }
+            tasks.getByPath("preBuild").dependsOn("ktlintFormat")
 
             dependencies {
                 add("detektPlugins", libs.getLibrary("compose-detekt"))
