@@ -115,7 +115,7 @@ compose-detekt = { module = "com.twitter.compose.rules:detekt", version.ref = "c
 [bundles]
 lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service", "lifecycle-runtimeCompose", "lifecycle-viewModelCompose"]
 coroutines = ["coroutines-android", "coroutines-android"]
-firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx", "firebase-auth-ktx"]
+firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradlePlugin" }

@@ -20,6 +20,10 @@ class AndroidNetworkPlugin : Plugin<Project> {
                     buildConfigField("String", "BASE_API", "\"https://api.openai.com/v1/\"")
                 }
 
+                defaultConfig {
+                    buildConfigField("String", "GOOGLE_AUTH_ID", KeyHelper.getValue("GOOGLE_AUTH_ID"))
+                }
+
                 buildTypes {
                     release {
                         buildConfigField(

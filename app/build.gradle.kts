@@ -61,7 +61,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.play.services.ads)
-    implementation(libs.play.services.auth)
     implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)
 }
