@@ -2,13 +2,17 @@
 
 package com.teachmeprint.swipepermission_presentation.ui
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.net.Uri
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -38,6 +42,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.teachmeprint.swipepermission_presentation.R
+import com.teachmeprint.swipepermission_presentation.SwipePermissionEvent
+import com.teachmeprint.swipepermission_presentation.SwipePermissionEvent.SignInWithIntent
 import com.teachmeprint.swipepermission_presentation.SwipePermissionUiState
 import com.teachmeprint.swipepermission_presentation.SwipePermissionViewModel
 import com.teachmeprint.swipepermission_presentation.ui.SwipePermissionItem.DISPLAY_OVERLAY
@@ -58,6 +64,8 @@ fun SwipePermissionRoute(
 
     SwipePermissionScreen(
         uiState = uiState,
+        onSignIn = viewModel::signIn,
+        handleEvent = viewModel::handleEvent,
         onUpPress = onUpPress
     )
 }
@@ -65,11 +73,22 @@ fun SwipePermissionRoute(
 @Composable
 private fun SwipePermissionScreen(
     uiState: SwipePermissionUiState,
+    onSignIn: suspend () -> IntentSender?,
+    handleEvent: (SwipePermissionEvent) -> Unit,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
     onUpPress: () -> Unit
 ) {
     val permissionState = rememberMultiplePermissionsState(PERMISSIONS)
+    val scope = rememberCoroutineScope()
+
+    val pagerState = rememberPagerState(
+        initialPage = when {
+            uiState.isSignInSuccessful -> READ_AND_WRITE.ordinal
+            permissionState.allPermissionsGranted -> DISPLAY_OVERLAY.ordinal
+            else -> INITIAL.ordinal
+        }
+    )
 
     val launcherOverlayPermission =
         rememberLauncherForActivityResult(StartActivityForResult()) {
@@ -78,14 +97,15 @@ private fun SwipePermissionScreen(
             }
         }
 
-    val pagerState = rememberPagerState(
-        initialPage = if (permissionState.allPermissionsGranted) {
-            DISPLAY_OVERLAY.ordinal
-        } else {
-            INITIAL.ordinal
+    val launcherSignIn = rememberLauncherForActivityResult(StartIntentSenderForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            handleEvent(SignInWithIntent(result.data))
+
+            scope.launch {
+                pagerState.animateScrollToPage(READ_AND_WRITE.ordinal)
+            }
         }
-    )
-    val scope = rememberCoroutineScope()
+    }
 
     Surface {
         HorizontalPager(
@@ -126,7 +146,11 @@ private fun SwipePermissionScreen(
                 if (item == INITIAL) {
                     SwipePermissionGoogleAuthButton(
                         onSignIn = {
-                            scope.launch {}
+                            scope.launch {
+                                launcherSignIn.launch(
+                                    intentSignIn(onSignIn() ?: return@launch)
+                                )
+                            }
                         }
                     )
                 } else {
@@ -173,6 +197,8 @@ private fun SwipePermissionScreen(
 private fun SwipePermissionScreenPreview() {
     SwipePermissionScreen(
         uiState = SwipePermissionUiState(),
+        onSignIn = { null },
+        handleEvent = {},
         onUpPress = {}
     )
 }
@@ -200,6 +226,9 @@ enum class SwipePermissionItem(
         icon = R.raw.swipe_overlay_animation
     );
 }
+
+private fun intentSignIn(intentSender: IntentSender) =
+    IntentSenderRequest.Builder(intentSender).build()
 
 private fun intentOverlayPermission() =
     Intent(ACTION_MANAGE_OVERLAY_PERMISSION)

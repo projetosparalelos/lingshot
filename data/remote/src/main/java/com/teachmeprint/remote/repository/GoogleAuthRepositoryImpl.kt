@@ -1,3 +1,5 @@
+@file:Suppress("InstanceOfCheckForException")
+
 package com.teachmeprint.remote.repository
 
 import android.content.Intent
@@ -14,6 +16,7 @@ import com.teachmeprint.remote.BuildConfig
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class GoogleAuthRepositoryImpl @Inject constructor(
     private val signInClient: SignInClient
@@ -27,7 +30,7 @@ class GoogleAuthRepositoryImpl @Inject constructor(
                 buildSignInRequest()
             ).await()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Timber.e(e)
             if (e is CancellationException) throw e
             null
         }
@@ -51,7 +54,7 @@ class GoogleAuthRepositoryImpl @Inject constructor(
                 errorMessage = null
             )
         } catch (e: Exception) {
-            e.printStackTrace()
+            Timber.e(e)
             if (e is CancellationException) throw e
             SignInResult(
                 userDomain = null,
@@ -65,7 +68,7 @@ class GoogleAuthRepositoryImpl @Inject constructor(
             signInClient.signOut().await()
             auth.signOut()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Timber.e(e)
             if (e is CancellationException) throw e
         }
     }

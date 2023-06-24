@@ -1,7 +1,5 @@
 @file:Suppress("DSL_SCOPE_VIOLATION")
 
-import com.google.gms.googleservices.GoogleServicesTask
-
 plugins {
     id("teachmeprint.android.application.plugin")
     id("teachmeprint.android.hilt.plugin")
@@ -24,15 +22,6 @@ android {
 
         minSdk = AppVersionPlugin.MIN_SDK
         targetSdk = AppVersionPlugin.TARGET_SDK
-    }
-    buildTypes {
-        debug {
-            gradle.projectsEvaluated {
-                tasks.withType<GoogleServicesTask> {
-                    enabled = false
-                }
-            }
-        }
     }
 }
 

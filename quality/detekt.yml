@@ -119,6 +119,7 @@ complexity:
       - 'run'
       - 'use'
       - 'with'
+    ignoreAnnotated: [ 'Composable' ]
   LabeledExpression:
     active: false
     ignoredLabels: [ ]
