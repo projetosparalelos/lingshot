@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +20,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,6 +44,7 @@ import com.teachmeprint.swipepermission_presentation.ui.SwipePermissionItem.DISP
 import com.teachmeprint.swipepermission_presentation.ui.SwipePermissionItem.INITIAL
 import com.teachmeprint.swipepermission_presentation.ui.SwipePermissionItem.READ_AND_WRITE
 import com.teachmeprint.swipepermission_presentation.ui.component.SwipePermissionAnimationIcon
+import com.teachmeprint.swipepermission_presentation.ui.component.SwipePermissionGoogleAuthButton
 import com.teachmeprint.swipepermission_presentation.util.PERMISSIONS
 import com.teachmeprint.swipepermission_presentation.util.hasOverlayPermission
 import kotlinx.coroutines.launch
@@ -86,72 +87,75 @@ private fun SwipePermissionScreen(
     )
     val scope = rememberCoroutineScope()
 
-    HorizontalPager(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface),
-        pageCount = uiState.swipePermissionItemList.size,
-        state = pagerState,
-        userScrollEnabled = false,
-        key = { uiState.swipePermissionItemList[it] }
-    ) { index ->
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
-        ) {
-            val item = uiState.swipePermissionItemList[index]
+    Surface {
+        HorizontalPager(
+            modifier = modifier
+                .fillMaxSize(),
+            pageCount = uiState.swipePermissionItemList.size,
+            state = pagerState,
+            userScrollEnabled = false,
+            key = { uiState.swipePermissionItemList[it] }
+        ) { index ->
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+            ) {
+                val item = uiState.swipePermissionItemList[index]
 
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(id = item.title),
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge
-            )
+                Text(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = stringResource(id = item.title),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge
+                )
 
-            SwipePermissionAnimationIcon(icon = item.icon)
+                SwipePermissionAnimationIcon(icon = item.icon)
 
-            val text = if (!permissionState.shouldShowRationale) {
-                item.text
-            } else {
-                item.secondText ?: item.text
-            }
+                val text = if (!permissionState.shouldShowRationale) {
+                    item.text
+                } else {
+                    item.secondText ?: item.text
+                }
 
-            Text(
-                text = stringResource(id = text),
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center
-            )
+                Text(
+                    text = stringResource(id = text),
+                    textAlign = TextAlign.Center
+                )
 
-            Button(onClick = {
-                when (item) {
-                    INITIAL -> {
-                        scope.launch {
-                            pagerState.animateScrollToPage(READ_AND_WRITE.ordinal)
+                if (item == INITIAL) {
+                    SwipePermissionGoogleAuthButton(
+                        onSignIn = {
+                            scope.launch {}
                         }
-                    }
+                    )
+                } else {
+                    Button(onClick = {
+                        when (item) {
+                            READ_AND_WRITE -> {
+                                if (permissionState.shouldShowRationale) {
+                                    context.startActivity(intentReadAndWritePermission(context))
+                                } else {
+                                    permissionState.launchMultiplePermissionRequest()
+                                }
+                            }
 
-                    READ_AND_WRITE -> {
-                        if (permissionState.shouldShowRationale) {
-                            context.startActivity(intentReadAndWritePermission(context))
-                        } else {
-                            permissionState.launchMultiplePermissionRequest()
-                        }
-                    }
+                            DISPLAY_OVERLAY -> {
+                                if (!hasOverlayPermission(context)) {
+                                    launcherOverlayPermission.launch(
+                                        intentOverlayPermission()
+                                    )
+                                } else {
+                                    onUpPress()
+                                }
+                            }
 
-                    DISPLAY_OVERLAY -> {
-                        if (!hasOverlayPermission(context)) {
-                            launcherOverlayPermission.launch(
-                                intentOverlayPermission()
-                            )
-                        } else {
-                            onUpPress()
+                            else -> Unit
                         }
+                    }) {
+                        Text(stringResource(id = R.string.text_button_swipe))
                     }
                 }
-            }) {
-                Text(stringResource(id = R.string.text_button_swipe))
             }
         }
     }
