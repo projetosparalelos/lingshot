@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.hawk)
 
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.coil.compose)
 
     implementation(libs.play.services.ads)
     implementation(platform(libs.firebase.bom))
