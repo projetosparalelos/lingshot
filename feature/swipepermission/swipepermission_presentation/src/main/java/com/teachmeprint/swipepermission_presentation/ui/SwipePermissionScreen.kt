@@ -99,11 +99,12 @@ private fun SwipePermissionScreen(
             }
         }
 
-    val launcherSignIn = rememberLauncherForActivityResult(StartIntentSenderForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            handleEvent(SignInWithIntent(result.data))
+    val launcherSignIn =
+        rememberLauncherForActivityResult(StartIntentSenderForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                handleEvent(SignInWithIntent(result.data))
+            }
         }
-    }
 
     Surface {
         HorizontalPager(
