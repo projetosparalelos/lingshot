@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "362848712243",
+    "project_id": "teachmeprint-language",
+    "storage_bucket": "teachmeprint-language.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362848712243:android:6ccee0f38bb9f181399546",
+        "android_client_info": {
+          "package_name": "com.teachmeprint.language"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362848712243-lh7uno990tqqalgefti371piiujkm6kc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teachmeprint.language",
+            "certificate_hash": "3c7c5b6636309fea3edb95be61af9ba94ec813ca"
+          }
+        },
+        {
+          "client_id": "362848712243-blpjejafmd7pb51cmegfp3r9e12r6k6t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAjwslsxRGNp10W2tgza4zRnSrP268Ia4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362848712243-9sqjjmgotp3qndbfo41tqvfhard1dj0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
