@@ -1,5 +1,7 @@
 package com.teachmeprint.remote.di
 
+import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.teachmeprint.domain.repository.ChatGPTRepository
 import com.teachmeprint.remote.BuildConfig
@@ -8,6 +10,7 @@ import com.teachmeprint.remote.repository.ChatGPTRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -30,7 +33,16 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun provideChuckerInterceptor(
+        @ApplicationContext context: Context
+    ) = ChuckerInterceptor.Builder(context).build()
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        chuckerInterceptor: ChuckerInterceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor { chain ->
             val newRequest: Request =
                 chain.request()
@@ -43,6 +55,7 @@ object DataModule {
             if (BuildConfig.DEBUG) {
                 addInterceptor(loggingInterceptor)
             }
+            addInterceptor(chuckerInterceptor)
         }.readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
             .build()

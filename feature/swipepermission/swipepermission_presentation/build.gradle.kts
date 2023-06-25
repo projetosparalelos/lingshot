@@ -12,6 +12,7 @@ android {
 
 dependencies {
     implementation(project(":core:designsystem"))
+    implementation(project(":domain"))
 
     implementation(libs.accompanist.permissions)
     implementation(libs.hilt.navigation.compose)

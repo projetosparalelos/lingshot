@@ -3,6 +3,7 @@ gradlePlugin = "7.4.2"
 kotlin = "1.8.21"
 googleServices = "4.3.15"
 playServicesAds = "22.1.0"
+playServicesAuth = "20.5.0"
 firebaseCrashylytics = "2.9.6"
 
 coreKTX = "1.10.1"
@@ -30,6 +31,7 @@ okHttp = "4.11.0"
 coroutines = "1.7.1"
 hawk = "2.0.1"
 timber = "5.0.1"
+chucker = "3.5.0"
 daggerHilt = "2.46.1"
 
 firebaseBom = "32.1.1"
@@ -89,16 +91,20 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 hawk = { module = "com.orhanobut:hawk", version.ref = "hawk" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+chucker-library = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
+chucker-library-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigation" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "daggerHilt" }
 
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth"}
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
