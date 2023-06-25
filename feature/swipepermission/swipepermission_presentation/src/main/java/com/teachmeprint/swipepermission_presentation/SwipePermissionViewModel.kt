@@ -21,11 +21,14 @@ class SwipePermissionViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
-        fetchSignIn(googleAuthRepository.getSignedInUser())
+        fetchSignIn(googleAuthRepository.getSignedInUser(), null)
     }
 
     fun handleEvent(swipePermissionEvent: SwipePermissionEvent) {
         when (swipePermissionEvent) {
+            is SwipePermissionEvent.ClearState -> {
+                clearState()
+            }
             is SwipePermissionEvent.SignInWithIntent -> {
                 signInWithIntent(swipePermissionEvent.intent)
             }
@@ -37,12 +40,21 @@ class SwipePermissionViewModel @Inject constructor(
     private fun signInWithIntent(intent: Intent?) {
         viewModelScope.launch {
             googleAuthRepository.signInWithIntent(intent = intent ?: return@launch).also {
-                fetchSignIn(it.userDomain)
+                fetchSignIn(it.userDomain, it.errorMessage)
             }
         }
     }
 
-    private fun fetchSignIn(userDomain: UserDomain?) {
-        _uiState.update { it.copy(isSignInSuccessful = (userDomain != null)) }
+    private fun fetchSignIn(userDomain: UserDomain?, signInError: String?) {
+        _uiState.update {
+            it.copy(
+                isSignInSuccessful = (userDomain != null),
+                signInError = signInError
+            )
+        }
+    }
+
+    private fun clearState() {
+        _uiState.update { SwipePermissionUiState() }
     }
 }

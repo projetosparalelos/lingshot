@@ -9,6 +9,7 @@ import android.content.IntentSender
 import android.net.Uri
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -43,6 +44,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.teachmeprint.swipepermission_presentation.R
 import com.teachmeprint.swipepermission_presentation.SwipePermissionEvent
+import com.teachmeprint.swipepermission_presentation.SwipePermissionEvent.ClearState
 import com.teachmeprint.swipepermission_presentation.SwipePermissionEvent.SignInWithIntent
 import com.teachmeprint.swipepermission_presentation.SwipePermissionUiState
 import com.teachmeprint.swipepermission_presentation.SwipePermissionViewModel
@@ -100,17 +102,12 @@ private fun SwipePermissionScreen(
     val launcherSignIn = rememberLauncherForActivityResult(StartIntentSenderForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             handleEvent(SignInWithIntent(result.data))
-
-            scope.launch {
-                pagerState.animateScrollToPage(READ_AND_WRITE.ordinal)
-            }
         }
     }
 
     Surface {
         HorizontalPager(
-            modifier = modifier
-                .fillMaxSize(),
+            modifier = modifier,
             pageCount = uiState.swipePermissionItemList.size,
             state = pagerState,
             userScrollEnabled = false,
@@ -184,10 +181,23 @@ private fun SwipePermissionScreen(
         }
     }
 
-    LaunchedEffect(permissionState.allPermissionsGranted) {
+    LaunchedEffect(
+        key1 = permissionState.allPermissionsGranted,
+        key2 = uiState.isSignInSuccessful,
+        key3 = uiState.signInError
+    ) {
         if (permissionState.allPermissionsGranted && pagerState.currentPage == READ_AND_WRITE.ordinal) {
             pagerState.animateScrollToPage(DISPLAY_OVERLAY.ordinal)
             return@LaunchedEffect
+        }
+
+        if (uiState.isSignInSuccessful) {
+            pagerState.animateScrollToPage(READ_AND_WRITE.ordinal)
+        }
+
+        uiState.signInError?.let { error ->
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            handleEvent(ClearState)
         }
     }
 }

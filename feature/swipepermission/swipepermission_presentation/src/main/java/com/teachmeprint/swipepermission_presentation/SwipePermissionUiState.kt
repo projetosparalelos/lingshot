@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 data class SwipePermissionUiState(
     val isSignInSuccessful: Boolean = false,
+    val signInError: String? = null,
     val swipePermissionItemList: ImmutableList<SwipePermissionItem> =
         enumValues<SwipePermissionItem>().toList().toImmutableList()
 )
