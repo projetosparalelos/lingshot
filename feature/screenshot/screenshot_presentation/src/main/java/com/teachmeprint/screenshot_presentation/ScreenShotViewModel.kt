@@ -43,7 +43,7 @@ class ScreenShotViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val chatGPTRepository: ChatGPTRepository,
     private val screenShotRepository: ScreenShotRepository,
-    private val languageChoiceRepository: LanguageChoiceRepository,
+    private val languageChoiceRepository: LanguageChoiceRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScreenShotUiState())

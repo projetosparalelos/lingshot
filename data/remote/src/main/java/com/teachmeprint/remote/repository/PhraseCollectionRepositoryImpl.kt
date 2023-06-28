@@ -27,7 +27,6 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
                 .document(useCase()?.userId.toString())
                 .collection(COLLECTION_LANGUAGES)
 
-
     override suspend fun savePhraseInLanguageCollections(
         phrase: PhraseDomain,
         languageDomain: LanguageDomain
