@@ -56,7 +56,6 @@ ktlint-plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref =
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKTX" }
 core-splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashScreen" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
-
 material = { module = "com.google.android.material:material", version.ref = "material" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
@@ -105,6 +104,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
+firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
 
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teachmeprint.home_presentation.ui.component.HomeCollectionCard
+import com.teachmeprint.home_presentation.ui.component.HomeDeckCard
 import com.teachmeprint.home_presentation.ui.component.HomeNeedReviewCard
 import com.teachmeprint.home_presentation.ui.component.HomeOffensiveTitle
 import com.teachmeprint.home_presentation.ui.component.HomePierChartCard
@@ -35,11 +35,11 @@ private fun HomeScreen() {
             HomeNeedReviewCard()
             HomePierChartCard()
             Text(
-                text = "Collections",
+                text = "Decks",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-            HomeCollectionCard()
+            HomeDeckCard()
         }
     }
 }

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HomeCollectionCard(modifier: Modifier = Modifier) {
+fun HomeDeckCard(modifier: Modifier = Modifier) {
     ElevatedCard(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -63,5 +63,5 @@ fun HomeCollectionCard(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun HomeCollectionCardPreview() {
-    HomeCollectionCard()
+    HomeDeckCard()
 }

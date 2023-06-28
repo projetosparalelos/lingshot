@@ -7,20 +7,15 @@ import android.speech.tts.TextToSpeech.*
 import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teachmeprint.common.helper.StatusMessage.STATUS_IDENTIFY_LANGUAGE_FAILED
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_RECOGNIZER_FAILED
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
 import com.teachmeprint.common.helper.launchWithStatus
-import com.teachmeprint.common.helper.statusDefault
-import com.teachmeprint.common.helper.statusEmpty
-import com.teachmeprint.common.helper.statusError
-import com.teachmeprint.common.helper.statusLoading
-import com.teachmeprint.common.helper.statusSuccess
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.teachmeprint.domain.model.ChatGPTPromptBodyDomain
+import com.teachmeprint.domain.model.statusDefault
+import com.teachmeprint.domain.model.statusEmpty
+import com.teachmeprint.domain.model.statusError
+import com.teachmeprint.domain.model.statusLoading
+import com.teachmeprint.domain.model.statusSuccess
 import com.teachmeprint.domain.repository.ChatGPTRepository
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepository
@@ -48,7 +43,7 @@ class ScreenShotViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val chatGPTRepository: ChatGPTRepository,
     private val screenShotRepository: ScreenShotRepository,
-    private val languageChoiceRepository: LanguageChoiceRepository
+    private val languageChoiceRepository: LanguageChoiceRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScreenShotUiState())
@@ -188,7 +183,7 @@ class ScreenShotViewModel @Inject constructor(
             ?.addOnFailureListener {
                 _uiState.update { value ->
                     value.copy(
-                        screenShotStatus = statusError(STATUS_TEXT_RECOGNIZER_FAILED)
+                        screenShotStatus = statusError(it.message)
                     )
                 }
             }
@@ -231,7 +226,7 @@ class ScreenShotViewModel @Inject constructor(
             .addOnFailureListener {
                 _uiState.update { value ->
                     value.copy(
-                        screenShotStatus = statusError(STATUS_IDENTIFY_LANGUAGE_FAILED)
+                        screenShotStatus = statusError(it.message)
                     )
                 }
             }
@@ -277,7 +272,7 @@ class ScreenShotViewModel @Inject constructor(
         @Deprecated("Deprecated in Java")
         override fun onError(p0: String?) {
             _uiState.update {
-                it.copy(screenShotStatus = statusError(STATUS_TEXT_TO_SPEECH_ERROR))
+                it.copy(screenShotStatus = statusError(p0))
             }
         }
     }
@@ -307,5 +302,7 @@ class ScreenShotViewModel @Inject constructor(
     companion object {
         const val ILLEGIBLE_TEXT = "There isn't any legible text."
         private const val LANGUAGE_CODE_UNAVAILABLE = "und"
+        private const val STATUS_TEXT_TO_SPEECH_FAILED = "Text to speech failed."
+        private const val STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED = "Text to speech not supported."
     }
 }

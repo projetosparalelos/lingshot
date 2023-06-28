@@ -13,6 +13,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+
     implementation(libs.retrofit)
     implementation(libs.play.services.ads)
 }

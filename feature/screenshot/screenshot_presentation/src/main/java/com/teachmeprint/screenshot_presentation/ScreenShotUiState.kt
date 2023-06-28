@@ -1,7 +1,7 @@
 package com.teachmeprint.screenshot_presentation
 
-import com.teachmeprint.common.helper.Status
-import com.teachmeprint.common.helper.statusDefault
+import com.teachmeprint.domain.model.Status
+import com.teachmeprint.domain.model.statusDefault
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.screenshot_domain.model.LanguageTranslationDomain
 import com.teachmeprint.screenshot_presentation.ui.component.ActionCropImage
