@@ -2,20 +2,18 @@ package com.teachmeprint.screenshot_presentation.ui.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.teachmeprint.common.helper.StatusMessage.getErrorMessage
 import com.teachmeprint.designsystem.component.TeachMePrintSnackBar
 
 @Composable
 fun ScreenShotSnackBarError(
-    code: Int,
+    message: String,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
     TeachMePrintSnackBar(
         modifier = modifier,
-        message = stringResource(id = getErrorMessage(code)),
+        message = message,
         onDismiss = onDismiss
     )
 }
@@ -23,5 +21,5 @@ fun ScreenShotSnackBarError(
 @Preview(showBackground = true)
 @Composable
 private fun ScreenShotSnackBarErrorPreview() {
-    ScreenShotSnackBarError(code = 0) {}
+    ScreenShotSnackBarError("Error message.") {}
 }

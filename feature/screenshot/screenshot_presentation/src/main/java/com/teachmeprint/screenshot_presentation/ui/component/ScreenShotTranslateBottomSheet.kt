@@ -41,13 +41,12 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import com.teachmeprint.common.helper.Status
-import com.teachmeprint.common.helper.StatusMessage.getErrorMessage
 import com.teachmeprint.common.helper.isLoadingStatus
 import com.teachmeprint.common.helper.onError
 import com.teachmeprint.common.helper.onLoading
 import com.teachmeprint.common.helper.onSuccess
-import com.teachmeprint.common.helper.statusSuccess
+import com.teachmeprint.domain.model.Status
+import com.teachmeprint.domain.model.statusSuccess
 import com.teachmeprint.screenshot_domain.model.LanguageTranslationDomain
 import com.teachmeprint.screenshot_presentation.R
 
@@ -176,7 +175,7 @@ private fun ScreenShotCorrectedOriginalText(
         status
             .onLoading { correctedOriginalText = originalText }
             .onSuccess { correctedOriginalText = it }
-            .onError { correctedOriginalText = stringResource(id = getErrorMessage(it)) }
+            .onError { correctedOriginalText = it }
     }
     LaunchedEffect(Unit) {
         onCorrectedOriginalText(originalText)

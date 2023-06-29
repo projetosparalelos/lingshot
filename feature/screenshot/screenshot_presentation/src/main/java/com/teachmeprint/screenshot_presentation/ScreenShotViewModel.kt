@@ -7,20 +7,16 @@ import android.speech.tts.TextToSpeech.*
 import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teachmeprint.common.helper.StatusMessage.STATUS_IDENTIFY_LANGUAGE_FAILED
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_RECOGNIZER_FAILED
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_ERROR
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_FAILED
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
 import com.teachmeprint.common.helper.launchWithStatus
-import com.teachmeprint.common.helper.statusDefault
-import com.teachmeprint.common.helper.statusEmpty
-import com.teachmeprint.common.helper.statusError
-import com.teachmeprint.common.helper.statusLoading
-import com.teachmeprint.common.helper.statusSuccess
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.teachmeprint.domain.model.ChatGPTPromptBodyDomain
+import com.teachmeprint.domain.model.Status
+import com.teachmeprint.domain.model.statusDefault
+import com.teachmeprint.domain.model.statusEmpty
+import com.teachmeprint.domain.model.statusError
+import com.teachmeprint.domain.model.statusLoading
+import com.teachmeprint.domain.model.statusSuccess
 import com.teachmeprint.domain.repository.ChatGPTRepository
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepository
@@ -176,22 +172,26 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun fetchTextRecognizer(imageBitmap: Bitmap?) {
-        screenShotRepository.fetchTextRecognizer(imageBitmap)
-            ?.addOnSuccessListener { value ->
-                val textFormatted = value.text.formatText()
-                when (_uiState.value.navigationBarItem) {
-                    TRANSLATE -> fetchPhraseToTranslate(textFormatted)
-                    LISTEN -> fetchLanguageIdentifier(textFormatted)
-                    else -> {}
+        viewModelScope.launch {
+            when (val status = screenShotRepository.fetchTextRecognizer(imageBitmap)) {
+                is Status.Success -> {
+                    val textFormatted = status.data.formatText()
+                    when (_uiState.value.navigationBarItem) {
+                        TRANSLATE -> fetchPhraseToTranslate(textFormatted)
+                        LISTEN -> fetchLanguageIdentifier(textFormatted)
+                        else -> Unit
+                    }
                 }
-            }
-            ?.addOnFailureListener {
-                _uiState.update { value ->
-                    value.copy(
-                        screenShotStatus = statusError(STATUS_TEXT_RECOGNIZER_FAILED)
-                    )
+                is Status.Error -> {
+                    _uiState.update { value ->
+                        value.copy(
+                            screenShotStatus = statusError(status.statusMessage)
+                        )
+                    }
                 }
+                else -> Unit
             }
+        }
     }
 
     private fun fetchPhraseToTranslate(text: String) {
@@ -224,17 +224,21 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun fetchLanguageIdentifier(text: String) {
-        screenShotRepository.fetchLanguageIdentifier(text)
-            .addOnSuccessListener { languageCode ->
-                fetchTextToSpeech(text.ifBlank { ILLEGIBLE_TEXT }, languageCode)
-            }
-            .addOnFailureListener {
-                _uiState.update { value ->
-                    value.copy(
-                        screenShotStatus = statusError(STATUS_IDENTIFY_LANGUAGE_FAILED)
-                    )
+        viewModelScope.launch {
+            when (val status = screenShotRepository.fetchLanguageIdentifier(text)) {
+                is Status.Success -> {
+                    fetchTextToSpeech(text.ifBlank { ILLEGIBLE_TEXT }, status.data.toString())
                 }
+                is Status.Error -> {
+                    _uiState.update { value ->
+                        value.copy(
+                            screenShotStatus = statusError(status.statusMessage)
+                        )
+                    }
+                }
+                else -> Unit
             }
+        }
     }
 
     private fun fetchTextToSpeech(text: String, languageCode: String) =
@@ -277,7 +281,7 @@ class ScreenShotViewModel @Inject constructor(
         @Deprecated("Deprecated in Java")
         override fun onError(p0: String?) {
             _uiState.update {
-                it.copy(screenShotStatus = statusError(STATUS_TEXT_TO_SPEECH_ERROR))
+                it.copy(screenShotStatus = statusError(p0))
             }
         }
     }
@@ -298,8 +302,9 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun String.formatText(): String {
-        return replace("\n", " ")
+    private fun String?.formatText(): String {
+        return toString()
+            .replace("\n", " ")
             .lowercase()
             .replaceFirstChar { it.uppercase() }
     }
@@ -307,5 +312,7 @@ class ScreenShotViewModel @Inject constructor(
     companion object {
         const val ILLEGIBLE_TEXT = "There isn't any legible text."
         private const val LANGUAGE_CODE_UNAVAILABLE = "und"
+        private const val STATUS_TEXT_TO_SPEECH_FAILED = "Text to speech failed."
+        private const val STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED = "Text to speech not supported."
     }
 }

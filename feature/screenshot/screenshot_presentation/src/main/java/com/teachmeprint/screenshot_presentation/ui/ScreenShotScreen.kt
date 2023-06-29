@@ -105,7 +105,7 @@ private fun ScreenShotScreen(
             }.onError {
                 ScreenShotSnackBarError(
                     modifier = Modifier.padding(bottom = 16.dp),
-                    code = it,
+                    message = it,
                     onDismiss = {
                         handleEvent(ClearStatus)
                     }

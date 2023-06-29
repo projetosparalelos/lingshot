@@ -10,5 +10,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
     implementation(project(":feature:screenshot:screenshot_domain"))
+
+    implementation(libs.text.recognition)
+    implementation(libs.language.id)
 }

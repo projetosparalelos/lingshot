@@ -2,15 +2,6 @@
     <!-- App -->
     <string name="app_name">TeachMePrint - Language</string>
 
-    <!-- StatusMessage -->
-    <string name="text_status_message_error_generic">An unknown error occurred.</string>
-    <string name="text_status_message_recognition_failed">Text recognition failed.</string>
-    <string name="text_status_message_speech_failed">Text to speech failed.</string>
-    <string name="text_status_message_speech_error">An error occurred while using text to speech.</string>
-    <string name="text_status_message_speech_not_supported">Text to speech not supported.</string>
-    <string name="text_status_language_identification_failed">Language identification failed.</string>
-    <string name="text_status_message_processing_request">An error occurred while processing your request.</string>
-
     <!-- NotificationClearScreenshot -->
     <string name="text_notification_message_clean_up_gallery">Clean up your screenshots in the gallery.</string>
 

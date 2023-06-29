@@ -1,41 +1,13 @@
 package com.teachmeprint.common.helper
 
 import androidx.compose.runtime.Composable
-import com.teachmeprint.common.helper.StatusMessage.STATUS_TEXT_ERROR_GENERIC
+import com.teachmeprint.domain.model.Status
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-sealed class Status<T> {
-    class Default<T> : Status<T>()
-    class Empty<T> : Status<T>()
-    class Loading<T> : Status<T>()
-    data class Success<T>(val data: T?) : Status<T>()
-    data class Error<T>(val statusCode: Int?) : Status<T>()
-}
-
 val <T> Status<T>.isLoadingStatus get() =
     this is Status.Loading
-
-fun <T> statusDefault(): Status<T> {
-    return Status.Default()
-}
-
-fun <T> statusEmpty(): Status<T> {
-    return Status.Empty()
-}
-
-fun <T> statusLoading(): Status<T> {
-    return Status.Loading()
-}
-
-fun <T> statusSuccess(data: T?): Status<T> {
-    return Status.Success(data)
-}
-
-fun <T> statusError(statusCode: Int?): Status<T> {
-    return Status.Error(statusCode)
-}
 
 fun <T> CoroutineScope.launchWithStatus(
     data: suspend () -> T?,
@@ -49,10 +21,10 @@ fun <T> CoroutineScope.launchWithStatus(
         } catch (e: Exception) {
             when (e) {
                 is HttpException -> {
-                    onCopy(Status.Error(e.code()))
+                    onCopy(Status.Error(e.message()))
                 }
                 else -> {
-                    onCopy(Status.Error(STATUS_TEXT_ERROR_GENERIC))
+                    onCopy(Status.Error(e.message))
                 }
             }
         }
@@ -84,9 +56,9 @@ fun <T> Status<T>.onSuccess(content: @Composable (T) -> Unit): Status<T> {
 }
 
 @Composable
-fun <T> Status<T>.onError(content: @Composable (Int) -> Unit): Status<T> {
+fun <T> Status<T>.onError(content: @Composable (String) -> Unit): Status<T> {
     if (this is Status.Error) {
-        statusCode?.let { content(it) }
+        statusMessage?.let { content(it) }
     }
     return this
 }
