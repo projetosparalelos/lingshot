@@ -1,5 +1,3 @@
-@file:Suppress("InstanceOfCheckForException")
-
 package com.teachmeprint.remote.repository
 
 import android.content.Intent
