@@ -88,6 +88,7 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okHttp" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
 hawk = { module = "com.orhanobut:hawk", version.ref = "hawk" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 chucker-library = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
@@ -117,7 +118,7 @@ compose-detekt = { module = "com.twitter.compose.rules:detekt", version.ref = "c
 
 [bundles]
 lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service", "lifecycle-runtimeCompose", "lifecycle-viewModelCompose"]
-coroutines = ["coroutines-android", "coroutines-android"]
+coroutines = ["coroutines-android", "coroutines-android", "coroutines-play-services"]
 firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx"]
 
 [plugins]

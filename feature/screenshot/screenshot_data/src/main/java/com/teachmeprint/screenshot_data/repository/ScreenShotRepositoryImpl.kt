@@ -1,25 +1,43 @@
 package com.teachmeprint.screenshot_data.repository
 
 import android.graphics.Bitmap
-import com.google.android.gms.tasks.Task
 import com.google.mlkit.nl.languageid.LanguageIdentifier
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognizer
+import com.teachmeprint.domain.model.Status
+import com.teachmeprint.domain.model.statusError
+import com.teachmeprint.domain.model.statusSuccess
 import com.teachmeprint.screenshot_domain.repository.ScreenShotRepository
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class ScreenShotRepositoryImpl @Inject constructor(
     private val textRecognizer: TextRecognizer,
     private val languageIdentifier: LanguageIdentifier
 ) : ScreenShotRepository {
 
-    override fun fetchTextRecognizer(imageBitmap: Bitmap?): Task<Text>? {
-        val inputImage = imageBitmap?.let { InputImage.fromBitmap(it, 0) }
-        return inputImage?.let { textRecognizer.process(it) }
+    override suspend fun fetchTextRecognizer(imageBitmap: Bitmap?): Status<String> {
+        return try {
+            val inputImage = imageBitmap?.let { InputImage.fromBitmap(it, 0) }
+            val text = inputImage?.let { textRecognizer.process(it) }?.await()?.text
+            statusSuccess(text)
+        } catch (e: Exception) {
+            Timber.e(e)
+            if (e is CancellationException) throw e
+            statusError(e.message)
+        }
     }
 
-    override fun fetchLanguageIdentifier(text: String): Task<String> {
-        return languageIdentifier.identifyLanguage(text)
+    override suspend fun fetchLanguageIdentifier(text: String): Status<String> {
+        return try {
+            val code = languageIdentifier.identifyLanguage(text).await()
+            statusSuccess(code)
+        } catch (e: Exception) {
+            Timber.e(e)
+            if (e is CancellationException) throw e
+            statusError(e.message)
+        }
     }
 }

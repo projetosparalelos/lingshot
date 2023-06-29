@@ -11,6 +11,7 @@ import com.teachmeprint.common.helper.launchWithStatus
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.teachmeprint.domain.model.ChatGPTPromptBodyDomain
+import com.teachmeprint.domain.model.Status
 import com.teachmeprint.domain.model.statusDefault
 import com.teachmeprint.domain.model.statusEmpty
 import com.teachmeprint.domain.model.statusError
@@ -171,22 +172,26 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun fetchTextRecognizer(imageBitmap: Bitmap?) {
-        screenShotRepository.fetchTextRecognizer(imageBitmap)
-            ?.addOnSuccessListener { value ->
-                val textFormatted = value.text.formatText()
-                when (_uiState.value.navigationBarItem) {
-                    TRANSLATE -> fetchPhraseToTranslate(textFormatted)
-                    LISTEN -> fetchLanguageIdentifier(textFormatted)
-                    else -> {}
+        viewModelScope.launch {
+            when (val status = screenShotRepository.fetchTextRecognizer(imageBitmap)) {
+                is Status.Success -> {
+                    val textFormatted = status.data.formatText()
+                    when (_uiState.value.navigationBarItem) {
+                        TRANSLATE -> fetchPhraseToTranslate(textFormatted)
+                        LISTEN -> fetchLanguageIdentifier(textFormatted)
+                        else -> Unit
+                    }
                 }
-            }
-            ?.addOnFailureListener {
-                _uiState.update { value ->
-                    value.copy(
-                        screenShotStatus = statusError(it.message)
-                    )
+                is Status.Error -> {
+                    _uiState.update { value ->
+                        value.copy(
+                            screenShotStatus = statusError(status.statusMessage)
+                        )
+                    }
                 }
+                else -> Unit
             }
+        }
     }
 
     private fun fetchPhraseToTranslate(text: String) {
@@ -219,17 +224,21 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun fetchLanguageIdentifier(text: String) {
-        screenShotRepository.fetchLanguageIdentifier(text)
-            .addOnSuccessListener { languageCode ->
-                fetchTextToSpeech(text.ifBlank { ILLEGIBLE_TEXT }, languageCode)
-            }
-            .addOnFailureListener {
-                _uiState.update { value ->
-                    value.copy(
-                        screenShotStatus = statusError(it.message)
-                    )
+        viewModelScope.launch {
+            when (val status = screenShotRepository.fetchLanguageIdentifier(text)) {
+                is Status.Success -> {
+                    fetchTextToSpeech(text.ifBlank { ILLEGIBLE_TEXT }, status.data.toString())
                 }
+                is Status.Error -> {
+                    _uiState.update { value ->
+                        value.copy(
+                            screenShotStatus = statusError(status.statusMessage)
+                        )
+                    }
+                }
+                else -> Unit
             }
+        }
     }
 
     private fun fetchTextToSpeech(text: String, languageCode: String) =
@@ -293,8 +302,9 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun String.formatText(): String {
-        return replace("\n", " ")
+    private fun String?.formatText(): String {
+        return toString()
+            .replace("\n", " ")
             .lowercase()
             .replaceFirstChar { it.uppercase() }
     }

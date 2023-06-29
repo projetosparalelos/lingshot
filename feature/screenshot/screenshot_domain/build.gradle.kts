@@ -10,9 +10,4 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-
-    implementation(libs.kotlinx.serialization.json)
-
-    api(libs.text.recognition)
-    api(libs.language.id)
 }

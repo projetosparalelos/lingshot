@@ -1,12 +1,11 @@
 package com.teachmeprint.screenshot_domain.repository
 
 import android.graphics.Bitmap
-import com.google.android.gms.tasks.Task
-import com.google.mlkit.vision.text.Text
+import com.teachmeprint.domain.model.Status
 
 interface ScreenShotRepository {
 
-    fun fetchTextRecognizer(imageBitmap: Bitmap?): Task<Text>?
+    suspend fun fetchTextRecognizer(imageBitmap: Bitmap?): Status<String>
 
-    fun fetchLanguageIdentifier(text: String): Task<String>
+    suspend fun fetchLanguageIdentifier(text: String): Status<String>
 }
