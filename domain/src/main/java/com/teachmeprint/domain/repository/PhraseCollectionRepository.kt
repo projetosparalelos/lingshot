@@ -7,8 +7,8 @@ import com.teachmeprint.domain.model.Status
 interface PhraseCollectionRepository {
 
     suspend fun savePhraseInLanguageCollections(
-        phrase: PhraseDomain,
-        languageDomain: LanguageDomain
+        languageDomain: LanguageDomain,
+        phraseDomain: PhraseDomain
     ): Status<Unit>
 
     suspend fun getLanguageCollections(): Status<List<LanguageDomain>>
@@ -16,4 +16,8 @@ interface PhraseCollectionRepository {
     suspend fun getPhrasesByLanguageCollections(
         languageDomain: LanguageDomain
     ): Status<List<PhraseDomain>>
+
+    suspend fun isPhraseSaved(languageId: String, phraseId: String): Boolean
+
+    suspend fun deletePhraseSaved(languageId: String, phraseId: String)
 }

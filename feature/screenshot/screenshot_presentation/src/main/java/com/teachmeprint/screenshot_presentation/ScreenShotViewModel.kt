@@ -20,6 +20,7 @@ import com.teachmeprint.domain.model.statusError
 import com.teachmeprint.domain.model.statusLoading
 import com.teachmeprint.domain.model.statusSuccess
 import com.teachmeprint.domain.repository.ChatGPTRepository
+import com.teachmeprint.domain.repository.PhraseCollectionRepository
 import com.teachmeprint.domain.usecase.SavePhraseLanguageUseCase
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepository
@@ -48,6 +49,7 @@ class ScreenShotViewModel @Inject constructor(
     private val chatGPTRepository: ChatGPTRepository,
     private val screenShotRepository: ScreenShotRepository,
     private val languageChoiceRepository: LanguageChoiceRepository,
+    private val phraseCollectionRepository: PhraseCollectionRepository,
     private val savePhraseLanguageUseCase: SavePhraseLanguageUseCase
 ) : ViewModel() {
 
@@ -86,8 +88,11 @@ class ScreenShotViewModel @Inject constructor(
                 saveLanguage(screenShotEvent.availableLanguage)
             }
 
-            is ScreenShotEvent.SavePhraseLanguage -> {
-                savePhraseLanguage(screenShotEvent.originalText, screenShotEvent.translateText)
+            is ScreenShotEvent.SavePhraseInLanguageCollection -> {
+                savePhraseInLanguageCollection(
+                    screenShotEvent.originalText,
+                    screenShotEvent.translatedText
+                )
             }
 
             is ScreenShotEvent.SelectedOptionsLanguage -> {
@@ -96,6 +101,10 @@ class ScreenShotViewModel @Inject constructor(
 
             is ScreenShotEvent.SelectedOptionsNavigationBar -> {
                 selectedOptionsNavigationBar(screenShotEvent.navigationBarItem)
+            }
+
+            is ScreenShotEvent.CheckPhraseInLanguageCollection -> {
+                checkPhraseInLanguageCollection(screenShotEvent.originalText)
             }
 
             is ScreenShotEvent.ClearStatus -> {
@@ -174,7 +183,9 @@ class ScreenShotViewModel @Inject constructor(
     private fun clearStatus() {
         _uiState.update {
             it.copy(
-                screenShotStatus = statusDefault()
+                screenShotStatus = statusDefault(),
+                correctedOriginalTextStatus = statusDefault(),
+                isPhraseSaved = false
             )
         }
     }
@@ -314,15 +325,41 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun savePhraseLanguage(originalText: String, translateTex: String) {
+    private fun savePhraseInLanguageCollection(originalText: String, translatedText: String) {
         viewModelScope.launch {
-            val languageDomain = LanguageDomain(
-                name = "${getLanguage()?.languageCode}_" +
-                    "${screenShotRepository.fetchLanguageIdentifier(originalText)}"
-            )
-            val phraseDomain = PhraseDomain(original = originalText, translate = translateTex)
-            savePhraseLanguageUseCase(phraseDomain, languageDomain)
+            val languageDomain = originalText.toLanguageDomain()
+            val phraseDomain = PhraseDomain(original = originalText, translate = translatedText)
+            _uiState.update {
+                it.copy(
+                    isPhraseSaved = savePhraseLanguageUseCase(
+                        languageDomain,
+                        phraseDomain
+                    )
+                )
+            }
         }
+    }
+
+    private fun checkPhraseInLanguageCollection(originalText: String) {
+        viewModelScope.launch {
+            val languageDomain = originalText.toLanguageDomain()
+            _uiState.update {
+                it.copy(
+                    isPhraseSaved = phraseCollectionRepository.isPhraseSaved(
+                        languageDomain.name,
+                        originalText
+                    )
+                )
+            }
+        }
+    }
+
+    private suspend fun String.toLanguageDomain(): LanguageDomain {
+        val status = screenShotRepository.fetchLanguageIdentifier(this)
+        if (status is Status.Success) {
+            return LanguageDomain(name = "${status.data}_${getLanguage()?.languageCode}")
+        }
+        return LanguageDomain()
     }
 
     private fun String?.formatText(): String {

@@ -55,10 +55,14 @@ fun ScreenShotTranslateBottomSheet(
     languageTranslationDomain: LanguageTranslationDomain,
     correctedOriginalTextStatus: Status<String>,
     onCorrectedOriginalText: (String) -> Unit,
+    isPhraseSaved: Boolean,
+    onCheckPhraseInLanguageCollection: (String) -> Unit,
+    onSavePhraseInLanguageCollection: (String, String) -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
+    var correctedOriginalText by remember { mutableStateOf(languageTranslationDomain.originalText) }
 
     ModalBottomSheet(
         modifier = modifier,
@@ -78,7 +82,16 @@ fun ScreenShotTranslateBottomSheet(
                     text = stringResource(R.string.text_title_translate_bottom_sheet),
                     style = MaterialTheme.typography.titleLarge
                 )
-                ScreenShotButtonAddToList()
+                ScreenShotButtonAddToList(
+                    isPhraseSaved = isPhraseSaved,
+                    isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
+                    onSavePhraseLanguage = {
+                        onSavePhraseInLanguageCollection(
+                            correctedOriginalText,
+                            languageTranslationDomain.translatedText.toString()
+                        )
+                    }
+                )
             }
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -105,25 +118,40 @@ fun ScreenShotTranslateBottomSheet(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     ScreenShotCorrectedOriginalText(
-                        originalText = languageTranslationDomain.originalText,
-                        status = correctedOriginalTextStatus,
-                        onCorrectedOriginalText = onCorrectedOriginalText
+                        correctedOriginalText = languageTranslationDomain.originalText,
+                        isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus
                     )
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
+        correctedOriginalTextStatus
+            .onLoading { correctedOriginalText = languageTranslationDomain.originalText }
+            .onSuccess {
+                correctedOriginalText = it
+                onCheckPhraseInLanguageCollection(it)
+            }
+            .onError { correctedOriginalText = it }
+    }
+
+    LaunchedEffect(Unit) {
+        onCorrectedOriginalText(languageTranslationDomain.originalText)
     }
 }
 
 @Composable
-private fun ScreenShotButtonAddToList(modifier: Modifier = Modifier) {
-    var added by remember { mutableStateOf(false) }
-    val iconTint = if (added) { Color.Red } else { MaterialTheme.colorScheme.onSecondaryContainer }
+private fun ScreenShotButtonAddToList(
+    isPhraseSaved: Boolean,
+    isLoadingStatus: Boolean,
+    onSavePhraseLanguage: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val iconTint = if (isPhraseSaved) { Color.Red } else { MaterialTheme.colorScheme.onSecondaryContainer }
 
     FilledTonalButton(
         modifier = modifier,
-        onClick = { added = !added }
+        enabled = !isLoadingStatus,
+        onClick = onSavePhraseLanguage
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -132,7 +160,7 @@ private fun ScreenShotButtonAddToList(modifier: Modifier = Modifier) {
                 contentDescription = null
             )
             AnimatedVisibility(
-                visible = added,
+                visible = isPhraseSaved,
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 Text(
@@ -146,13 +174,10 @@ private fun ScreenShotButtonAddToList(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ScreenShotCorrectedOriginalText(
-    originalText: String,
-    status: Status<String>,
-    modifier: Modifier = Modifier,
-    onCorrectedOriginalText: (String) -> Unit
+    correctedOriginalText: String,
+    isLoadingStatus: Boolean,
+    modifier: Modifier = Modifier
 ) {
-    var correctedOriginalText by remember { mutableStateOf(originalText) }
-
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -166,19 +191,12 @@ private fun ScreenShotCorrectedOriginalText(
         Text(
             modifier = Modifier
                 .placeholder(
-                    visible = status.isLoadingStatus,
+                    visible = isLoadingStatus,
                     highlight = PlaceholderHighlight.shimmer()
                 ),
             text = correctedOriginalText,
             fontSize = 14.sp
         )
-        status
-            .onLoading { correctedOriginalText = originalText }
-            .onSuccess { correctedOriginalText = it }
-            .onError { correctedOriginalText = it }
-    }
-    LaunchedEffect(Unit) {
-        onCorrectedOriginalText(originalText)
     }
 }
 
@@ -187,8 +205,11 @@ private fun ScreenShotCorrectedOriginalText(
 private fun ScreenShotTranslateBottomSheetPreview() {
     ScreenShotTranslateBottomSheet(
         languageTranslationDomain = LanguageTranslationDomain("Original", "Translated"),
+        isPhraseSaved = false,
         correctedOriginalTextStatus = statusSuccess("Corrected original"),
         onCorrectedOriginalText = {},
+        onCheckPhraseInLanguageCollection = {},
+        onSavePhraseInLanguageCollection = { _, _ -> },
         onDismiss = {}
     )
 }

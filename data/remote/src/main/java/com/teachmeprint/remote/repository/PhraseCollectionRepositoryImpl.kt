@@ -28,8 +28,8 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
                 .collection(COLLECTION_LANGUAGES)
 
     override suspend fun savePhraseInLanguageCollections(
-        phraseDomain: PhraseDomain,
-        languageDomain: LanguageDomain
+        languageDomain: LanguageDomain,
+        phraseDomain: PhraseDomain
     ): Status<Unit> {
         return try {
             queryCollectionByLanguages
@@ -79,6 +79,33 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
             Timber.e(e)
             if (e is CancellationException) throw e
             statusError(e.message)
+        }
+    }
+
+    override suspend fun isPhraseSaved(languageId: String, phraseId: String): Boolean {
+        return try {
+            queryCollectionByLanguages
+                .document(languageId)
+                .collection(COLLECTION_PHRASES)
+                .document(phraseId.encodeBase())
+                .get().await().exists()
+        } catch (e: Exception) {
+            Timber.e(e)
+            if (e is CancellationException) throw e
+            false
+        }
+    }
+
+    override suspend fun deletePhraseSaved(languageId: String, phraseId: String) {
+        try {
+            queryCollectionByLanguages
+                .document(languageId)
+                .collection(COLLECTION_PHRASES)
+                .document(phraseId.encodeBase())
+                .delete().await()
+        } catch (e: Exception) {
+            Timber.e(e)
+            if (e is CancellationException) throw e
         }
     }
 

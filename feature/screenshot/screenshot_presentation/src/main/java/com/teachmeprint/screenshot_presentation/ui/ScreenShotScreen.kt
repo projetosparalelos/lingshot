@@ -93,9 +93,18 @@ private fun ScreenShotScreen(
                 if (uiState.navigationBarItem == TRANSLATE) {
                     ScreenShotTranslateBottomSheet(
                         languageTranslationDomain = it,
+                        isPhraseSaved = uiState.isPhraseSaved,
                         correctedOriginalTextStatus = uiState.correctedOriginalTextStatus,
                         onCorrectedOriginalText = { original ->
                             handleEvent(FetchCorrectedOriginalText(original))
+                        },
+                        onCheckPhraseInLanguageCollection = { originalText ->
+                            handleEvent(CheckPhraseInLanguageCollection(originalText))
+                        },
+                        onSavePhraseInLanguageCollection = { originalText, translatedText ->
+                            handleEvent(
+                                SavePhraseInLanguageCollection(originalText, translatedText)
+                            )
                         },
                         onDismiss = {
                             handleEvent(ClearStatus)
