@@ -20,6 +20,11 @@ sealed class ScreenShotEvent {
         val availableLanguage: AvailableLanguage?
     ) : ScreenShotEvent()
 
+    data class SavePhraseLanguage(
+        val originalText: String,
+        val translateText: String
+    ) : ScreenShotEvent()
+
     data class SelectedOptionsLanguage(
         val availableLanguage: AvailableLanguage?
     ) : ScreenShotEvent()

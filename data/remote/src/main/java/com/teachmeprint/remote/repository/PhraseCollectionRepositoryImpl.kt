@@ -28,7 +28,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
                 .collection(COLLECTION_LANGUAGES)
 
     override suspend fun savePhraseInLanguageCollections(
-        phrase: PhraseDomain,
+        phraseDomain: PhraseDomain,
         languageDomain: LanguageDomain
     ): Status<Unit> {
         return try {
@@ -36,8 +36,8 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
                 .document(languageDomain.name)
                 .apply { set(languageDomain) }
                 .collection(COLLECTION_PHRASES)
-                .document(phrase.original.encodeBase())
-                .set(phrase)
+                .document(phraseDomain.original.encodeBase())
+                .set(phraseDomain)
                 .await()
 
             statusSuccess(Unit)

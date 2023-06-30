@@ -11,6 +11,8 @@ import com.teachmeprint.common.helper.launchWithStatus
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.teachmeprint.domain.model.ChatGPTPromptBodyDomain
+import com.teachmeprint.domain.model.LanguageDomain
+import com.teachmeprint.domain.model.PhraseDomain
 import com.teachmeprint.domain.model.Status
 import com.teachmeprint.domain.model.statusDefault
 import com.teachmeprint.domain.model.statusEmpty
@@ -18,6 +20,7 @@ import com.teachmeprint.domain.model.statusError
 import com.teachmeprint.domain.model.statusLoading
 import com.teachmeprint.domain.model.statusSuccess
 import com.teachmeprint.domain.repository.ChatGPTRepository
+import com.teachmeprint.domain.usecase.SavePhraseLanguageUseCase
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
 import com.teachmeprint.languagechoice_domain.repository.LanguageChoiceRepository
 import com.teachmeprint.screenshot_domain.model.LanguageTranslationDomain
@@ -44,7 +47,8 @@ class ScreenShotViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val chatGPTRepository: ChatGPTRepository,
     private val screenShotRepository: ScreenShotRepository,
-    private val languageChoiceRepository: LanguageChoiceRepository
+    private val languageChoiceRepository: LanguageChoiceRepository,
+    private val savePhraseLanguageUseCase: SavePhraseLanguageUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScreenShotUiState())
@@ -80,6 +84,10 @@ class ScreenShotViewModel @Inject constructor(
 
             is ScreenShotEvent.SaveLanguage -> {
                 saveLanguage(screenShotEvent.availableLanguage)
+            }
+
+            is ScreenShotEvent.SavePhraseLanguage -> {
+                savePhraseLanguage(screenShotEvent.originalText, screenShotEvent.translateText)
             }
 
             is ScreenShotEvent.SelectedOptionsLanguage -> {
@@ -182,6 +190,7 @@ class ScreenShotViewModel @Inject constructor(
                         else -> Unit
                     }
                 }
+
                 is Status.Error -> {
                     _uiState.update { value ->
                         value.copy(
@@ -189,6 +198,7 @@ class ScreenShotViewModel @Inject constructor(
                         )
                     }
                 }
+
                 else -> Unit
             }
         }
@@ -229,6 +239,7 @@ class ScreenShotViewModel @Inject constructor(
                 is Status.Success -> {
                     fetchTextToSpeech(text.ifBlank { ILLEGIBLE_TEXT }, status.data.toString())
                 }
+
                 is Status.Error -> {
                     _uiState.update { value ->
                         value.copy(
@@ -236,6 +247,7 @@ class ScreenShotViewModel @Inject constructor(
                         )
                     }
                 }
+
                 else -> Unit
             }
         }
@@ -299,6 +311,17 @@ class ScreenShotViewModel @Inject constructor(
     private fun saveLanguage(availableLanguage: AvailableLanguage?) {
         viewModelScope.launch {
             languageChoiceRepository.saveLanguage(availableLanguage)
+        }
+    }
+
+    private fun savePhraseLanguage(originalText: String, translateTex: String) {
+        viewModelScope.launch {
+            val languageDomain = LanguageDomain(
+                name = "${getLanguage()?.languageCode}_" +
+                    "${screenShotRepository.fetchLanguageIdentifier(originalText)}"
+            )
+            val phraseDomain = PhraseDomain(original = originalText, translate = translateTex)
+            savePhraseLanguageUseCase(phraseDomain, languageDomain)
         }
     }
 

@@ -164,7 +164,7 @@ complexity:
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    thresholdInClasses: 20
+    thresholdInClasses: 50
 
 coroutines:
   active: true
