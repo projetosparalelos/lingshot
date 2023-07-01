@@ -118,7 +118,7 @@ fun ScreenShotTranslateBottomSheet(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     ScreenShotCorrectedOriginalText(
-                        correctedOriginalText = languageTranslationDomain.originalText,
+                        correctedOriginalText = correctedOriginalText,
                         isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus
                     )
                 }
