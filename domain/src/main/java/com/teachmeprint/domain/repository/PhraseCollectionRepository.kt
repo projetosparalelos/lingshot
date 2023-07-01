@@ -1,20 +1,20 @@
 package com.teachmeprint.domain.repository
 
-import com.teachmeprint.domain.model.LanguageDomain
+import com.teachmeprint.domain.model.LanguageCodeFromAndToDomain
 import com.teachmeprint.domain.model.PhraseDomain
 import com.teachmeprint.domain.model.Status
 
 interface PhraseCollectionRepository {
 
     suspend fun savePhraseInLanguageCollections(
-        languageDomain: LanguageDomain,
+        languageCodeFromAndToDomain: LanguageCodeFromAndToDomain,
         phraseDomain: PhraseDomain
     ): Status<Unit>
 
-    suspend fun getLanguageCollections(): Status<List<LanguageDomain>>
+    suspend fun getLanguageCollections(): Status<List<LanguageCodeFromAndToDomain>>
 
     suspend fun getPhrasesByLanguageCollections(
-        languageDomain: LanguageDomain
+        languageCodeFromAndToDomain: LanguageCodeFromAndToDomain
     ): Status<List<PhraseDomain>>
 
     suspend fun isPhraseSaved(languageId: String, phraseId: String): Boolean

@@ -1,11 +1,14 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 
 package com.teachmeprint.screenshot_presentation.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -146,7 +150,11 @@ private fun ScreenShotButtonAddToList(
     onSavePhraseLanguage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val iconTint = if (isPhraseSaved) { Color.Red } else { MaterialTheme.colorScheme.onSecondaryContainer }
+    val iconTint = if (isPhraseSaved) {
+        Color.Red
+    } else {
+        MaterialTheme.colorScheme.onSecondaryContainer
+    }
 
     FilledTonalButton(
         modifier = modifier,
@@ -188,15 +196,36 @@ private fun ScreenShotCorrectedOriginalText(
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(4.dp))
-        Text(
+        ScreenShotOpenDictionaryByWord(
             modifier = Modifier
                 .placeholder(
                     visible = isLoadingStatus,
                     highlight = PlaceholderHighlight.shimmer()
                 ),
             text = correctedOriginalText,
-            fontSize = 14.sp
+            onClick = {}
         )
+    }
+}
+
+@Composable
+fun ScreenShotOpenDictionaryByWord(
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit
+) {
+    val words = text.split(" ")
+    FlowRow(modifier = modifier) {
+        words.forEach { word ->
+            Text(
+                text = word,
+                fontSize = 14.sp,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier
+                    .clickable { onClick(word) }
+                    .padding(horizontal = 4.dp)
+            )
+        }
     }
 }
 
@@ -204,7 +233,11 @@ private fun ScreenShotCorrectedOriginalText(
 @Composable
 private fun ScreenShotTranslateBottomSheetPreview() {
     ScreenShotTranslateBottomSheet(
-        languageTranslationDomain = LanguageTranslationDomain("Original", "Translated"),
+        languageTranslationDomain = LanguageTranslationDomain(
+            "Original",
+            "Translated",
+            "enpt"
+        ),
         isPhraseSaved = false,
         correctedOriginalTextStatus = statusSuccess("Corrected original"),
         onCorrectedOriginalText = {},

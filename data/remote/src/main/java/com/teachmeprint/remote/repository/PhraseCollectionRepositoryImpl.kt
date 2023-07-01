@@ -2,7 +2,7 @@ package com.teachmeprint.remote.repository
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.teachmeprint.domain.model.LanguageDomain
+import com.teachmeprint.domain.model.LanguageCodeFromAndToDomain
 import com.teachmeprint.domain.model.PhraseDomain
 import com.teachmeprint.domain.model.Status
 import com.teachmeprint.domain.model.statusError
@@ -28,13 +28,13 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
                 .collection(COLLECTION_LANGUAGES)
 
     override suspend fun savePhraseInLanguageCollections(
-        languageDomain: LanguageDomain,
+        languageCodeFromAndToDomain: LanguageCodeFromAndToDomain,
         phraseDomain: PhraseDomain
     ): Status<Unit> {
         return try {
             queryCollectionByLanguages
-                .document(languageDomain.name)
-                .apply { set(languageDomain) }
+                .document(languageCodeFromAndToDomain.name)
+                .apply { set(languageCodeFromAndToDomain) }
                 .collection(COLLECTION_PHRASES)
                 .document(phraseDomain.original.encodeBase())
                 .set(phraseDomain)
@@ -48,12 +48,12 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getLanguageCollections(): Status<List<LanguageDomain>> {
+    override suspend fun getLanguageCollections(): Status<List<LanguageCodeFromAndToDomain>> {
         return try {
             val languageList = queryCollectionByLanguages
                 .get()
                 .await().map {
-                    it.toObject(LanguageDomain::class.java)
+                    it.toObject(LanguageCodeFromAndToDomain::class.java)
                 }
             statusSuccess(languageList)
         } catch (e: Exception) {
@@ -64,11 +64,11 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPhrasesByLanguageCollections(
-        languageDomain: LanguageDomain
+        languageCodeFromAndToDomain: LanguageCodeFromAndToDomain
     ): Status<List<PhraseDomain>> {
         return try {
             val phraseList = queryCollectionByLanguages
-                .document(languageDomain.name)
+                .document(languageCodeFromAndToDomain.name)
                 .collection(COLLECTION_PHRASES)
                 .get()
                 .await().map {

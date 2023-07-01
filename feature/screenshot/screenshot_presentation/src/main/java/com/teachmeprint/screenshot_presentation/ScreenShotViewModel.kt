@@ -11,7 +11,7 @@ import com.teachmeprint.common.helper.launchWithStatus
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.teachmeprint.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.teachmeprint.domain.model.ChatGPTPromptBodyDomain
-import com.teachmeprint.domain.model.LanguageDomain
+import com.teachmeprint.domain.model.LanguageCodeFromAndToDomain
 import com.teachmeprint.domain.model.PhraseDomain
 import com.teachmeprint.domain.model.Status
 import com.teachmeprint.domain.model.statusDefault
@@ -223,7 +223,8 @@ class ScreenShotViewModel @Inject constructor(
                 )
                 LanguageTranslationDomain(
                     originalText = text,
-                    translatedText = chatGPTRepository.get(requestBody)
+                    translatedText = chatGPTRepository.get(requestBody),
+                    languageCodeFromAndTo = text.getLanguageCodeFromAndToDomain().name
                 )
             }, { status ->
                 _uiState.update { it.copy(screenShotStatus = status) }
@@ -327,7 +328,7 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun savePhraseInLanguageCollection(originalText: String, translatedText: String) {
         viewModelScope.launch {
-            val languageDomain = originalText.toLanguageDomain()
+            val languageDomain = originalText.getLanguageCodeFromAndToDomain()
             val phraseDomain = PhraseDomain(original = originalText, translate = translatedText)
             _uiState.update {
                 it.copy(
@@ -342,7 +343,7 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun checkPhraseInLanguageCollection(originalText: String) {
         viewModelScope.launch {
-            val languageDomain = originalText.toLanguageDomain()
+            val languageDomain = originalText.getLanguageCodeFromAndToDomain()
             _uiState.update {
                 it.copy(
                     isPhraseSaved = phraseCollectionRepository.isPhraseSaved(
@@ -354,12 +355,14 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private suspend fun String.toLanguageDomain(): LanguageDomain {
+    private suspend fun String.getLanguageCodeFromAndToDomain(): LanguageCodeFromAndToDomain {
         val status = screenShotRepository.fetchLanguageIdentifier(this)
         if (status is Status.Success) {
-            return LanguageDomain(name = "${status.data}_${getLanguage()?.languageCode}")
+            return LanguageCodeFromAndToDomain(
+                name = "${status.data}_${getLanguage()?.languageCode}"
+            )
         }
-        return LanguageDomain()
+        return LanguageCodeFromAndToDomain()
     }
 
     private fun String?.formatText(): String {
