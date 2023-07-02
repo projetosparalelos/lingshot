@@ -91,7 +91,8 @@ class ScreenShotViewModel @Inject constructor(
             is ScreenShotEvent.SavePhraseInLanguageCollection -> {
                 savePhraseInLanguageCollection(
                     screenShotEvent.originalText,
-                    screenShotEvent.translatedText
+                    screenShotEvent.translatedText,
+                    screenShotEvent.languageCodeFromAndTo
                 )
             }
 
@@ -104,7 +105,10 @@ class ScreenShotViewModel @Inject constructor(
             }
 
             is ScreenShotEvent.CheckPhraseInLanguageCollection -> {
-                checkPhraseInLanguageCollection(screenShotEvent.originalText)
+                checkPhraseInLanguageCollection(
+                    screenShotEvent.originalText,
+                    screenShotEvent.languageCodeFromAndTo
+                )
             }
 
             is ScreenShotEvent.ClearStatus -> {
@@ -117,6 +121,10 @@ class ScreenShotViewModel @Inject constructor(
 
             is ScreenShotEvent.ToggleLanguageDialogAndHideSelectionAlert -> {
                 toggleLanguageDialogAndHideSelectionAlert()
+            }
+
+            is ScreenShotEvent.ToggleDictionaryFullScreenPopup -> {
+                toggleDictionaryFullScreenPopup(screenShotEvent.url)
             }
         }
     }
@@ -180,6 +188,10 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
+    private fun toggleDictionaryFullScreenPopup(url: String?) {
+        _uiState.update { it.copy(dictionaryUrl = url) }
+    }
+
     private fun clearStatus() {
         _uiState.update {
             it.copy(
@@ -224,7 +236,7 @@ class ScreenShotViewModel @Inject constructor(
                 LanguageTranslationDomain(
                     originalText = text,
                     translatedText = chatGPTRepository.get(requestBody),
-                    languageCodeFromAndTo = text.getLanguageCodeFromAndToDomain().name
+                    languageCodeFromAndTo = text.getLanguageCodeFromAndToDomain()
                 )
             }, { status ->
                 _uiState.update { it.copy(screenShotStatus = status) }
@@ -326,9 +338,13 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun savePhraseInLanguageCollection(originalText: String, translatedText: String) {
+    private fun savePhraseInLanguageCollection(
+        originalText: String,
+        translatedText: String,
+        languageCodeFromAndTo: String
+    ) {
         viewModelScope.launch {
-            val languageDomain = originalText.getLanguageCodeFromAndToDomain()
+            val languageDomain = LanguageCodeFromAndToDomain(name = languageCodeFromAndTo)
             val phraseDomain = PhraseDomain(original = originalText, translate = translatedText)
             _uiState.update {
                 it.copy(
@@ -341,13 +357,15 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun checkPhraseInLanguageCollection(originalText: String) {
+    private fun checkPhraseInLanguageCollection(
+        originalText: String,
+        languageCodeFromAndTo: String
+    ) {
         viewModelScope.launch {
-            val languageDomain = originalText.getLanguageCodeFromAndToDomain()
             _uiState.update {
                 it.copy(
                     isPhraseSaved = phraseCollectionRepository.isPhraseSaved(
-                        languageDomain.name,
+                        languageCodeFromAndTo,
                         originalText
                     )
                 )
@@ -355,14 +373,12 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private suspend fun String.getLanguageCodeFromAndToDomain(): LanguageCodeFromAndToDomain {
+    private suspend fun String.getLanguageCodeFromAndToDomain(): String {
         val status = screenShotRepository.fetchLanguageIdentifier(this)
         if (status is Status.Success) {
-            return LanguageCodeFromAndToDomain(
-                name = "${status.data}_${getLanguage()?.languageCode}"
-            )
+            return "${status.data}_${getLanguage()?.languageCode}"
         }
-        return LanguageCodeFromAndToDomain()
+        return ""
     }
 
     private fun String?.formatText(): String {

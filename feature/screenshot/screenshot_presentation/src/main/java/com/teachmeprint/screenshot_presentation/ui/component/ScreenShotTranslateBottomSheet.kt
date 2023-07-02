@@ -60,8 +60,9 @@ fun ScreenShotTranslateBottomSheet(
     correctedOriginalTextStatus: Status<String>,
     onCorrectedOriginalText: (String) -> Unit,
     isPhraseSaved: Boolean,
-    onCheckPhraseInLanguageCollection: (String) -> Unit,
-    onSavePhraseInLanguageCollection: (String, String) -> Unit,
+    onCheckPhraseInLanguageCollection: (String, String) -> Unit,
+    onSavePhraseInLanguageCollection: (String, String, String) -> Unit,
+    onToggleDictionaryFullScreenPopup: (String) -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
@@ -92,7 +93,8 @@ fun ScreenShotTranslateBottomSheet(
                     onSavePhraseLanguage = {
                         onSavePhraseInLanguageCollection(
                             correctedOriginalText,
-                            languageTranslationDomain.translatedText.toString()
+                            languageTranslationDomain.translatedText.toString(),
+                            languageTranslationDomain.languageCodeFromAndTo
                         )
                     }
                 )
@@ -123,7 +125,12 @@ fun ScreenShotTranslateBottomSheet(
                     Spacer(modifier = Modifier.height(8.dp))
                     ScreenShotCorrectedOriginalText(
                         correctedOriginalText = correctedOriginalText,
-                        isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus
+                        isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
+                        onToggleDictionaryFullScreenDialog = {
+                            onToggleDictionaryFullScreenPopup(
+                                languageTranslationDomain.dictionaryUrl(it)
+                            )
+                        }
                     )
                 }
             }
@@ -133,7 +140,10 @@ fun ScreenShotTranslateBottomSheet(
             .onLoading { correctedOriginalText = languageTranslationDomain.originalText }
             .onSuccess {
                 correctedOriginalText = it
-                onCheckPhraseInLanguageCollection(it)
+                onCheckPhraseInLanguageCollection(
+                    it,
+                    languageTranslationDomain.languageCodeFromAndTo
+                )
             }
             .onError { correctedOriginalText = it }
     }
@@ -184,6 +194,7 @@ private fun ScreenShotButtonAddToList(
 private fun ScreenShotCorrectedOriginalText(
     correctedOriginalText: String,
     isLoadingStatus: Boolean,
+    onToggleDictionaryFullScreenDialog: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -203,7 +214,7 @@ private fun ScreenShotCorrectedOriginalText(
                     highlight = PlaceholderHighlight.shimmer()
                 ),
             text = correctedOriginalText,
-            onClick = {}
+            onToggleDictionaryFullScreenDialog = onToggleDictionaryFullScreenDialog
         )
     }
 }
@@ -212,7 +223,7 @@ private fun ScreenShotCorrectedOriginalText(
 fun ScreenShotOpenDictionaryByWord(
     text: String,
     modifier: Modifier = Modifier,
-    onClick: (String) -> Unit
+    onToggleDictionaryFullScreenDialog: (String) -> Unit
 ) {
     val words = text.split(" ")
     FlowRow(modifier = modifier) {
@@ -222,14 +233,14 @@ fun ScreenShotOpenDictionaryByWord(
                 fontSize = 14.sp,
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier
-                    .clickable { onClick(word) }
+                    .clickable { onToggleDictionaryFullScreenDialog(word) }
                     .padding(horizontal = 4.dp)
             )
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ScreenShotTranslateBottomSheetPreview() {
     ScreenShotTranslateBottomSheet(
@@ -241,8 +252,9 @@ private fun ScreenShotTranslateBottomSheetPreview() {
         isPhraseSaved = false,
         correctedOriginalTextStatus = statusSuccess("Corrected original"),
         onCorrectedOriginalText = {},
-        onCheckPhraseInLanguageCollection = {},
-        onSavePhraseInLanguageCollection = { _, _ -> },
+        onCheckPhraseInLanguageCollection = { _, _ -> },
+        onSavePhraseInLanguageCollection = { _, _, _ -> },
+        onToggleDictionaryFullScreenPopup = {},
         onDismiss = {}
     )
 }

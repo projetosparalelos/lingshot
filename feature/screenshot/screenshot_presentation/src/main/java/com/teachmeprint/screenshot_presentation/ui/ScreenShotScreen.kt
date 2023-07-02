@@ -1,8 +1,14 @@
 package com.teachmeprint.screenshot_presentation.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,13 +24,25 @@ import com.teachmeprint.common.helper.onSuccess
 import com.teachmeprint.languagechoice_presentation.ui.LanguageChoiceDialog
 import com.teachmeprint.screenshot_presentation.R
 import com.teachmeprint.screenshot_presentation.ScreenShotEvent
-import com.teachmeprint.screenshot_presentation.ScreenShotEvent.*
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.CheckPhraseInLanguageCollection
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.ClearStatus
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.CroppedImage
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.FetchCorrectedOriginalText
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.FetchTextRecognizer
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.SaveLanguage
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.SavePhraseInLanguageCollection
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.SelectedOptionsLanguage
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.SelectedOptionsNavigationBar
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.ToggleDictionaryFullScreenPopup
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.ToggleLanguageDialog
+import com.teachmeprint.screenshot_presentation.ScreenShotEvent.ToggleLanguageDialogAndHideSelectionAlert
 import com.teachmeprint.screenshot_presentation.ScreenShotUiState
 import com.teachmeprint.screenshot_presentation.ScreenShotViewModel
 import com.teachmeprint.screenshot_presentation.ScreenShotViewModel.Companion.ILLEGIBLE_TEXT
 import com.teachmeprint.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotBalloon
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotCropImage
+import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotDictionaryFullScreenPopup
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotLottieLoading
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotNavigationBar
 import com.teachmeprint.screenshot_presentation.ui.component.ScreenShotNavigationBarItem
@@ -98,13 +116,26 @@ private fun ScreenShotScreen(
                         onCorrectedOriginalText = { original ->
                             handleEvent(FetchCorrectedOriginalText(original))
                         },
-                        onCheckPhraseInLanguageCollection = { originalText ->
-                            handleEvent(CheckPhraseInLanguageCollection(originalText))
-                        },
-                        onSavePhraseInLanguageCollection = { originalText, translatedText ->
+                        onCheckPhraseInLanguageCollection = { originalText, languageCodeFromAndTo ->
                             handleEvent(
-                                SavePhraseInLanguageCollection(originalText, translatedText)
+                                CheckPhraseInLanguageCollection(
+                                    originalText,
+                                    languageCodeFromAndTo
+                                )
                             )
+                        },
+                        onSavePhraseInLanguageCollection = { originalText, translatedText,
+                            languageCodeFromAndTo ->
+                            handleEvent(
+                                SavePhraseInLanguageCollection(
+                                    originalText,
+                                    translatedText,
+                                    languageCodeFromAndTo
+                                )
+                            )
+                        },
+                        onToggleDictionaryFullScreenPopup = { url ->
+                            handleEvent(ToggleDictionaryFullScreenPopup(url))
                         },
                         onDismiss = {
                             handleEvent(ClearStatus)
@@ -157,6 +188,12 @@ private fun ScreenShotScreen(
                 handleEvent(ToggleLanguageDialog)
             }
         )
+    }
+
+    uiState.dictionaryUrl?.let { url ->
+        ScreenShotDictionaryFullScreenPopup(url) {
+            handleEvent(ToggleDictionaryFullScreenPopup(null))
+        }
     }
 }
 

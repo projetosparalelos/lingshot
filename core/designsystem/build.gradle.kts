@@ -8,3 +8,7 @@ plugins {
 android {
     namespace = "com.teachmeprint.designsystem"
 }
+
+dependencies {
+    implementation(libs.accompanist.webview)
+}

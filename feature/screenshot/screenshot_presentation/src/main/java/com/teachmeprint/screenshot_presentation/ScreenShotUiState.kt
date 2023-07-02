@@ -12,6 +12,7 @@ import kotlinx.collections.immutable.toImmutableList
 data class ScreenShotUiState(
     val screenShotStatus: Status<LanguageTranslationDomain> = statusDefault(),
     val correctedOriginalTextStatus: Status<String> = statusDefault(),
+    val dictionaryUrl: String? = null,
     val isPhraseSaved: Boolean = false,
     val isLanguageSelectionAlertVisible: Boolean = false,
     val isLanguageDialogVisible: Boolean = false,
