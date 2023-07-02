@@ -11,7 +11,7 @@ enum class AvailableLanguage(
     FRENCH("French", "fr", "\uD83C\uDDEB\uD83C\uDDF7"),
     GERMAN("German", "de", "\uD83C\uDDE9\uD83C\uDDEA"),
     ITALIAN("Italian", "it", "\uD83C\uDDEE\uD83C\uDDF9"),
-    PORTUGUESE("Portuguese", "br", "\uD83C\uDDE7\uD83C\uDDF7"),
+    PORTUGUESE("Portuguese", "pt", "\uD83C\uDDE7\uD83C\uDDF7"),
     RUSSIAN("Russian", "ru", "\uD83C\uDDF7\uD83C\uDDFA"),
     SPANISH("Spanish", "es", "\uD83C\uDDEA\uD83C\uDDF8");
 }

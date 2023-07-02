@@ -1,6 +1,6 @@
 package com.teachmeprint.domain.model
 
-data class LanguageDomain(
+data class LanguageCodeFromAndToDomain(
     val name: String = ""
 )
 

@@ -1,11 +1,14 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 
 package com.teachmeprint.screenshot_presentation.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,10 +59,15 @@ fun ScreenShotTranslateBottomSheet(
     languageTranslationDomain: LanguageTranslationDomain,
     correctedOriginalTextStatus: Status<String>,
     onCorrectedOriginalText: (String) -> Unit,
+    isPhraseSaved: Boolean,
+    onCheckPhraseInLanguageCollection: (String, String) -> Unit,
+    onSavePhraseInLanguageCollection: (String, String, String) -> Unit,
+    onToggleDictionaryFullScreenPopup: (String) -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
+    var correctedOriginalText by remember { mutableStateOf(languageTranslationDomain.originalText) }
 
     ModalBottomSheet(
         modifier = modifier,
@@ -78,7 +87,17 @@ fun ScreenShotTranslateBottomSheet(
                     text = stringResource(R.string.text_title_translate_bottom_sheet),
                     style = MaterialTheme.typography.titleLarge
                 )
-                ScreenShotButtonAddToList()
+                ScreenShotButtonAddToList(
+                    isPhraseSaved = isPhraseSaved,
+                    isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
+                    onSavePhraseLanguage = {
+                        onSavePhraseInLanguageCollection(
+                            correctedOriginalText,
+                            languageTranslationDomain.translatedText.toString(),
+                            languageTranslationDomain.languageCodeFromAndTo
+                        )
+                    }
+                )
             }
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -105,25 +124,52 @@ fun ScreenShotTranslateBottomSheet(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     ScreenShotCorrectedOriginalText(
-                        originalText = languageTranslationDomain.originalText,
-                        status = correctedOriginalTextStatus,
-                        onCorrectedOriginalText = onCorrectedOriginalText
+                        correctedOriginalText = correctedOriginalText,
+                        isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
+                        onToggleDictionaryFullScreenDialog = {
+                            onToggleDictionaryFullScreenPopup(
+                                languageTranslationDomain.dictionaryUrl(it)
+                            )
+                        }
                     )
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
+        correctedOriginalTextStatus
+            .onLoading { correctedOriginalText = languageTranslationDomain.originalText }
+            .onSuccess {
+                correctedOriginalText = it
+                onCheckPhraseInLanguageCollection(
+                    it,
+                    languageTranslationDomain.languageCodeFromAndTo
+                )
+            }
+            .onError { correctedOriginalText = it }
+    }
+
+    LaunchedEffect(Unit) {
+        onCorrectedOriginalText(languageTranslationDomain.originalText)
     }
 }
 
 @Composable
-private fun ScreenShotButtonAddToList(modifier: Modifier = Modifier) {
-    var added by remember { mutableStateOf(false) }
-    val iconTint = if (added) { Color.Red } else { MaterialTheme.colorScheme.onSecondaryContainer }
+private fun ScreenShotButtonAddToList(
+    isPhraseSaved: Boolean,
+    isLoadingStatus: Boolean,
+    onSavePhraseLanguage: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val iconTint = if (isPhraseSaved) {
+        Color.Red
+    } else {
+        MaterialTheme.colorScheme.onSecondaryContainer
+    }
 
     FilledTonalButton(
         modifier = modifier,
-        onClick = { added = !added }
+        enabled = !isLoadingStatus,
+        onClick = onSavePhraseLanguage
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -132,7 +178,7 @@ private fun ScreenShotButtonAddToList(modifier: Modifier = Modifier) {
                 contentDescription = null
             )
             AnimatedVisibility(
-                visible = added,
+                visible = isPhraseSaved,
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 Text(
@@ -146,13 +192,11 @@ private fun ScreenShotButtonAddToList(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ScreenShotCorrectedOriginalText(
-    originalText: String,
-    status: Status<String>,
-    modifier: Modifier = Modifier,
-    onCorrectedOriginalText: (String) -> Unit
+    correctedOriginalText: String,
+    isLoadingStatus: Boolean,
+    onToggleDictionaryFullScreenDialog: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    var correctedOriginalText by remember { mutableStateOf(originalText) }
-
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -163,32 +207,54 @@ private fun ScreenShotCorrectedOriginalText(
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(4.dp))
-        Text(
+        ScreenShotOpenDictionaryByWord(
             modifier = Modifier
                 .placeholder(
-                    visible = status.isLoadingStatus,
+                    visible = isLoadingStatus,
                     highlight = PlaceholderHighlight.shimmer()
                 ),
             text = correctedOriginalText,
-            fontSize = 14.sp
+            onToggleDictionaryFullScreenDialog = onToggleDictionaryFullScreenDialog
         )
-        status
-            .onLoading { correctedOriginalText = originalText }
-            .onSuccess { correctedOriginalText = it }
-            .onError { correctedOriginalText = it }
-    }
-    LaunchedEffect(Unit) {
-        onCorrectedOriginalText(originalText)
     }
 }
 
-@Preview
+@Composable
+fun ScreenShotOpenDictionaryByWord(
+    text: String,
+    modifier: Modifier = Modifier,
+    onToggleDictionaryFullScreenDialog: (String) -> Unit
+) {
+    val words = text.split(" ")
+    FlowRow(modifier = modifier) {
+        words.forEach { word ->
+            Text(
+                text = word,
+                fontSize = 14.sp,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier
+                    .clickable { onToggleDictionaryFullScreenDialog(word) }
+                    .padding(horizontal = 4.dp)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
 @Composable
 private fun ScreenShotTranslateBottomSheetPreview() {
     ScreenShotTranslateBottomSheet(
-        languageTranslationDomain = LanguageTranslationDomain("Original", "Translated"),
+        languageTranslationDomain = LanguageTranslationDomain(
+            "Original",
+            "Translated",
+            "enpt"
+        ),
+        isPhraseSaved = false,
         correctedOriginalTextStatus = statusSuccess("Corrected original"),
         onCorrectedOriginalText = {},
+        onCheckPhraseInLanguageCollection = { _, _ -> },
+        onSavePhraseInLanguageCollection = { _, _, _ -> },
+        onToggleDictionaryFullScreenPopup = {},
         onDismiss = {}
     )
 }

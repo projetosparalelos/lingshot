@@ -12,12 +12,23 @@ sealed class ScreenShotEvent {
 
     object ToggleLanguageDialogAndHideSelectionAlert : ScreenShotEvent()
 
+    data class CheckPhraseInLanguageCollection(
+        val originalText: String,
+        val languageCodeFromAndTo: String
+    ) : ScreenShotEvent()
+
     data class CroppedImage(
         val actionCropImage: ActionCropImage?
     ) : ScreenShotEvent()
 
     data class SaveLanguage(
         val availableLanguage: AvailableLanguage?
+    ) : ScreenShotEvent()
+
+    data class SavePhraseInLanguageCollection(
+        val originalText: String,
+        val translatedText: String,
+        val languageCodeFromAndTo: String
     ) : ScreenShotEvent()
 
     data class SelectedOptionsLanguage(
@@ -34,5 +45,9 @@ sealed class ScreenShotEvent {
 
     data class FetchTextRecognizer(
         val imageBitmap: Bitmap?
+    ) : ScreenShotEvent()
+
+    data class ToggleDictionaryFullScreenPopup(
+        val url: String?
     ) : ScreenShotEvent()
 }
