@@ -6,6 +6,9 @@ data class LanguageTranslationDomain(
     val languageCodeFromAndTo: String
 ) {
     val dictionaryUrl: (String) -> String = { word ->
-        "https://www.wordreference.com/${languageCodeFromAndTo.replace("_", "")}/$word"
+        "https://www.wordreference.com/" +
+            languageCodeFromAndTo.replace("_", "") +
+            "/" +
+            word.replace(Regex("[^\\p{L}\\p{N}]+\$"), "")
     }
 }
