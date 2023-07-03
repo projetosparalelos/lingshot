@@ -116,22 +116,14 @@ private fun ScreenShotScreen(
                         onCorrectedOriginalText = { original ->
                             handleEvent(FetchCorrectedOriginalText(original))
                         },
-                        onCheckPhraseInLanguageCollection = { originalText, languageCodeFromAndTo ->
+                        onCheckPhraseInLanguageCollection = { originalText ->
                             handleEvent(
-                                CheckPhraseInLanguageCollection(
-                                    originalText,
-                                    languageCodeFromAndTo
-                                )
+                                CheckPhraseInLanguageCollection(originalText)
                             )
                         },
-                        onSavePhraseInLanguageCollection = { originalText, translatedText,
-                            languageCodeFromAndTo ->
+                        onSavePhraseInLanguageCollection = { originalText, translatedText ->
                             handleEvent(
-                                SavePhraseInLanguageCollection(
-                                    originalText,
-                                    translatedText,
-                                    languageCodeFromAndTo
-                                )
+                                SavePhraseInLanguageCollection(originalText, translatedText)
                             )
                         },
                         onToggleDictionaryFullScreenPopup = { url ->

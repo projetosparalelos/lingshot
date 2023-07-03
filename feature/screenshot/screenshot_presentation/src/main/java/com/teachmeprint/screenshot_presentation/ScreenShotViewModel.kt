@@ -91,8 +91,7 @@ class ScreenShotViewModel @Inject constructor(
             is ScreenShotEvent.SavePhraseInLanguageCollection -> {
                 savePhraseInLanguageCollection(
                     screenShotEvent.originalText,
-                    screenShotEvent.translatedText,
-                    screenShotEvent.languageCodeFromAndTo
+                    screenShotEvent.translatedText
                 )
             }
 
@@ -106,8 +105,7 @@ class ScreenShotViewModel @Inject constructor(
 
             is ScreenShotEvent.CheckPhraseInLanguageCollection -> {
                 checkPhraseInLanguageCollection(
-                    screenShotEvent.originalText,
-                    screenShotEvent.languageCodeFromAndTo
+                    screenShotEvent.originalText
                 )
             }
 
@@ -236,7 +234,8 @@ class ScreenShotViewModel @Inject constructor(
                 LanguageTranslationDomain(
                     originalText = text,
                     translatedText = chatGPTRepository.get(requestBody),
-                    languageCodeFromAndTo = text.getLanguageCodeFromAndToDomain()
+                    languageCodeFrom = text.getLanguageCodeIdentifier(),
+                    languageCodeTo = languageChoiceRepository.getLanguage()?.languageCode.toString()
                 )
             }, { status ->
                 _uiState.update { it.copy(screenShotStatus = status) }
@@ -340,11 +339,10 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun savePhraseInLanguageCollection(
         originalText: String,
-        translatedText: String,
-        languageCodeFromAndTo: String
+        translatedText: String
     ) {
         viewModelScope.launch {
-            val languageDomain = LanguageCodeFromAndToDomain(name = languageCodeFromAndTo)
+            val languageDomain = originalText.getLanguageCodeFromAndToDomain()
             val phraseDomain = PhraseDomain(original = originalText, translate = translatedText)
             _uiState.update {
                 it.copy(
@@ -358,14 +356,13 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun checkPhraseInLanguageCollection(
-        originalText: String,
-        languageCodeFromAndTo: String
+        originalText: String
     ) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
                     isPhraseSaved = phraseCollectionRepository.isPhraseSaved(
-                        languageCodeFromAndTo,
+                        originalText.getLanguageCodeFromAndToDomain().name,
                         originalText
                     )
                 )
@@ -373,10 +370,17 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private suspend fun String.getLanguageCodeFromAndToDomain(): String {
+    private suspend fun String.getLanguageCodeFromAndToDomain(): LanguageCodeFromAndToDomain {
+        return LanguageCodeFromAndToDomain(
+            name = getLanguageCodeIdentifier() + "_" +
+                languageChoiceRepository.getLanguage()?.languageCode.toString()
+        )
+    }
+
+    private suspend fun String.getLanguageCodeIdentifier(): String {
         val status = screenShotRepository.fetchLanguageIdentifier(this)
         if (status is Status.Success) {
-            return "${status.data}_${getLanguage()?.languageCode}"
+            return status.data.orEmpty()
         }
         return ""
     }

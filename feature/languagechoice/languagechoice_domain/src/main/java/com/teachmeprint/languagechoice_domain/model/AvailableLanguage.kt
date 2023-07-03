@@ -14,4 +14,11 @@ enum class AvailableLanguage(
     PORTUGUESE("Portuguese", "pt", "\uD83C\uDDE7\uD83C\uDDF7"),
     RUSSIAN("Russian", "ru", "\uD83C\uDDF7\uD83C\uDDFA"),
     SPANISH("Spanish", "es", "\uD83C\uDDEA\uD83C\uDDF8");
+
+    companion object {
+        fun from(languageCode: String?): AvailableLanguage? =
+            values().firstOrNull {
+                it.languageCode.equals(languageCode, ignoreCase = true)
+            }
+    }
 }
