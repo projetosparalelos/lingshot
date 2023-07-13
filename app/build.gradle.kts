@@ -45,7 +45,6 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.navigation.compose)
     implementation(libs.core.splash.screen)
-    implementation(libs.hawk)
 
     implementation(libs.hilt.navigation.compose)
     implementation(libs.coil.compose)

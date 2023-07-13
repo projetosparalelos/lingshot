@@ -13,7 +13,8 @@ enum class AvailableLanguage(
     ITALIAN("Italian", "it", "\uD83C\uDDEE\uD83C\uDDF9"),
     PORTUGUESE("Portuguese", "pt", "\uD83C\uDDE7\uD83C\uDDF7"),
     RUSSIAN("Russian", "ru", "\uD83C\uDDF7\uD83C\uDDFA"),
-    SPANISH("Spanish", "es", "\uD83C\uDDEA\uD83C\uDDF8");
+    SPANISH("Spanish", "es", "\uD83C\uDDEA\uD83C\uDDF8"),
+    SWEDISH("Swedish", "sv", "\uD83C\uDDF8\uD83C\uDDEA");
 
     companion object {
         fun from(languageCode: String?): AvailableLanguage? =

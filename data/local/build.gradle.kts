@@ -6,7 +6,3 @@ plugins {
 android {
     namespace = "com.teachmeprint.local"
 }
-
-dependencies {
-    implementation(libs.hawk)
-}

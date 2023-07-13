@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.teachmeprint.languagechoice_domain"
 }
+
+dependencies {
+    implementation(libs.bundles.coroutines)
+}
