@@ -11,5 +11,5 @@ android {
 dependencies {
     implementation(project(":feature:languagechoice:languagechoice_domain"))
 
-    implementation(libs.hawk)
+    implementation(libs.datastore.preferences)
 }

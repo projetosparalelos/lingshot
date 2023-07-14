@@ -1,5 +1,6 @@
 *.iml
 .gradle
+.pre-commit-config.yaml
 /local.properties
 /teach-me-print-keys.properties
 .DS_Store

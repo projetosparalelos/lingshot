@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.os.Build
-import com.orhanobut.hawk.Hawk
 import com.teachmeprint.common.CommonConstant.CHANNEL_ID
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -16,7 +15,6 @@ class TeachMePrintApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         setupNotificationChannel()
-        setupHawk()
         setupTimber()
     }
 
@@ -29,10 +27,6 @@ class TeachMePrintApplication : Application() {
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
-    }
-
-    private fun setupHawk() {
-        Hawk.init(this).build()
     }
 
     private fun setupTimber() {

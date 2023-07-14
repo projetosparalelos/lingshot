@@ -1,11 +1,12 @@
 package com.teachmeprint.languagechoice_domain.repository
 
 import com.teachmeprint.languagechoice_domain.model.AvailableLanguage
+import kotlinx.coroutines.flow.Flow
 
 interface LanguageChoiceRepository {
-    fun getLanguage(): AvailableLanguage?
+    fun getLanguage(): Flow<AvailableLanguage?>
 
-    fun saveLanguage(availableLanguage: AvailableLanguage?)
+    suspend fun saveLanguage(availableLanguage: AvailableLanguage?)
 
-    fun deleteLanguage(): Boolean
+    suspend fun deleteLanguage()
 }

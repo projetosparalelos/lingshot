@@ -40,6 +40,7 @@ import java.util.*
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -138,10 +139,12 @@ class ScreenShotViewModel @Inject constructor(
     private fun selectedOptionsNavigationBar(navigationBarItem: NavigationBarItem) {
         when (navigationBarItem) {
             TRANSLATE -> {
-                getLanguage()?.let {
-                    croppedImage(CROPPED_IMAGE)
-                } ?: run {
-                    showLanguageSelectionAlert()
+                viewModelScope.launch {
+                    getLanguage()?.let {
+                        croppedImage(CROPPED_IMAGE)
+                    } ?: run {
+                        showLanguageSelectionAlert()
+                    }
                 }
             }
 
@@ -169,11 +172,13 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun toggleLanguageDialog() {
-        _uiState.update {
-            it.copy(
-                isLanguageDialogVisible = !it.isLanguageDialogVisible,
-                availableLanguage = getLanguage()
-            )
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLanguageDialogVisible = !it.isLanguageDialogVisible,
+                    availableLanguage = getLanguage()
+                )
+            }
         }
     }
 
@@ -235,7 +240,7 @@ class ScreenShotViewModel @Inject constructor(
                     originalText = text,
                     translatedText = chatGPTRepository.get(requestBody),
                     languageCodeFrom = text.getLanguageCodeIdentifier(),
-                    languageCodeTo = languageChoiceRepository.getLanguage()?.languageCode.toString()
+                    languageCodeTo = getLanguage()?.languageCode.toString()
                 )
             }, { status ->
                 _uiState.update { it.copy(screenShotStatus = status) }
@@ -327,8 +332,8 @@ class ScreenShotViewModel @Inject constructor(
         textToSpeech.shutdown()
     }
 
-    private fun getLanguage(): AvailableLanguage? {
-        return languageChoiceRepository.getLanguage()
+    private suspend fun getLanguage(): AvailableLanguage? {
+        return languageChoiceRepository.getLanguage().first()
     }
 
     private fun saveLanguage(availableLanguage: AvailableLanguage?) {
@@ -372,8 +377,7 @@ class ScreenShotViewModel @Inject constructor(
 
     private suspend fun String.getLanguageCodeFromAndToDomain(): LanguageCodeFromAndToDomain {
         return LanguageCodeFromAndToDomain(
-            name = getLanguageCodeIdentifier() + "_" +
-                languageChoiceRepository.getLanguage()?.languageCode.toString()
+            name = getLanguageCodeIdentifier() + "_" + getLanguage()?.languageCode.toString()
         )
     }
 
