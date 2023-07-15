@@ -1,4 +1,4 @@
-name: Compress image
+name: Compress image CI
 on: pull_request
 jobs:
   build:
