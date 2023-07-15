@@ -1,5 +1,11 @@
 name: Compress image CI
+
 on: pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: calibreapp/image-actions
