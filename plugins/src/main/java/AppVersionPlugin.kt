@@ -30,7 +30,7 @@ class AppVersionPlugin : Plugin<Project> {
     }
 
   companion object {
-    const val APPLICATION_NAME_ID = "com.teachmeprint.language"
+    const val APPLICATION_NAME_ID = "com.lingshot.language"
     const val VERSION_CODE = 2
     const val VERSION_NAME = "1.2"
 

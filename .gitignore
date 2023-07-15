@@ -1,8 +1,7 @@
 *.iml
 .gradle
-.pre-commit-config.yaml
 /local.properties
-/teach-me-print-keys.properties
+/lingshot-keys.properties
 .DS_Store
 /build
 /captures

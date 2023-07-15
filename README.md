@@ -1,10 +1,10 @@
-![build](https://github.com/CharlesMoreira1/teachmeprint/actions/workflows/build-ci.yml/badge.svg)
+![build](https://github.com/CharlesMoreira1/lingshot/actions/workflows/build-ci.yml/badge.svg)
 <a href="https://ktlint.github.io/"><img src="https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg" alt="ktlint"></a>
 
 ## 📃 License
 
 ```
-Copyright 2023 TeachMePrint - Language
+Copyright 2023 Lingshot
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

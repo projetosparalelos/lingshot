@@ -1,5 +1,0 @@
-appId: com.teachmeprint.language
----
-- tapOn: "Start now"
-- tapOn:
-    id: image_button_screen_shot_floating

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- SwipePermissionScreen -->
-    <string name="text_title_swipe_initial">Welcome to TeachMePrint!</string>
+    <string name="text_title_swipe_initial">Welcome to Lingshot!</string>
     <string name="text_message_swipe_initial">Explore the screen and let our\nartificial intelligence translate for you,\nmaking learning even easier and\nmore engaging.</string>
     <string name="text_title_swipe_read_and_write">Intelligent Translation with a Screenshot!</string>
     <string name="text_message_swipe_read_and_write">To translate your screenshots, we request your permission to save the images on your device.\n\nWe guarantee the privacy of your data, which\nwill be used exclusively for this purpose!</string>

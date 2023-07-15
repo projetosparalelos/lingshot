@@ -1,6 +1,6 @@
 <resources>
     <!-- App -->
-    <string name="app_name">TeachMePrint - Language</string>
+    <string name="app_name">Lingshot</string>
 
     <!-- NotificationClearScreenshot -->
     <string name="text_notification_message_clean_up_gallery">Clean up your screenshots in the gallery.</string>

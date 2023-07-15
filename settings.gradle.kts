@@ -15,7 +15,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "TeachMePrint"
+rootProject.name = "Lingshot"
 include(":app")
 include(":feature:screenshot:screenshot_domain")
 include(":feature:screenshot:screenshot_data")

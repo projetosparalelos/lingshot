@@ -12,35 +12,35 @@ dependencies {
 gradlePlugin {
     plugins {
         register("appVersionPlugin") {
-            id = "teachmeprint.app.version.plugin"
+            id = "lingshot.app.version.plugin"
             implementationClass = "AppVersionPlugin"
         }
         register("androidApplicationPlugin") {
-            id = "teachmeprint.android.application.plugin"
+            id = "lingshot.android.application.plugin"
             implementationClass = "AndroidApplicationPlugin"
         }
         register("androidLibraryPlugin") {
-            id = "teachmeprint.android.library.plugin"
+            id = "lingshot.android.library.plugin"
             implementationClass = "AndroidLibraryPlugin"
         }
         register("androidLibraryComposePlugin") {
-            id = "teachmeprint.android.library.compose.plugin"
+            id = "lingshot.android.library.compose.plugin"
             implementationClass = "AndroidLibraryComposePlugin"
         }
         register("androidHiltPlugin") {
-            id = "teachmeprint.android.hilt.plugin"
+            id = "lingshot.android.hilt.plugin"
             implementationClass = "AndroidHiltPlugin"
         }
         register("androidQualityPlugin") {
-            id = "teachmeprint.android.quality.plugin"
+            id = "lingshot.android.quality.plugin"
             implementationClass = "AndroidQualityPlugin"
         }
         register("androidAdmobPlugin") {
-            id = "teachmeprint.android.admob.plugin"
+            id = "lingshot.android.admob.plugin"
             implementationClass = "AndroidAdmobPlugin"
         }
         register("androidNetworkPlugin") {
-            id = "teachmeprint.android.network.plugin"
+            id = "lingshot.android.network.plugin"
             implementationClass = "AndroidNetworkPlugin"
         }
     }

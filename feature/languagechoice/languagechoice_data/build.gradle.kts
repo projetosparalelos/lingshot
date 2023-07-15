@@ -1,11 +1,11 @@
 plugins {
-    id("teachmeprint.app.version.plugin")
-    id("teachmeprint.android.hilt.plugin")
-    id("teachmeprint.android.quality.plugin")
+    id("lingshot.app.version.plugin")
+    id("lingshot.android.hilt.plugin")
+    id("lingshot.android.quality.plugin")
 }
 
 android {
-    namespace = "com.teachmeprint.languagechoice_data"
+    namespace = "com.lingshot.languagechoice_data"
 }
 
 dependencies {

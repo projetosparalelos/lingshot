@@ -1,13 +1,13 @@
 plugins {
-    id("teachmeprint.app.version.plugin")
-    id("teachmeprint.android.hilt.plugin")
-    id("teachmeprint.android.library.plugin")
-    id("teachmeprint.android.library.compose.plugin")
-    id("teachmeprint.android.quality.plugin")
+    id("lingshot.app.version.plugin")
+    id("lingshot.android.hilt.plugin")
+    id("lingshot.android.library.plugin")
+    id("lingshot.android.library.compose.plugin")
+    id("lingshot.android.quality.plugin")
 }
 
 android {
-    namespace = "com.teachmeprint.home_presentation"
+    namespace = "com.lingshot.home_presentation"
 }
 
 dependencies {

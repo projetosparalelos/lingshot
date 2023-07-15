@@ -1,8 +1,8 @@
 plugins {
-    id("teachmeprint.app.version.plugin")
-    id("teachmeprint.android.quality.plugin")
+    id("lingshot.app.version.plugin")
+    id("lingshot.android.quality.plugin")
 }
 
 android {
-    namespace = "com.teachmeprint.local"
+    namespace = "com.lingshot.local"
 }

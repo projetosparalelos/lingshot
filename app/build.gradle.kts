@@ -1,10 +1,10 @@
 @file:Suppress("DSL_SCOPE_VIOLATION")
 
 plugins {
-    id("teachmeprint.android.application.plugin")
-    id("teachmeprint.android.hilt.plugin")
-    id("teachmeprint.android.library.plugin")
-    id("teachmeprint.android.quality.plugin")
+    id("lingshot.android.application.plugin")
+    id("lingshot.android.hilt.plugin")
+    id("lingshot.android.library.plugin")
+    id("lingshot.android.quality.plugin")
 
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)

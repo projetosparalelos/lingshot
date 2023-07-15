@@ -6,7 +6,7 @@ import java.util.Properties
 
 internal object KeyHelper {
     private val properties by lazy {
-        Properties().apply { load(FileInputStream(File("teach-me-print-keys.properties"))) }
+        Properties().apply { load(FileInputStream(File("lingshot-keys.properties"))) }
     }
 
     fun getValue(key: String): String {
