@@ -35,6 +35,12 @@ jobs:
           ADMOB_INTERSTITIAL_ID_RELEASE: ${{ secrets.ADMOB_INTERSTITIAL_ID_RELEASE }}
           ADMOB_INTERSTITIAL_ID_DEBUG: ${{ secrets.ADMOB_INTERSTITIAL_ID_DEBUG }}
 
+      - name: Upload properties file
+        uses: actions/upload-artifact@v3
+        with:
+          name: Lingshot Keys
+          path: lingshot-keys.properties
+
   build:
     runs-on: ubuntu-latest
 
@@ -42,6 +48,11 @@ jobs:
     steps:
       - name: Setup checkout
         uses: actions/checkout@v3
+
+      - name: Download properties file
+        uses: actions/download-artifact@v3
+        with:
+          name: Lingshot Keys
 
       - name: Build the app
         run: ./gradlew clean build
@@ -53,6 +64,11 @@ jobs:
     steps:
       - name: Setup checkout
         uses: actions/checkout@v3
+
+      - name: Download properties file
+        uses: actions/download-artifact@v3
+        with:
+          name: Lingshot Keys
 
       - name: Check code formatting
         run: ./gradlew ktlintCheck
