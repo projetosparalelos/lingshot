@@ -13,19 +13,14 @@ jobs:
   setup-keys:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Setup checkout
-        uses: actions/checkout@v3
-
-      - name: Set environment variables
-        run: |
-          echo "CHAT_GPT_KEY_RELEASE=${{ secrets.CHAT_GPT_KEY_RELEASE }}" >> $GITHUB_ENV
-          echo "CHAT_GPT_KEY_DEBUG=${{ secrets.CHAT_GPT_KEY_DEBUG }}" >> $GITHUB_ENV
-          echo "GOOGLE_AUTH_ID=${{ secrets.GOOGLE_AUTH_ID }}" >> $GITHUB_ENV
-          echo "ADMOB_APP_ID_RELEASE=${{ secrets.ADMOB_APP_ID_RELEASE }}" >> $GITHUB_ENV
-          echo "ADMOB_APP_ID_DEBUG=${{ secrets.ADMOB_APP_ID_DEBUG }}" >> $GITHUB_ENV
-          echo "ADMOB_INTERSTITIAL_ID_RELEASE=${{ secrets.ADMOB_INTERSTITIAL_ID_RELEASE }}" >> $GITHUB_ENV
-          echo "ADMOB_INTERSTITIAL_ID_DEBUG=${{ secrets.ADMOB_INTERSTITIAL_ID_DEBUG }}" >> $GITHUB_ENV
+    env:
+      CHAT_GPT_KEY_RELEASE: ${{ secrets.CHAT_GPT_KEY_RELEASE }}
+      CHAT_GPT_KEY_DEBUG: ${{ secrets.CHAT_GPT_KEY_DEBUG }}
+      GOOGLE_AUTH_ID: ${{ secrets.GOOGLE_AUTH_ID }}
+      ADMOB_APP_ID_RELEASE: ${{ secrets.ADMOB_APP_ID_RELEASE }}
+      ADMOB_APP_ID_DEBUG: ${{ secrets.ADMOB_APP_ID_DEBUG }}
+      ADMOB_INTERSTITIAL_ID_RELEASE: ${{ secrets.ADMOB_INTERSTITIAL_ID_RELEASE }}
+      ADMOB_INTERSTITIAL_ID_DEBUG: ${{ secrets.ADMOB_INTERSTITIAL_ID_DEBUG }}
 
   build:
     runs-on: ubuntu-latest
@@ -37,13 +32,13 @@ jobs:
 
       - name: Receive environment variables
         run: |
-          echo $CHAT_GPT_KEY_RELEASE
-          echo $CHAT_GPT_KEY_DEBUG
-          echo $GOOGLE_AUTH_ID
-          echo $ADMOB_APP_ID_RELEASE
-          echo $ADMOB_APP_ID_DEBUG
-          echo $ADMOB_INTERSTITIAL_ID_RELEASE
-          echo $ADMOB_INTERSTITIAL_ID_DEBUG
+          echo "CHAT_GPT_KEY_RELEASE=\"$CHAT_GPT_KEY_RELEASE\"" >> ./lingshot-keys.properties
+          echo "CHAT_GPT_KEY_DEBUG=\"$CHAT_GPT_KEY_DEBUG\"" >> ./lingshot-keys.properties
+          echo "GOOGLE_AUTH_ID=\"$GOOGLE_AUTH_ID\"" >> ./lingshot-keys.properties
+          echo "ADMOB_APP_ID_RELEASE=\"$ADMOB_APP_ID_RELEASE\"" >> ./lingshot-keys.properties
+          echo "ADMOB_APP_ID_DEBUG=\"$ADMOB_APP_ID_DEBUG\"" >> ./lingshot-keys.properties
+          echo "ADMOB_INTERSTITIAL_ID_RELEASE=\"$ADMOB_INTERSTITIAL_ID_RELEASE\"" >> ./lingshot-keys.properties
+          echo "ADMOB_INTERSTITIAL_ID_DEBUG=\"$ADMOB_INTERSTITIAL_ID_DEBUG\"" >> ./lingshot-keys.properties
 
       - name: Build the app
         run: ./gradlew clean build
@@ -58,13 +53,13 @@ jobs:
 
       - name: Receive environment variables
         run: |
-          echo $CHAT_GPT_KEY_RELEASE
-          echo $CHAT_GPT_KEY_DEBUG
-          echo $GOOGLE_AUTH_ID
-          echo $ADMOB_APP_ID_RELEASE
-          echo $ADMOB_APP_ID_DEBUG
-          echo $ADMOB_INTERSTITIAL_ID_RELEASE
-          echo $ADMOB_INTERSTITIAL_ID_DEBUG
+          echo "CHAT_GPT_KEY_RELEASE=\"$CHAT_GPT_KEY_RELEASE\"" >> ./lingshot-keys.properties
+          echo "CHAT_GPT_KEY_DEBUG=\"$CHAT_GPT_KEY_DEBUG\"" >> ./lingshot-keys.properties
+          echo "GOOGLE_AUTH_ID=\"$GOOGLE_AUTH_ID\"" >> ./lingshot-keys.properties
+          echo "ADMOB_APP_ID_RELEASE=\"$ADMOB_APP_ID_RELEASE\"" >> ./lingshot-keys.properties
+          echo "ADMOB_APP_ID_DEBUG=\"$ADMOB_APP_ID_DEBUG\"" >> ./lingshot-keys.properties
+          echo "ADMOB_INTERSTITIAL_ID_RELEASE=\"$ADMOB_INTERSTITIAL_ID_RELEASE\"" >> ./lingshot-keys.properties
+          echo "ADMOB_INTERSTITIAL_ID_DEBUG=\"$ADMOB_INTERSTITIAL_ID_DEBUG\"" >> ./lingshot-keys.properties
 
       - name: Check code formatting
         run: ./gradlew ktlintCheck
