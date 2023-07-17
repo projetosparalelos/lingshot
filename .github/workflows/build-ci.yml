@@ -13,6 +13,9 @@ jobs:
   setup-keys:
     runs-on: ubuntu-latest
 
+    steps:
+      - name: Setup checkout
+        uses: actions/checkout@v3
     env:
       CHAT_GPT_KEY_RELEASE: ${{ secrets.CHAT_GPT_KEY_RELEASE }}
       CHAT_GPT_KEY_DEBUG: ${{ secrets.CHAT_GPT_KEY_DEBUG }}
