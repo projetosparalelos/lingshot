@@ -33,7 +33,7 @@ jobs:
       - name: Setup checkout
         uses: actions/checkout@v3
 
-      - name: Receive environment variables
+      - name: Set environment variables
         run: |
           echo "CHAT_GPT_KEY_RELEASE=\"$CHAT_GPT_KEY_RELEASE\"" >> ./lingshot-keys.properties
           echo "CHAT_GPT_KEY_DEBUG=\"$CHAT_GPT_KEY_DEBUG\"" >> ./lingshot-keys.properties
@@ -54,7 +54,7 @@ jobs:
       - name: Setup checkout
         uses: actions/checkout@v3
 
-      - name: Receive environment variables
+      - name: Set environment variables
         run: |
           echo "CHAT_GPT_KEY_RELEASE=\"$CHAT_GPT_KEY_RELEASE\"" >> ./lingshot-keys.properties
           echo "CHAT_GPT_KEY_DEBUG=\"$CHAT_GPT_KEY_DEBUG\"" >> ./lingshot-keys.properties
