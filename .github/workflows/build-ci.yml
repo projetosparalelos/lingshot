@@ -35,8 +35,8 @@ jobs:
 
       - name: Set environment variables
         run: |
-          chmod +x set-key.sh
-          set-key.sh
+          chmod +x .github/set-key.sh
+          .github/set-key.sh
         shell: bash
 
       - name: Build the app
@@ -52,8 +52,8 @@ jobs:
 
       - name: Set environment variables
         run: |
-          chmod +x set-key.sh
-          set-key.sh
+          chmod +x .github/set-key.sh
+          .github/set-key.sh
         shell: bash
 
       - name: Check code formatting
