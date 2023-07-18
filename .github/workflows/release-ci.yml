@@ -51,11 +51,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew assembleDebug
 
-      - name: GitHub Release
-        uses: marvinpinto/action-automatic-releases@latest
+      - name: Create release and upload apk
+        uses: underwindfall/create-release-with-debugapk@v2.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ github.event.inputs.tagname }}"
-          prerelease: false
-          files: |
-            ./app/build/outputs/apk/debug/*.apk
+          tag_name: ${{ github.event.inputs.tagname }}
+          asset_path: app/build/outputs/apk/debug/app-debug.apk
+          asset_name: lingshot-debug.apk
+          asset_content_type: application/zip
