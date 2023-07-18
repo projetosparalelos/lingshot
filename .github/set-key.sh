@@ -5,4 +5,4 @@ echo "ADMOB_APP_ID_RELEASE=\"$ADMOB_APP_ID_RELEASE\"" >> ./lingshot-keys.propert
 echo "ADMOB_APP_ID_DEBUG=\"$ADMOB_APP_ID_DEBUG\"" >> ./lingshot-keys.properties
 echo "ADMOB_INTERSTITIAL_ID_RELEASE=\"$ADMOB_INTERSTITIAL_ID_RELEASE\"" >> ./lingshot-keys.properties
 echo "ADMOB_INTERSTITIAL_ID_DEBUG=\"$ADMOB_INTERSTITIAL_ID_DEBUG\"" >> ./lingshot-keys.properties
-echo "$FIREBASE_GOOGLE_SERVICES" >> ./app/src/google-services.jso
+echo "$FIREBASE_GOOGLE_SERVICES" >> ./app/src/google-services.json
