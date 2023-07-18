@@ -2,6 +2,7 @@
 .gradle
 /local.properties
 /lingshot-keys.properties
+/app/src/google-services.json
 .DS_Store
 /build
 /captures
