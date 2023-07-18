@@ -17,6 +17,7 @@ env:
   ADMOB_APP_ID_DEBUG: ${{ secrets.ADMOB_APP_ID_DEBUG }}
   ADMOB_INTERSTITIAL_ID_RELEASE: ${{ secrets.ADMOB_INTERSTITIAL_ID_RELEASE }}
   ADMOB_INTERSTITIAL_ID_DEBUG: ${{ secrets.ADMOB_INTERSTITIAL_ID_DEBUG }}
+  FIREBASE_GOOGLE_SERVICES: ${{ secrets.FIREBASE_GOOGLE_SERVICES }}
 
 jobs:
   create-tag:
@@ -48,7 +49,7 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew assemble
+        run: ./gradlew assembleDebug
 
       - name: GitHub Release
         uses: marvinpinto/action-automatic-releases@latest
@@ -58,4 +59,3 @@ jobs:
           prerelease: false
           files: |
             ./app/build/outputs/apk/debug/*.apk
-            ./app/build/outputs/apk/release/*.apk
