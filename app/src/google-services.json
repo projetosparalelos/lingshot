@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "43721462036",
+    "project_id": "lingshot-df9ee",
+    "storage_bucket": "lingshot-df9ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43721462036:android:82f187ce936e059786b201",
+        "android_client_info": {
+          "package_name": "com.lingshot.language"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "43721462036-h9vf8dumalul477amcnr4fjufmcggod8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lingshot.language",
+            "certificate_hash": "3c7c5b6636309fea3edb95be61af9ba94ec813ca"
+          }
+        },
+        {
+          "client_id": "43721462036-vhn6hblfc01kpkm4o956qq2upt8mnv3c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoSzTtYGMcYTuIAbWDGBAnu_AWt6gMJiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "43721462036-vhn6hblfc01kpkm4o956qq2upt8mnv3c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

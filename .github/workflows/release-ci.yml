@@ -17,7 +17,6 @@ env:
   ADMOB_APP_ID_DEBUG: ${{ secrets.ADMOB_APP_ID_DEBUG }}
   ADMOB_INTERSTITIAL_ID_RELEASE: ${{ secrets.ADMOB_INTERSTITIAL_ID_RELEASE }}
   ADMOB_INTERSTITIAL_ID_DEBUG: ${{ secrets.ADMOB_INTERSTITIAL_ID_DEBUG }}
-  FIREBASE_GOOGLE_SERVICES: ${{ secrets.FIREBASE_GOOGLE_SERVICES }}
 
 jobs:
   create-tag:
@@ -47,6 +46,11 @@ jobs:
           chmod +x .github/set-key.sh
           .github/set-key.sh
         shell: bash
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 1.8
 
       - name: Build with Gradle
         run: ./gradlew assembleDebug
