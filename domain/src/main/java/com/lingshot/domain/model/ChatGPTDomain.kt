@@ -12,6 +12,6 @@ data class ChatGPTPromptBodyDomain(
     val maxTokens: Int = MAX_TOKENS_DEFAULT
 )
 
-private const val MODEL_DEFAULT = "gpt-4"
+private const val MODEL_DEFAULT = "gpt-3.5-turbo"
 private const val MAX_TOKENS_DEFAULT = 100
 private const val TEMPERATURE_DEFAULT = 0.1
