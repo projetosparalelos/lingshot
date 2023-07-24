@@ -1,10 +1,8 @@
 package com.lingshot.domain
 
 object PromptChatGPTConstant {
-    val PROMPT_TRANSLATE: (String?, String) -> String = { language, text ->
-        "Translate this into 1. $language and improve the meaning:\\n\\n${text}\\n\\n1."
+    val PROMPT_TRANSLATE: (String?) -> String = { language ->
+        "You translate and improve the meaning of the sentences into $language."
     }
-    val PROMPT_CORRECT_SPELLING: (String) -> String = { originalText ->
-        "Correct the spelling 1. \\n\\n$originalText\\n\\n\\n1."
-    }
+    const val PROMPT_CORRECT_SPELLING = "Correct the spelling if necessary, otherwise leave it as it is."
 }

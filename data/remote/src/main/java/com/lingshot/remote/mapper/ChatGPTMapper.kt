@@ -1,17 +1,20 @@
 package com.lingshot.remote.mapper
 
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
+import com.lingshot.domain.model.MessageDomain
+import com.lingshot.remote.model.Message
 import com.lingshot.remote.model.RequestBody
 
+fun MessageDomain.toMessageEntity(): Message {
+    return Message(role, content)
+}
+
 fun ChatGPTPromptBodyDomain.toRequestBodyEntity(): RequestBody {
+    val messages = messages.map { it.toMessageEntity() }
     return RequestBody(
         model = model,
-        prompt = prompt,
-        maxTokens = maxTokens,
+        messages = messages,
         temperature = temperature,
-        topP = topP,
-        frequencyPenalty = frequencyPenalty,
-        presencePenalty = presencePenalty,
-        stop = stop
+        max_tokens = maxTokens
     )
 }

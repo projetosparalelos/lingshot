@@ -12,6 +12,6 @@ class ChatGPTRepositoryImpl @Inject constructor(
 
     override suspend fun get(chatGPTPromptBodyDomain: ChatGPTPromptBodyDomain): String? {
         val response = chatGPTService.get(chatGPTPromptBodyDomain.toRequestBodyEntity())
-        return response.choices?.get(0)?.text?.trim()
+        return response.choices[0].message.content?.trim()
     }
 }

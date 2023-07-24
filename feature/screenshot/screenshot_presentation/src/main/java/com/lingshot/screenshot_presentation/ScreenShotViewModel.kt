@@ -12,6 +12,7 @@ import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
 import com.lingshot.domain.model.LanguageCodeFromAndToDomain
+import com.lingshot.domain.model.MessageDomain
 import com.lingshot.domain.model.PhraseDomain
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
@@ -234,7 +235,16 @@ class ScreenShotViewModel @Inject constructor(
         if (text.isNotBlank()) {
             viewModelScope.launchWithStatus({
                 val requestBody = ChatGPTPromptBodyDomain(
-                    prompt = PROMPT_TRANSLATE(getLanguage()?.displayName, text)
+                    messages = listOf(
+                        MessageDomain(
+                            role = "system",
+                            content = PROMPT_TRANSLATE(getLanguage()?.displayName)
+                        ),
+                        MessageDomain(
+                            role = "user",
+                            content = text
+                        )
+                    )
                 )
                 LanguageTranslationDomain(
                     originalText = text,
@@ -253,7 +263,16 @@ class ScreenShotViewModel @Inject constructor(
     private fun fetchCorrectedOriginalText(originalText: String) {
         viewModelScope.launchWithStatus({
             val requestBody = ChatGPTPromptBodyDomain(
-                prompt = PROMPT_CORRECT_SPELLING(originalText)
+                messages = listOf(
+                    MessageDomain(
+                        role = "system",
+                        content = PROMPT_CORRECT_SPELLING
+                    ),
+                    MessageDomain(
+                        role = "user",
+                        content = originalText
+                    )
+                )
             )
             chatGPTRepository.get(requestBody)
         }, { status ->

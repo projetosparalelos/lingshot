@@ -6,6 +6,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface ChatGPTService {
-    @POST("completions")
+    @POST("chat/completions")
     suspend fun get(@Body body: RequestBody): ChatGPTResponse
 }
