@@ -49,8 +49,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
 
     fun onFloating(
         coroutineScope: CoroutineScope,
-        onScreenShot: () -> Unit,
-        onStopService: () -> Unit
+        onScreenShot: () -> Unit
     ) {
         with(imageButtonScreenCaptureFloating) {
             setOnClickListener {
@@ -63,8 +62,11 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
                     showOrHide()
                 }
             }
-            onTouchMoveFloatingButton(onStopService)
         }
+    }
+
+    fun onFloatingClose(onStopService: () -> Unit) {
+        imageButtonScreenCaptureFloating.onTouchMoveFloatingButton(onStopService)
     }
 
     private fun ImageButton.onTouchMoveFloatingButton(onStopService: () -> Unit) {
@@ -126,7 +128,11 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
             PixelFormat.TRANSLUCENT
-        )
+        ).apply {
+            gravity = Gravity.TOP or Gravity.START
+            x = 0
+            y = 0
+        }
     }
 
     private fun setupWindowParamsFloatingClose() {
