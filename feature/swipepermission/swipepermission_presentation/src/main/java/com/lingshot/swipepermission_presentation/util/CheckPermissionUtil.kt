@@ -25,6 +25,6 @@ val PERMISSIONS = listOf(
         READ_MEDIA_IMAGES
     } else {
         READ_EXTERNAL_STORAGE
-    },
-    WRITE_EXTERNAL_STORAGE
+        WRITE_EXTERNAL_STORAGE
+    }
 )

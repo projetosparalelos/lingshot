@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lingshot.common.util.singleClick
 import com.lingshot.swipepermission_presentation.R
 
 @Composable
@@ -21,7 +22,7 @@ fun SwipePermissionGoogleAuthButton(
 ) {
     Button(
         modifier = modifier,
-        onClick = onSignIn,
+        onClick = singleClick(onSignIn),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.onBackground
         )

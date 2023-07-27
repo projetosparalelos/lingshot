@@ -126,11 +126,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
             PixelFormat.TRANSLUCENT
-        ).apply {
-            gravity = Gravity.TOP or Gravity.START
-            x = 0
-            y = 0
-        }
+        )
     }
 
     private fun setupWindowParamsFloatingClose() {
