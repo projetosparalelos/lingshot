@@ -24,9 +24,6 @@ import com.lingshot.screencapture.navigation.NavigationIntent
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
@@ -53,12 +50,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
                 screenCaptureManager.captureScreenshot(lifecycleScope)
             }
         )
-        lifecycleScope.launch {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                delay(2.seconds)
-            }
-            screenCaptureFloatingWindow.onFloatingClose { stopSelf() }
-        }
+        screenCaptureFloatingWindow.onFloatingClose { stopSelf() }
     }
 
     override fun onConfigurationChanged(configuration: Configuration) {

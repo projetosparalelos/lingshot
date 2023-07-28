@@ -37,6 +37,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
     private var initialY = 0
     private var initialTouchX = 0f
     private var initialTouchY = 0f
+    private var isStopServiceAllowed = false
 
     private val imageButtonScreenCaptureFloating by lazy {
         rootViewFloating.findViewById<ImageButton>(R.id.image_button_screen_capture_floating)
@@ -60,6 +61,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
                         onScreenShot.invoke()
                     }
                     showOrHide()
+                    isStopServiceAllowed = true
                 }
             }
         }
@@ -99,7 +101,10 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
                         windowParamsFloating.y =
                             screenHeight - rootViewFloating.height
                     }
-                    if (event.rawY > initialTouchY) rootViewFloatingClose.isVisible = true
+                    if (event.rawY > initialTouchY) {
+                        rootViewFloatingClose.isVisible = true
+                        isStopServiceAllowed = true
+                    }
                     windowManager.updateViewLayout(rootViewFloating, windowParamsFloating)
                 }
                 MotionEvent.ACTION_UP -> {
@@ -156,7 +161,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
     }
 
     private fun setupFloatingCloseService(onStopService: () -> Unit) {
-        if (rootViewFloating.isViewOverlapping(rootViewFloatingClose)) {
+        if (rootViewFloating.isViewOverlapping(rootViewFloatingClose) && isStopServiceAllowed) {
             onStopService.invoke()
         }
     }
