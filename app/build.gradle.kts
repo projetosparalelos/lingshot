@@ -23,6 +23,15 @@ android {
         minSdk = AppVersionPlugin.MIN_SDK
         targetSdk = AppVersionPlugin.TARGET_SDK
     }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("keystore/lingshot-key.jks")
+            keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+            storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+        }
+    }
 }
 
 dependencies {
