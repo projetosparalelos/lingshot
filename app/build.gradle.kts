@@ -32,6 +32,13 @@ android {
             storePassword = System.getenv("SIGNING_STORE_PASSWORD")
         }
     }
+
+    buildTypes {
+        getByName("release") {
+            proguardFiles("proguard-android.txt", "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
 }
 
 dependencies {
