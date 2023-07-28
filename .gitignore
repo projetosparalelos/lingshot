@@ -3,7 +3,6 @@
 /local.properties
 /lingshot-keys.properties
 /app/src/google-services.json
-/keystore/lingshot-key.jks
 .DS_Store
 /build
 /captures
@@ -11,3 +10,4 @@
 .cxx
 local.properties
 /.idea/
+/keystore/lingshot-key
