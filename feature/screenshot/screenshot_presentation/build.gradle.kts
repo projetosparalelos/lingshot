@@ -28,4 +28,5 @@ dependencies {
     implementation(libs.image.cropper)
     implementation(libs.balloon.compose)
     implementation(libs.lottie.compose)
+    implementation(libs.compose.markdown)
 }

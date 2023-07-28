@@ -40,6 +40,7 @@ imageCropper = "4.5.0"
 coil = "2.4.0"
 balloon = "1.5.4"
 lottie = "6.0.1"
+markdown = "0.3.4"
 
 jUnit = "4.13.2"
 
@@ -112,6 +113,7 @@ image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref =
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
+compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "markdown" }
 
 junit = { module = "junit:junit", version.ref = "jUnit" }
 
