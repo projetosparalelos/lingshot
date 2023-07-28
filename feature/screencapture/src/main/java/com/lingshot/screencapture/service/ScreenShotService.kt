@@ -24,7 +24,7 @@ import com.lingshot.screencapture.navigation.NavigationIntent
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
-
+//
 @AndroidEntryPoint
 class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
 
