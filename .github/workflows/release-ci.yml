@@ -40,12 +40,10 @@ jobs:
 
     steps:
       - name: GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          tag_name: ${{ github.event.inputs.tagname }}
-          release_name: ${{ github.event.inputs.tagname }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: ${{ github.event.inputs.tagname }}
           prerelease: false
 
   google-play-release:
