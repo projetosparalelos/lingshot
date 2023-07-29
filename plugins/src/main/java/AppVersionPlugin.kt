@@ -32,7 +32,7 @@ class AppVersionPlugin : Plugin<Project> {
   companion object {
     const val APPLICATION_NAME_ID = "com.lingshot.language"
     const val VERSION_CODE = 7
-    const val VERSION_NAME = "1.7"
+    const val VERSION_NAME = "2.0"
 
     const val COMPILE_SDK = 33
     const val TARGET_SDK = 33
