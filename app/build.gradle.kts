@@ -22,6 +22,8 @@ android {
 
         minSdk = AppVersionPlugin.MIN_SDK
         targetSdk = AppVersionPlugin.TARGET_SDK
+
+        setProperty("archivesBaseName", "${parent?.name}-$versionName")
     }
 
     signingConfigs {
