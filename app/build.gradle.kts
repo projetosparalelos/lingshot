@@ -1,4 +1,4 @@
-@file:Suppress("DSL_SCOPE_VIOLATION")
+@file:Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 
 plugins {
     id("lingshot.android.application.plugin")
@@ -22,6 +22,24 @@ android {
 
         minSdk = AppVersionPlugin.MIN_SDK
         targetSdk = AppVersionPlugin.TARGET_SDK
+
+        setProperty("archivesBaseName", "${parent?.name}-$versionName")
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("../config/signing/lingshot-keystore")
+            keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+            storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        release {
+            proguardFiles("proguard-android.txt", "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+        }
     }
 }
 

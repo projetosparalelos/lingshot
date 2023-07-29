@@ -61,7 +61,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
                         onScreenShot.invoke()
                     }
                     showOrHide()
-                    isStopServiceAllowed = true
+                    isStopServiceAllowed = false
                 }
             }
         }
