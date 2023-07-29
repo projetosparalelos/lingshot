@@ -1,6 +1,23 @@
 name: Release CI
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      tagname:
+        description: 'Version name'
+        required: true
+        default: 'v1.0.0'
+        type: string
+      track:
+        description: 'Track'
+        required: true
+        default: 'internal'
+        type: string
+      status:
+        description: 'Status'
+        required: true
+        default: 'draft'
+        type: string
 
 env:
   CHAT_GPT_KEY_RELEASE: ${{ secrets.CHAT_GPT_KEY_RELEASE }}
@@ -16,6 +33,28 @@ env:
   SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
 
 jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event.inputs.track == 'production' }}
+    steps:
+      - name: Create tag
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ github.event.inputs.tagname }}',
+              sha: context.sha
+            })
+
+      - name: GitHub Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: ${{ github.event.inputs.tagname }}
+          prerelease: false
 
   google-play-release:
     runs-on: ubuntu-latest
@@ -45,5 +84,5 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.lingshot.language
           releaseFiles: ./app/build/outputs/bundle/release/*.aab
-          status: draft
-          track: internal
+          status: ${{ github.event.inputs.status }}
+          track: ${{ github.event.inputs.track }}
