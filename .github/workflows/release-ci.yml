@@ -46,7 +46,6 @@ jobs:
         with:
           tag_name: ${{ github.event.inputs.tagname }}
           release_name: ${{ github.event.inputs.tagname }}
-          draft: true
           prerelease: false
 
   google-play-release:
