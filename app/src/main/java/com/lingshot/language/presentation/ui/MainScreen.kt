@@ -1,12 +1,16 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 
 package com.lingshot.language.presentation.ui
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
 import android.content.Context
 import android.content.Context.MEDIA_PROJECTION_SERVICE
 import android.content.Intent
 import android.media.projection.MediaProjectionManager
+import android.os.Build
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.makeText
 import androidx.activity.ComponentActivity.RESULT_OK
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -31,22 +35,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle.Event.ON_RESUME
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.lingshot.common.R.*
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.lingshot.common.util.findActivity
 import com.lingshot.designsystem.component.LingshotOnLifecycleEvent
 import com.lingshot.home_presentation.ui.HomeRoute
 import com.lingshot.home_presentation.ui.component.HomeToggleServiceButton
+import com.lingshot.language.R
 import com.lingshot.language.presentation.MainEvent
 import com.lingshot.language.presentation.MainUiState
 import com.lingshot.language.presentation.MainViewModel
 import com.lingshot.screencapture.service.ScreenShotService.Companion.getStartIntent
 import com.lingshot.screencapture.service.ScreenShotService.Companion.getStopIntent
 import com.lingshot.screencapture.util.isServiceRunning
+import com.lingshot.swipepermission_presentation.ui.intentApplicationDetailsPermission
 
 @Composable
 fun MainRoute(viewModel: MainViewModel = hiltViewModel()) {
@@ -66,6 +76,11 @@ private fun MainScreen(
     handleEvent: (MainEvent) -> Unit
 ) {
     val activity = context.findActivity()
+    val notificationPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        rememberPermissionState(POST_NOTIFICATIONS)
+    } else {
+        null
+    }
 
     val launcherScreenShotService =
         rememberLauncherForActivityResult(StartActivityForResult()) { result ->
@@ -116,9 +131,22 @@ private fun MainScreen(
         },
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
+            val textMessageNotificationPermission = stringResource(
+                id = R.string.text_message_notification_permission
+            )
             HomeToggleServiceButton(
                 isServiceRunning = uiState.isServiceRunning,
                 onToggleServiceButton = {
+                    if (notificationPermissionState?.status?.isGranted?.not() == true) {
+                        if (notificationPermissionState.status.shouldShowRationale) {
+                            context.startActivity(intentApplicationDetailsPermission(context))
+                            makeText(context, textMessageNotificationPermission, LENGTH_LONG).show()
+                        } else {
+                            notificationPermissionState.launchPermissionRequest()
+                        }
+                        return@HomeToggleServiceButton
+                    }
+
                     if (uiState.isServiceRunning) {
                         activity?.stopScreenShotService()
                         handleEvent(MainEvent.ToggleServiceButton)
