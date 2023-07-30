@@ -19,6 +19,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,11 +31,14 @@ import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun EditPhraseFullScreenPopup(
-    modifier: Modifier = Modifier,
     phrase: PhraseDomain,
     onPhraseChange: (PhraseDomain) -> Unit,
+    onSavePhraseInLanguageCollection: (PhraseDomain) -> Unit,
+    modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
+    val id = rememberSaveable { mutableStateOf(phrase.id) }
+
     Popup(
         onDismissRequest = onDismiss,
         properties = PopupProperties(
@@ -55,7 +60,9 @@ fun EditPhraseFullScreenPopup(
                         }
                     },
                     actions = {
-                        TextButton(onClick = {}) {
+                        TextButton(onClick = {
+                            onSavePhraseInLanguageCollection(phrase.copy(id = id.value))
+                        }) {
                             Text(text = "Save")
                         }
                     }
@@ -106,6 +113,7 @@ private fun EditPhraseFullScreenPopupPreview() {
     EditPhraseFullScreenPopup(
         onDismiss = {},
         phrase = PhraseDomain("What's your name?", "Qual seu nome?"),
-        onPhraseChange = {}
+        onPhraseChange = {},
+        onSavePhraseInLanguageCollection = {}
     )
 }

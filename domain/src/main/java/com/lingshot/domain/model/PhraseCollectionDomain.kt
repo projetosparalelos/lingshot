@@ -5,6 +5,7 @@ data class LanguageCodeFromAndToDomain(
 )
 
 data class PhraseDomain(
+    val id: String = "",
     val original: String = "",
     val translate: String = ""
 )

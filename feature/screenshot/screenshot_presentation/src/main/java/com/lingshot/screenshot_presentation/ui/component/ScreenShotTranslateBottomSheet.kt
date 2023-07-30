@@ -61,14 +61,13 @@ fun ScreenShotTranslateBottomSheet(
     onCorrectedOriginalText: (String) -> Unit,
     isPhraseSaved: Boolean,
     onCheckPhraseInLanguageCollection: (String) -> Unit,
-    onSavePhraseInLanguageCollection: (String, String) -> Unit,
+    onSetPhraseDomain: (String, String) -> Unit,
     onToggleDictionaryFullScreenPopup: (String) -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     var correctedOriginalText by remember { mutableStateOf(languageTranslationDomain.originalText) }
-
     ModalBottomSheet(
         modifier = modifier,
         sheetState = sheetState,
@@ -90,8 +89,8 @@ fun ScreenShotTranslateBottomSheet(
                 ScreenShotButtonAddToList(
                     isPhraseSaved = isPhraseSaved,
                     isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
-                    onSavePhraseLanguage = {
-                        onSavePhraseInLanguageCollection(
+                    onSetPhraseDomain = {
+                        onSetPhraseDomain(
                             correctedOriginalText,
                             languageTranslationDomain.translatedText.toString()
                         )
@@ -153,7 +152,7 @@ fun ScreenShotTranslateBottomSheet(
 private fun ScreenShotButtonAddToList(
     isPhraseSaved: Boolean,
     isLoadingStatus: Boolean,
-    onSavePhraseLanguage: () -> Unit,
+    onSetPhraseDomain: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val iconTint = if (isPhraseSaved) {
@@ -165,7 +164,7 @@ private fun ScreenShotButtonAddToList(
     FilledTonalButton(
         modifier = modifier,
         enabled = !isLoadingStatus,
-        onClick = onSavePhraseLanguage
+        onClick = onSetPhraseDomain
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -250,7 +249,7 @@ private fun ScreenShotTranslateBottomSheetPreview() {
         correctedOriginalTextStatus = statusSuccess("Corrected original"),
         onCorrectedOriginalText = {},
         onCheckPhraseInLanguageCollection = {},
-        onSavePhraseInLanguageCollection = { _, _ -> },
+        onSetPhraseDomain = { _, _ -> },
         onToggleDictionaryFullScreenPopup = {},
         onDismiss = {}
     )

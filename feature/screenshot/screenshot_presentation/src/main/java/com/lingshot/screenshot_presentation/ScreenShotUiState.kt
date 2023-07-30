@@ -1,5 +1,6 @@
 package com.lingshot.screenshot_presentation
 
+import com.lingshot.domain.model.PhraseDomain
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
@@ -13,6 +14,7 @@ data class ScreenShotUiState(
     val screenShotStatus: Status<LanguageTranslationDomain> = statusDefault(),
     val correctedOriginalTextStatus: Status<String> = statusDefault(),
     val dictionaryUrl: String? = null,
+    val phraseDomain: PhraseDomain? = null,
     val isPhraseSaved: Boolean = false,
     val isLanguageSelectionAlertVisible: Boolean = false,
     val isLanguageDialogVisible: Boolean = false,

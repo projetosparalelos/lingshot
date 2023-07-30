@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import com.lingshot.common.R
 
@@ -45,4 +46,12 @@ fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
     is ContextWrapper -> baseContext.findActivity()
     else -> null
+}
+
+fun String.encodeBase(): String {
+    val bytes = lowercase()
+        .replace(" ", "")
+        .toByteArray()
+    val encodedBytes = Base64.encode(bytes, Base64.DEFAULT)
+    return String(encodedBytes)
 }

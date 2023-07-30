@@ -9,7 +9,6 @@ import com.lingshot.domain.model.statusError
 import com.lingshot.domain.model.statusSuccess
 import com.lingshot.domain.repository.PhraseCollectionRepository
 import com.lingshot.domain.usecase.UserProfileUseCase
-import com.lingshot.remote.util.encodeBase
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.tasks.await
@@ -36,7 +35,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
                 .document(languageCodeFromAndToDomain.name)
                 .apply { set(languageCodeFromAndToDomain) }
                 .collection(COLLECTION_PHRASES)
-                .document(phraseDomain.original.encodeBase())
+                .document(phraseDomain.id)
                 .set(phraseDomain)
                 .await()
 
@@ -87,7 +86,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
             queryCollectionByLanguages
                 .document(languageId)
                 .collection(COLLECTION_PHRASES)
-                .document(phraseId.encodeBase())
+                .document(phraseId)
                 .get().await().exists()
         } catch (e: Exception) {
             Timber.e(e)
@@ -101,7 +100,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
             queryCollectionByLanguages
                 .document(languageId)
                 .collection(COLLECTION_PHRASES)
-                .document(phraseId.encodeBase())
+                .document(phraseId)
                 .delete().await()
         } catch (e: Exception) {
             Timber.e(e)

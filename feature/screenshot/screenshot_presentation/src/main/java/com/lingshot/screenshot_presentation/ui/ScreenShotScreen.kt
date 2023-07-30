@@ -30,7 +30,6 @@ import com.lingshot.screenshot_presentation.ScreenShotEvent.CroppedImage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchCorrectedOriginalText
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchTextRecognizer
 import com.lingshot.screenshot_presentation.ScreenShotEvent.SaveLanguage
-import com.lingshot.screenshot_presentation.ScreenShotEvent.SavePhraseInLanguageCollection
 import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsLanguage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsNavigationBar
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleDictionaryFullScreenPopup
@@ -121,9 +120,12 @@ private fun ScreenShotScreen(
                                 CheckPhraseInLanguageCollection(originalText)
                             )
                         },
-                        onSavePhraseInLanguageCollection = { originalText, translatedText ->
+                        onSetPhraseDomain = { originalText, translatedText ->
                             handleEvent(
-                                SavePhraseInLanguageCollection(originalText, translatedText)
+                                ScreenShotEvent.SetPhraseDomain(
+                                    originalText,
+                                    translatedText
+                                )
                             )
                         },
                         onToggleDictionaryFullScreenPopup = { url ->
@@ -186,6 +188,26 @@ private fun ScreenShotScreen(
         ScreenShotDictionaryFullScreenPopup(url) {
             handleEvent(ToggleDictionaryFullScreenPopup(null))
         }
+    }
+
+    uiState.phraseDomain?.let { phrase ->
+        EditPhraseFullScreenPopup(
+            phrase = phrase,
+            onPhraseChange = {
+                handleEvent(
+                    ScreenShotEvent.SetPhraseDomain(
+                        originalText = it.original,
+                        translatedText = it.translate
+                    )
+                )
+            },
+            onSavePhraseInLanguageCollection = {
+                handleEvent(ScreenShotEvent.SavePhraseInLanguageCollection(it))
+            },
+            onDismiss = {
+                handleEvent(ScreenShotEvent.HideEditPhraseFullScreenPopup)
+            }
+        )
     }
 }
 

@@ -16,6 +16,6 @@ enum class DictionaryType {
     abstract fun url(languageCodeFrom: String, languageCodeTo: String, word: String): String
 
     protected fun String.removeCharactersFromEnd(): String {
-        return replace(Regex("[^\\p{L}\\p{N}]+\$"), "").lowercase()
+        return replace(Regex("[^\\p{L}\\p{N}]+\$"), "").lowercase().trim()
     }
 }

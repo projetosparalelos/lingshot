@@ -14,12 +14,12 @@ class SavePhraseLanguageUseCase @Inject constructor(
     ): Boolean {
         return if (phraseCollectionRepository.isPhraseSaved(
                 languageCodeFromAndToDomain.name,
-                phraseDomain.original
+                phraseDomain.id
             )
         ) {
             phraseCollectionRepository.deletePhraseSaved(
                 languageCodeFromAndToDomain.name,
-                phraseDomain.original
+                phraseDomain.id
             )
             false
         } else {

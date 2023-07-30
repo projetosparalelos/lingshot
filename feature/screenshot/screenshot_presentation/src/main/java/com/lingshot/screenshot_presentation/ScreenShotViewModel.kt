@@ -8,6 +8,7 @@ import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingshot.common.helper.launchWithStatus
+import com.lingshot.common.util.encodeBase
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
@@ -91,10 +92,7 @@ class ScreenShotViewModel @Inject constructor(
             }
 
             is ScreenShotEvent.SavePhraseInLanguageCollection -> {
-                savePhraseInLanguageCollection(
-                    screenShotEvent.originalText,
-                    screenShotEvent.translatedText
-                )
+                saveOrDeletePhraseInLanguageCollection(screenShotEvent.phraseDomain)
             }
 
             is ScreenShotEvent.SelectedOptionsLanguage -> {
@@ -105,10 +103,19 @@ class ScreenShotViewModel @Inject constructor(
                 selectedOptionsNavigationBar(screenShotEvent.navigationBarItem)
             }
 
-            is ScreenShotEvent.CheckPhraseInLanguageCollection -> {
-                checkPhraseInLanguageCollection(
-                    screenShotEvent.originalText
+            is ScreenShotEvent.SetPhraseDomain -> {
+                setPhraseDomain(
+                    screenShotEvent.originalText,
+                    screenShotEvent.translatedText
                 )
+            }
+
+            is ScreenShotEvent.CheckPhraseInLanguageCollection -> {
+                checkPhraseInLanguageCollection(screenShotEvent.originalText)
+            }
+
+            is ScreenShotEvent.HideEditPhraseFullScreenPopup -> {
+                hideEditPhraseFullScreenPopup()
             }
 
             is ScreenShotEvent.ClearStatus -> {
@@ -204,6 +211,24 @@ class ScreenShotViewModel @Inject constructor(
                 isPhraseSaved = false
             )
         }
+    }
+
+    private fun hideEditPhraseFullScreenPopup() {
+        _uiState.update { it.copy(phraseDomain = null) }
+    }
+
+    private fun setPhraseDomain(originalText: String, translatedText: String) {
+        val phraseDomain = PhraseDomain(
+            id = originalText.encodeBase(),
+            original = originalText,
+            translate = translatedText
+        )
+
+        if (_uiState.value.isPhraseSaved) {
+            saveOrDeletePhraseInLanguageCollection(phraseDomain)
+            return
+        }
+        _uiState.update { it.copy(phraseDomain = phraseDomain) }
     }
 
     private fun fetchTextRecognizer(imageBitmap: Bitmap?) {
@@ -361,19 +386,16 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun savePhraseInLanguageCollection(
-        originalText: String,
-        translatedText: String
-    ) {
+    private fun saveOrDeletePhraseInLanguageCollection(phraseDomain: PhraseDomain) {
         viewModelScope.launch {
-            val languageDomain = originalText.getLanguageCodeFromAndToDomain()
-            val phraseDomain = PhraseDomain(original = originalText, translate = translatedText)
+            val languageDomain = phraseDomain.original.getLanguageCodeFromAndToDomain()
             _uiState.update {
                 it.copy(
                     isPhraseSaved = savePhraseLanguageUseCase(
                         languageDomain,
                         phraseDomain
-                    )
+                    ),
+                    phraseDomain = null
                 )
             }
         }
@@ -386,8 +408,8 @@ class ScreenShotViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     isPhraseSaved = phraseCollectionRepository.isPhraseSaved(
-                        originalText.getLanguageCodeFromAndToDomain().name,
-                        originalText
+                        languageId = originalText.getLanguageCodeFromAndToDomain().name,
+                        phraseId = originalText.encodeBase()
                     )
                 )
             }
