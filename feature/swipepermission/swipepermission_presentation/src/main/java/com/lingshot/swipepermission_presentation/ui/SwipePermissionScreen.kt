@@ -160,7 +160,9 @@ private fun SwipePermissionScreen(
                         when (item) {
                             READ_AND_WRITE -> {
                                 if (permissionState.shouldShowRationale) {
-                                    context.startActivity(intentApplicationDetailsPermission(context))
+                                    context.startActivity(
+                                        intentApplicationDetailsPermission(context)
+                                    )
                                 } else {
                                     permissionState.launchMultiplePermissionRequest()
                                 }
