@@ -1,2 +1,3 @@
 <resources>
+    <string name="text_message_notification_permission">Please enable post notification permission for updates!</string>
 </resources>
