@@ -1,7 +1,6 @@
 package com.lingshot.screenshot_presentation
 
 import android.graphics.Bitmap
-import com.lingshot.domain.model.PhraseDomain
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
@@ -28,7 +27,7 @@ sealed class ScreenShotEvent {
     ) : ScreenShotEvent()
 
     data class SavePhraseInLanguageCollection(
-        val phraseDomain: PhraseDomain
+        val phraseDomain: com.phrase.phrasemaster_domain.model.PhraseDomain
     ) : ScreenShotEvent()
 
     data class SelectedOptionsLanguage(

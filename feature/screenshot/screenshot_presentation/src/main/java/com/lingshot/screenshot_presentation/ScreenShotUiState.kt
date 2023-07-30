@@ -1,12 +1,12 @@
 package com.lingshot.screenshot_presentation
 
-import com.lingshot.domain.model.PhraseDomain
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
+import com.phrase.phrasemaster_domain.model.PhraseDomain
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 

@@ -16,6 +16,8 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":feature:languagechoice:languagechoice_domain"))
     implementation(project(":feature:languagechoice:languagechoice_presentation"))
+    implementation(project(":feature:phrasemaster:phrasemaster_domain"))
+    implementation(project(":feature:phrasemaster:phrasemaster_presentation"))
     implementation(project(":feature:screencapture"))
     implementation(project(":feature:screenshot:screenshot_domain"))
 
@@ -28,5 +30,4 @@ dependencies {
     implementation(libs.image.cropper)
     implementation(libs.balloon.compose)
     implementation(libs.lottie.compose)
-    implementation(libs.compose.markdown)
 }

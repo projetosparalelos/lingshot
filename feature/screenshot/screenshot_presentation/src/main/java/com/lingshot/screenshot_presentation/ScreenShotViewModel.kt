@@ -12,9 +12,7 @@ import com.lingshot.common.util.encodeBase
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
-import com.lingshot.domain.model.LanguageCodeFromAndToDomain
 import com.lingshot.domain.model.MessageDomain
-import com.lingshot.domain.model.PhraseDomain
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.domain.model.statusEmpty
@@ -22,8 +20,6 @@ import com.lingshot.domain.model.statusError
 import com.lingshot.domain.model.statusLoading
 import com.lingshot.domain.model.statusSuccess
 import com.lingshot.domain.repository.ChatGPTRepository
-import com.lingshot.domain.repository.PhraseCollectionRepository
-import com.lingshot.domain.usecase.SavePhraseLanguageUseCase
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
@@ -36,6 +32,8 @@ import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.FOCUS
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LANGUAGE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LISTEN
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
+import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.*
@@ -218,7 +216,7 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun setPhraseDomain(originalText: String, translatedText: String) {
-        val phraseDomain = PhraseDomain(
+        val phraseDomain = com.phrase.phrasemaster_domain.model.PhraseDomain(
             id = originalText.encodeBase(),
             original = originalText,
             translate = translatedText
@@ -386,7 +384,9 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun saveOrDeletePhraseInLanguageCollection(phraseDomain: PhraseDomain) {
+    private fun saveOrDeletePhraseInLanguageCollection(
+        phraseDomain: com.phrase.phrasemaster_domain.model.PhraseDomain
+    ) {
         viewModelScope.launch {
             val languageDomain = phraseDomain.original.getLanguageCodeFromAndToDomain()
             _uiState.update {
@@ -416,8 +416,8 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private suspend fun String.getLanguageCodeFromAndToDomain(): LanguageCodeFromAndToDomain {
-        return LanguageCodeFromAndToDomain(
+    private suspend fun String.getLanguageCodeFromAndToDomain(): com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain {
+        return com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain(
             name = getLanguageCodeIdentifier() + "_" + getLanguage()?.languageCode.toString()
         )
     }

@@ -1,14 +1,12 @@
-package com.lingshot.remote.repository
+package com.lingshot.phrasemaster_data.repository
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.lingshot.domain.model.LanguageCodeFromAndToDomain
-import com.lingshot.domain.model.PhraseDomain
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusError
 import com.lingshot.domain.model.statusSuccess
-import com.lingshot.domain.repository.PhraseCollectionRepository
 import com.lingshot.domain.usecase.UserProfileUseCase
+import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.tasks.await
@@ -27,8 +25,8 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
                 .collection(COLLECTION_LANGUAGES)
 
     override suspend fun savePhraseInLanguageCollections(
-        languageCodeFromAndToDomain: LanguageCodeFromAndToDomain,
-        phraseDomain: PhraseDomain
+        languageCodeFromAndToDomain: com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain,
+        phraseDomain: com.phrase.phrasemaster_domain.model.PhraseDomain
     ): Status<Unit> {
         return try {
             queryCollectionByLanguages
@@ -47,12 +45,14 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getLanguageCollections(): Status<List<LanguageCodeFromAndToDomain>> {
+    override suspend fun getLanguageCollections(): Status<List<com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain>> {
         return try {
             val languageList = queryCollectionByLanguages
                 .get()
                 .await().map {
-                    it.toObject(LanguageCodeFromAndToDomain::class.java)
+                    it.toObject(
+                        com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain::class.java
+                    )
                 }
             statusSuccess(languageList)
         } catch (e: Exception) {
@@ -63,15 +63,15 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPhrasesByLanguageCollections(
-        languageCodeFromAndToDomain: LanguageCodeFromAndToDomain
-    ): Status<List<PhraseDomain>> {
+        languageCodeFromAndToDomain: com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain
+    ): Status<List<com.phrase.phrasemaster_domain.model.PhraseDomain>> {
         return try {
             val phraseList = queryCollectionByLanguages
                 .document(languageCodeFromAndToDomain.name)
                 .collection(COLLECTION_PHRASES)
                 .get()
                 .await().map {
-                    it.toObject(PhraseDomain::class.java)
+                    it.toObject(com.phrase.phrasemaster_domain.model.PhraseDomain::class.java)
                 }
             statusSuccess(phraseList)
         } catch (e: Exception) {

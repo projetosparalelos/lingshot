@@ -1,8 +1,8 @@
-package com.lingshot.domain.repository
+package com.phrase.phrasemaster_domain.repository
 
-import com.lingshot.domain.model.LanguageCodeFromAndToDomain
-import com.lingshot.domain.model.PhraseDomain
 import com.lingshot.domain.model.Status
+import com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain
+import com.phrase.phrasemaster_domain.model.PhraseDomain
 
 interface PhraseCollectionRepository {
 

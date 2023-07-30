@@ -1,4 +1,4 @@
-package com.lingshot.domain.model
+package com.phrase.phrasemaster_domain.model
 
 data class LanguageCodeFromAndToDomain(
     val name: String = ""

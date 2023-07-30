@@ -24,6 +24,13 @@ class AppVersionPlugin : Plugin<Project> {
                 defaultConfig {
                     minSdk = MIN_SDK
                 }
+
+                buildTypes {
+                    release {
+                        proguardFiles("proguard-android.txt", "proguard-rules.pro")
+                        consumerProguardFiles("proguard-rules.pro")
+                    }
+                }
                 configureKotlinJvm(this)
             }
         }

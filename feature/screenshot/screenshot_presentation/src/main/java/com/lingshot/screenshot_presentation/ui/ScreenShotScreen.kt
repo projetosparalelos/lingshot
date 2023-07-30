@@ -22,6 +22,7 @@ import com.lingshot.common.helper.onError
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
 import com.lingshot.languagechoice_presentation.ui.LanguageChoiceDialog
+import com.lingshot.phrasemaster_presentation.ui.EditPhraseFullScreenPopup
 import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ScreenShotEvent
 import com.lingshot.screenshot_presentation.ScreenShotEvent.CheckPhraseInLanguageCollection
@@ -189,7 +190,6 @@ private fun ScreenShotScreen(
             handleEvent(ToggleDictionaryFullScreenPopup(null))
         }
     }
-
     uiState.phraseDomain?.let { phrase ->
         EditPhraseFullScreenPopup(
             phrase = phrase,

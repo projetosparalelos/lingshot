@@ -1,8 +1,8 @@
-package com.lingshot.domain.usecase
+package com.phrase.phrasemaster_domain.usecase
 
-import com.lingshot.domain.model.LanguageCodeFromAndToDomain
-import com.lingshot.domain.model.PhraseDomain
-import com.lingshot.domain.repository.PhraseCollectionRepository
+import com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain
+import com.phrase.phrasemaster_domain.model.PhraseDomain
+import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import javax.inject.Inject
 
 class SavePhraseLanguageUseCase @Inject constructor(
