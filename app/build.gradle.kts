@@ -61,6 +61,7 @@ dependencies {
 
     implementation(libs.compose.material3)
     implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.permissions)
     implementation(libs.navigation.compose)
     implementation(libs.core.splash.screen)
 

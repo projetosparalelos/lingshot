@@ -160,7 +160,7 @@ private fun SwipePermissionScreen(
                         when (item) {
                             READ_AND_WRITE -> {
                                 if (permissionState.shouldShowRationale) {
-                                    context.startActivity(intentReadAndWritePermission(context))
+                                    context.startActivity(intentApplicationDetailsPermission(context))
                                 } else {
                                     permissionState.launchMultiplePermissionRequest()
                                 }
@@ -248,7 +248,7 @@ private fun intentSignIn(intentSender: IntentSender) =
 private fun intentOverlayPermission() =
     Intent(ACTION_MANAGE_OVERLAY_PERMISSION)
 
-private fun intentReadAndWritePermission(context: Context) =
+fun intentApplicationDetailsPermission(context: Context) =
     Intent(
         ACTION_APPLICATION_DETAILS_SETTINGS,
         Uri.parse("package:${context.packageName}")
