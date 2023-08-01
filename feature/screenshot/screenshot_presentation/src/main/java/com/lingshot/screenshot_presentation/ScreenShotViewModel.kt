@@ -1,3 +1,5 @@
+@file:Suppress("LongParameterList")
+
 package com.lingshot.screenshot_presentation
 
 import android.content.Context
