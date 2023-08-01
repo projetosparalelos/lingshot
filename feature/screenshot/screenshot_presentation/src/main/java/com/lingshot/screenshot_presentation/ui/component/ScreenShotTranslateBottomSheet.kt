@@ -62,7 +62,7 @@ fun ScreenShotTranslateBottomSheet(
     isPhraseSaved: Boolean,
     onCheckPhraseInLanguageCollection: (String) -> Unit,
     onSetPhraseDomain: (String, String) -> Unit,
-    onToggleDictionaryFullScreenPopup: (String) -> Unit,
+    onToggleDictionaryFullScreenDialog: (String) -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
@@ -125,7 +125,7 @@ fun ScreenShotTranslateBottomSheet(
                         correctedOriginalText = correctedOriginalText,
                         isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
                         onToggleDictionaryFullScreenDialog = {
-                            onToggleDictionaryFullScreenPopup(
+                            onToggleDictionaryFullScreenDialog(
                                 languageTranslationDomain.dictionaryUrl(it)
                             )
                         }
@@ -250,7 +250,7 @@ private fun ScreenShotTranslateBottomSheetPreview() {
         onCorrectedOriginalText = {},
         onCheckPhraseInLanguageCollection = {},
         onSetPhraseDomain = { _, _ -> },
-        onToggleDictionaryFullScreenPopup = {},
+        onToggleDictionaryFullScreenDialog = {},
         onDismiss = {}
     )
 }

@@ -22,7 +22,7 @@ import com.lingshot.common.helper.onError
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
 import com.lingshot.languagechoice_presentation.ui.LanguageChoiceDialog
-import com.lingshot.phrasemaster_presentation.ui.EditPhraseFullScreenPopup
+import com.lingshot.phrasemaster_presentation.ui.EditPhraseFullScreenDialog
 import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ScreenShotEvent
 import com.lingshot.screenshot_presentation.ScreenShotEvent.CheckPhraseInLanguageCollection
@@ -33,7 +33,7 @@ import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchTextRecognizer
 import com.lingshot.screenshot_presentation.ScreenShotEvent.SaveLanguage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsLanguage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsNavigationBar
-import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleDictionaryFullScreenPopup
+import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleDictionaryFullScreenDialog
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleLanguageDialog
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleLanguageDialogAndHideSelectionAlert
 import com.lingshot.screenshot_presentation.ScreenShotUiState
@@ -42,7 +42,7 @@ import com.lingshot.screenshot_presentation.ScreenShotViewModel.Companion.ILLEGI
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotBalloon
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotCropImage
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotDictionaryFullScreenPopup
+import com.lingshot.screenshot_presentation.ui.component.ScreenShotDictionaryFullScreenDialog
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotLottieLoading
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotNavigationBar
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotNavigationBarItem
@@ -129,8 +129,8 @@ private fun ScreenShotScreen(
                                 )
                             )
                         },
-                        onToggleDictionaryFullScreenPopup = { url ->
-                            handleEvent(ToggleDictionaryFullScreenPopup(url))
+                        onToggleDictionaryFullScreenDialog = { url ->
+                            handleEvent(ToggleDictionaryFullScreenDialog(url))
                         },
                         onDismiss = {
                             handleEvent(ClearStatus)
@@ -186,26 +186,18 @@ private fun ScreenShotScreen(
     }
 
     uiState.dictionaryUrl?.let { url ->
-        ScreenShotDictionaryFullScreenPopup(url) {
-            handleEvent(ToggleDictionaryFullScreenPopup(null))
+        ScreenShotDictionaryFullScreenDialog(url) {
+            handleEvent(ToggleDictionaryFullScreenDialog(null))
         }
     }
-    uiState.phraseDomain?.let { phrase ->
-        EditPhraseFullScreenPopup(
-            phrase = phrase,
-            onPhraseChange = {
-                handleEvent(
-                    ScreenShotEvent.SetPhraseDomain(
-                        originalText = it.original,
-                        translatedText = it.translate
-                    )
-                )
-            },
+    if (uiState.isEditFullScreenDialogVisible) {
+        EditPhraseFullScreenDialog(
+            phraseState = uiState.phraseState,
             onSavePhraseInLanguageCollection = {
                 handleEvent(ScreenShotEvent.SavePhraseInLanguageCollection(it))
             },
             onDismiss = {
-                handleEvent(ScreenShotEvent.HideEditPhraseFullScreenPopup)
+                handleEvent(ScreenShotEvent.HideEditPhraseFullScreenDialog)
             }
         )
     }

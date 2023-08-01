@@ -10,4 +10,5 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":feature:languagechoice:languagechoice_domain"))
 }

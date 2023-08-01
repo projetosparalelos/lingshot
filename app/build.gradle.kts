@@ -57,7 +57,6 @@ dependencies {
     implementation(project(":feature:phrasemaster:phrasemaster_domain"))
     implementation(project(":feature:phrasemaster:phrasemaster_presentation"))
     implementation(project(":feature:screencapture"))
-    implementation(project(":feature:screenshot:screenshot_data"))
     implementation(project(":feature:screenshot:screenshot_domain"))
     implementation(project(":feature:screenshot:screenshot_presentation"))
     implementation(project(":feature:swipepermission:swipepermission_presentation"))

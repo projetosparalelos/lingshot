@@ -3,10 +3,10 @@ package com.lingshot.screenshot_presentation
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
+import com.lingshot.phrasemaster_presentation.ui.PhraseState
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
-import com.phrase.phrasemaster_domain.model.PhraseDomain
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -14,7 +14,8 @@ data class ScreenShotUiState(
     val screenShotStatus: Status<LanguageTranslationDomain> = statusDefault(),
     val correctedOriginalTextStatus: Status<String> = statusDefault(),
     val dictionaryUrl: String? = null,
-    val phraseDomain: PhraseDomain? = null,
+    val phraseState: PhraseState = PhraseState(),
+    val isEditFullScreenDialogVisible: Boolean = false,
     val isPhraseSaved: Boolean = false,
     val isLanguageSelectionAlertVisible: Boolean = false,
     val isLanguageDialogVisible: Boolean = false,

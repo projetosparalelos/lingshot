@@ -7,7 +7,6 @@ import com.phrase.phrasemaster_domain.model.PhraseDomain
 interface PhraseCollectionRepository {
 
     suspend fun savePhraseInLanguageCollections(
-        languageCodeFromAndToDomain: LanguageCodeFromAndToDomain,
         phraseDomain: PhraseDomain
     ): Status<Unit>
 
@@ -17,7 +16,7 @@ interface PhraseCollectionRepository {
         languageCodeFromAndToDomain: LanguageCodeFromAndToDomain
     ): Status<List<PhraseDomain>>
 
-    suspend fun isPhraseSaved(languageId: String, phraseId: String): Boolean
+    suspend fun isPhraseSaved(originalText: String): Boolean
 
-    suspend fun deletePhraseSaved(languageId: String, phraseId: String)
+    suspend fun deletePhraseSaved(originalText: String)
 }

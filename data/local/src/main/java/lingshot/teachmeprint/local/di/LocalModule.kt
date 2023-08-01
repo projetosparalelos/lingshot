@@ -1,29 +1,29 @@
-package com.lingshot.screenshot_data.di
+package lingshot.teachmeprint.local.di
 
 import com.google.mlkit.nl.languageid.LanguageIdentification
 import com.google.mlkit.nl.languageid.LanguageIdentifier
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions.DEFAULT_OPTIONS
-import com.lingshot.screenshot_data.repository.ScreenShotRepositoryImpl
-import com.lingshot.screenshot_domain.repository.ScreenShotRepository
+import com.lingshot.domain.repository.TextIdentifierRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import lingshot.teachmeprint.local.repository.TextIdentifierRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ScreenShotDataModule {
+object LocalModule {
 
     @Singleton
     @Provides
     fun provideScreenShotRepository(
         textRecognizer: TextRecognizer,
         languageIdentifier: LanguageIdentifier
-    ): ScreenShotRepository =
-        ScreenShotRepositoryImpl(textRecognizer, languageIdentifier)
+    ): TextIdentifierRepository =
+        TextIdentifierRepositoryImpl(textRecognizer, languageIdentifier)
 
     @Singleton
     @Provides

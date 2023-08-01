@@ -1,9 +1,9 @@
-package com.lingshot.screenshot_domain.repository
+package com.lingshot.domain.repository
 
 import android.graphics.Bitmap
 import com.lingshot.domain.model.Status
 
-interface ScreenShotRepository {
+interface TextIdentifierRepository {
 
     suspend fun fetchTextRecognizer(imageBitmap: Bitmap?): Status<String>
 

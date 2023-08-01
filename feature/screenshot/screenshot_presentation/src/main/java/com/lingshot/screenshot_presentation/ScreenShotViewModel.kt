@@ -20,10 +20,13 @@ import com.lingshot.domain.model.statusError
 import com.lingshot.domain.model.statusLoading
 import com.lingshot.domain.model.statusSuccess
 import com.lingshot.domain.repository.ChatGPTRepository
+import com.lingshot.domain.repository.TextIdentifierRepository
+import com.lingshot.domain.usecase.LanguageIdentifierUseCase
+import com.lingshot.domain.usecase.LanguageIdentifierUseCase.Companion.LANGUAGE_CODE_UNAVAILABLE
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
+import com.lingshot.phrasemaster_presentation.ui.PhraseState
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
-import com.lingshot.screenshot_domain.repository.ScreenShotRepository
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
@@ -32,7 +35,9 @@ import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.FOCUS
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LANGUAGE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LISTEN
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
+import com.phrase.phrasemaster_domain.model.PhraseDomain
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import com.phrase.phrasemaster_domain.usecase.SaveOrDeleteResult
 import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -48,10 +53,11 @@ import kotlinx.coroutines.launch
 class ScreenShotViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val chatGPTRepository: ChatGPTRepository,
-    private val screenShotRepository: ScreenShotRepository,
+    private val textIdentifierRepository: TextIdentifierRepository,
     private val languageChoiceRepository: LanguageChoiceRepository,
     private val phraseCollectionRepository: PhraseCollectionRepository,
-    private val savePhraseLanguageUseCase: SavePhraseLanguageUseCase
+    private val savePhraseLanguageUseCase: SavePhraseLanguageUseCase,
+    private val languageIdentifierUseCase: LanguageIdentifierUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScreenShotUiState())
@@ -112,8 +118,8 @@ class ScreenShotViewModel @Inject constructor(
                 checkPhraseInLanguageCollection(screenShotEvent.originalText)
             }
 
-            is ScreenShotEvent.HideEditPhraseFullScreenPopup -> {
-                hideEditPhraseFullScreenPopup()
+            is ScreenShotEvent.HideEditPhraseFullScreenDialog -> {
+                hideEditPhraseFullScreenDialog()
             }
 
             is ScreenShotEvent.ClearStatus -> {
@@ -128,8 +134,8 @@ class ScreenShotViewModel @Inject constructor(
                 toggleLanguageDialogAndHideSelectionAlert()
             }
 
-            is ScreenShotEvent.ToggleDictionaryFullScreenPopup -> {
-                toggleDictionaryFullScreenPopup(screenShotEvent.url)
+            is ScreenShotEvent.ToggleDictionaryFullScreenDialog -> {
+                toggleDictionaryFullScreenDialog(screenShotEvent.url)
             }
         }
     }
@@ -197,7 +203,7 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun toggleDictionaryFullScreenPopup(url: String?) {
+    private fun toggleDictionaryFullScreenDialog(url: String?) {
         _uiState.update { it.copy(dictionaryUrl = url) }
     }
 
@@ -211,12 +217,12 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun hideEditPhraseFullScreenPopup() {
-        _uiState.update { it.copy(phraseDomain = null) }
+    private fun hideEditPhraseFullScreenDialog() {
+        _uiState.update { it.copy(isEditFullScreenDialogVisible = !it.isEditFullScreenDialogVisible) }
     }
 
     private fun setPhraseDomain(originalText: String, translatedText: String) {
-        val phraseDomain = com.phrase.phrasemaster_domain.model.PhraseDomain(
+        val phraseDomain = PhraseDomain(
             id = originalText.encodeBase(),
             original = originalText,
             translate = translatedText
@@ -226,12 +232,17 @@ class ScreenShotViewModel @Inject constructor(
             saveOrDeletePhraseInLanguageCollection(phraseDomain)
             return
         }
-        _uiState.update { it.copy(phraseDomain = phraseDomain) }
+        _uiState.update {
+            it.copy(
+                phraseState = PhraseState(phraseDomain, true),
+                isEditFullScreenDialogVisible = true
+            )
+        }
     }
 
     private fun fetchTextRecognizer(imageBitmap: Bitmap?) {
         viewModelScope.launch {
-            when (val status = screenShotRepository.fetchTextRecognizer(imageBitmap)) {
+            when (val status = textIdentifierRepository.fetchTextRecognizer(imageBitmap)) {
                 is Status.Success -> {
                     val textFormatted = status.data.formatText()
                     when (_uiState.value.navigationBarItem) {
@@ -272,7 +283,7 @@ class ScreenShotViewModel @Inject constructor(
                 LanguageTranslationDomain(
                     originalText = text,
                     translatedText = chatGPTRepository.get(requestBody),
-                    languageCodeFrom = text.getLanguageCodeIdentifier(),
+                    languageCodeFrom = languageIdentifierUseCase(text),
                     languageCodeTo = getLanguage()?.languageCode.toString()
                 )
             }, { status ->
@@ -305,7 +316,7 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun fetchLanguageIdentifier(text: String) {
         viewModelScope.launch {
-            when (val status = screenShotRepository.fetchLanguageIdentifier(text)) {
+            when (val status = textIdentifierRepository.fetchLanguageIdentifier(text)) {
                 is Status.Success -> {
                     fetchTextToSpeech(text.ifBlank { ILLEGIBLE_TEXT }, status.data.toString())
                 }
@@ -385,18 +396,26 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun saveOrDeletePhraseInLanguageCollection(
-        phraseDomain: com.phrase.phrasemaster_domain.model.PhraseDomain
+        phraseDomain: PhraseDomain
     ) {
         viewModelScope.launch {
-            val languageDomain = phraseDomain.original.getLanguageCodeFromAndToDomain()
             _uiState.update {
-                it.copy(
-                    isPhraseSaved = savePhraseLanguageUseCase(
-                        languageDomain,
-                        phraseDomain
-                    ),
-                    phraseDomain = null
-                )
+                it.copy(phraseState = it.phraseState.copy(isValidLanguage = true))
+            }
+            when (val result = savePhraseLanguageUseCase(phraseDomain)) {
+                is SaveOrDeleteResult.InvalidLanguage -> {
+                    _uiState.update {
+                        it.copy(phraseState = it.phraseState.copy(isValidLanguage = false))
+                    }
+                }
+                is SaveOrDeleteResult.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isPhraseSaved = result.isPhraseSaved,
+                            isEditFullScreenDialogVisible = false
+                        )
+                    }
+                }
             }
         }
     }
@@ -407,27 +426,10 @@ class ScreenShotViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isPhraseSaved = phraseCollectionRepository.isPhraseSaved(
-                        languageId = originalText.getLanguageCodeFromAndToDomain().name,
-                        phraseId = originalText.encodeBase()
-                    )
+                    isPhraseSaved = phraseCollectionRepository.isPhraseSaved(originalText)
                 )
             }
         }
-    }
-
-    private suspend fun String.getLanguageCodeFromAndToDomain(): com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain {
-        return com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain(
-            name = getLanguageCodeIdentifier() + "_" + getLanguage()?.languageCode.toString()
-        )
-    }
-
-    private suspend fun String.getLanguageCodeIdentifier(): String {
-        val status = screenShotRepository.fetchLanguageIdentifier(this)
-        if (status is Status.Success) {
-            return status.data.orEmpty()
-        }
-        return ""
     }
 
     private fun String?.formatText(): String {
@@ -439,7 +441,6 @@ class ScreenShotViewModel @Inject constructor(
 
     companion object {
         const val ILLEGIBLE_TEXT = "There isn't any legible text."
-        private const val LANGUAGE_CODE_UNAVAILABLE = "und"
         private const val STATUS_TEXT_TO_SPEECH_FAILED = "Text to speech failed."
         private const val STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED = "Text to speech not supported."
     }
