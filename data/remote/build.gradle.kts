@@ -22,7 +22,6 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.firestore.ktx)
 
     debugImplementation(libs.chucker.library)
     releaseImplementation(libs.chucker.library.no.op)

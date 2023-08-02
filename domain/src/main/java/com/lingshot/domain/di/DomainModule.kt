@@ -1,8 +1,8 @@
 package com.lingshot.domain.di
 
 import com.lingshot.domain.repository.GoogleAuthRepository
-import com.lingshot.domain.repository.PhraseCollectionRepository
-import com.lingshot.domain.usecase.SavePhraseLanguageUseCase
+import com.lingshot.domain.repository.TextIdentifierRepository
+import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.lingshot.domain.usecase.UserProfileUseCase
 import dagger.Module
 import dagger.Provides
@@ -22,7 +22,7 @@ object DomainModule {
 
     @Singleton
     @Provides
-    fun provideSavePhraseLanguageUseCase(
-        phraseCollectionRepository: PhraseCollectionRepository
-    ): SavePhraseLanguageUseCase = SavePhraseLanguageUseCase(phraseCollectionRepository)
+    fun provideLanguageIdentifierUseCase(
+        textIdentifierRepository: TextIdentifierRepository
+    ): LanguageIdentifierUseCase = LanguageIdentifierUseCase(textIdentifierRepository)
 }

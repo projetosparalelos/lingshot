@@ -4,9 +4,12 @@ import android.graphics.Bitmap
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
+import com.phrase.phrasemaster_domain.model.PhraseDomain
 
 sealed class ScreenShotEvent {
     object ClearStatus : ScreenShotEvent()
+
+    object HideEditPhraseFullScreenDialog : ScreenShotEvent()
 
     object ToggleLanguageDialog : ScreenShotEvent()
 
@@ -25,8 +28,7 @@ sealed class ScreenShotEvent {
     ) : ScreenShotEvent()
 
     data class SavePhraseInLanguageCollection(
-        val originalText: String,
-        val translatedText: String
+        val phraseDomain: PhraseDomain
     ) : ScreenShotEvent()
 
     data class SelectedOptionsLanguage(
@@ -45,7 +47,12 @@ sealed class ScreenShotEvent {
         val imageBitmap: Bitmap?
     ) : ScreenShotEvent()
 
-    data class ToggleDictionaryFullScreenPopup(
+    data class ToggleDictionaryFullScreenDialog(
         val url: String?
+    ) : ScreenShotEvent()
+
+    data class SetPhraseDomain(
+        val originalText: String,
+        val translatedText: String
     ) : ScreenShotEvent()
 }
