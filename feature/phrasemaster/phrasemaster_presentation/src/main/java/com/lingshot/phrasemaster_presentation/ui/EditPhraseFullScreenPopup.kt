@@ -46,9 +46,9 @@ fun EditPhraseFullScreenDialog(
         onDismiss = onDismiss,
         onActions = {
             TextButton(onClick = {
-                state.updateBracketsStatus()
+                state.updateParenthesesStatus()
 
-                if (state.hasWordInDoubleSquareBrackets) {
+                if (state.hasWordInDoubleParentheses) {
                     onSavePhraseInLanguageCollection(state.phraseDomain)
                 }
             }) {
@@ -69,7 +69,7 @@ fun EditPhraseFullScreenDialog(
                         phraseDomain = state.phraseDomain.copy(original = newValue)
                     )
 
-                    state.updateBracketsStatus()
+                    state.updateParenthesesStatus()
                 },
                 label = {
                     Text(
@@ -80,7 +80,7 @@ fun EditPhraseFullScreenDialog(
             MarkdownText(
                 markdown = stringResource(R.string.text_markdown_enclose_word_edit_phrase)
             )
-            AnimatedVisibility(visible = state.hasWordInDoubleSquareBrackets.not()) {
+            AnimatedVisibility(visible = state.hasWordInDoubleParentheses.not()) {
                 MarkdownText(
                     modifier = Modifier.padding(top = 4.dp),
                     markdown = stringResource(R.string.text_markdown_alert_enclose_word_edit_phrase)
@@ -133,14 +133,14 @@ data class PhraseState(
     val phraseDomain: PhraseDomain = PhraseDomain(),
     val isValidLanguage: Boolean = true
 ) {
-    var hasWordInDoubleSquareBrackets by mutableStateOf(true)
+    var hasWordInDoubleParentheses by mutableStateOf(true)
         private set
 
-    fun updateBracketsStatus() {
-        val regex = Regex("\\[\\[([^\\[\\]\\s]+)]]")
+    fun updateParenthesesStatus() {
+        val regex = Regex("\\(\\(([^()\\s]+)\\)\\)")
         val matches = regex.findAll(phraseDomain.original)
         val words = matches.map { it.groupValues[1] }.toList()
 
-        hasWordInDoubleSquareBrackets = (words.size == 1)
+        hasWordInDoubleParentheses = (words.size == 1)
     }
 }
