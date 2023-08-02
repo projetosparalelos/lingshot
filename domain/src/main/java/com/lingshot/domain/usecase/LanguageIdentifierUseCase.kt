@@ -8,8 +8,8 @@ class LanguageIdentifierUseCase @Inject constructor(
     private val textIdentifierRepository: TextIdentifierRepository
 ) {
     suspend operator fun invoke(text: String): String {
-        val textWithoutBrackets = text.replace(Regex("[\\[\\]]"), "")
-        val status = textIdentifierRepository.fetchLanguageIdentifier(textWithoutBrackets)
+        val textWithoutParentheses = text.replace(Regex("\\(\\((.*?)\\)\\)"), "$1")
+        val status = textIdentifierRepository.fetchLanguageIdentifier(textWithoutParentheses)
         if (status is Status.Success) {
             return status.data.orEmpty()
         }

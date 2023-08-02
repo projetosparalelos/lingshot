@@ -3,8 +3,8 @@
     <string name="text_title_toolbar_edit_phrase">Edit sentence</string>
     <string name="text_label_original_input_edit_phrase">Original</string>
     <string name="text_label_translate_input_edit_phrase">Translation</string>
-    <string name="text_markdown_enclose_word_edit_phrase">"Enclose a word you want to practice in `[[ ]]`, for example: `What's your [[name]]?`"</string>
-    <string name="text_markdown_alert_enclose_word_edit_phrase">⚠️ **Warning:** The phrase should contain only one word enclosed in double square brackets `[[word]]`.</string>
+    <string name="text_markdown_enclose_word_edit_phrase">"Enclose a word you want to practice in `(( ))`, for example: `What's your ((name))?`"</string>
+    <string name="text_markdown_alert_enclose_word_edit_phrase">⚠️ **Warning:** The phrase should contain only one word enclosed in double parentheses `((word))`.</string>
     <string name="text_button_save_edit_phrase">Save</string>
     <string name="text_message_invalid_language">Invalid language. Please check the original field.</string>
 </resources>
