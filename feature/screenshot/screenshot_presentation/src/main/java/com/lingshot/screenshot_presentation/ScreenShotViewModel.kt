@@ -24,7 +24,6 @@ import com.lingshot.domain.model.statusSuccess
 import com.lingshot.domain.repository.ChatGPTRepository
 import com.lingshot.domain.repository.TextIdentifierRepository
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
-import com.lingshot.domain.usecase.LanguageIdentifierUseCase.Companion.LANGUAGE_CODE_UNAVAILABLE
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.lingshot.phrasemaster_presentation.ui.PhraseState
@@ -443,6 +442,7 @@ class ScreenShotViewModel @Inject constructor(
 
     companion object {
         const val ILLEGIBLE_TEXT = "There isn't any legible text."
+        private const val LANGUAGE_CODE_UNAVAILABLE = "und"
         private const val STATUS_TEXT_TO_SPEECH_FAILED = "Text to speech failed."
         private const val STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED = "Text to speech not supported."
     }
