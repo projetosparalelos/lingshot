@@ -13,6 +13,7 @@ android {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
+    implementation(project(":domain"))
     implementation(project(":feature:phrasemaster:phrasemaster_domain"))
 
     implementation(libs.hilt.navigation.compose)

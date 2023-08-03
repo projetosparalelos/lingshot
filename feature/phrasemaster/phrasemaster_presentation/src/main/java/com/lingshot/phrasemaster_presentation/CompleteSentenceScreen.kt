@@ -26,17 +26,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.lingshot.designsystem.component.LingshotMeasureUnconstrained
+import com.lingshot.domain.helper.FormatPhraseHelper.extractWordsInDoubleParentheses
+import com.lingshot.domain.helper.FormatPhraseHelper.removeDoubleParenthesesAllPhrase
 
 @Composable
 fun CompleteSentenceScreen() {
     val sentence = "How are ((you)) doing?"
-    val sentenceWithoutParentheses = sentence.replace(Regex("\\(\\((.*?)\\)\\)"), "$1")
+    val sentenceWithoutParentheses = removeDoubleParenthesesAllPhrase(sentence)
     val getWordWithoutParentheses = extractWordsInDoubleParentheses(sentence)
     val parts = sentenceWithoutParentheses.split(getWordWithoutParentheses)
     var userInput by remember { mutableStateOf(TextFieldValue()) }
@@ -69,7 +69,7 @@ fun CompleteSentenceScreen() {
                             getWordWithoutParentheses.substring(0, userInput.text.length)
                         )
 
-                        MeasureUnconstrained(viewToMeasure = {
+                        LingshotMeasureUnconstrained(viewToMeasure = {
                             Text(
                                 text = getWordWithoutParentheses,
                                 style = MaterialTheme.typography.headlineSmall,
@@ -113,34 +113,6 @@ fun CompleteSentenceScreen() {
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-    }
-}
-
-private fun extractWordsInDoubleParentheses(text: String): String {
-    val regex = Regex("\\(\\((.*?)\\)\\)")
-    val matches = regex.findAll(text)
-    return matches.map { it.groupValues[1] }.joinToString(" ")
-}
-
-@Composable
-fun MeasureUnconstrained(
-    viewToMeasure: @Composable () -> Unit,
-    content: @Composable (measuredWidth: Dp, measuredHeight: Dp) -> Unit
-) {
-    SubcomposeLayout { constraints ->
-        val placeable = subcompose("viewToMeasure", viewToMeasure)[0]
-            .measure(Constraints())
-
-        val measuredWidth = placeable.width.toDp()
-        val measuredHeight = placeable.height.toDp()
-
-        val contentPlaceable = subcompose("content") {
-            content(measuredWidth, measuredHeight)
-        }[0].measure(constraints)
-
-        layout(contentPlaceable.width, contentPlaceable.height) {
-            contentPlaceable.place(0, 0)
-        }
     }
 }
 
