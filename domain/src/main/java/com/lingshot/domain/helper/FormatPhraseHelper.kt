@@ -12,4 +12,11 @@ object FormatPhraseHelper {
         val matches = regexDoubleParentheses.findAll(text)
         return matches.map { it.groupValues[1] }.joinToString(" ")
     }
+
+    fun processPhraseWithDoubleParentheses(text: String): List<String> {
+        return text.replace("((", " ((")
+            .replace("))", ")) ")
+            .replace(Regex("\\s+"), " ")
+            .split(" ")
+    }
 }

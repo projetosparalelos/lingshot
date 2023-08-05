@@ -42,13 +42,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
 import com.lingshot.common.helper.isLoadingStatus
 import com.lingshot.common.helper.onError
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
+import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
+import com.lingshot.designsystem.component.placeholder.placeholder
+import com.lingshot.designsystem.component.placeholder.shimmer
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusSuccess
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain

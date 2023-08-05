@@ -16,14 +16,15 @@ import com.lingshot.home_presentation.ui.component.HomeDeckCard
 import com.lingshot.home_presentation.ui.component.HomeNeedReviewCard
 import com.lingshot.home_presentation.ui.component.HomeOffensiveTitle
 import com.lingshot.home_presentation.ui.component.HomePierChartCard
+import com.lingshot.home_presentation.ui.navigation.HomeDestination
 
 @Composable
-fun HomeRoute() {
-    HomeScreen()
+fun HomeRoute(homeDestination: HomeDestination) {
+    HomeScreen(homeDestination)
 }
 
 @Composable
-private fun HomeScreen() {
+private fun HomeScreen(homeDestination: HomeDestination) {
     Surface {
         Column(
             modifier = Modifier
@@ -39,7 +40,7 @@ private fun HomeScreen() {
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-            HomeDeckCard()
+            HomeDeckCard(onNavigateToCompletePhrase = homeDestination.onNavigateToCompletePhrase)
         }
     }
 }
@@ -47,5 +48,5 @@ private fun HomeScreen() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(HomeDestination())
 }

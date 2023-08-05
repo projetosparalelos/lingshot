@@ -7,15 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "com.lingshot.home_presentation"
+    namespace = "com.lingshot.completephrase_presentation"
 }
 
 dependencies {
-    implementation(project(":core:common"))
+    implementation(project(":domain"))
     implementation(project(":core:designsystem"))
 
     implementation(libs.accompanist.navigation.animation)
 
-    implementation(libs.lottie.compose)
     implementation(libs.hilt.navigation.compose)
 }

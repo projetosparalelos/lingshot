@@ -2,19 +2,12 @@
 
 package com.lingshot.designsystem.component
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -32,29 +25,20 @@ fun LingshotFullScreenDialog(
     content: @Composable () -> Unit
 ) {
     AlertDialog(
+        modifier = modifier,
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             dismissOnBackPress = true,
             usePlatformDefaultWidth = false
         )
     ) {
-        Surface(
-            modifier = modifier.fillMaxSize()
+        LingshotLayout(
+            title = title,
+            icon = Icons.Default.Close,
+            onClickNavigation = onDismiss,
+            actions = onActions
         ) {
-            Column {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(text = title)
-                    },
-                    actions = onActions,
-                    navigationIcon = {
-                        IconButton(onClick = onDismiss) {
-                            Icon(Icons.Default.Close, contentDescription = null)
-                        }
-                    }
-                )
-                content()
-            }
+            content()
         }
     }
     LingshotFullScreenDialogStatusBarColor()

@@ -6,13 +6,19 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lingshot.designsystem.theme.LingshotTheme
-import com.lingshot.language.navigation.LingshotNavHost
+import com.lingshot.language.presentation.ui.MainRoute
 import com.lingshot.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
+import com.lingshot.swipepermission_presentation.ui.SwipePermissionRoute
+import com.lingshot.swipepermission_presentation.util.allPermissionsGranted
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,9 +44,23 @@ class MainActivity : ComponentActivity() {
         systemUiController: SystemUiController = rememberSystemUiController(),
         statusBarColor: Color = MaterialTheme.colorScheme.surface
     ) {
+        var reload by remember { mutableStateOf(false) }
+        val allPermissionsGranted by remember(key1 = reload) {
+            mutableStateOf(allPermissionsGranted(this))
+        }
+
         SideEffect {
             systemUiController.setStatusBarColor(statusBarColor)
         }
-        LingshotNavHost()
+
+        if (allPermissionsGranted) {
+            MainRoute()
+        } else {
+            SwipePermissionRoute(
+                onUpPress = {
+                    reload = !reload
+                }
+            )
+        }
     }
 }
