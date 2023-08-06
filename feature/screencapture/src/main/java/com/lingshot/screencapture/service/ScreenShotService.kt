@@ -3,7 +3,6 @@
 package com.lingshot.screencapture.service
 
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
@@ -87,27 +86,22 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
     private fun setupNotificationForeground() {
         NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.text_notification_title_display_display_tuned_on))
+            .setContentIntent(intentMainActivity())
             .setContentText(
                 getString(R.string.text_notification_message_display_reading_is_ready_to_use)
-            )
-            .addAction(
-                0,
-                getString(R.string.text_notification_button_display_turn_off),
-                intentStopScreenShot()
             )
             .setSmallIcon(R.drawable.ic_translate_24).run {
                 startForeground(NOTIFICATION_FOREGROUND_ID, build())
             }
     }
 
-    private fun intentStopScreenShot() =
-        Intent(this, ScreenShotService::class.java).run {
-            action = STOP_SERVICE
-            PendingIntent.getService(
+    private fun intentMainActivity() =
+        Intent(this, Class.forName(MAIN_ACTIVITY_PATH)).run {
+            PendingIntent.getActivity(
                 this@ScreenShotService,
                 0,
                 this,
-                FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+                FLAG_UPDATE_CURRENT
             )
         }
 
@@ -126,6 +120,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
     }
 
     companion object {
+        private const val MAIN_ACTIVITY_PATH = "com.lingshot.language.MainActivity"
         private const val SCREEN_CAPTURE_DATA = "SCREEN_CAPTURE_DATA"
         private const val STOP_SERVICE = "STOP_SERVICE"
         private const val NOTIFICATION_FOREGROUND_ID = 1

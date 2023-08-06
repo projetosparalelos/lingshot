@@ -1,5 +1,4 @@
 @file:OptIn(
-    ExperimentalMaterial3Api::class,
     ExperimentalPermissionsApi::class,
     ExperimentalLayoutApi::class
 )
@@ -18,7 +17,9 @@ import android.widget.Toast.makeText
 import androidx.activity.ComponentActivity.RESULT_OK
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.compose.foundation.layout.Column
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -30,29 +31,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle.Event.ON_RESUME
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -124,7 +112,11 @@ private fun MainScreen(
         modifier = modifier.systemBarsPadding(),
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            if (shouldShowHomeScreen) {
+            AnimatedVisibility(
+                visible = shouldShowHomeScreen,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 val textMessageNotificationPermission = stringResource(
                     id = R.string.text_message_notification_permission
                 )
@@ -170,44 +162,7 @@ private fun MainScreen(
                         )
                     )
             ) {
-                Column(Modifier.fillMaxSize()) {
-                    if (shouldShowHomeScreen) {
-                        MainToolbar(
-                            title = "Hi, ${uiState.userDomain?.firstName}",
-                            avatar = uiState.userDomain?.profilePictureUrl
-                        )
-                    }
-                    LingshotNavHost(navController = lingshotAppState.navController)
-                }
-            }
-        }
-    )
-}
-
-@Composable
-private fun MainToolbar(title: String?, avatar: String?) {
-    TopAppBar(
-        title = {
-            Text(
-                text = title.toString(),
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = {}) {
-                AsyncImage(
-                    modifier = Modifier.clip(CircleShape),
-                    model = avatar,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { }) {
-                Icon(Icons.Rounded.Settings, contentDescription = null)
+                LingshotNavHost(navController = lingshotAppState.navController)
             }
         }
     )

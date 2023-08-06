@@ -12,10 +12,13 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(project(":domain"))
     implementation(project(":core:designsystem"))
+    implementation(project(":feature:home:home_domain"))
 
     implementation(libs.accompanist.navigation.animation)
 
     implementation(libs.lottie.compose)
+    implementation(libs.coil.compose)
     implementation(libs.hilt.navigation.compose)
 }
