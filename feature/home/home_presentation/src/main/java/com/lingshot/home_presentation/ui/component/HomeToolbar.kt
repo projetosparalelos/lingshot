@@ -20,8 +20,12 @@ import coil.compose.AsyncImage
 import com.lingshot.domain.model.UserDomain
 
 @Composable
-fun HomeToolbar(userDomain: UserDomain?) {
+fun HomeToolbar(
+    userDomain: UserDomain?,
+    modifier: Modifier = Modifier
+) {
     TopAppBar(
+        modifier = modifier,
         title = {
             Text(
                 text = "Hi, ${userDomain?.firstName}",
