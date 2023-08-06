@@ -95,7 +95,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
                 startForeground(NOTIFICATION_FOREGROUND_ID, build())
             }
     }
-//
+
     private fun intentMainActivity() =
         Intent(this, Class.forName(MAIN_ACTIVITY_PATH)).run {
             PendingIntent.getActivity(
