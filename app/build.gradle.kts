@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":data:local"))
     implementation(project(":data:remote"))
     implementation(project(":domain"))
+    implementation(project(":feature:completephrase:completephrase_presentation"))
     implementation(project(":feature:home:home_presentation"))
     implementation(project(":feature:languagechoice:languagechoice_data"))
     implementation(project(":feature:languagechoice:languagechoice_domain"))
@@ -64,7 +65,8 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.permissions)
-    implementation(libs.navigation.compose)
+    implementation(libs.accompanist.navigation.animation)
+
     implementation(libs.core.splash.screen)
 
     implementation(libs.hilt.navigation.compose)

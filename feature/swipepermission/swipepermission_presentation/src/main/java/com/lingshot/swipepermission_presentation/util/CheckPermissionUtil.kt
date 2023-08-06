@@ -13,7 +13,7 @@ fun allPermissionsGranted(context: Context) =
     (hasPermissions(context) && hasOverlayPermission(context))
 
 private fun hasPermissions(context: Context) =
-    PERMISSIONS.filter { it != WRITE_EXTERNAL_STORAGE }.all {
+    PERMISSIONS.all {
         ActivityCompat.checkSelfPermission(context, it) == PERMISSION_GRANTED
     }
 

@@ -22,6 +22,7 @@ class AndroidLibraryComposePlugin : Plugin<Project> {
                 add("implementation", libs.getLibrary("compose-material-iconsExtended"))
                 add("implementation", libs.getLibrary("compose-material3"))
                 add("implementation", libs.getLibrary("compose-ui"))
+                add("implementation", libs.getLibrary("compose-ui-util"))
                 add("implementation", libs.getLibrary("compose-ui-tooling-preview"))
 
                 add("debugImplementation", libs.getLibrary("compose-ui-tooling"))

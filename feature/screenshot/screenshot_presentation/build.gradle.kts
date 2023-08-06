@@ -23,7 +23,6 @@ dependencies {
 
     implementation(libs.activity.compose)
     implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.placeholder.material)
 
     implementation(libs.hilt.navigation.compose)
 

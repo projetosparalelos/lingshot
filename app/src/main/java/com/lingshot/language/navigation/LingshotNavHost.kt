@@ -1,30 +1,34 @@
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package com.lingshot.language.navigation
 
-import android.content.Context
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
-import com.lingshot.home_presentation.navigation.homeScreen
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.lingshot.completephrase_presentation.navigation.completePhraseScreen
+import com.lingshot.completephrase_presentation.navigation.navigateToCompletePhrase
+import com.lingshot.home_presentation.ui.navigation.HOME_ROUTE
+import com.lingshot.home_presentation.ui.navigation.HomeDestination
+import com.lingshot.home_presentation.ui.navigation.homeScreen
 
 @Composable
-fun LingshotNavHost(
-    navController: NavHostController = rememberNavController(),
-    context: Context = LocalContext.current
-) {
-    NavHost(navController, startDestination = START_ROUTE) {
-        startScreen(context) {
-            navController.navigateToMain(
-                navOptions {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        inclusive = true
-                    }
-                }
-            )
-        }
-        homeScreen()
+fun LingshotNavHost(navController: NavHostController) {
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = HOME_ROUTE
+    ) {
+        val homeDestination = homeDestination(navController)
+
+        homeScreen(homeDestination)
+        completePhraseScreen()
     }
+}
+
+private val homeDestination: (NavHostController) -> HomeDestination = { nav ->
+    HomeDestination(
+        onNavigateToCompletePhrase = {
+            nav.navigateToCompletePhrase()
+        }
+    )
 }

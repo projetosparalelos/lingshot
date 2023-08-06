@@ -1,5 +1,6 @@
 package com.lingshot.home_presentation.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HomeDeckCard(modifier: Modifier = Modifier) {
+fun HomeDeckCard(modifier: Modifier = Modifier, onNavigateToCompletePhrase: () -> Unit) {
     ElevatedCard(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -33,6 +34,9 @@ fun HomeDeckCard(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable {
+                    onNavigateToCompletePhrase()
+                }
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -63,5 +67,5 @@ fun HomeDeckCard(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun HomeCollectionCardPreview() {
-    HomeDeckCard()
+    HomeDeckCard {}
 }
