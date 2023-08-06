@@ -3,6 +3,7 @@
 package com.lingshot.screencapture.service
 
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
@@ -101,7 +102,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
                 this@ScreenShotService,
                 0,
                 this,
-                FLAG_UPDATE_CURRENT
+                FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
             )
         }
 
