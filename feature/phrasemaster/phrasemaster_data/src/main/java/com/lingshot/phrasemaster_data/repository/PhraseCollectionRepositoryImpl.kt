@@ -2,14 +2,15 @@ package com.lingshot.phrasemaster_data.repository
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.lingshot.domain.helper.encodeBase
 import com.lingshot.domain.model.Status
+import com.lingshot.domain.model.statusEmpty
 import com.lingshot.domain.model.statusError
 import com.lingshot.domain.model.statusSuccess
 import com.lingshot.domain.usecase.UserProfileUseCase
-import com.phrase.phrasemaster_domain.mapper.LanguageCodeFromAndToMapper
-import com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain
+import com.phrase.phrasemaster_domain.mapper.LanguageCollectionMapper
+import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import com.phrase.phrasemaster_domain.model.PhraseDomain
+import com.phrase.phrasemaster_domain.model.encodeId
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
@@ -18,7 +19,7 @@ import timber.log.Timber
 
 class PhraseCollectionRepositoryImpl @Inject constructor(
     private val useCase: UserProfileUseCase,
-    private val languageCodeFromAndToMapper: LanguageCodeFromAndToMapper
+    private val languageCollectionMapper: LanguageCollectionMapper
 ) : PhraseCollectionRepository {
 
     private val db = Firebase.firestore
@@ -32,11 +33,11 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     override suspend fun savePhraseInLanguageCollections(
         phraseDomain: PhraseDomain
     ): Status<Unit> {
-        val languageCodeFromAndToDomain = languageCodeFromAndToMapper(phraseDomain.original)
+        val languageCollectionDomain = languageCollectionMapper(phraseDomain.original)
         return try {
             queryCollectionByLanguages
-                .document(languageCodeFromAndToDomain.id)
-                .apply { set(languageCodeFromAndToDomain) }
+                .document(languageCollectionDomain.id)
+                .apply { set(languageCollectionDomain) }
                 .collection(COLLECTION_PHRASES)
                 .document(phraseDomain.id)
                 .set(phraseDomain)
@@ -50,16 +51,21 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getLanguageCollections(): Status<List<LanguageCodeFromAndToDomain>> {
+    override suspend fun getLanguageCollections(): Status<List<LanguageCollectionDomain>> {
         return try {
             val languageList = queryCollectionByLanguages
                 .get()
                 .await().map {
                     it.toObject(
-                        LanguageCodeFromAndToDomain::class.java
+                        LanguageCollectionDomain::class.java
                     )
                 }
-            statusSuccess(languageList)
+
+            if (languageList.isNotEmpty()) {
+                statusSuccess(languageList)
+            } else {
+                statusEmpty()
+            }
         } catch (e: Exception) {
             Timber.e(e)
             if (e is CancellationException) throw e
@@ -68,11 +74,11 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPhrasesByLanguageCollections(
-        languageCodeFromAndToDomain: LanguageCodeFromAndToDomain
+        languageCollectionDomain: LanguageCollectionDomain
     ): Status<List<PhraseDomain>> {
         return try {
             val phraseList = queryCollectionByLanguages
-                .document(languageCodeFromAndToDomain.id)
+                .document(languageCollectionDomain.id)
                 .collection(COLLECTION_PHRASES)
                 .get()
                 .await().map {
@@ -87,8 +93,8 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isPhraseSaved(originalText: String): Boolean {
-        val languageId = languageCodeFromAndToMapper(originalText).id
-        val phraseId = originalText.encodeBase()
+        val languageId = languageCollectionMapper(originalText).id
+        val phraseId = originalText.encodeId()
         return try {
             queryCollectionByLanguages
                 .document(languageId)
@@ -103,8 +109,8 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deletePhraseSaved(originalText: String) {
-        val languageId = languageCodeFromAndToMapper(originalText).id
-        val phraseId = originalText.encodeBase()
+        val languageId = languageCollectionMapper(originalText).id
+        val phraseId = originalText.encodeId()
         try {
             queryCollectionByLanguages
                 .document(languageId)

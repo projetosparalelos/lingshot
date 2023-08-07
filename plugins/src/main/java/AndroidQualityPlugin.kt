@@ -43,6 +43,7 @@ class AndroidQualityPlugin : Plugin<Project> {
 
             dependencies {
                 add("detektPlugins", libs.getLibrary("compose-detekt"))
+                add("lintChecks",libs.getLibrary("compose-lint-checks"))
             }
         }
     }

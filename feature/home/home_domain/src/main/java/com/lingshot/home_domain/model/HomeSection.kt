@@ -7,8 +7,8 @@ data class HomeSection(
 
 enum class HomeTypeSection {
     HEADER,
+    COLLECTION,
     OFFENSIVE_TITLE,
     NEED_REVIEW,
-    PI_CHART,
-    DECKS;
+    PI_CHART;
 }

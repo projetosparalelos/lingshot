@@ -1,6 +1,6 @@
 package com.phrase.phrasemaster_domain.model
 
-data class LanguageCodeFromAndToDomain(
+data class LanguageCollectionDomain(
     val id: String = "",
     val from: String = "",
     val to: String = ""
