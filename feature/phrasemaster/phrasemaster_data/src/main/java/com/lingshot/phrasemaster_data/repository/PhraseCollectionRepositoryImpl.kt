@@ -2,7 +2,7 @@ package com.lingshot.phrasemaster_data.repository
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.lingshot.common.util.encodeBase
+import com.lingshot.domain.helper.encodeBase
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusError
 import com.lingshot.domain.model.statusSuccess
@@ -35,7 +35,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
         val languageCodeFromAndToDomain = languageCodeFromAndToMapper(phraseDomain.original)
         return try {
             queryCollectionByLanguages
-                .document(languageCodeFromAndToDomain.name)
+                .document(languageCodeFromAndToDomain.id)
                 .apply { set(languageCodeFromAndToDomain) }
                 .collection(COLLECTION_PHRASES)
                 .document(phraseDomain.id)
@@ -72,7 +72,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     ): Status<List<PhraseDomain>> {
         return try {
             val phraseList = queryCollectionByLanguages
-                .document(languageCodeFromAndToDomain.name)
+                .document(languageCodeFromAndToDomain.id)
                 .collection(COLLECTION_PHRASES)
                 .get()
                 .await().map {
@@ -87,7 +87,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isPhraseSaved(originalText: String): Boolean {
-        val languageId = languageCodeFromAndToMapper(originalText).name
+        val languageId = languageCodeFromAndToMapper(originalText).id
         val phraseId = originalText.encodeBase()
         return try {
             queryCollectionByLanguages
@@ -103,7 +103,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deletePhraseSaved(originalText: String) {
-        val languageId = languageCodeFromAndToMapper(originalText).name
+        val languageId = languageCodeFromAndToMapper(originalText).id
         val phraseId = originalText.encodeBase()
         try {
             queryCollectionByLanguages

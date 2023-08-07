@@ -10,9 +10,9 @@ import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingshot.common.helper.launchWithStatus
-import com.lingshot.common.util.encodeBase
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
+import com.lingshot.domain.helper.encodeBase
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
 import com.lingshot.domain.model.MessageDomain
 import com.lingshot.domain.model.Status

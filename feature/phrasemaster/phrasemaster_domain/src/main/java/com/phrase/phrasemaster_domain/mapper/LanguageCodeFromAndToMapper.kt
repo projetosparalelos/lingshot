@@ -1,5 +1,6 @@
 package com.phrase.phrasemaster_domain.mapper
 
+import com.lingshot.domain.helper.encodeBase
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.phrase.phrasemaster_domain.model.LanguageCodeFromAndToDomain
@@ -11,9 +12,12 @@ class LanguageCodeFromAndToMapper @Inject constructor(
     private val languageIdentifierUseCase: LanguageIdentifierUseCase
 ) {
     suspend operator fun invoke(text: String): LanguageCodeFromAndToDomain {
+        val from = languageIdentifierUseCase(text)
+        val to = languageChoiceRepository.getLanguage().first()?.languageCode.toString()
         return LanguageCodeFromAndToDomain(
-            name = languageIdentifierUseCase(text) + "_" +
-                languageChoiceRepository.getLanguage().first()?.languageCode.toString()
+            id = "${from}_$to".encodeBase(),
+            from = from,
+            to = to
         )
     }
 }
