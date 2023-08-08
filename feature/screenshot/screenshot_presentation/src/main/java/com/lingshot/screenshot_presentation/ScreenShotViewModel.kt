@@ -10,7 +10,6 @@ import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingshot.common.helper.launchWithStatus
-import com.lingshot.common.util.encodeBase
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
@@ -37,6 +36,7 @@ import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LANGU
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LISTEN
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import com.phrase.phrasemaster_domain.model.PhraseDomain
+import com.phrase.phrasemaster_domain.model.encodeId
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import com.phrase.phrasemaster_domain.usecase.SaveOrDeleteResult
 import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
@@ -224,7 +224,7 @@ class ScreenShotViewModel @Inject constructor(
 
     private fun setPhraseDomain(originalText: String, translatedText: String) {
         val phraseDomain = PhraseDomain(
-            id = originalText.encodeBase(),
+            id = originalText.encodeId(),
             original = originalText,
             translate = translatedText
         )

@@ -2,7 +2,7 @@ package com.lingshot.phrasemaster_data.di
 
 import com.lingshot.domain.usecase.UserProfileUseCase
 import com.lingshot.phrasemaster_data.repository.PhraseCollectionRepositoryImpl
-import com.phrase.phrasemaster_domain.mapper.LanguageCodeFromAndToMapper
+import com.phrase.phrasemaster_domain.mapper.LanguageCollectionMapper
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import dagger.Module
 import dagger.Provides
@@ -18,7 +18,7 @@ object PhraseMasterDataModule {
     @Provides
     fun providePhraseCollectionRepository(
         userProfileUseCase: UserProfileUseCase,
-        languageCodeFromAndToMapper: LanguageCodeFromAndToMapper
+        languageCollectionMapper: LanguageCollectionMapper
     ): PhraseCollectionRepository =
-        PhraseCollectionRepositoryImpl(userProfileUseCase, languageCodeFromAndToMapper)
+        PhraseCollectionRepositoryImpl(userProfileUseCase, languageCollectionMapper)
 }

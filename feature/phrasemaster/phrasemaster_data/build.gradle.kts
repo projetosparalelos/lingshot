@@ -10,7 +10,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:common"))
     implementation(project(":domain"))
     implementation(project(":feature:phrasemaster:phrasemaster_domain"))
 

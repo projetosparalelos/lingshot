@@ -22,9 +22,18 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lingshot.languagechoice_domain.model.AvailableLanguage
+import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 
 @Composable
-fun HomeDeckCard(modifier: Modifier = Modifier, onNavigateToCompletePhrase: () -> Unit) {
+fun HomeCollectionCard(
+    languageCollectionDomain: LanguageCollectionDomain,
+    modifier: Modifier = Modifier,
+    onNavigateToCompletePhrase: () -> Unit
+) {
+    val languageFrom = AvailableLanguage.from(languageCollectionDomain.from)
+    val languageTo = AvailableLanguage.from(languageCollectionDomain.to)
+
     ElevatedCard(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -42,10 +51,10 @@ fun HomeDeckCard(modifier: Modifier = Modifier, onNavigateToCompletePhrase: () -
         ) {
             val text = buildAnnotatedString {
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)) {
-                    append("\uD83C\uDDFA\uD83C\uDDF8 English ")
+                    append("${languageFrom?.flagEmoji} ${languageFrom?.displayName} ")
                 }
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
-                    append("from portuguese")
+                    append("from ${languageTo?.displayName}")
                 }
             }
             Text(text = text)
@@ -67,5 +76,5 @@ fun HomeDeckCard(modifier: Modifier = Modifier, onNavigateToCompletePhrase: () -
 @Preview(showBackground = true)
 @Composable
 private fun HomeCollectionCardPreview() {
-    HomeDeckCard {}
+    HomeCollectionCard(languageCollectionDomain = LanguageCollectionDomain()) {}
 }
