@@ -110,6 +110,7 @@ private fun MainScreen(
 
     Scaffold(
         modifier = modifier.systemBarsPadding(),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             AnimatedVisibility(

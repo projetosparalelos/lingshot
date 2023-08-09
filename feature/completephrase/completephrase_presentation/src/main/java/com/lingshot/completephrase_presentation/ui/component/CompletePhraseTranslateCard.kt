@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
@@ -27,11 +28,11 @@ import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
 
 @Composable
-internal fun CompletePhraseTranslateCard() {
-    var showOrHideTextTranslate by remember { mutableStateOf(true) }
+fun CompletePhraseTranslateCard(modifier: Modifier = Modifier) {
+    var showOrHideTextTranslate by remember { mutableStateOf(false) }
 
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onSecondary
         )
@@ -70,4 +71,10 @@ internal fun CompletePhraseTranslateCard() {
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CompletePhraseTranslateCardPreview() {
+    CompletePhraseTranslateCard()
 }

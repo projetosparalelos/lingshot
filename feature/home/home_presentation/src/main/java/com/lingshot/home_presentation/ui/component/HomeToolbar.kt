@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.lingshot.domain.model.UserDomain
 
@@ -50,4 +51,10 @@ fun HomeToolbar(
             }
         }
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeToolbarPreview() {
+    HomeToolbar(userDomain = UserDomain())
 }

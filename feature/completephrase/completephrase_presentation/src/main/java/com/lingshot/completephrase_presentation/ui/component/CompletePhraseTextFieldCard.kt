@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalLayoutApi::class)
+@file:OptIn(ExperimentalLayoutApi::class, ExperimentalComposeUiApi::class)
 
 package com.lingshot.completephrase_presentation.ui.component
 
@@ -28,26 +28,30 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lingshot.completephrase_presentation.ReviewLevel
 import com.lingshot.designsystem.component.LingshotMeasureUnconstrained
+import com.lingshot.designsystem.component.LingshotPulseAnimation
+import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
+import com.lingshot.designsystem.component.placeholder.fade
+import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.domain.helper.FormatPhraseHelper
 
 @Composable
-internal fun CompletePhraseTextFieldCard() {
+fun CompletePhraseTextFieldCard(enableVoice: Boolean, modifier: Modifier = Modifier) {
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onSecondary
         )
@@ -62,15 +66,17 @@ internal fun CompletePhraseTextFieldCard() {
             ) {
                 CompletePhraseReviewLevel()
                 Spacer(modifier = Modifier.weight(1f))
-                CompletePhrasePlayAudioButton()
+                CompletePhrasePlayAudioButton(enableVoice)
             }
             Spacer(modifier = Modifier.height(16.dp))
             FlowRow(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .placeholder(enableVoice, highlight = PlaceholderHighlight.fade()),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                CompletePhraseRenderTextWithField()
+                CompletePhraseRenderTextWithField(enableVoice)
             }
             Spacer(modifier = Modifier.height(24.dp))
             CompletePhraseShowWordButton()
@@ -79,14 +85,14 @@ internal fun CompletePhraseTextFieldCard() {
 }
 
 @Composable
-private fun CompletePhraseRenderTextWithField() {
+private fun CompletePhraseRenderTextWithField(enableVoice: Boolean) {
     val sentence = "Let's ((go))! It's time to learn!"
 
     val words = FormatPhraseHelper.processPhraseWithDoubleParentheses(sentence)
     val getWordWithoutParentheses = FormatPhraseHelper.extractWordsInDoubleParentheses(sentence)
 
     var userInput by remember { mutableStateOf(TextFieldValue()) }
-    val focusRequester = remember { FocusRequester() }
+    val softwareKeyboardController = LocalSoftwareKeyboardController.current
 
     val textTypography = MaterialTheme.typography.headlineSmall
     val textColor = MaterialTheme.colorScheme.primary
@@ -112,7 +118,6 @@ private fun CompletePhraseRenderTextWithField() {
             }) { measuredWidth, measuredHeight ->
                 BasicTextField(
                     modifier = Modifier
-                        .focusRequester(focusRequester)
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(4.dp)
                         .size(width = measuredWidth, height = measuredHeight)
@@ -124,8 +129,13 @@ private fun CompletePhraseRenderTextWithField() {
                     onValueChange = {
                         if (it.text.length <= getWordWithoutParentheses.length) {
                             userInput = it
+
+                            if (userInput.text == getWordWithoutParentheses) {
+                                softwareKeyboardController?.hide()
+                            }
                         }
                     }
+
                 )
             }
         } else {
@@ -135,9 +145,6 @@ private fun CompletePhraseRenderTextWithField() {
                 color = textColor
             )
         }
-    }
-
-    LaunchedEffect(Unit) {
     }
 }
 
@@ -176,13 +183,21 @@ private fun CompletePhraseReviewLevel() {
 }
 
 @Composable
-private fun CompletePhrasePlayAudioButton() {
-    IconButton(
-        onClick = { /*TODO*/ }
-    ) {
-        Icon(
-            imageVector = Icons.Default.VolumeUp,
-            contentDescription = null
-        )
+private fun CompletePhrasePlayAudioButton(enableVoice: Boolean) {
+    LingshotPulseAnimation(enableAnimation = enableVoice) {
+        IconButton(
+            onClick = { /*TODO*/ }
+        ) {
+            Icon(
+                imageVector = Icons.Default.VolumeUp,
+                contentDescription = null
+            )
+        }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CompletePhraseTextFieldCardPreview() {
+    CompletePhraseTextFieldCard(false)
 }
