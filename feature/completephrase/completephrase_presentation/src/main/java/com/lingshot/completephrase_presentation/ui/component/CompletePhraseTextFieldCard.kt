@@ -76,7 +76,7 @@ fun CompletePhraseTextFieldCard(enableVoice: Boolean, modifier: Modifier = Modif
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                CompletePhraseRenderTextWithField(enableVoice)
+                CompletePhraseRenderTextWithField()
             }
             Spacer(modifier = Modifier.height(24.dp))
             CompletePhraseShowWordButton()
@@ -85,7 +85,7 @@ fun CompletePhraseTextFieldCard(enableVoice: Boolean, modifier: Modifier = Modif
 }
 
 @Composable
-private fun CompletePhraseRenderTextWithField(enableVoice: Boolean) {
+private fun CompletePhraseRenderTextWithField() {
     val sentence = "Let's ((go))! It's time to learn!"
 
     val words = FormatPhraseHelper.processPhraseWithDoubleParentheses(sentence)
