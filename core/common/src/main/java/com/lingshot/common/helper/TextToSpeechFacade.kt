@@ -13,7 +13,7 @@ import com.lingshot.domain.model.statusLoading
 import com.lingshot.domain.model.statusSuccess
 import java.util.Locale
 
-class TextSpeechFacade<T>(
+class TextToSpeechFacade<T>(
     private val context: Context,
     private val speechStatusCallback: (Status<T>) -> Unit
 ) {

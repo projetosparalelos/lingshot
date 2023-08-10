@@ -7,7 +7,7 @@ import android.graphics.Bitmap
 import android.speech.tts.TextToSpeech.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lingshot.common.helper.TextSpeechFacade
+import com.lingshot.common.helper.TextToSpeechFacade
 import com.lingshot.common.helper.launchWithStatus
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
@@ -61,7 +61,7 @@ class ScreenShotViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ScreenShotUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val textToSpeech = TextSpeechFacade(context) { status ->
+    private val textToSpeech = TextToSpeechFacade(context) { status ->
         _uiState.update { it.copy(screenShotStatus = status) }
     }
 
