@@ -3,6 +3,7 @@
 package com.lingshot.designsystem.component
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -24,7 +25,7 @@ fun LingshotLayout(
     modifier: Modifier = Modifier,
     icon: ImageVector = Icons.Default.ArrowBack,
     actions: @Composable RowScope.() -> Unit = {},
-    content: @Composable () -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) {
     Surface(
         modifier = modifier.fillMaxSize()

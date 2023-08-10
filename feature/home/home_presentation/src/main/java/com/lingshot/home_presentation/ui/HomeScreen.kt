@@ -122,7 +122,7 @@ private fun HomeScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
+private fun HomeScreenPreview() {
     HomeScreen(
         homeDestination = HomeDestination(),
         uiState = HomeUiState()

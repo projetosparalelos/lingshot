@@ -4,11 +4,10 @@ package com.lingshot.screenshot_presentation
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.*
-import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lingshot.common.helper.TextSpeechFacade
 import com.lingshot.common.helper.launchWithStatus
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
@@ -18,8 +17,6 @@ import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.domain.model.statusEmpty
 import com.lingshot.domain.model.statusError
-import com.lingshot.domain.model.statusLoading
-import com.lingshot.domain.model.statusSuccess
 import com.lingshot.domain.repository.ChatGPTRepository
 import com.lingshot.domain.repository.TextIdentifierRepository
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
@@ -64,18 +61,8 @@ class ScreenShotViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ScreenShotUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val textToSpeech: TextToSpeech by lazy {
-        TextToSpeech(context) { status ->
-            if (status != SUCCESS) {
-                _uiState.update {
-                    it.copy(screenShotStatus = statusError(STATUS_TEXT_TO_SPEECH_FAILED))
-                }
-            }
-        }
-    }
-
-    init {
-        setupTextToSpeech()
+    private val textToSpeech = TextSpeechFacade(context) { status ->
+        _uiState.update { it.copy(screenShotStatus = status) }
     }
 
     fun handleEvent(screenShotEvent: ScreenShotEvent) {
@@ -319,7 +306,7 @@ class ScreenShotViewModel @Inject constructor(
         viewModelScope.launch {
             when (val status = textIdentifierRepository.fetchLanguageIdentifier(text)) {
                 is Status.Success -> {
-                    fetchTextToSpeech(text.ifBlank { ILLEGIBLE_TEXT }, status.data.toString())
+                    textToSpeech.speakText(text.ifBlank { ILLEGIBLE_TEXT }, status.data.toString())
                 }
 
                 is Status.Error -> {
@@ -335,54 +322,8 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun fetchTextToSpeech(text: String, languageCode: String) =
-        with(textToSpeech) {
-            val languageLocale = if (languageCode == LANGUAGE_CODE_UNAVAILABLE) {
-                Locale.US
-            } else {
-                Locale.forLanguageTag(languageCode)
-            }
-
-            val result = setLanguage(languageLocale)
-            if (result == LANG_MISSING_DATA || result == LANG_NOT_SUPPORTED) {
-                _uiState.update { value ->
-                    value.copy(
-                        screenShotStatus = statusError(
-                            STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED
-                        )
-                    )
-                }
-            }
-
-            speak(text, QUEUE_FLUSH, null, "")
-        }
-
-    private fun setupTextToSpeech() =
-        with(textToSpeech) {
-            setOnUtteranceProgressListener(onSpeechListener())
-            setSpeechRate(0.7f)
-        }
-
-    private fun onSpeechListener() = object : UtteranceProgressListener() {
-        override fun onStart(p0: String?) {
-            _uiState.update { it.copy(screenShotStatus = statusLoading()) }
-        }
-
-        override fun onDone(value: String?) {
-            _uiState.update { it.copy(screenShotStatus = statusSuccess(null)) }
-        }
-
-        @Deprecated("Deprecated in Java")
-        override fun onError(p0: String?) {
-            _uiState.update {
-                it.copy(screenShotStatus = statusError(p0))
-            }
-        }
-    }
-
     override fun onCleared() {
         super.onCleared()
-        textToSpeech.stop()
         textToSpeech.shutdown()
     }
 
@@ -442,8 +383,5 @@ class ScreenShotViewModel @Inject constructor(
 
     companion object {
         const val ILLEGIBLE_TEXT = "There isn't any legible text."
-        private const val LANGUAGE_CODE_UNAVAILABLE = "und"
-        private const val STATUS_TEXT_TO_SPEECH_FAILED = "Text to speech failed."
-        private const val STATUS_TEXT_TO_SPEECH_NOT_SUPPORTED = "Text to speech not supported."
     }
 }
