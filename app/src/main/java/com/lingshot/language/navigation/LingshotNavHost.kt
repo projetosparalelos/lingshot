@@ -27,8 +27,8 @@ fun LingshotNavHost(navController: NavHostController) {
 
 private val homeDestination: (NavHostController) -> HomeDestination = { nav ->
     HomeDestination(
-        onNavigateToCompletePhrase = {
-            nav.navigateToCompletePhrase()
+        onNavigateToCompletePhrase = { languageId ->
+            nav.navigateToCompletePhrase(languageId)
         }
     )
 }

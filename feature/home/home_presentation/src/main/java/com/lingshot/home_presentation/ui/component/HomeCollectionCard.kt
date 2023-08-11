@@ -29,7 +29,7 @@ import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 fun HomeCollectionCard(
     languageCollectionDomain: LanguageCollectionDomain,
     modifier: Modifier = Modifier,
-    onNavigateToCompletePhrase: () -> Unit
+    onNavigateToCompletePhrase: (String) -> Unit
 ) {
     val languageFrom = AvailableLanguage.from(languageCollectionDomain.from)
     val languageTo = AvailableLanguage.from(languageCollectionDomain.to)
@@ -44,7 +44,7 @@ fun HomeCollectionCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    onNavigateToCompletePhrase()
+                    onNavigateToCompletePhrase(languageCollectionDomain.id)
                 }
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)

@@ -12,27 +12,29 @@ import com.google.accompanist.navigation.animation.composable
 import com.lingshot.completephrase_presentation.ui.CompletePhraseScreenRoute
 
 const val COMPLETE_PHRASE_ROUTE = "complete_phrase_route"
+private const val LANGUAGE_ID = "languageId"
 
-fun NavController.navigateToCompletePhrase(navOptions: NavOptions? = null) {
-    this.navigate(COMPLETE_PHRASE_ROUTE, navOptions)
+fun NavController.navigateToCompletePhrase(languageId: String, navOptions: NavOptions? = null) {
+    this.navigate("$COMPLETE_PHRASE_ROUTE/$languageId", navOptions)
 }
 
 fun NavGraphBuilder.completePhraseScreen() {
     composable(
-        route = COMPLETE_PHRASE_ROUTE,
+        route = "$COMPLETE_PHRASE_ROUTE/{$LANGUAGE_ID}",
         enterTransition = {
             slideIntoContainer(
-                AnimatedContentScope.SlideDirection.Left,
+                towards = AnimatedContentScope.SlideDirection.Left,
                 animationSpec = tween(700)
             )
         },
         exitTransition = {
             slideOutOfContainer(
-                AnimatedContentScope.SlideDirection.Right,
+                towards = AnimatedContentScope.SlideDirection.Right,
                 animationSpec = tween(700)
             )
         }
-    ) {
-        CompletePhraseScreenRoute()
+    ) { navBackStackEntry ->
+        val languageId = navBackStackEntry.arguments?.getString(LANGUAGE_ID)
+        CompletePhraseScreenRoute(languageId = languageId)
     }
 }

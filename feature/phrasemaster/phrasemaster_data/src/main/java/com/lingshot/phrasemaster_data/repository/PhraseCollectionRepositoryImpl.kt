@@ -74,11 +74,11 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPhrasesByLanguageCollections(
-        languageCollectionDomain: LanguageCollectionDomain
+        languageId: String
     ): Status<List<PhraseDomain>> {
         return try {
             val phraseList = queryCollectionByLanguages
-                .document(languageCollectionDomain.id)
+                .document(languageId)
                 .collection(COLLECTION_PHRASES)
                 .get()
                 .await().map {

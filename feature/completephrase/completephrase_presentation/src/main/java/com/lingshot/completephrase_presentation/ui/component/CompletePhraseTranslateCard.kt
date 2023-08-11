@@ -28,8 +28,8 @@ import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
 
 @Composable
-fun CompletePhraseTranslateCard(modifier: Modifier = Modifier) {
-    var showOrHideTextTranslate by remember { mutableStateOf(false) }
+fun CompletePhraseTranslateCard(translateText: String, modifier: Modifier = Modifier) {
+    var isTranslatedTextVisible by remember { mutableStateOf(false) }
 
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
@@ -48,20 +48,20 @@ fun CompletePhraseTranslateCard(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .weight(1f)
                     .placeholder(
-                        visible = !showOrHideTextTranslate,
+                        visible = !isTranslatedTextVisible,
                         highlight = PlaceholderHighlight.fade()
                     ),
-                text = "Vamos lá! É hora de aprender!",
+                text = translateText,
                 fontSize = 18.sp,
                 style = MaterialTheme.typography.bodyLarge
             )
 
             IconButton(onClick = {
-                showOrHideTextTranslate = !showOrHideTextTranslate
+                isTranslatedTextVisible = !isTranslatedTextVisible
             }) {
                 Icon(
                     imageVector =
-                    if (showOrHideTextTranslate) {
+                    if (isTranslatedTextVisible) {
                         Icons.Default.Visibility
                     } else {
                         Icons.Default.VisibilityOff
@@ -76,5 +76,5 @@ fun CompletePhraseTranslateCard(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun CompletePhraseTranslateCardPreview() {
-    CompletePhraseTranslateCard()
+    CompletePhraseTranslateCard("Vamos lá!")
 }

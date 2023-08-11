@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,9 +48,18 @@ import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
 import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.domain.helper.FormatPhraseHelper
+import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.delay
 
 @Composable
-fun CompletePhraseTextFieldCard(enableVoice: Boolean, modifier: Modifier = Modifier) {
+fun CompletePhraseTextFieldCard(
+    isSpeechActive: Boolean,
+    originalText: String,
+    onSpeakText: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var isShimmerVisible by remember { mutableStateOf(true) }
+
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -66,30 +76,51 @@ fun CompletePhraseTextFieldCard(enableVoice: Boolean, modifier: Modifier = Modif
             ) {
                 CompletePhraseReviewLevel()
                 Spacer(modifier = Modifier.weight(1f))
-                CompletePhrasePlayAudioButton(enableVoice)
+                CompletePhrasePlayAudioButton(isSpeechActive)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            FlowRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .placeholder(enableVoice, highlight = PlaceholderHighlight.fade()),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                CompletePhraseRenderTextWithField()
+            if (isSpeechActive || isShimmerVisible) {
+                CompletePhraseRenderTextShimmer(text = originalText)
+            } else {
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    CompletePhraseRenderTextWithField(originalText)
+                }
             }
             Spacer(modifier = Modifier.height(24.dp))
             CompletePhraseShowWordButton()
         }
     }
+
+    LaunchedEffect(Unit) {
+        onSpeakText()
+
+        delay(1.seconds)
+        isShimmerVisible = false
+    }
 }
 
 @Composable
-private fun CompletePhraseRenderTextWithField() {
-    val sentence = "Let's ((go))! It's time to learn!"
+private fun CompletePhraseRenderTextShimmer(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.headlineSmall,
+        modifier = modifier
+            .fillMaxWidth()
+            .placeholder(
+                visible = true,
+                highlight = PlaceholderHighlight.fade()
+            )
+    )
+}
 
-    val words = FormatPhraseHelper.processPhraseWithDoubleParentheses(sentence)
-    val getWordWithoutParentheses = FormatPhraseHelper.extractWordsInDoubleParentheses(sentence)
+@Composable
+private fun CompletePhraseRenderTextWithField(text: String) {
+    val words = FormatPhraseHelper.processPhraseWithDoubleParentheses(text)
+    val getWordWithoutParentheses = FormatPhraseHelper.extractWordsInDoubleParentheses(text)
 
     var userInput by remember { mutableStateOf(TextFieldValue()) }
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
@@ -199,5 +230,5 @@ private fun CompletePhrasePlayAudioButton(enableVoice: Boolean) {
 @Preview(showBackground = true)
 @Composable
 private fun CompletePhraseTextFieldCardPreview() {
-    CompletePhraseTextFieldCard(false)
+    CompletePhraseTextFieldCard(false, "Let's go!", onSpeakText = {})
 }

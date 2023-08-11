@@ -13,7 +13,7 @@ interface PhraseCollectionRepository {
     suspend fun getLanguageCollections(): Status<List<LanguageCollectionDomain>>
 
     suspend fun getPhrasesByLanguageCollections(
-        languageCollectionDomain: LanguageCollectionDomain
+        languageId: String
     ): Status<List<PhraseDomain>>
 
     suspend fun isPhraseSaved(originalText: String): Boolean
