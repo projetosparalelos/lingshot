@@ -33,9 +33,27 @@ class CompletePhraseViewModel @Inject constructor(
 
     fun handleEvent(completePhraseEvent: CompletePhraseEvent) {
         when (completePhraseEvent) {
+            is CompletePhraseEvent.ClearState -> {
+                clearState()
+            }
             is CompletePhraseEvent.FetchTextToSpeech -> {
                 fetchTextToSpeech(completePhraseEvent.text)
             }
+            is CompletePhraseEvent.ToggleTranslatedTextVisibility -> {
+                toggleTranslatedTextVisibility()
+            }
+        }
+    }
+
+    private fun clearState() {
+        _uiState.update {
+            it.copy(isSpeechActive = true, isTranslatedTextVisible = false)
+        }
+    }
+
+    private fun toggleTranslatedTextVisibility() {
+        _uiState.update {
+            it.copy(isTranslatedTextVisible = !it.isTranslatedTextVisible)
         }
     }
 

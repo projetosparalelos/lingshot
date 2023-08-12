@@ -48,18 +48,14 @@ import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
 import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.domain.helper.FormatPhraseHelper
-import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.delay
 
 @Composable
 fun CompletePhraseTextFieldCard(
-    isSpeechActive: Boolean,
     originalText: String,
+    isSpeechActive: Boolean,
     onSpeakText: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isShimmerVisible by remember { mutableStateOf(true) }
-
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -79,16 +75,17 @@ fun CompletePhraseTextFieldCard(
                 CompletePhrasePlayAudioButton(isSpeechActive)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            if (isSpeechActive || isShimmerVisible) {
-                CompletePhraseRenderTextShimmer(text = originalText)
-            } else {
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    CompletePhraseRenderTextWithField(originalText)
-                }
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .placeholder(
+                        visible = isSpeechActive,
+                        highlight = PlaceholderHighlight.fade()
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                CompletePhraseRenderTextWithField(originalText)
             }
             Spacer(modifier = Modifier.height(24.dp))
             CompletePhraseShowWordButton()
@@ -97,24 +94,7 @@ fun CompletePhraseTextFieldCard(
 
     LaunchedEffect(Unit) {
         onSpeakText()
-
-        delay(1.seconds)
-        isShimmerVisible = false
     }
-}
-
-@Composable
-private fun CompletePhraseRenderTextShimmer(text: String, modifier: Modifier = Modifier) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.headlineSmall,
-        modifier = modifier
-            .fillMaxWidth()
-            .placeholder(
-                visible = true,
-                highlight = PlaceholderHighlight.fade()
-            )
-    )
 }
 
 @Composable
@@ -166,7 +146,6 @@ private fun CompletePhraseRenderTextWithField(text: String) {
                             }
                         }
                     }
-
                 )
             }
         } else {
@@ -230,5 +209,9 @@ private fun CompletePhrasePlayAudioButton(enableVoice: Boolean) {
 @Preview(showBackground = true)
 @Composable
 private fun CompletePhraseTextFieldCardPreview() {
-    CompletePhraseTextFieldCard(false, "Let's go!", onSpeakText = {})
+    CompletePhraseTextFieldCard(
+        originalText = "Let's go!",
+        isSpeechActive = false,
+        onSpeakText = {}
+    )
 }

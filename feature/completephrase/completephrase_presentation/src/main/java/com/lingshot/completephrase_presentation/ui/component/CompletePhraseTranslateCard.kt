@@ -14,10 +14,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,9 +24,12 @@ import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
 
 @Composable
-fun CompletePhraseTranslateCard(translateText: String, modifier: Modifier = Modifier) {
-    var isTranslatedTextVisible by remember { mutableStateOf(false) }
-
+fun CompletePhraseTranslateCard(
+    translateText: String,
+    isTranslatedTextVisible: Boolean,
+    onToggleTranslatedTextVisibility: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -56,9 +55,7 @@ fun CompletePhraseTranslateCard(translateText: String, modifier: Modifier = Modi
                 style = MaterialTheme.typography.bodyLarge
             )
 
-            IconButton(onClick = {
-                isTranslatedTextVisible = !isTranslatedTextVisible
-            }) {
+            IconButton(onClick = onToggleTranslatedTextVisibility) {
                 Icon(
                     imageVector =
                     if (isTranslatedTextVisible) {
@@ -76,5 +73,9 @@ fun CompletePhraseTranslateCard(translateText: String, modifier: Modifier = Modi
 @Preview(showBackground = true)
 @Composable
 private fun CompletePhraseTranslateCardPreview() {
-    CompletePhraseTranslateCard("Vamos lá!")
+    CompletePhraseTranslateCard(
+        translateText = "Vamos lá!",
+        isTranslatedTextVisible = false,
+        onToggleTranslatedTextVisibility = {}
+    )
 }

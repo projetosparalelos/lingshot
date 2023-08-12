@@ -6,5 +6,6 @@ import com.phrase.phrasemaster_domain.model.PhraseDomain
 
 data class CompletePhraseUiState(
     val isSpeechActive: Boolean = true,
+    val isTranslatedTextVisible: Boolean = false,
     val phrasesByLanguageCollectionsStatus: Status<List<PhraseDomain>> = statusDefault()
 )
