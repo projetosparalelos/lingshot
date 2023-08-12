@@ -18,7 +18,7 @@ fun NavController.navigateToCompletePhrase(languageId: String, navOptions: NavOp
     this.navigate("$COMPLETE_PHRASE_ROUTE/$languageId", navOptions)
 }
 
-fun NavGraphBuilder.completePhraseScreen() {
+fun NavGraphBuilder.completePhraseScreen(onBackClick: () -> Unit) {
     composable(
         route = "$COMPLETE_PHRASE_ROUTE/{$LANGUAGE_ID}",
         enterTransition = {
@@ -35,6 +35,6 @@ fun NavGraphBuilder.completePhraseScreen() {
         }
     ) { navBackStackEntry ->
         val languageId = navBackStackEntry.arguments?.getString(LANGUAGE_ID)
-        CompletePhraseScreenRoute(languageId = languageId)
+        CompletePhraseScreenRoute(languageId = languageId, onBackClick = onBackClick)
     }
 }

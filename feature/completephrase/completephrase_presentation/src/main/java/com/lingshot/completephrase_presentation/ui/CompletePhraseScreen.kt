@@ -40,6 +40,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun CompletePhraseScreenRoute(
     languageId: String?,
+    onBackClick: () -> Unit,
     viewModel: CompletePhraseViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -50,14 +51,16 @@ internal fun CompletePhraseScreenRoute(
 
     CompletePhraseScreen(
         uiState = uiState,
-        handleEvent = viewModel::handleEvent
+        handleEvent = viewModel::handleEvent,
+        onBackClick = onBackClick
     )
 }
 
 @Composable
 private fun CompletePhraseScreen(
     uiState: CompletePhraseUiState,
-    handleEvent: (CompletePhraseEvent) -> Unit
+    handleEvent: (CompletePhraseEvent) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
@@ -67,7 +70,7 @@ private fun CompletePhraseScreen(
 
     LingshotLayout(
         title = "Complete phrase",
-        onClickNavigation = {}
+        onClickNavigation = onBackClick
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -145,6 +148,7 @@ private fun CompletePhraseScreen(
 private fun CompletePhraseScreenPreview() {
     CompletePhraseScreen(
         uiState = CompletePhraseUiState(),
-        handleEvent = {}
+        handleEvent = {},
+        onBackClick = {}
     )
 }

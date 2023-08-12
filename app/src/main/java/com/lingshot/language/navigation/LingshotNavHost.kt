@@ -21,7 +21,7 @@ fun LingshotNavHost(navController: NavHostController) {
         val homeDestination = homeDestination(navController)
 
         homeScreen(homeDestination)
-        completePhraseScreen()
+        completePhraseScreen(onBackClick = navController::popBackStack)
     }
 }
 

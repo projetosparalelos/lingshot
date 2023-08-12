@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.CheckCircleOutline
@@ -38,7 +39,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lingshot.completephrase_presentation.ReviewLevel
@@ -47,7 +47,10 @@ import com.lingshot.designsystem.component.LingshotPulseAnimation
 import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
 import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
-import com.lingshot.domain.helper.FormatPhraseHelper
+import com.lingshot.domain.helper.FormatPhraseHelper.extractWordsInDoubleParentheses
+import com.lingshot.domain.helper.FormatPhraseHelper.processPhraseWithDoubleParentheses
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun CompletePhraseTextFieldCard(
@@ -56,6 +59,13 @@ fun CompletePhraseTextFieldCard(
     onSpeakText: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val listWords = processPhraseWithDoubleParentheses(originalText).toImmutableList()
+    val wordWithoutParentheses = extractWordsInDoubleParentheses(originalText)
+
+    val softwareKeyboardController = LocalSoftwareKeyboardController.current
+    var wordToFill by remember { mutableStateOf("") }
+    var isShimmerVisible by remember { mutableStateOf(true) }
+
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -72,23 +82,42 @@ fun CompletePhraseTextFieldCard(
             ) {
                 CompletePhraseReviewLevel()
                 Spacer(modifier = Modifier.weight(1f))
-                CompletePhrasePlayAudioButton(isSpeechActive)
+                CompletePhrasePlayAudioButton(
+                    isSpeechActive = isSpeechActive,
+                    onSpeakText = {
+                        onSpeakText()
+                        isShimmerVisible = false
+                    }
+                )
             }
             Spacer(modifier = Modifier.height(16.dp))
             FlowRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .placeholder(
-                        visible = isSpeechActive,
+                        visible = isSpeechActive && isShimmerVisible,
                         highlight = PlaceholderHighlight.fade()
                     ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                CompletePhraseRenderTextWithField(originalText)
+                CompletePhraseRenderTextWithField(
+                    listWords = listWords,
+                    wordWithoutParentheses = wordWithoutParentheses,
+                    wordToFill = wordToFill,
+                    onFillWord = { word ->
+                        wordToFill = word
+                    },
+                    onHideKeyboard = {
+                        softwareKeyboardController?.hide()
+                    }
+                )
             }
             Spacer(modifier = Modifier.height(24.dp))
-            CompletePhraseShowWordButton()
+            CompletePhraseShowWordButton(onFillWord = {
+                wordToFill = wordWithoutParentheses
+                softwareKeyboardController?.hide()
+            })
         }
     }
 
@@ -98,20 +127,20 @@ fun CompletePhraseTextFieldCard(
 }
 
 @Composable
-private fun CompletePhraseRenderTextWithField(text: String) {
-    val words = FormatPhraseHelper.processPhraseWithDoubleParentheses(text)
-    val getWordWithoutParentheses = FormatPhraseHelper.extractWordsInDoubleParentheses(text)
-
-    var userInput by remember { mutableStateOf(TextFieldValue()) }
-    val softwareKeyboardController = LocalSoftwareKeyboardController.current
-
+private fun CompletePhraseRenderTextWithField(
+    listWords: ImmutableList<String>,
+    wordWithoutParentheses: String,
+    wordToFill: String,
+    onFillWord: (String) -> Unit,
+    onHideKeyboard: () -> Unit
+) {
     val textTypography = MaterialTheme.typography.headlineSmall
     val textColor = MaterialTheme.colorScheme.primary
 
-    words.forEach { word ->
-        if (word == "(($getWordWithoutParentheses))") {
-            val isError = userInput.text.isNotEmpty() && !userInput.text.startsWith(
-                getWordWithoutParentheses.substring(0, userInput.text.length),
+    listWords.forEach { word ->
+        if (word == "(($wordWithoutParentheses))") {
+            val isError = wordToFill.isNotEmpty() && !wordToFill.startsWith(
+                wordWithoutParentheses.substring(0, wordToFill.length),
                 ignoreCase = true
             )
 
@@ -122,7 +151,7 @@ private fun CompletePhraseRenderTextWithField(text: String) {
             }
             LingshotMeasureUnconstrained(viewToMeasure = {
                 Text(
-                    text = getWordWithoutParentheses,
+                    text = wordWithoutParentheses,
                     style = textTypography,
                     modifier = Modifier.padding(horizontal = 5.dp)
                 )
@@ -133,16 +162,19 @@ private fun CompletePhraseRenderTextWithField(text: String) {
                         .padding(4.dp)
                         .size(width = measuredWidth, height = measuredHeight)
                         .padding(horizontal = 4.dp),
-                    value = userInput,
+                    value = wordToFill,
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = true
+                    ),
                     textStyle = textTypography.copy(color = colorBasicTextField),
                     cursorBrush = SolidColor(colorBasicTextField),
                     onValueChange = {
-                        if (it.text.length <= getWordWithoutParentheses.length) {
-                            userInput = it
+                        if (it.length <= wordWithoutParentheses.length) {
+                            onFillWord(it)
 
-                            if (userInput.text == getWordWithoutParentheses) {
-                                softwareKeyboardController?.hide()
+                            if (it.equals(wordWithoutParentheses, ignoreCase = true)) {
+                                onHideKeyboard()
                             }
                         }
                     }
@@ -159,10 +191,10 @@ private fun CompletePhraseRenderTextWithField(text: String) {
 }
 
 @Composable
-private fun ColumnScope.CompletePhraseShowWordButton() {
+private fun ColumnScope.CompletePhraseShowWordButton(onFillWord: () -> Unit) {
     ElevatedButton(
         modifier = Modifier.align(Alignment.End),
-        onClick = { /*TODO*/ }
+        onClick = onFillWord
     ) {
         Text(
             text = "Show word"
@@ -193,10 +225,10 @@ private fun CompletePhraseReviewLevel() {
 }
 
 @Composable
-private fun CompletePhrasePlayAudioButton(enableVoice: Boolean) {
-    LingshotPulseAnimation(enableAnimation = enableVoice) {
+private fun CompletePhrasePlayAudioButton(isSpeechActive: Boolean, onSpeakText: () -> Unit) {
+    LingshotPulseAnimation(enableAnimation = isSpeechActive) {
         IconButton(
-            onClick = { /*TODO*/ }
+            onClick = onSpeakText
         ) {
             Icon(
                 imageVector = Icons.Default.VolumeUp,
