@@ -10,6 +10,8 @@ import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -58,6 +60,7 @@ class CompletePhraseViewModel @Inject constructor(
     }
 
     suspend fun fetchPhrasesByLanguageCollections(languageId: String?) {
+        delay(1.seconds)
         val phraseDomain = phraseCollectionRepository
             .getPhrasesByLanguageCollections(languageId ?: "")
         _uiState.update { it.copy(phrasesByLanguageCollectionsStatus = phraseDomain) }

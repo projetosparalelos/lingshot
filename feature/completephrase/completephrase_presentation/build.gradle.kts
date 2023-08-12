@@ -17,6 +17,5 @@ dependencies {
     implementation(project(":feature:phrasemaster:phrasemaster_domain"))
 
     implementation(libs.accompanist.navigation.animation)
-
     implementation(libs.hilt.navigation.compose)
 }

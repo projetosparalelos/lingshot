@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
 import com.lingshot.completephrase_presentation.CompletePhraseEvent
 import com.lingshot.completephrase_presentation.CompletePhraseUiState
@@ -33,6 +34,7 @@ import com.lingshot.completephrase_presentation.ui.component.CompletePhraseIndic
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseTextFieldCard
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseTranslateCard
 import com.lingshot.designsystem.component.LingshotLayout
+import com.lingshot.designsystem.component.LingshotLoading
 import kotlinx.coroutines.launch
 
 @Composable
@@ -108,21 +110,25 @@ private fun CompletePhraseScreen(
                         }
                     }
                 }
-            }
 
-            FloatingActionButton(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.BottomEnd),
-                onClick = {
-                    scope.launch {
-                        handleEvent(CompletePhraseEvent.ClearState)
-                    }.invokeOnCompletion {
-                        currentPageIndex = currentPage
+                FloatingActionButton(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.BottomEnd),
+                    onClick = {
+                        if (currentPage <= (listPhraseDomain.size - 1)) {
+                            scope.launch {
+                                handleEvent(CompletePhraseEvent.ClearState)
+                            }.invokeOnCompletion {
+                                currentPageIndex = currentPage
+                            }
+                        }
                     }
+                ) {
+                    Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
                 }
-            ) {
-                Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
+            }.onLoading {
+                LingshotLoading(modifier = Modifier.align(Alignment.Center))
             }
         }
     }
