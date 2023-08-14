@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingshot.common.helper.TextToSpeechFacade
 import com.lingshot.common.helper.isLoadingStatus
+import com.lingshot.completephrase_presentation.helper.AnswerSoundFacade
+import com.lingshot.completephrase_presentation.ui.component.AnswerState
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +29,8 @@ class CompletePhraseViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CompletePhraseUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val answerSoundFacade = AnswerSoundFacade(context)
+
     private val textToSpeech = TextToSpeechFacade<String>(context) { status ->
         _uiState.update {
             it.copy(isSpeechActive = status.isLoadingStatus)
@@ -38,8 +42,20 @@ class CompletePhraseViewModel @Inject constructor(
             is CompletePhraseEvent.ClearState -> {
                 clearState()
             }
+            is CompletePhraseEvent.FillWord -> {
+                fillWord(completePhraseEvent.word)
+            }
+            is CompletePhraseEvent.FetchAnswerSound -> {
+                fetchAnswerSound()
+            }
             is CompletePhraseEvent.FetchTextToSpeech -> {
                 fetchTextToSpeech(completePhraseEvent.text)
+            }
+            is CompletePhraseEvent.HideAnswerSheet -> {
+                hideAnswerSheet()
+            }
+            is CompletePhraseEvent.ShowAnswerSheet -> {
+                showAnswerSheet(completePhraseEvent.isAnswerCorrect)
             }
             is CompletePhraseEvent.ToggleTranslatedTextVisibility -> {
                 toggleTranslatedTextVisibility()
@@ -49,7 +65,36 @@ class CompletePhraseViewModel @Inject constructor(
 
     private fun clearState() {
         _uiState.update {
-            it.copy(isSpeechActive = true, isTranslatedTextVisible = false)
+            it.copy(
+                answerState = AnswerState(),
+                isAnswerSheetVisible = false,
+                isSpeechActive = true,
+                isTranslatedTextVisible = false,
+                wordToFill = ""
+            )
+        }
+    }
+
+    private fun fillWord(word: String) {
+        _uiState.update {
+            it.copy(wordToFill = word)
+        }
+    }
+
+    private fun hideAnswerSheet() {
+        _uiState.update {
+            it.copy(
+                isAnswerSheetVisible = false
+            )
+        }
+    }
+
+    private fun showAnswerSheet(isAnswerCorrect: Boolean) {
+        _uiState.update {
+            it.copy(
+                isAnswerSheetVisible = true,
+                answerState = it.answerState.copy(isSuccess = isAnswerCorrect)
+            )
         }
     }
 
@@ -66,6 +111,14 @@ class CompletePhraseViewModel @Inject constructor(
         _uiState.update { it.copy(phrasesByLanguageCollectionsStatus = phraseDomain) }
     }
 
+    private fun fetchAnswerSound() {
+        if (_uiState.value.answerState.isSuccess) {
+            answerSoundFacade.playSuccessSound()
+        } else {
+            answerSoundFacade.playErrorSound()
+        }
+    }
+
     private fun fetchTextToSpeech(text: String) {
         viewModelScope.launch {
             val languageCode = languageIdentifierUseCase(text)
@@ -75,6 +128,7 @@ class CompletePhraseViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
+        answerSoundFacade.cleanUpResources()
         textToSpeech.shutdown()
     }
 }

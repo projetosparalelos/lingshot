@@ -47,23 +47,20 @@ import com.lingshot.designsystem.component.LingshotPulseAnimation
 import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
 import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
-import com.lingshot.domain.helper.FormatPhraseHelper.extractWordsInDoubleParentheses
-import com.lingshot.domain.helper.FormatPhraseHelper.processPhraseWithDoubleParentheses
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun CompletePhraseTextFieldCard(
-    originalText: String,
+    listWords: ImmutableList<String>,
+    wordWithoutParentheses: String,
+    wordToFill: String,
+    onFillWord: (String) -> Unit,
     isSpeechActive: Boolean,
     onSpeakText: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val listWords = processPhraseWithDoubleParentheses(originalText).toImmutableList()
-    val wordWithoutParentheses = extractWordsInDoubleParentheses(originalText)
-
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
-    var wordToFill by remember { mutableStateOf("") }
     var isShimmerVisible by remember { mutableStateOf(true) }
 
     ElevatedCard(
@@ -105,19 +102,19 @@ fun CompletePhraseTextFieldCard(
                     listWords = listWords,
                     wordWithoutParentheses = wordWithoutParentheses,
                     wordToFill = wordToFill,
-                    onFillWord = { word ->
-                        wordToFill = word
-                    },
+                    onFillWord = onFillWord,
                     onHideKeyboard = {
                         softwareKeyboardController?.hide()
                     }
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
-            CompletePhraseShowWordButton(onFillWord = {
-                wordToFill = wordWithoutParentheses
-                softwareKeyboardController?.hide()
-            })
+            CompletePhraseShowWordButton(
+                onFillWord = {
+                    onFillWord(wordWithoutParentheses)
+                    softwareKeyboardController?.hide()
+                }
+            )
         }
     }
 
@@ -242,7 +239,10 @@ private fun CompletePhrasePlayAudioButton(isSpeechActive: Boolean, onSpeakText: 
 @Composable
 private fun CompletePhraseTextFieldCardPreview() {
     CompletePhraseTextFieldCard(
-        originalText = "Let's go!",
+        listWords = emptyList<String>().toImmutableList(),
+        wordWithoutParentheses = "go",
+        wordToFill = "",
+        onFillWord = {},
         isSpeechActive = false,
         onSpeakText = {}
     )

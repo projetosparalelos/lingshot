@@ -10,7 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.lingshot.common.util.limitCharactersWithEllipsize
-import com.lingshot.designsystem.theme.LocalBalloonTheme
+import com.lingshot.designsystem.theme.LocalSchemeCustom
 import com.skydoves.balloon.BalloonAnimation.ELASTIC
 import com.skydoves.balloon.BalloonCenterAlign.START
 import com.skydoves.balloon.compose.Balloon
@@ -23,7 +23,7 @@ fun ScreenShotBalloon(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
-    val background = LocalBalloonTheme.current.content
+    val background = LocalSchemeCustom.current.balloon
     Balloon(
         modifier = modifier,
         builder = rememberBalloonBuilder(background),
@@ -33,7 +33,7 @@ fun ScreenShotBalloon(
                 textAlign = TextAlign.Center,
                 fontSize = 14.sp,
                 lineHeight = 16.sp,
-                color = LocalBalloonTheme.current.onContent,
+                color = LocalSchemeCustom.current.onBalloon,
                 text = text.limitCharactersWithEllipsize(280)
             )
         }
