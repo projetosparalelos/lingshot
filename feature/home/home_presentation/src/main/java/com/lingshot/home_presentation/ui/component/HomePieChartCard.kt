@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lingshot.designsystem.theme.LocalPieChartTheme
+import com.lingshot.designsystem.theme.LocalSchemeCustom
 
 @Composable
 fun HomePierChartCard(modifier: Modifier = Modifier) {
@@ -44,12 +44,12 @@ fun HomePierChartCard(modifier: Modifier = Modifier) {
                 HomePieChartIndicator(
                     value = "50",
                     type = "goals",
-                    color = LocalPieChartTheme.current.goals
+                    color = LocalSchemeCustom.current.goalsPieChart
                 )
                 HomePieChartIndicator(
                     value = "20",
                     type = "completed",
-                    color = LocalPieChartTheme.current.completed
+                    color = LocalSchemeCustom.current.completedPieChart
                 )
             }
             IconButton(
@@ -67,7 +67,7 @@ private fun HomePieChart(
     goals: Int = 50,
     completed: Int = 20
 ) {
-    val pieChartTheme = LocalPieChartTheme.current
+    val schemeCustom = LocalSchemeCustom.current
     Canvas(modifier = modifier) {
         val adjustedCompleted = if (completed > goals) goals else completed
         val chartData = listOf(
@@ -84,8 +84,8 @@ private fun HomePieChart(
             val sweepAngle = chartDegrees * chartData[index]
 
             val color = when (index) {
-                0 -> pieChartTheme.completed
-                1 -> pieChartTheme.goals
+                0 -> schemeCustom.completedPieChart
+                1 -> schemeCustom.goalsPieChart
                 else -> Color.White
             }
 

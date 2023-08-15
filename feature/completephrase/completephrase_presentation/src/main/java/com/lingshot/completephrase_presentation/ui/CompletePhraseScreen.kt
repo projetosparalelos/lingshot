@@ -9,8 +9,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,11 +31,16 @@ import com.lingshot.common.helper.onSuccess
 import com.lingshot.completephrase_presentation.CompletePhraseEvent
 import com.lingshot.completephrase_presentation.CompletePhraseUiState
 import com.lingshot.completephrase_presentation.CompletePhraseViewModel
+import com.lingshot.completephrase_presentation.ui.component.CompletePhraseAnswerSheet
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseIndicatorPage
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseTextFieldCard
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseTranslateCard
 import com.lingshot.designsystem.component.LingshotLayout
 import com.lingshot.designsystem.component.LingshotLoading
+import com.lingshot.designsystem.theme.LingshotTheme
+import com.lingshot.domain.helper.FormatPhraseHelper.extractWordsInDoubleParentheses
+import com.lingshot.domain.helper.FormatPhraseHelper.processPhraseWithDoubleParentheses
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 @Composable
@@ -77,7 +83,12 @@ private fun CompletePhraseScreen(
         ) {
             uiState.phrasesByLanguageCollectionsStatus.onSuccess { listPhraseDomain ->
                 val phraseDomain = listPhraseDomain[currentPageIndex]
+                val listWords = processPhraseWithDoubleParentheses(
+                    phraseDomain.original
+                ).toImmutableList()
 
+                val wordWithoutParentheses =
+                    extractWordsInDoubleParentheses(phraseDomain.original)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -93,7 +104,12 @@ private fun CompletePhraseScreen(
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             CompletePhraseTextFieldCard(
-                                originalText = phraseDomain.original,
+                                listWords = listWords,
+                                wordWithoutParentheses = wordWithoutParentheses,
+                                wordToFill = uiState.wordToFill,
+                                onFillWord = { word ->
+                                    handleEvent(CompletePhraseEvent.FillWord(word))
+                                },
                                 isSpeechActive = uiState.isSpeechActive,
                                 onSpeakText = {
                                     handleEvent(
@@ -107,28 +123,50 @@ private fun CompletePhraseScreen(
                                 translateText = phraseDomain.translate,
                                 isTranslatedTextVisible = uiState.isTranslatedTextVisible,
                                 onToggleTranslatedTextVisibility = {
-                                    handleEvent(CompletePhraseEvent.ToggleTranslatedTextVisibility)
+                                    handleEvent(
+                                        CompletePhraseEvent.ToggleTranslatedTextVisibility
+                                    )
                                 }
                             )
                         }
                     }
                 }
 
-                FloatingActionButton(
+                ExtendedFloatingActionButton(
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.BottomEnd),
+                    text = {
+                        Text(text = "Verify")
+                    },
+                    icon = {
+                        Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
+                    },
                     onClick = {
-                        if (currentPage <= (listPhraseDomain.size - 1)) {
-                            scope.launch {
-                                handleEvent(CompletePhraseEvent.ClearState)
-                            }.invokeOnCompletion {
-                                currentPageIndex = currentPage
-                            }
-                        }
+                        val isAnswerCorrect = uiState.wordToFill.equals(
+                            wordWithoutParentheses,
+                            ignoreCase = true
+                        )
+                        handleEvent(CompletePhraseEvent.ShowAnswerSheet(isAnswerCorrect))
                     }
-                ) {
-                    Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
+                )
+
+                if (uiState.isAnswerSheetVisible) {
+                    CompletePhraseAnswerSheet(
+                        answerState = uiState.answerState,
+                        onContinue = {
+                            if (currentPage <= (listPhraseDomain.size - 1)) {
+                                scope.launch {
+                                    handleEvent(CompletePhraseEvent.ClearState)
+                                }.invokeOnCompletion {
+                                    currentPageIndex = currentPage
+                                }
+                            }
+                        },
+                        onDismiss = {
+                            handleEvent(CompletePhraseEvent.HideAnswerSheet)
+                        }
+                    )
                 }
             }.onLoading {
                 LingshotLoading(modifier = Modifier.align(Alignment.Center))
@@ -136,9 +174,12 @@ private fun CompletePhraseScreen(
         }
     }
 
-    LaunchedEffect(currentPageIndex) {
+    LaunchedEffect(currentPageIndex, uiState.isAnswerSheetVisible) {
         if (currentPageIndex != 0 && scrollState.value != 0) {
             scrollState.animateScrollTo(0)
+        }
+        if (uiState.isAnswerSheetVisible) {
+            handleEvent(CompletePhraseEvent.FetchAnswerSound)
         }
     }
 }
@@ -146,9 +187,11 @@ private fun CompletePhraseScreen(
 @Preview(showBackground = true)
 @Composable
 private fun CompletePhraseScreenPreview() {
-    CompletePhraseScreen(
-        uiState = CompletePhraseUiState(),
-        handleEvent = {},
-        onBackClick = {}
-    )
+    LingshotTheme(isDarkTheme = true) {
+        CompletePhraseScreen(
+            uiState = CompletePhraseUiState(),
+            handleEvent = {},
+            onBackClick = {}
+        )
+    }
 }
