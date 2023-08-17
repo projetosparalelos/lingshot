@@ -1,15 +1,9 @@
 package com.phrase.phrasemaster_domain.usecase
 
-import android.os.Build
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 class SavePhraseLanguageUseCase @Inject constructor(
@@ -39,21 +33,8 @@ class SavePhraseLanguageUseCase @Inject constructor(
             phraseCollectionRepository.deletePhraseSaved(phraseDomain.original)
             false
         } else {
-            phraseCollectionRepository.savePhraseInLanguageCollections(
-                phraseDomain.copy(date = formatDate())
-            )
+            phraseCollectionRepository.savePhraseInLanguageCollections(phraseDomain)
             true
-        }
-    }
-
-    private fun formatDate(): String {
-        val pattern = "dd/MM/yyyy HH:mm:ss"
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val dateFormat = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
-            LocalDateTime.now().format(dateFormat)
-        } else {
-            val dateFormat = SimpleDateFormat(pattern, Locale.getDefault())
-            dateFormat.format(Date())
         }
     }
 }

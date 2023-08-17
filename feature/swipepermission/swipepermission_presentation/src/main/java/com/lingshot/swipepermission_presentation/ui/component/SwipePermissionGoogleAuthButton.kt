@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lingshot.common.util.singleClick
@@ -32,7 +33,7 @@ fun SwipePermissionGoogleAuthButton(
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = "Sign in with Google")
+        Text(text = stringResource(R.string.text_button_sign_with_google_swiper_permission))
     }
 }
 

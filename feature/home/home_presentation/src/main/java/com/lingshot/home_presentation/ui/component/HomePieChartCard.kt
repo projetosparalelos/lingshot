@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lingshot.designsystem.theme.LocalSchemeCustom
+import com.lingshot.home_presentation.R
 
 @Composable
 fun HomePierChartCard(modifier: Modifier = Modifier) {
@@ -43,12 +45,12 @@ fun HomePierChartCard(modifier: Modifier = Modifier) {
             Column {
                 HomePieChartIndicator(
                     value = "50",
-                    type = "goals",
+                    type = stringResource(R.string.text_label_piechart_goals_home),
                     color = LocalSchemeCustom.current.goalsPieChart
                 )
                 HomePieChartIndicator(
                     value = "20",
-                    type = "completed",
+                    type = stringResource(R.string.text_label_piechart_completed_home),
                     color = LocalSchemeCustom.current.completedPieChart
                 )
             }

@@ -5,11 +5,9 @@ plugins {
 }
 
 android {
-    namespace = "com.lingshot.phrasemaster_domain"
+    namespace = "com.lingshot.reviewlevel_domain"
 }
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":feature:languagechoice:languagechoice_domain"))
-    implementation(project(":feature:reviewlevel:reviewlevel_domain"))
 }

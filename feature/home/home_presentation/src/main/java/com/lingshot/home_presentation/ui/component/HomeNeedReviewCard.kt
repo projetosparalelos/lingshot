@@ -16,9 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lingshot.home_presentation.R
 
 @Composable
 fun HomeNeedReviewCard(modifier: Modifier = Modifier) {
@@ -48,7 +50,7 @@ fun HomeNeedReviewCard(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineSmall
             )
             Text(
-                text = "sentences pending review.",
+                text = stringResource(R.string.text_label_phrase_pending_review_home),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
