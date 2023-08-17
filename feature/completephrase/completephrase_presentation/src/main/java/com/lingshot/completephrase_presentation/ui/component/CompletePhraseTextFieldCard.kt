@@ -58,6 +58,7 @@ fun CompletePhraseTextFieldCard(
     onFillWord: (String) -> Unit,
     isSpeechActive: Boolean,
     onSpeakText: () -> Unit,
+    reviewLevel: ReviewLevel,
     modifier: Modifier = Modifier
 ) {
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
@@ -77,7 +78,7 @@ fun CompletePhraseTextFieldCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
-                CompletePhraseReviewLevel()
+                CompletePhraseReviewLevel(reviewLevel)
                 Spacer(modifier = Modifier.weight(1f))
                 CompletePhrasePlayAudioButton(
                     isSpeechActive = isSpeechActive,
@@ -205,11 +206,11 @@ private fun ColumnScope.CompletePhraseShowWordButton(
 }
 
 @Composable
-private fun CompletePhraseReviewLevel() {
+private fun CompletePhraseReviewLevel(reviewLevel: ReviewLevel) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        repeat(ReviewLevel.values().size) { index ->
+        repeat(enumValues<ReviewLevel>().size) { index ->
             val icon =
-                if (index < 2) Icons.Default.CheckCircle else Icons.Default.CheckCircleOutline
+                if (index <= reviewLevel.level) Icons.Default.CheckCircle else Icons.Default.CheckCircleOutline
 
             Icon(
                 modifier = Modifier.size(18.dp),
@@ -220,7 +221,7 @@ private fun CompletePhraseReviewLevel() {
         }
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = ReviewLevel.from(2)?.label.toString(),
+            text = reviewLevel.label,
             color = MaterialTheme.colorScheme.secondary
         )
     }
@@ -249,6 +250,7 @@ private fun CompletePhraseTextFieldCardPreview() {
         wordToFill = "",
         onFillWord = {},
         isSpeechActive = false,
-        onSpeakText = {}
+        onSpeakText = {},
+        reviewLevel = ReviewLevel.NEW_WORD
     )
 }

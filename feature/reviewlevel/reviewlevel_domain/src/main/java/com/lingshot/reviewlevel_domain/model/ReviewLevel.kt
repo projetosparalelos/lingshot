@@ -8,8 +8,8 @@ enum class ReviewLevel(val level: Int, val day: Int, val label: String) {
     MASTER(level = 4, day = 90, label = "Master");
 
     companion object {
-        fun from(level: Int?): ReviewLevel? =
-            values().firstOrNull { it.level == level }
+        fun from(level: Int?): ReviewLevel =
+            values().first { it.level == level }
 
         fun getNextReviewTimestamp(reviewLevel: ReviewLevel = NEW_WORD): Long {
             return System.currentTimeMillis() + (reviewLevel.day * 24 * 60 * 60 * 1000L)

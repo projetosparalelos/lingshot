@@ -44,6 +44,7 @@ import com.lingshot.designsystem.component.LingshotLoading
 import com.lingshot.designsystem.theme.LingshotTheme
 import com.lingshot.domain.helper.FormatPhraseHelper.extractWordsInDoubleParentheses
 import com.lingshot.domain.helper.FormatPhraseHelper.processPhraseWithDoubleParentheses
+import com.lingshot.reviewlevel_domain.model.ReviewLevel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
@@ -121,7 +122,8 @@ private fun CompletePhraseScreen(
                                             phraseDomain.original
                                         )
                                     )
-                                }
+                                },
+                                reviewLevel = ReviewLevel.from(phraseDomain.reviewLevel)
                             )
                             CompletePhraseTranslateCard(
                                 translateText = phraseDomain.translate,
