@@ -4,4 +4,5 @@
     <string name="text_button_action_select_snack_bar">Select</string>
     <string name="text_title_translate_bottom_sheet">Your translate</string>
     <string name="text_button_add_to_list_bottom_sheet">Added</string>
+    <string name="text_title_dictionary_full_screen_dialog_screenshot">Dictionary</string>
 </resources>

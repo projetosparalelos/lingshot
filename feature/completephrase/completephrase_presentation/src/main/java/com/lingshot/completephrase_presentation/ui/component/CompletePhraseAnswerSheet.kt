@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lingshot.completephrase_presentation.R
@@ -72,7 +73,7 @@ fun CompletePhraseAnswerSheet(
                 colors = answerState.buttonColor,
                 onClick = onContinue
             ) {
-                Text("Continue")
+                Text(stringResource(R.string.text_button_continue_answer_sheet_complete_phrase))
             }
         }
     }
@@ -92,6 +93,9 @@ private fun CompletePhraseAnswerSheetPreview() {
 data class AnswerState(
     val isSuccess: Boolean = true
 ) {
+    private val localSchemeCustom
+        @Composable get() = LocalSchemeCustom.current
+
     val icon: ImageVector = if (isSuccess) {
         Icons.Default.Verified
     } else {
@@ -110,16 +114,16 @@ data class AnswerState(
 
     val itemColor: Color
         @Composable get() = if (isSuccess) {
-            LocalSchemeCustom.current.onAnswerSuccessContainer
+            localSchemeCustom.onAnswerSuccessContainer
         } else {
-            LocalSchemeCustom.current.onAnswerErrorContainer
+            localSchemeCustom.onAnswerErrorContainer
         }
 
     val containerColor: Color
         @Composable get() = if (isSuccess) {
-            LocalSchemeCustom.current.answerSuccessContainer
+            localSchemeCustom.answerSuccessContainer
         } else {
-            LocalSchemeCustom.current.answerErrorContainer
+            localSchemeCustom.answerErrorContainer
         }
 
     val buttonColor: ButtonColors
@@ -127,14 +131,14 @@ data class AnswerState(
             ButtonDefaults.buttonColors(
                 containerColor =
                 if (isSuccess) {
-                    LocalSchemeCustom.current.answerSuccess
+                    localSchemeCustom.answerSuccess
                 } else {
-                    LocalSchemeCustom.current.answerError
+                    localSchemeCustom.answerError
                 },
                 contentColor = if (isSuccess) {
-                    LocalSchemeCustom.current.onAnswerSuccess
+                    localSchemeCustom.onAnswerSuccess
                 } else {
-                    LocalSchemeCustom.current.onAnswerError
+                    localSchemeCustom.onAnswerError
                 }
             )
 }

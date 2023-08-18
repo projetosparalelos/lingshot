@@ -15,7 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CompletePhraseIndicatorPage(currentPage: Int, totalPage: Int, modifier: Modifier = Modifier) {
+fun CompletePhraseIndicatorPage(
+    currentPage: Int,
+    totalPage: Int,
+    modifier: Modifier = Modifier
+) {
     val progress = currentPage.toFloat() / totalPage
 
     Column(
@@ -40,5 +44,8 @@ fun CompletePhraseIndicatorPage(currentPage: Int, totalPage: Int, modifier: Modi
 @Preview(showBackground = true)
 @Composable
 private fun CompletePhraseIndicatorPagePreview() {
-    CompletePhraseIndicatorPage(currentPage = 0, totalPage = 10)
+    CompletePhraseIndicatorPage(
+        currentPage = 0,
+        totalPage = 10
+    )
 }

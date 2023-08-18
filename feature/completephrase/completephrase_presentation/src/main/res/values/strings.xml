@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_button_verify_complete_phrase">Verify</string>
+    <string name="text_message_collection_empty_complete_phrase">Oops! It seems there are no new sentences for you to learn at the moment. Keep up the good work!</string>
+    <string name="text_button_continue_answer_sheet_complete_phrase">Continue</string>
+    <string name="text_title_complete_phrase">Complete phrase</string>
+</resources>

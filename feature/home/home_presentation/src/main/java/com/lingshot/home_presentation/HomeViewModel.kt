@@ -21,7 +21,7 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
-    init {
+    fun fetchHome() {
         fetchUserProfile()
         fetchLanguageCollections()
     }

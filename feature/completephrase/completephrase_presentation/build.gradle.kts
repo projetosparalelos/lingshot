@@ -15,7 +15,9 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":domain"))
     implementation(project(":feature:phrasemaster:phrasemaster_domain"))
+    implementation(project(":feature:reviewlevel:reviewlevel_domain"))
 
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.lottie.compose)
 }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.lingshot.home_presentation.R
 
 @Composable
 fun HomeEmptyCollectionCard(modifier: Modifier = Modifier) {
@@ -24,7 +26,7 @@ fun HomeEmptyCollectionCard(modifier: Modifier = Modifier) {
                 fontSize = 24.sp
             )
         ) {
-            append("(  * _ *  )")
+            append(stringResource(R.string.text_emoji_empty_collection_card_home))
         }
         append("\n")
         withStyle(
@@ -33,7 +35,7 @@ fun HomeEmptyCollectionCard(modifier: Modifier = Modifier) {
                 fontSize = 12.sp
             )
         ) {
-            append("Collection is empty. Add a phrase!")
+            append(stringResource(R.string.text_message_empty_collection_card_home))
         }
     }
     Text(

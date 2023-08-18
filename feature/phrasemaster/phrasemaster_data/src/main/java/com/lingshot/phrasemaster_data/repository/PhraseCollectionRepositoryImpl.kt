@@ -80,11 +80,17 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
             val phraseList = queryCollectionByLanguages
                 .document(languageId)
                 .collection(COLLECTION_PHRASES)
+                .whereLessThanOrEqualTo("nextReviewTimestamp", System.currentTimeMillis())
                 .get()
                 .await().map {
                     it.toObject(PhraseDomain::class.java)
                 }
-            statusSuccess(phraseList)
+
+            if (phraseList.isNotEmpty()) {
+                statusSuccess(phraseList)
+            } else {
+                statusEmpty()
+            }
         } catch (e: Exception) {
             Timber.e(e)
             if (e is CancellationException) throw e

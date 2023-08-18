@@ -41,12 +41,12 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lingshot.completephrase_presentation.ReviewLevel
 import com.lingshot.designsystem.component.LingshotMeasureUnconstrained
 import com.lingshot.designsystem.component.LingshotPulseAnimation
 import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
 import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
+import com.lingshot.reviewlevel_domain.model.ReviewLevel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -58,6 +58,7 @@ fun CompletePhraseTextFieldCard(
     onFillWord: (String) -> Unit,
     isSpeechActive: Boolean,
     onSpeakText: () -> Unit,
+    reviewLevel: ReviewLevel,
     modifier: Modifier = Modifier
 ) {
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
@@ -77,7 +78,7 @@ fun CompletePhraseTextFieldCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
-                CompletePhraseReviewLevel()
+                CompletePhraseReviewLevel(reviewLevel)
                 Spacer(modifier = Modifier.weight(1f))
                 CompletePhrasePlayAudioButton(
                     isSpeechActive = isSpeechActive,
@@ -110,6 +111,7 @@ fun CompletePhraseTextFieldCard(
             }
             Spacer(modifier = Modifier.height(24.dp))
             CompletePhraseShowWordButton(
+                enabledButton = isSpeechActive.not(),
                 onFillWord = {
                     onFillWord(wordWithoutParentheses)
                     softwareKeyboardController?.hide()
@@ -188,9 +190,13 @@ private fun CompletePhraseRenderTextWithField(
 }
 
 @Composable
-private fun ColumnScope.CompletePhraseShowWordButton(onFillWord: () -> Unit) {
+private fun ColumnScope.CompletePhraseShowWordButton(
+    enabledButton: Boolean,
+    onFillWord: () -> Unit
+) {
     ElevatedButton(
         modifier = Modifier.align(Alignment.End),
+        enabled = enabledButton,
         onClick = onFillWord
     ) {
         Text(
@@ -200,11 +206,11 @@ private fun ColumnScope.CompletePhraseShowWordButton(onFillWord: () -> Unit) {
 }
 
 @Composable
-private fun CompletePhraseReviewLevel() {
+private fun CompletePhraseReviewLevel(reviewLevel: ReviewLevel) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        repeat(ReviewLevel.values().size) { index ->
+        repeat(enumValues<ReviewLevel>().size) { index ->
             val icon =
-                if (index < 2) Icons.Default.CheckCircle else Icons.Default.CheckCircleOutline
+                if (index <= reviewLevel.level) Icons.Default.CheckCircle else Icons.Default.CheckCircleOutline
 
             Icon(
                 modifier = Modifier.size(18.dp),
@@ -215,7 +221,7 @@ private fun CompletePhraseReviewLevel() {
         }
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = ReviewLevel.from(2)?.label.toString(),
+            text = reviewLevel.label,
             color = MaterialTheme.colorScheme.secondary
         )
     }
@@ -244,6 +250,7 @@ private fun CompletePhraseTextFieldCardPreview() {
         wordToFill = "",
         onFillWord = {},
         isSpeechActive = false,
-        onSpeakText = {}
+        onSpeakText = {},
+        reviewLevel = ReviewLevel.NEW_WORD
     )
 }

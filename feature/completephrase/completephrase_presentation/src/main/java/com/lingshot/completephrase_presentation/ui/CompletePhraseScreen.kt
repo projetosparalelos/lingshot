@@ -22,16 +22,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.lingshot.common.helper.onEmpty
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
 import com.lingshot.completephrase_presentation.CompletePhraseEvent
 import com.lingshot.completephrase_presentation.CompletePhraseUiState
 import com.lingshot.completephrase_presentation.CompletePhraseViewModel
+import com.lingshot.completephrase_presentation.R
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseAnswerSheet
+import com.lingshot.completephrase_presentation.ui.component.CompletePhraseCollectionEmpty
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseIndicatorPage
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseTextFieldCard
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseTranslateCard
@@ -40,6 +44,7 @@ import com.lingshot.designsystem.component.LingshotLoading
 import com.lingshot.designsystem.theme.LingshotTheme
 import com.lingshot.domain.helper.FormatPhraseHelper.extractWordsInDoubleParentheses
 import com.lingshot.domain.helper.FormatPhraseHelper.processPhraseWithDoubleParentheses
+import com.lingshot.reviewlevel_domain.model.ReviewLevel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
@@ -75,7 +80,7 @@ private fun CompletePhraseScreen(
     val currentPage = (currentPageIndex + 1)
 
     LingshotLayout(
-        title = "Complete phrase",
+        title = stringResource(R.string.text_title_complete_phrase),
         onClickNavigation = onBackClick
     ) {
         Box(
@@ -117,7 +122,8 @@ private fun CompletePhraseScreen(
                                             phraseDomain.original
                                         )
                                     )
-                                }
+                                },
+                                reviewLevel = ReviewLevel.from(phraseDomain.reviewLevel)
                             )
                             CompletePhraseTranslateCard(
                                 translateText = phraseDomain.translate,
@@ -137,17 +143,19 @@ private fun CompletePhraseScreen(
                         .padding(16.dp)
                         .align(Alignment.BottomEnd),
                     text = {
-                        Text(text = "Verify")
+                        Text(text = stringResource(R.string.text_button_verify_complete_phrase))
                     },
                     icon = {
                         Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
                     },
                     onClick = {
-                        val isAnswerCorrect = uiState.wordToFill.equals(
-                            wordWithoutParentheses,
-                            ignoreCase = true
-                        )
-                        handleEvent(CompletePhraseEvent.ShowAnswerSheet(isAnswerCorrect))
+                        if (uiState.isSpeechActive.not()) {
+                            val isAnswerCorrect = uiState.wordToFill.equals(
+                                wordWithoutParentheses,
+                                ignoreCase = true
+                            )
+                            handleEvent(CompletePhraseEvent.ShowAnswerSheet(isAnswerCorrect))
+                        }
                     }
                 )
 
@@ -168,6 +176,8 @@ private fun CompletePhraseScreen(
                         }
                     )
                 }
+            }.onEmpty {
+                CompletePhraseCollectionEmpty(modifier = Modifier.align(Alignment.Center))
             }.onLoading {
                 LingshotLoading(modifier = Modifier.align(Alignment.Center))
             }

@@ -66,6 +66,10 @@ fun SwipePermissionRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchSignIn()
+    }
+
     SwipePermissionScreen(
         uiState = uiState,
         onSignIn = viewModel::signIn,
