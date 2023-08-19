@@ -10,6 +10,11 @@ interface PhraseCollectionRepository {
         phraseDomain: PhraseDomain
     ): Status<Unit>
 
+    suspend fun updatePhraseInLanguageCollections(
+        languageId: String,
+        phraseDomain: PhraseDomain
+    ): Status<Unit>
+
     suspend fun getLanguageCollections(): Status<List<LanguageCollectionDomain>>
 
     suspend fun getPhrasesByLanguageCollections(

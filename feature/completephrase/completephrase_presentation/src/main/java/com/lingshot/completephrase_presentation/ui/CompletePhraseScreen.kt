@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +30,14 @@ import com.lingshot.common.helper.onEmpty
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
 import com.lingshot.completephrase_presentation.CompletePhraseEvent
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.ClearState
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.FetchAnswerSound
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.FetchTextToSpeech
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.FillWord
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.HideAnswerSheet
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.ShowAnswerSheet
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.ToggleTranslatedTextVisibility
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.UpdatePhraseInLanguageCollections
 import com.lingshot.completephrase_presentation.CompletePhraseUiState
 import com.lingshot.completephrase_presentation.CompletePhraseViewModel
 import com.lingshot.completephrase_presentation.R
@@ -46,7 +53,6 @@ import com.lingshot.domain.helper.FormatPhraseHelper.extractWordsInDoubleParenth
 import com.lingshot.domain.helper.FormatPhraseHelper.processPhraseWithDoubleParentheses
 import com.lingshot.reviewlevel_domain.model.ReviewLevel
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun CompletePhraseScreenRoute(
@@ -63,6 +69,7 @@ internal fun CompletePhraseScreenRoute(
     CompletePhraseScreen(
         uiState = uiState,
         handleEvent = viewModel::handleEvent,
+        languageId = languageId,
         onBackClick = onBackClick
     )
 }
@@ -71,10 +78,10 @@ internal fun CompletePhraseScreenRoute(
 private fun CompletePhraseScreen(
     uiState: CompletePhraseUiState,
     handleEvent: (CompletePhraseEvent) -> Unit,
+    languageId: String?,
     onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-    val scope = rememberCoroutineScope()
 
     var currentPageIndex by remember { mutableStateOf(0) }
     val currentPage = (currentPageIndex + 1)
@@ -88,12 +95,14 @@ private fun CompletePhraseScreen(
         ) {
             uiState.phrasesByLanguageCollectionsStatus.onSuccess { listPhraseDomain ->
                 val phraseDomain = listPhraseDomain[currentPageIndex]
+
                 val listWords = processPhraseWithDoubleParentheses(
                     phraseDomain.original
                 ).toImmutableList()
 
                 val wordWithoutParentheses =
                     extractWordsInDoubleParentheses(phraseDomain.original)
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -113,15 +122,11 @@ private fun CompletePhraseScreen(
                                 wordWithoutParentheses = wordWithoutParentheses,
                                 wordToFill = uiState.wordToFill,
                                 onFillWord = { word ->
-                                    handleEvent(CompletePhraseEvent.FillWord(word))
+                                    handleEvent(FillWord(word))
                                 },
                                 isSpeechActive = uiState.isSpeechActive,
                                 onSpeakText = {
-                                    handleEvent(
-                                        CompletePhraseEvent.FetchTextToSpeech(
-                                            phraseDomain.original
-                                        )
-                                    )
+                                    handleEvent(FetchTextToSpeech(phraseDomain.original))
                                 },
                                 reviewLevel = ReviewLevel.from(phraseDomain.reviewLevel)
                             )
@@ -130,7 +135,7 @@ private fun CompletePhraseScreen(
                                 isTranslatedTextVisible = uiState.isTranslatedTextVisible,
                                 onToggleTranslatedTextVisibility = {
                                     handleEvent(
-                                        CompletePhraseEvent.ToggleTranslatedTextVisibility
+                                        ToggleTranslatedTextVisibility
                                     )
                                 }
                             )
@@ -154,7 +159,7 @@ private fun CompletePhraseScreen(
                                 wordWithoutParentheses,
                                 ignoreCase = true
                             )
-                            handleEvent(CompletePhraseEvent.ShowAnswerSheet(isAnswerCorrect))
+                            handleEvent(ShowAnswerSheet(isAnswerCorrect))
                         }
                     }
                 )
@@ -163,18 +168,23 @@ private fun CompletePhraseScreen(
                     CompletePhraseAnswerSheet(
                         answerState = uiState.answerState,
                         onContinue = {
-                            if (currentPage <= (listPhraseDomain.size - 1)) {
-                                scope.launch {
-                                    handleEvent(CompletePhraseEvent.ClearState)
-                                }.invokeOnCompletion {
-                                    currentPageIndex = currentPage
-                                }
+                            if (uiState.answerState.isSuccess) {
+                                handleEvent(
+                                    UpdatePhraseInLanguageCollections(languageId!!, phraseDomain)
+                                )
                             }
                         },
                         onDismiss = {
-                            handleEvent(CompletePhraseEvent.HideAnswerSheet)
+                            handleEvent(HideAnswerSheet)
                         }
                     )
+                }
+
+                uiState.updatePhraseInLanguageCollectionsStatus.onSuccess {
+                    if (currentPage <= (listPhraseDomain.size - 1)) {
+                        handleEvent(ClearState)
+                        currentPageIndex = currentPage
+                    }
                 }
             }.onEmpty {
                 CompletePhraseCollectionEmpty(modifier = Modifier.align(Alignment.Center))
@@ -189,7 +199,7 @@ private fun CompletePhraseScreen(
             scrollState.animateScrollTo(0)
         }
         if (uiState.isAnswerSheetVisible) {
-            handleEvent(CompletePhraseEvent.FetchAnswerSound)
+            handleEvent(FetchAnswerSound)
         }
     }
 }
@@ -201,6 +211,7 @@ private fun CompletePhraseScreenPreview() {
         CompletePhraseScreen(
             uiState = CompletePhraseUiState(),
             handleEvent = {},
+            languageId = "id",
             onBackClick = {}
         )
     }

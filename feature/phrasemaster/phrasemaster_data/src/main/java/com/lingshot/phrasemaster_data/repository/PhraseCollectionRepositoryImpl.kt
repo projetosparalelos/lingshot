@@ -51,6 +51,26 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updatePhraseInLanguageCollections(
+        languageId: String,
+        phraseDomain: PhraseDomain
+    ): Status<Unit> {
+        return try {
+            queryCollectionByLanguages
+                .document(languageId)
+                .collection(COLLECTION_PHRASES)
+                .document(phraseDomain.id)
+                .set(phraseDomain)
+                .await()
+
+            statusSuccess(Unit)
+        } catch (e: Exception) {
+            Timber.e(e)
+            if (e is CancellationException) throw e
+            statusError(e.message)
+        }
+    }
+
     override suspend fun getLanguageCollections(): Status<List<LanguageCollectionDomain>> {
         return try {
             val languageList = queryCollectionByLanguages

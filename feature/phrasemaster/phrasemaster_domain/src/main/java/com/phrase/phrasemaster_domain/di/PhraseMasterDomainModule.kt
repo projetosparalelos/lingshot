@@ -5,6 +5,7 @@ import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.phrase.phrasemaster_domain.mapper.LanguageCollectionMapper
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
+import com.phrase.phrasemaster_domain.usecase.UpdatePhraseReviewUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +24,14 @@ object PhraseMasterDomainModule {
     ): SavePhraseLanguageUseCase = SavePhraseLanguageUseCase(
         phraseCollectionRepository,
         languageIdentifierUseCase
+    )
+
+    @Singleton
+    @Provides
+    fun provideUpdatePhraseReviewUseCase(
+        phraseCollectionRepository: PhraseCollectionRepository
+    ): UpdatePhraseReviewUseCase = UpdatePhraseReviewUseCase(
+        phraseCollectionRepository
     )
 
     @Singleton
