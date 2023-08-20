@@ -18,8 +18,12 @@ sealed class CompletePhraseEvent {
 
     data class FetchTextToSpeech(val text: String) : CompletePhraseEvent()
 
-    data class UpdatePhraseInLanguageCollections(
+    data class UpdatePhrasePositionOnSuccess(
         val languageId: String?,
+        val phraseDomain: PhraseDomain
+    ) : CompletePhraseEvent()
+
+    data class UpdatePhrasePositionOnError(
         val phraseDomain: PhraseDomain
     ) : CompletePhraseEvent()
 }

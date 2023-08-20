@@ -26,8 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.lingshot.common.helper.onEmpty
-import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
 import com.lingshot.completephrase_presentation.CompletePhraseEvent
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.ClearState
@@ -37,7 +35,8 @@ import com.lingshot.completephrase_presentation.CompletePhraseEvent.FillWord
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.HideAnswerSheet
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.ShowAnswerSheet
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.ToggleTranslatedTextVisibility
-import com.lingshot.completephrase_presentation.CompletePhraseEvent.UpdatePhraseInLanguageCollections
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.UpdatePhrasePositionOnError
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.UpdatePhrasePositionOnSuccess
 import com.lingshot.completephrase_presentation.CompletePhraseUiState
 import com.lingshot.completephrase_presentation.CompletePhraseViewModel
 import com.lingshot.completephrase_presentation.R
@@ -93,104 +92,114 @@ private fun CompletePhraseScreen(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            uiState.phrasesByLanguageCollectionsStatus.onSuccess { listPhraseDomain ->
-                val phraseDomain = listPhraseDomain[currentPageIndex]
+            if (uiState.isLoading) {
+                LingshotLoading(modifier = Modifier.align(Alignment.Center))
+            } else {
+                if (uiState.phrasesByLanguageCollections.isNotEmpty()) {
+                    val phraseDomain = uiState.phrasesByLanguageCollections[currentPageIndex]
 
-                val listWords = processPhraseWithDoubleParentheses(
-                    phraseDomain.original
-                ).toImmutableList()
+                    val listWords = processPhraseWithDoubleParentheses(
+                        phraseDomain.original
+                    ).toImmutableList()
 
-                val wordWithoutParentheses =
-                    extractWordsInDoubleParentheses(phraseDomain.original)
+                    val wordWithoutParentheses =
+                        extractWordsInDoubleParentheses(phraseDomain.original)
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)
-                ) {
-                    CompletePhraseIndicatorPage(currentPage, listPhraseDomain.size)
-                    key(currentPageIndex) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            CompletePhraseTextFieldCard(
-                                listWords = listWords,
-                                wordWithoutParentheses = wordWithoutParentheses,
-                                wordToFill = uiState.wordToFill,
-                                onFillWord = { word ->
-                                    handleEvent(FillWord(word))
-                                },
-                                isSpeechActive = uiState.isSpeechActive,
-                                onSpeakText = {
-                                    handleEvent(FetchTextToSpeech(phraseDomain.original))
-                                },
-                                reviewLevel = ReviewLevel.from(phraseDomain.reviewLevel)
-                            )
-                            CompletePhraseTranslateCard(
-                                translateText = phraseDomain.translate,
-                                isTranslatedTextVisible = uiState.isTranslatedTextVisible,
-                                onToggleTranslatedTextVisibility = {
-                                    handleEvent(
-                                        ToggleTranslatedTextVisibility
-                                    )
-                                }
-                            )
-                        }
-                    }
-                }
-
-                ExtendedFloatingActionButton(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.BottomEnd),
-                    text = {
-                        Text(text = stringResource(R.string.text_button_verify_complete_phrase))
-                    },
-                    icon = {
-                        Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
-                    },
-                    onClick = {
-                        if (uiState.isSpeechActive.not()) {
-                            val isAnswerCorrect = uiState.wordToFill.equals(
-                                wordWithoutParentheses,
-                                ignoreCase = true
-                            )
-                            handleEvent(ShowAnswerSheet(isAnswerCorrect))
-                        }
-                    }
-                )
-
-                if (uiState.isAnswerSheetVisible) {
-                    CompletePhraseAnswerSheet(
-                        answerState = uiState.answerState,
-                        onContinue = {
-                            if (uiState.answerState.isSuccess) {
-                                handleEvent(
-                                    UpdatePhraseInLanguageCollections(languageId!!, phraseDomain)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(scrollState)
+                    ) {
+                        CompletePhraseIndicatorPage(
+                            currentPage,
+                            uiState.phrasesByLanguageCollections.size
+                        )
+                        key(currentPageIndex) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                CompletePhraseTextFieldCard(
+                                    listWords = listWords,
+                                    wordWithoutParentheses = wordWithoutParentheses,
+                                    wordToFill = uiState.wordToFill,
+                                    onFillWord = { word ->
+                                        handleEvent(FillWord(word))
+                                    },
+                                    isSpeechActive = uiState.isSpeechActive,
+                                    onSpeakText = {
+                                        handleEvent(FetchTextToSpeech(phraseDomain.original))
+                                    },
+                                    reviewLevel = ReviewLevel.from(phraseDomain.reviewLevel)
+                                )
+                                CompletePhraseTranslateCard(
+                                    translateText = phraseDomain.translate,
+                                    isTranslatedTextVisible = uiState.isTranslatedTextVisible,
+                                    onToggleTranslatedTextVisibility = {
+                                        handleEvent(
+                                            ToggleTranslatedTextVisibility
+                                        )
+                                    }
                                 )
                             }
+                        }
+                    }
+
+                    ExtendedFloatingActionButton(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.BottomEnd),
+                        text = {
+                            Text(text = stringResource(R.string.text_button_verify_complete_phrase))
                         },
-                        onDismiss = {
-                            handleEvent(HideAnswerSheet)
+                        icon = {
+                            Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
+                        },
+                        onClick = {
+                            if (uiState.isSpeechActive.not()) {
+                                val isAnswerCorrect = uiState.wordToFill.equals(
+                                    wordWithoutParentheses,
+                                    ignoreCase = true
+                                )
+                                handleEvent(ShowAnswerSheet(isAnswerCorrect))
+                            }
                         }
                     )
-                }
 
-                uiState.updatePhraseInLanguageCollectionsStatus.onSuccess {
-                    if (currentPage <= (listPhraseDomain.size - 1)) {
-                        handleEvent(ClearState)
-                        currentPageIndex = currentPage
+                    if (uiState.isAnswerSheetVisible) {
+                        CompletePhraseAnswerSheet(
+                            answerState = uiState.answerState,
+                            onContinue = {
+                                if (uiState.answerState.isSuccess) {
+                                    handleEvent(
+                                        UpdatePhrasePositionOnSuccess(languageId, phraseDomain)
+                                    )
+                                } else {
+                                    handleEvent(UpdatePhrasePositionOnError(phraseDomain)).run {
+                                        handleEvent(ClearState)
+                                        currentPageIndex = currentPage
+                                    }
+                                }
+                            },
+                            onDismiss = {
+                                handleEvent(HideAnswerSheet)
+                            }
+                        )
                     }
+                } else {
+                    CompletePhraseCollectionEmpty(modifier = Modifier.align(Alignment.Center))
                 }
-            }.onEmpty {
-                CompletePhraseCollectionEmpty(modifier = Modifier.align(Alignment.Center))
-            }.onLoading {
-                LingshotLoading(modifier = Modifier.align(Alignment.Center))
             }
+        }
+    }
+
+    uiState.updatePhraseInLanguageCollectionsStatus.onSuccess {
+        if (currentPage <= (uiState.phrasesByLanguageCollections.size - 1)) {
+            handleEvent(ClearState)
+            currentPageIndex = currentPage
         }
     }
 
