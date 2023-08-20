@@ -52,6 +52,10 @@ class CompletePhraseViewModel @Inject constructor(
                 fillWord(completePhraseEvent.word)
             }
 
+            is CompletePhraseEvent.FetchAnswersFinished -> {
+                fetchAnswersFinished()
+            }
+
             is CompletePhraseEvent.FetchAnswerSound -> {
                 fetchAnswerSound()
             }
@@ -177,6 +181,14 @@ class CompletePhraseViewModel @Inject constructor(
             }
 
             else -> Unit
+        }
+    }
+
+    private fun fetchAnswersFinished() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isAnswersFinished = true) }
+        }.invokeOnCompletion {
+            answerSoundFacade.playFinishedSound()
         }
     }
 

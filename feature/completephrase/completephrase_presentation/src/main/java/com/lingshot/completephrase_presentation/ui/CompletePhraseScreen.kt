@@ -31,6 +31,7 @@ import com.lingshot.common.helper.onSuccess
 import com.lingshot.completephrase_presentation.CompletePhraseEvent
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.ClearState
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.FetchAnswerSound
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.FetchAnswersFinished
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.FetchTextToSpeech
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.FillWord
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.HideAnswerSheet
@@ -42,6 +43,7 @@ import com.lingshot.completephrase_presentation.CompletePhraseUiState
 import com.lingshot.completephrase_presentation.CompletePhraseViewModel
 import com.lingshot.completephrase_presentation.R
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseAnswerSheet
+import com.lingshot.completephrase_presentation.ui.component.CompletePhraseAnswersFinishedFullScreenDialog
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseCollectionEmpty
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseIndicatorPage
 import com.lingshot.completephrase_presentation.ui.component.CompletePhraseTextFieldCard
@@ -198,6 +200,12 @@ private fun CompletePhraseScreen(
                 } else {
                     CompletePhraseCollectionEmpty(modifier = Modifier.align(Alignment.Center))
                 }
+
+                if (uiState.isAnswersFinished) {
+                    CompletePhraseAnswersFinishedFullScreenDialog(
+                        onDismiss = onBackClick
+                    )
+                }
             }
         }
     }
@@ -206,6 +214,8 @@ private fun CompletePhraseScreen(
         if (currentPage <= (uiState.phrasesByLanguageCollections.size - 1)) {
             handleEvent(ClearState)
             currentPageIndex = currentPage
+        } else {
+            handleEvent(FetchAnswersFinished)
         }
     }
 

@@ -8,6 +8,7 @@ class AnswerSoundFacade(context: Context) {
 
     private val successSound = MediaPlayer.create(context, R.raw.verify_answer_success)
     private val errorSound = MediaPlayer.create(context, R.raw.verify_answer_error)
+    private val finishedSound = MediaPlayer.create(context, R.raw.answers_finished)
 
     fun playSuccessSound() {
         successSound.start()
@@ -17,8 +18,13 @@ class AnswerSoundFacade(context: Context) {
         errorSound.start()
     }
 
+    fun playFinishedSound() {
+        finishedSound.start()
+    }
+
     fun cleanUpResources() {
         successSound.release()
         errorSound.release()
+        finishedSound.release()
     }
 }

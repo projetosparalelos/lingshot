@@ -6,6 +6,8 @@ sealed class CompletePhraseEvent {
 
     object ClearState : CompletePhraseEvent()
 
+    object FetchAnswersFinished : CompletePhraseEvent()
+
     object FetchAnswerSound : CompletePhraseEvent()
 
     object HideAnswerSheet : CompletePhraseEvent()
