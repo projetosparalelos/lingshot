@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +53,7 @@ import com.lingshot.domain.helper.FormatPhraseHelper.extractWordsInDoubleParenth
 import com.lingshot.domain.helper.FormatPhraseHelper.processPhraseWithDoubleParentheses
 import com.lingshot.reviewlevel_domain.model.ReviewLevel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun CompletePhraseScreenRoute(
@@ -80,6 +82,7 @@ private fun CompletePhraseScreen(
     languageId: String?,
     onBackClick: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
     var currentPageIndex by remember { mutableStateOf(0) }
@@ -178,7 +181,9 @@ private fun CompletePhraseScreen(
                                         UpdatePhrasePositionOnSuccess(languageId, phraseDomain)
                                     )
                                 } else {
-                                    handleEvent(UpdatePhrasePositionOnError(phraseDomain)).run {
+                                    scope.launch {
+                                        handleEvent(UpdatePhrasePositionOnError(phraseDomain))
+                                    }.invokeOnCompletion {
                                         handleEvent(ClearState)
                                         currentPageIndex = currentPage
                                     }
