@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lingshot.designsystem.component.LingshotFullScreenDialog
+import com.lingshot.designsystem.component.LingshotFullScreenDialogStatusBarColor
 import com.lingshot.phrasemaster_presentation.R
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 import dev.jeziellago.compose.markdowntext.MarkdownText
@@ -106,6 +107,8 @@ fun EditPhraseFullScreenDialog(
             )
         }
     }
+
+    LingshotFullScreenDialogStatusBarColor()
 
     if (phraseState.isValidLanguage.not()) {
         Toast.makeText(

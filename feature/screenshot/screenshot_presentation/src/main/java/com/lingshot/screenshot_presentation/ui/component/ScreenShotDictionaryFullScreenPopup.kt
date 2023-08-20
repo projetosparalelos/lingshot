@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.lingshot.designsystem.component.LingshotFullScreenDialog
+import com.lingshot.designsystem.component.LingshotFullScreenDialogStatusBarColor
 import com.lingshot.designsystem.component.LingshotWebView
 import com.lingshot.screenshot_presentation.R
 
@@ -21,6 +22,8 @@ fun ScreenShotDictionaryFullScreenDialog(
     ) {
         LingshotWebView(url = url)
     }
+
+    LingshotFullScreenDialogStatusBarColor()
 }
 
 @Preview(showBackground = true)

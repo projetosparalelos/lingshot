@@ -18,9 +18,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun LingshotFullScreenDialog(
-    title: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    title: String = "",
     onActions: @Composable RowScope.() -> Unit = {},
     content: @Composable () -> Unit
 ) {
@@ -41,14 +41,14 @@ fun LingshotFullScreenDialog(
             content()
         }
     }
-    LingshotFullScreenDialogStatusBarColor()
 }
 
 @Composable
-private fun LingshotFullScreenDialogStatusBarColor(
-    color: Color = MaterialTheme.colorScheme.surface,
-    systemUiController: SystemUiController = rememberSystemUiController()
+fun LingshotFullScreenDialogStatusBarColor(
+    color: Color = MaterialTheme.colorScheme.surface
 ) {
+    val systemUiController: SystemUiController = rememberSystemUiController()
+
     DisposableEffect(Unit) {
         systemUiController.setStatusBarColor(color)
         onDispose {
