@@ -2,6 +2,7 @@
 
 package com.lingshot.completephrase_presentation.ui.component
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lingshot.completephrase_presentation.R
@@ -35,6 +40,7 @@ import com.lingshot.designsystem.theme.LocalSchemeCustom
 @Composable
 fun CompletePhraseAnswerSheet(
     answerState: AnswerState,
+    correctAnswer: String,
     onContinue: () -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
@@ -64,10 +70,33 @@ fun CompletePhraseAnswerSheet(
                 contentDescription = null
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = answerState.phrase,
-                color = answerState.itemColor
-            )
+            Column(
+                modifier = Modifier.weight(2f),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = answerState.phrase,
+                    color = answerState.itemColor
+                )
+                if (!answerState.isSuccess) {
+                    val text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(
+                                stringResource(
+                                    R.string.text_label_sheet_correct_answer_complete_phrase
+                                )
+                            )
+                        }
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
+                            append(correctAnswer)
+                        }
+                    }
+                    Text(
+                        text = text,
+                        color = answerState.itemColor
+                    )
+                }
+            }
             Spacer(modifier = Modifier.weight(1f))
             FilledTonalButton(
                 colors = answerState.buttonColor,
@@ -84,6 +113,7 @@ fun CompletePhraseAnswerSheet(
 private fun CompletePhraseAnswerSheetPreview() {
     CompletePhraseAnswerSheet(
         answerState = AnswerState(),
+        correctAnswer = "go",
         onContinue = {},
         onDismiss = {}
     )

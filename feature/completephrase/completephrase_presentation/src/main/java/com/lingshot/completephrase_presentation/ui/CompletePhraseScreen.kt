@@ -175,6 +175,7 @@ private fun CompletePhraseScreen(
                     if (uiState.isAnswerSheetVisible) {
                         CompletePhraseAnswerSheet(
                             answerState = uiState.answerState,
+                            correctAnswer = wordWithoutParentheses,
                             onContinue = {
                                 if (uiState.answerState.isSuccess) {
                                     handleEvent(
