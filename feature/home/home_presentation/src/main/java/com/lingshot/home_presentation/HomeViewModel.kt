@@ -2,15 +2,19 @@ package com.lingshot.home_presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lingshot.domain.model.Status
+import com.lingshot.domain.model.UserDomain
 import com.lingshot.domain.model.statusLoading
 import com.lingshot.domain.usecase.UserProfileUseCase
+import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -18,30 +22,35 @@ class HomeViewModel @Inject constructor(
     private val phraseCollectionRepository: PhraseCollectionRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState = _uiState.asStateFlow()
+    private val languageCollectionsStatus: StateFlow<Status<List<LanguageCollectionDomain>>> =
+        flow {
+            emit(phraseCollectionRepository.getLanguageCollections())
+        }.stateIn(
+            scope = viewModelScope,
+            started = WhileSubscribed(5_000),
+            initialValue = statusLoading()
+        )
 
-    fun fetchHome() {
-        fetchUserProfile()
-        fetchLanguageCollections()
-    }
+    private val userDomain: StateFlow<UserDomain?> = flow {
+        emit(userProfileUseCase())
+    }.stateIn(
+        scope = viewModelScope,
+        started = WhileSubscribed(5_000),
+        initialValue = null
+    )
 
-    private fun fetchUserProfile() {
-        _uiState.update { it.copy(userDomain = userProfileUseCase()) }
-    }
-
-    private fun fetchLanguageCollections() {
-        _uiState.update {
-            it.copy(
-                languageCollectionsStatus = statusLoading()
+    val uiState: StateFlow<HomeUiState> =
+        combine(
+            languageCollectionsStatus,
+            userDomain
+        ) { languageCollectionsStatus, userDomain ->
+            HomeUiState(
+                userDomain = userDomain,
+                languageCollectionsStatus = languageCollectionsStatus
             )
-        }
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    languageCollectionsStatus = phraseCollectionRepository.getLanguageCollections()
-                )
-            }
-        }
-    }
+        }.stateIn(
+            scope = viewModelScope,
+            started = WhileSubscribed(5_000),
+            initialValue = HomeUiState()
+        )
 }
