@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.lingshot.home_presentation.R
 
 @Composable
-fun HomeNeedReviewCard(modifier: Modifier = Modifier) {
+fun HomeNeedReviewCard(pendingReview: String?, modifier: Modifier = Modifier) {
     ElevatedCard(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -44,7 +44,7 @@ fun HomeNeedReviewCard(modifier: Modifier = Modifier) {
                 contentDescription = null
             )
             Text(
-                text = "5",
+                text = pendingReview.toString(),
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineSmall
@@ -60,5 +60,5 @@ fun HomeNeedReviewCard(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun HomeNeedReviewCardPreview() {
-    HomeNeedReviewCard()
+    HomeNeedReviewCard(pendingReview = "5")
 }

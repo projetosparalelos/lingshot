@@ -7,6 +7,7 @@ import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import com.phrase.phrasemaster_domain.usecase.CheckSavedPhraseUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrieveLanguageCollectionsUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesForNextReviewUseCase
+import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesPendingReviewUseCase
 import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
 import com.phrase.phrasemaster_domain.usecase.UpdatePhraseReviewUseCase
 import dagger.Module
@@ -50,6 +51,14 @@ object PhraseMasterDomainModule {
     fun provideRetrievePhrasesForNextReviewUseCase(
         phraseCollectionRepository: PhraseCollectionRepository
     ): RetrievePhrasesForNextReviewUseCase = RetrievePhrasesForNextReviewUseCase(
+        phraseCollectionRepository
+    )
+
+    @Singleton
+    @Provides
+    fun provideRetrievePhrasesPendingReviewUseCase(
+        phraseCollectionRepository: PhraseCollectionRepository
+    ): RetrievePhrasesPendingReviewUseCase = RetrievePhrasesPendingReviewUseCase(
         phraseCollectionRepository
     )
 

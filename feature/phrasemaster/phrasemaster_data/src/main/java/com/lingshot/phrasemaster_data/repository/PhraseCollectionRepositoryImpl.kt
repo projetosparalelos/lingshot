@@ -72,6 +72,25 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
             }
     }
 
+    override suspend fun getPhrasesPendingReview(): String {
+        return queryCollectionByLanguages.get().await()
+            .flatMap { language ->
+                val phrases = language.reference.collection(COLLECTION_PHRASES)
+
+                val phrasesWithTimestampFilter = phrases
+                    .whereLessThanOrEqualTo("nextReviewTimestamp", System.currentTimeMillis())
+                    .get()
+                    .await()
+
+                val phrasesWithReviewLevelFilter = phrases
+                    .whereGreaterThan("reviewLevel", 0)
+                    .get()
+                    .await()
+
+                phrasesWithTimestampFilter.intersect(phrasesWithReviewLevelFilter.toSet())
+            }.size.toString()
+    }
+
     override suspend fun isPhraseSaved(originalText: String): Boolean {
         val languageId = languageCollectionMapper(originalText).id
         val phraseId = originalText.encodeId()

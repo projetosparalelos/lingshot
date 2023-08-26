@@ -80,7 +80,20 @@ private fun HomeScreen(
                         }
 
                         HomeTypeSection.NEED_REVIEW -> {
-                            HomeNeedReviewCard()
+                            uiState.phrasesPendingReviewStatus
+                                .onLoading {
+                                    HomeNeedReviewCard(
+                                        modifier = Modifier.placeholder(
+                                            visible = true,
+                                            highlight = PlaceholderHighlight.fade()
+                                        ),
+                                        pendingReview = null
+                                    )
+                                }.onSuccess { data ->
+                                    HomeNeedReviewCard(
+                                        pendingReview = data
+                                    )
+                                }
                         }
 
                         HomeTypeSection.PI_CHART -> {

@@ -20,6 +20,8 @@ interface PhraseCollectionRepository {
         languageId: String
     ): List<PhraseDomain>
 
+    suspend fun getPhrasesPendingReview(): String
+
     suspend fun isPhraseSaved(originalText: String): Boolean
 
     suspend fun deletePhraseSaved(originalText: String)

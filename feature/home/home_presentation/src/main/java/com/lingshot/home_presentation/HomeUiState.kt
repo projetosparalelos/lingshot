@@ -2,7 +2,7 @@ package com.lingshot.home_presentation
 
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.UserDomain
-import com.lingshot.domain.model.statusDefault
+import com.lingshot.domain.model.statusLoading
 import com.lingshot.home_domain.model.HomeSection
 import com.lingshot.home_domain.model.HomeTypeSection
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
@@ -11,7 +11,8 @@ import kotlinx.collections.immutable.toImmutableList
 data class HomeUiState(
     val userDomain: UserDomain? = null,
     val languageCollectionsStatus: Status<List<LanguageCollectionDomain>> =
-        statusDefault()
+        statusLoading(),
+    val phrasesPendingReviewStatus: Status<String> = statusLoading()
 ) {
 
     val homeSection = listOf(
