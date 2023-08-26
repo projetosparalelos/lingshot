@@ -12,4 +12,6 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":feature:languagechoice:languagechoice_domain"))
     implementation(project(":feature:reviewlevel:reviewlevel_domain"))
+
+    implementation(libs.timber)
 }

@@ -34,7 +34,7 @@ import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LISTE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 import com.phrase.phrasemaster_domain.model.encodeId
-import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import com.phrase.phrasemaster_domain.usecase.CheckSavedPhraseUseCase
 import com.phrase.phrasemaster_domain.usecase.SaveOrDeleteResult
 import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,7 +53,7 @@ class ScreenShotViewModel @Inject constructor(
     private val chatGPTRepository: ChatGPTRepository,
     private val textIdentifierRepository: TextIdentifierRepository,
     private val languageChoiceRepository: LanguageChoiceRepository,
-    private val phraseCollectionRepository: PhraseCollectionRepository,
+    private val checkSavedPhraseUseCase: CheckSavedPhraseUseCase,
     private val savePhraseLanguageUseCase: SavePhraseLanguageUseCase,
     private val languageIdentifierUseCase: LanguageIdentifierUseCase
 ) : ViewModel() {
@@ -368,7 +368,7 @@ class ScreenShotViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isPhraseSaved = phraseCollectionRepository.isPhraseSaved(originalText)
+                    isPhraseSaved = checkSavedPhraseUseCase(originalText)
                 )
             }
         }

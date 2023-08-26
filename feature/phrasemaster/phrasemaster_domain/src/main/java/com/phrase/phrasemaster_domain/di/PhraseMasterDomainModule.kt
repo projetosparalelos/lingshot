@@ -4,6 +4,9 @@ import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.phrase.phrasemaster_domain.mapper.LanguageCollectionMapper
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import com.phrase.phrasemaster_domain.usecase.CheckSavedPhraseUseCase
+import com.phrase.phrasemaster_domain.usecase.RetrieveLanguageCollectionsUseCase
+import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesForNextReviewUseCase
 import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
 import com.phrase.phrasemaster_domain.usecase.UpdatePhraseReviewUseCase
 import dagger.Module
@@ -24,6 +27,30 @@ object PhraseMasterDomainModule {
     ): SavePhraseLanguageUseCase = SavePhraseLanguageUseCase(
         phraseCollectionRepository,
         languageIdentifierUseCase
+    )
+
+    @Singleton
+    @Provides
+    fun provideCheckSavedPhraseUseCase(
+        phraseCollectionRepository: PhraseCollectionRepository
+    ): CheckSavedPhraseUseCase = CheckSavedPhraseUseCase(
+        phraseCollectionRepository
+    )
+
+    @Singleton
+    @Provides
+    fun provideRetrieveLanguageCollectionsUseCase(
+        phraseCollectionRepository: PhraseCollectionRepository
+    ): RetrieveLanguageCollectionsUseCase = RetrieveLanguageCollectionsUseCase(
+        phraseCollectionRepository
+    )
+
+    @Singleton
+    @Provides
+    fun provideRetrievePhrasesForNextReviewUseCase(
+        phraseCollectionRepository: PhraseCollectionRepository
+    ): RetrievePhrasesForNextReviewUseCase = RetrievePhrasesForNextReviewUseCase(
+        phraseCollectionRepository
     )
 
     @Singleton

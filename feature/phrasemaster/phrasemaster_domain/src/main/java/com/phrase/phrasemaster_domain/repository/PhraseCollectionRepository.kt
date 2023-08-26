@@ -1,6 +1,5 @@
 package com.phrase.phrasemaster_domain.repository
 
-import com.lingshot.domain.model.Status
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 
@@ -8,18 +7,18 @@ interface PhraseCollectionRepository {
 
     suspend fun savePhraseInLanguageCollections(
         phraseDomain: PhraseDomain
-    ): Status<Unit>
+    )
 
     suspend fun updatePhraseInLanguageCollections(
         languageId: String,
         phraseDomain: PhraseDomain
-    ): Status<Unit>
+    )
 
-    suspend fun getLanguageCollections(): Status<List<LanguageCollectionDomain>>
+    suspend fun getLanguageCollections(): List<LanguageCollectionDomain>
 
-    suspend fun getPhrasesByLanguageCollections(
+    suspend fun getPhrasesForNextReview(
         languageId: String
-    ): Status<List<PhraseDomain>>
+    ): List<PhraseDomain>
 
     suspend fun isPhraseSaved(originalText: String): Boolean
 

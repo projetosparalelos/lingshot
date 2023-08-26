@@ -11,7 +11,7 @@ import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.phrase.phrasemaster_domain.model.PhraseDomain
-import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesForNextReviewUseCase
 import com.phrase.phrasemaster_domain.usecase.UpdatePhraseReviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -27,8 +27,8 @@ import kotlinx.coroutines.launch
 class CompletePhraseViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val languageIdentifierUseCase: LanguageIdentifierUseCase,
-    private val updatePhraseReviewUseCase: UpdatePhraseReviewUseCase,
-    private val phraseCollectionRepository: PhraseCollectionRepository
+    private val retrievePhrasesForNextReviewUseCase: RetrievePhrasesForNextReviewUseCase,
+    private val updatePhraseReviewUseCase: UpdatePhraseReviewUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CompletePhraseUiState())
@@ -158,10 +158,8 @@ class CompletePhraseViewModel @Inject constructor(
 
     suspend fun fetchPhrasesByLanguageCollections(languageId: String?) {
         delay(1.seconds)
-        val phraseDomain = phraseCollectionRepository
-            .getPhrasesByLanguageCollections(languageId ?: "")
 
-        when (phraseDomain) {
+        when (val phraseDomain = retrievePhrasesForNextReviewUseCase(languageId ?: "")) {
             is Status.Success -> {
                 _uiState.update {
                     it.copy(
