@@ -18,6 +18,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
+import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
+import com.lingshot.designsystem.component.placeholder.fade
+import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.domain.model.UserDomain
 
 @Composable
@@ -29,6 +32,11 @@ fun HomeToolbar(
         modifier = modifier,
         title = {
             Text(
+                modifier = Modifier
+                    .placeholder(
+                        visible = userDomain == null,
+                        highlight = PlaceholderHighlight.fade()
+                    ),
                 text = "Hi, ${userDomain?.firstName}",
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
@@ -36,9 +44,16 @@ fun HomeToolbar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = {}) {
+            IconButton(
+                onClick = {}
+            ) {
                 AsyncImage(
-                    modifier = Modifier.clip(CircleShape),
+                    modifier = Modifier
+                        .placeholder(
+                            visible = userDomain == null,
+                            highlight = PlaceholderHighlight.fade()
+                        )
+                        .clip(CircleShape),
                     model = userDomain?.profilePictureUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop
