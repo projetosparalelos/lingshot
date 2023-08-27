@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -22,12 +23,15 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lingshot.home_presentation.R
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 
 @Composable
 fun HomeCollectionCard(
     languageCollectionDomain: LanguageCollectionDomain,
+    totalPhrases: Int,
+    phrasesPlayed: Int,
     modifier: Modifier = Modifier,
     onNavigateToCompletePhrase: (String) -> Unit
 ) {
@@ -59,14 +63,22 @@ fun HomeCollectionCard(
             }
             Text(text = text)
             LinearProgressIndicator(
-                progress = 0.5f,
+                progress = if (totalPhrases <= 0) {
+                    0f
+                } else {
+                    phrasesPlayed.toFloat() / totalPhrases.toFloat()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(12.dp)
                     .clip(RoundedCornerShape(4.dp))
             )
             Text(
-                text = "Playing 0 / 12.605 sentences",
+                text = String.format(
+                    stringResource(id = R.string.text_label_phrases_played_and_total_phrases),
+                    phrasesPlayed,
+                    totalPhrases
+                ),
                 style = MaterialTheme.typography.labelMedium
             )
         }
@@ -76,5 +88,10 @@ fun HomeCollectionCard(
 @Preview(showBackground = true)
 @Composable
 private fun HomeCollectionCardPreview() {
-    HomeCollectionCard(languageCollectionDomain = LanguageCollectionDomain()) {}
+    HomeCollectionCard(
+        languageCollectionDomain = LanguageCollectionDomain(),
+        totalPhrases = 1,
+        phrasesPlayed = 1,
+        onNavigateToCompletePhrase = {}
+    )
 }

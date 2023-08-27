@@ -4,6 +4,7 @@ import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusEmpty
 import com.lingshot.domain.model.statusError
 import com.lingshot.domain.model.statusSuccess
+import com.phrase.phrasemaster_domain.model.CollectionInfoDomain
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import kotlin.coroutines.cancellation.CancellationException
@@ -14,10 +15,10 @@ import timber.log.Timber
 class RetrieveLanguageCollectionsUseCase(
     private val phraseCollectionRepository: PhraseCollectionRepository
 ) {
-    operator fun invoke(): Flow<Status<List<LanguageCollectionDomain>>> = flow {
+    operator fun invoke(): Flow<Status<Pair<List<LanguageCollectionDomain>, CollectionInfoDomain>>> = flow {
         try {
             val languageList = phraseCollectionRepository.getLanguageCollections()
-            if (languageList.isNotEmpty()) {
+            if (languageList.first.isNotEmpty()) {
                 emit(statusSuccess(languageList))
             } else {
                 emit(statusEmpty())

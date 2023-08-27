@@ -5,12 +5,13 @@ import com.lingshot.domain.model.UserDomain
 import com.lingshot.domain.model.statusLoading
 import com.lingshot.home_domain.model.HomeSection
 import com.lingshot.home_domain.model.HomeTypeSection
+import com.phrase.phrasemaster_domain.model.CollectionInfoDomain
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import kotlinx.collections.immutable.toImmutableList
 
 data class HomeUiState(
     val userDomain: UserDomain? = null,
-    val languageCollectionsStatus: Status<List<LanguageCollectionDomain>> =
+    val languageCollectionsStatus: Status<Pair<List<LanguageCollectionDomain>, CollectionInfoDomain>> =
         statusLoading(),
     val phrasesPendingReviewStatus: Status<String> = statusLoading()
 ) {

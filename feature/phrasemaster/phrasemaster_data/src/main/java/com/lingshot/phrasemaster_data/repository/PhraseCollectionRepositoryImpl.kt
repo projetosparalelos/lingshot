@@ -1,9 +1,11 @@
 package com.lingshot.phrasemaster_data.repository
 
+import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.lingshot.domain.usecase.UserProfileUseCase
 import com.phrase.phrasemaster_domain.mapper.LanguageCollectionMapper
+import com.phrase.phrasemaster_domain.model.CollectionInfoDomain
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 import com.phrase.phrasemaster_domain.model.encodeId
@@ -49,14 +51,39 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
             .await()
     }
 
-    override suspend fun getLanguageCollections(): List<LanguageCollectionDomain> {
-        return queryCollectionByLanguages
-            .get()
-            .await().map {
-                it.toObject(
-                    LanguageCollectionDomain::class.java
-                )
-            }
+    override suspend fun getLanguageCollections(): Pair<List<LanguageCollectionDomain>, CollectionInfoDomain> {
+        val queryResult = queryCollectionByLanguages.get().await()
+
+        val languageCollections = queryResult.map {
+            it.toObject(LanguageCollectionDomain::class.java)
+        }
+
+        val listTotalPhrases = queryResult.map { languageDoc ->
+            languageDoc
+                .reference
+                .collection(COLLECTION_PHRASES)
+                .count()
+                .get(AggregateSource.SERVER)
+                .await()
+                .count
+                .toInt()
+        }
+
+        val listPhrasesPlayed = queryResult.map { languageDoc ->
+            languageDoc
+                .reference
+                .collection(COLLECTION_PHRASES)
+                .whereGreaterThan("reviewLevel", 0)
+                .count()
+                .get(AggregateSource.SERVER)
+                .await()
+                .count
+                .toInt()
+        }
+
+        val collectionInfo = CollectionInfoDomain(listTotalPhrases, listPhrasesPlayed)
+
+        return languageCollections to collectionInfo
     }
 
     override suspend fun getPhrasesForNextReview(

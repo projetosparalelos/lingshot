@@ -6,10 +6,15 @@ data class LanguageCollectionDomain(
     val to: String = ""
 )
 
+data class CollectionInfoDomain(
+    val listTotalPhrases: List<Int> = emptyList(),
+    val listPhrasesPlayed: List<Int> = emptyList()
+)
+
 data class PhraseDomain(
     val id: String = "",
     val original: String = "",
     val translate: String = "",
-    val reviewLevel: Int = 2,
-    val nextReviewTimestamp: Long = 1693081198429
+    val reviewLevel: Int = 0,
+    val nextReviewTimestamp: Long = System.currentTimeMillis()
 )

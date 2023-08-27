@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEachIndexed
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lingshot.common.helper.onEmpty
@@ -109,6 +110,8 @@ private fun HomeScreen(
                                             highlight = PlaceholderHighlight.fade()
                                         ),
                                         languageCollectionDomain = LanguageCollectionDomain(),
+                                        totalPhrases = 0,
+                                        phrasesPlayed = 0,
                                         onNavigateToCompletePhrase = {}
                                     )
                                 }
@@ -116,11 +119,12 @@ private fun HomeScreen(
                                     HomeEmptyCollectionCard()
                                 }
                                 .onSuccess { data ->
-                                    data.forEach { item ->
+                                    data.first.fastForEachIndexed { position, item ->
                                         HomeCollectionCard(
                                             languageCollectionDomain = item,
-                                            onNavigateToCompletePhrase =
-                                            homeDestination.onNavigateToCompletePhrase
+                                            totalPhrases = data.second.listTotalPhrases[position],
+                                            phrasesPlayed = data.second.listPhrasesPlayed[position],
+                                            onNavigateToCompletePhrase = homeDestination.onNavigateToCompletePhrase
                                         )
                                         Spacer(modifier = Modifier.height(8.dp))
                                     }

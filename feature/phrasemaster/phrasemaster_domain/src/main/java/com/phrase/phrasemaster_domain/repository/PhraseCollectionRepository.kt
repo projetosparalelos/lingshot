@@ -1,5 +1,6 @@
 package com.phrase.phrasemaster_domain.repository
 
+import com.phrase.phrasemaster_domain.model.CollectionInfoDomain
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 
@@ -14,7 +15,7 @@ interface PhraseCollectionRepository {
         phraseDomain: PhraseDomain
     )
 
-    suspend fun getLanguageCollections(): List<LanguageCollectionDomain>
+    suspend fun getLanguageCollections(): Pair<List<LanguageCollectionDomain>, CollectionInfoDomain>
 
     suspend fun getPhrasesForNextReview(
         languageId: String
