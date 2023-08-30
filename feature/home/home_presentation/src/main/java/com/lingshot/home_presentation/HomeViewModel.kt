@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingshot.common.helper.isLoadingStatus
 import com.lingshot.domain.usecase.UserProfileUseCase
+import com.phrase.phrasemaster_domain.usecase.RetrieveAndUpdateConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrieveLanguageCollectionsUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesPendingReviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,8 @@ import kotlinx.coroutines.flow.stateIn
 class HomeViewModel @Inject constructor(
     private val userProfileUseCase: UserProfileUseCase,
     retrieveLanguageCollectionsUseCase: RetrieveLanguageCollectionsUseCase,
-    retrievePhrasesPendingReviewUseCase: RetrievePhrasesPendingReviewUseCase
+    retrievePhrasesPendingReviewUseCase: RetrievePhrasesPendingReviewUseCase,
+    retrieveAndUpdateConsecutiveDaysUseCase: RetrieveAndUpdateConsecutiveDaysUseCase
 ) : ViewModel() {
 
     private val userDomain = flow { emit(userProfileUseCase()) }
@@ -29,20 +31,23 @@ class HomeViewModel @Inject constructor(
         combine(
             retrieveLanguageCollectionsUseCase(),
             retrievePhrasesPendingReviewUseCase(),
+            retrieveAndUpdateConsecutiveDaysUseCase(isFirstTimeNotFromHome = true),
             _uiState,
             userDomain
         ) { languageCollectionsStatus,
             phrasesPendingReviewStatus,
+            consecutiveDaysStatus,
             uiState, userDomain ->
-
             if (languageCollectionsStatus.isLoadingStatus.not() &&
                 phrasesPendingReviewStatus.isLoadingStatus.not() &&
+                consecutiveDaysStatus.isLoadingStatus.not() &&
                 userDomain != null
             ) {
                 uiState.copy(
                     userDomain = userDomain,
                     phrasesPendingReviewStatus = phrasesPendingReviewStatus,
-                    languageCollectionsStatus = languageCollectionsStatus
+                    languageCollectionsStatus = languageCollectionsStatus,
+                    consecutiveDaysStatus = consecutiveDaysStatus
                 )
             } else {
                 uiState

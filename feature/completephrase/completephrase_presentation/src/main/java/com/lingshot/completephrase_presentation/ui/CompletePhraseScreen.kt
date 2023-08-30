@@ -37,6 +37,7 @@ import com.lingshot.completephrase_presentation.CompletePhraseEvent.FillWord
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.HideAnswerSheet
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.ShowAnswerSheet
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.ToggleTranslatedTextVisibility
+import com.lingshot.completephrase_presentation.CompletePhraseEvent.UpdateConsecutiveDays
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.UpdatePhrasePositionOnError
 import com.lingshot.completephrase_presentation.CompletePhraseEvent.UpdatePhrasePositionOnSuccess
 import com.lingshot.completephrase_presentation.CompletePhraseUiState
@@ -217,6 +218,7 @@ private fun CompletePhraseScreen(
         } else {
             handleEvent(FetchAnswersFinished)
         }
+        handleEvent(UpdateConsecutiveDays)
     }
 
     LaunchedEffect(currentPageIndex, uiState.isAnswerSheetVisible) {

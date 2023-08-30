@@ -11,6 +11,7 @@ import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.phrase.phrasemaster_domain.model.PhraseDomain
+import com.phrase.phrasemaster_domain.usecase.RetrieveAndUpdateConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesForNextReviewUseCase
 import com.phrase.phrasemaster_domain.usecase.UpdatePhraseReviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -28,6 +30,7 @@ class CompletePhraseViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val languageIdentifierUseCase: LanguageIdentifierUseCase,
     private val retrievePhrasesForNextReviewUseCase: RetrievePhrasesForNextReviewUseCase,
+    private val retrieveAndUpdateConsecutiveDaysUseCase: RetrieveAndUpdateConsecutiveDaysUseCase,
     private val updatePhraseReviewUseCase: UpdatePhraseReviewUseCase
 ) : ViewModel() {
 
@@ -74,6 +77,10 @@ class CompletePhraseViewModel @Inject constructor(
 
             is CompletePhraseEvent.ToggleTranslatedTextVisibility -> {
                 toggleTranslatedTextVisibility()
+            }
+
+            is CompletePhraseEvent.UpdateConsecutiveDays -> {
+                updateConsecutiveDays()
             }
 
             is CompletePhraseEvent.UpdatePhrasePositionOnSuccess -> {
@@ -128,6 +135,15 @@ class CompletePhraseViewModel @Inject constructor(
     private fun toggleTranslatedTextVisibility() {
         _uiState.update {
             it.copy(isTranslatedTextVisible = !it.isTranslatedTextVisible)
+        }
+    }
+
+    private fun updateConsecutiveDays() {
+        viewModelScope.launch {
+            if (_uiState.value.isFirstTimeSavingConsecutiveDays) {
+                retrieveAndUpdateConsecutiveDaysUseCase().single()
+                _uiState.update { it.copy(isFirstTimeSavingConsecutiveDays = false) }
+            }
         }
     }
 

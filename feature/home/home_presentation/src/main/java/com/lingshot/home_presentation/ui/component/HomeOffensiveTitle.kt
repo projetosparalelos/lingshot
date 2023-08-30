@@ -14,13 +14,19 @@ import com.lingshot.designsystem.theme.LingshotTheme
 import com.lingshot.home_presentation.R
 
 @Composable
-fun HomeOffensiveTitle(modifier: Modifier = Modifier) {
+fun HomeOffensiveTitle(consecutiveDays: Int, modifier: Modifier = Modifier) {
     val text = buildAnnotatedString {
         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
             append(stringResource(R.string.text_label_your_offence_home))
+            append(" ")
         }
         withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
-            append("5 days")
+            append(
+                String.format(
+                    stringResource(id = R.string.text_label_consecutive_days_home),
+                    consecutiveDays
+                )
+            )
         }
     }
     Text(
@@ -34,6 +40,6 @@ fun HomeOffensiveTitle(modifier: Modifier = Modifier) {
 @Composable
 private fun HomeOffensiveTitlePreview() {
     LingshotTheme {
-        HomeOffensiveTitle()
+        HomeOffensiveTitle(consecutiveDays = 5)
     }
 }

@@ -3,7 +3,8 @@
     <string name="text_emoji_empty_collection_card_home">(  * _ *  )</string>
     <string name="text_message_empty_collection_card_home">Collection is empty. Add a phrase!</string>
     <string name="text_label_phrase_pending_review_home">sentences pending review.</string>
-    <string name="text_label_your_offence_home">"Your offence is: "</string>
+    <string name="text_label_your_offence_home">Your offence is:</string>
+    <string name="text_label_consecutive_days_home">%s day(s)</string>
     <string name="text_label_piechart_goals_home">goals</string>
     <string name="text_label_piechart_completed_home">completed</string>
     <string name="text_label_phrases_played_and_total_phrases">Played %s / %s sentences"</string>

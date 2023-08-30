@@ -3,8 +3,10 @@ package com.phrase.phrasemaster_domain.di
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.phrase.phrasemaster_domain.mapper.LanguageCollectionMapper
+import com.phrase.phrasemaster_domain.repository.ConsecutiveDaysRepository
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import com.phrase.phrasemaster_domain.usecase.CheckSavedPhraseUseCase
+import com.phrase.phrasemaster_domain.usecase.RetrieveAndUpdateConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrieveLanguageCollectionsUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesForNextReviewUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesPendingReviewUseCase
@@ -78,5 +80,13 @@ object PhraseMasterDomainModule {
     ): LanguageCollectionMapper = LanguageCollectionMapper(
         languageChoiceRepository,
         languageIdentifierUseCase
+    )
+
+    @Singleton
+    @Provides
+    fun provideRetrieveAndUpdateConsecutiveDaysUseCase(
+        consecutiveDaysRepository: ConsecutiveDaysRepository
+    ): RetrieveAndUpdateConsecutiveDaysUseCase = RetrieveAndUpdateConsecutiveDaysUseCase(
+        consecutiveDaysRepository
     )
 }

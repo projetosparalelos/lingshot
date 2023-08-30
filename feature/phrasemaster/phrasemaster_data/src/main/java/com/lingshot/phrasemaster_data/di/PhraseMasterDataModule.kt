@@ -1,8 +1,10 @@
 package com.lingshot.phrasemaster_data.di
 
 import com.lingshot.domain.usecase.UserProfileUseCase
+import com.lingshot.phrasemaster_data.repository.ConsecutiveDaysRepositoryImpl
 import com.lingshot.phrasemaster_data.repository.PhraseCollectionRepositoryImpl
 import com.phrase.phrasemaster_domain.mapper.LanguageCollectionMapper
+import com.phrase.phrasemaster_domain.repository.ConsecutiveDaysRepository
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import dagger.Module
 import dagger.Provides
@@ -21,4 +23,11 @@ object PhraseMasterDataModule {
         languageCollectionMapper: LanguageCollectionMapper
     ): PhraseCollectionRepository =
         PhraseCollectionRepositoryImpl(userProfileUseCase, languageCollectionMapper)
+
+    @Singleton
+    @Provides
+    fun provideConsecutiveDaysRepository(
+        userProfileUseCase: UserProfileUseCase
+    ): ConsecutiveDaysRepository =
+        ConsecutiveDaysRepositoryImpl(userProfileUseCase)
 }

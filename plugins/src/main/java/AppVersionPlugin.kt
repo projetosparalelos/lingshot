@@ -43,7 +43,7 @@ class AppVersionPlugin : Plugin<Project> {
 
     const val COMPILE_SDK = 33
     const val TARGET_SDK = 33
-    const val MIN_SDK = 24
+    const val MIN_SDK = 26
     val javaCompileVersion = JavaVersion.VERSION_1_8
   }
 }

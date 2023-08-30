@@ -77,7 +77,17 @@ private fun HomeScreen(
                         }
 
                         HomeTypeSection.OFFENSIVE_TITLE -> {
-                            HomeOffensiveTitle()
+                            uiState.consecutiveDaysStatus.onLoading {
+                                HomeOffensiveTitle(
+                                    modifier = Modifier.placeholder(
+                                        visible = true,
+                                        highlight = PlaceholderHighlight.fade()
+                                    ),
+                                    consecutiveDays = 0
+                                )
+                            }.onSuccess { data ->
+                                HomeOffensiveTitle(consecutiveDays = data)
+                            }
                         }
 
                         HomeTypeSection.NEED_REVIEW -> {

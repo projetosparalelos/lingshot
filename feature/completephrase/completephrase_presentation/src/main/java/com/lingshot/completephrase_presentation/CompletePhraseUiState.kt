@@ -9,6 +9,7 @@ data class CompletePhraseUiState(
     val answerState: AnswerState = AnswerState(),
     val isAnswerSheetVisible: Boolean = false,
     val isAnswersFinished: Boolean = false,
+    val isFirstTimeSavingConsecutiveDays: Boolean = true,
     val isSpeechActive: Boolean = true,
     val isLoading: Boolean = true,
     val phrasesByLanguageCollections: List<PhraseDomain> = emptyList(),

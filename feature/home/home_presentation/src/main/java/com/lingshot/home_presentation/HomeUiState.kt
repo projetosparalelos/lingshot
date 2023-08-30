@@ -13,7 +13,8 @@ data class HomeUiState(
     val userDomain: UserDomain? = null,
     val languageCollectionsStatus: Status<Pair<List<LanguageCollectionDomain>, CollectionInfoDomain>> =
         statusLoading(),
-    val phrasesPendingReviewStatus: Status<String> = statusLoading()
+    val phrasesPendingReviewStatus: Status<String> = statusLoading(),
+    val consecutiveDaysStatus: Status<Int> = statusLoading()
 ) {
 
     val homeSection = listOf(
