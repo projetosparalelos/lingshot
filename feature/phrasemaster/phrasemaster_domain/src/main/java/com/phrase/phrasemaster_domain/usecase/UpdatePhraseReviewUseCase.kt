@@ -8,10 +8,11 @@ import com.lingshot.reviewlevel_domain.model.ReviewLevel.Companion.from
 import com.lingshot.reviewlevel_domain.model.ReviewLevel.Companion.getNextReviewTimestamp
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import timber.log.Timber
 
-class UpdatePhraseReviewUseCase(
+class UpdatePhraseReviewUseCase @Inject constructor(
     private val phraseCollectionRepository: PhraseCollectionRepository
 ) {
     suspend operator fun invoke(languageId: String?, phraseDomain: PhraseDomain): Status<Unit> {

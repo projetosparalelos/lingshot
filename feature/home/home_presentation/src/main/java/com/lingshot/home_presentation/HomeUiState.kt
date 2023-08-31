@@ -11,6 +11,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 data class HomeUiState(
     val userDomain: UserDomain? = null,
+    val isExpandedDropdownMenuSignOut: Boolean = false,
     val languageCollectionsStatus: Status<Pair<List<LanguageCollectionDomain>, CollectionInfoDomain>> =
         statusLoading(),
     val phrasesPendingReviewStatus: Status<String> = statusLoading(),

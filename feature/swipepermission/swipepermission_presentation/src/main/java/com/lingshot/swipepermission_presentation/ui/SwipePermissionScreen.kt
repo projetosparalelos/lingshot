@@ -60,9 +60,9 @@ import com.lingshot.swipepermission_presentation.util.hasOverlayPermission
 import kotlinx.coroutines.launch
 
 @Composable
-fun SwipePermissionRoute(
+internal fun SwipePermissionRoute(
     viewModel: SwipePermissionViewModel = hiltViewModel(),
-    onUpPress: () -> Unit
+    onNavigateToHome: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -74,7 +74,7 @@ fun SwipePermissionRoute(
         uiState = uiState,
         onSignIn = viewModel::signIn,
         handleEvent = viewModel::handleEvent,
-        onUpPress = onUpPress
+        onNavigateToHome = onNavigateToHome
     )
 }
 
@@ -85,23 +85,27 @@ private fun SwipePermissionScreen(
     handleEvent: (SwipePermissionEvent) -> Unit,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
-    onUpPress: () -> Unit
+    onNavigateToHome: () -> Unit
 ) {
     val permissionState = rememberMultiplePermissionsState(PERMISSIONS)
     val scope = rememberCoroutineScope()
 
     val pagerState = rememberPagerState(
-        initialPage = when {
-            uiState.isSignInSuccessful -> READ_AND_WRITE.ordinal
-            permissionState.allPermissionsGranted -> DISPLAY_OVERLAY.ordinal
-            else -> INITIAL.ordinal
+        initialPage = if (uiState.isSignInSuccessful) {
+            if (permissionState.allPermissionsGranted) {
+                DISPLAY_OVERLAY.ordinal
+            } else {
+                READ_AND_WRITE.ordinal
+            }
+        } else {
+            INITIAL.ordinal
         }
     )
 
     val launcherOverlayPermission =
         rememberLauncherForActivityResult(StartActivityForResult()) {
             if (hasOverlayPermission(context)) {
-                onUpPress()
+                onNavigateToHome()
             }
         }
 
@@ -178,7 +182,7 @@ private fun SwipePermissionScreen(
                                         intentOverlayPermission()
                                     )
                                 } else {
-                                    onUpPress()
+                                    onNavigateToHome()
                                 }
                             }
 
@@ -197,15 +201,17 @@ private fun SwipePermissionScreen(
         key2 = uiState.isSignInSuccessful,
         key3 = uiState.signInError
     ) {
-        if (permissionState.allPermissionsGranted && pagerState.currentPage == READ_AND_WRITE.ordinal) {
-            pagerState.animateScrollToPage(DISPLAY_OVERLAY.ordinal)
-            return@LaunchedEffect
-        }
-
         if (uiState.isSignInSuccessful) {
-            pagerState.animateScrollToPage(READ_AND_WRITE.ordinal)
+            if (permissionState.allPermissionsGranted) {
+                if (hasOverlayPermission(context)) {
+                    onNavigateToHome()
+                } else {
+                    pagerState.animateScrollToPage(DISPLAY_OVERLAY.ordinal)
+                }
+            } else {
+                pagerState.animateScrollToPage(READ_AND_WRITE.ordinal)
+            }
         }
-
         uiState.signInError?.let { error ->
             Toast.makeText(context, error, Toast.LENGTH_LONG).show()
             handleEvent(ClearState)
@@ -220,7 +226,7 @@ private fun SwipePermissionScreenPreview() {
         uiState = SwipePermissionUiState(),
         onSignIn = { null },
         handleEvent = {},
-        onUpPress = {}
+        onNavigateToHome = {}
     )
 }
 

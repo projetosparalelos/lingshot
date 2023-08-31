@@ -6,12 +6,13 @@ import com.lingshot.domain.model.statusSuccess
 import com.phrase.phrasemaster_domain.model.ConsecutiveDaysDomain
 import com.phrase.phrasemaster_domain.repository.ConsecutiveDaysRepository
 import java.time.LocalDate
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 
-class RetrieveAndUpdateConsecutiveDaysUseCase(
+class RetrieveAndUpdateConsecutiveDaysUseCase @Inject constructor(
     private val consecutiveDaysRepository: ConsecutiveDaysRepository
 ) {
     operator fun invoke(isFirstTimeNotFromHome: Boolean = false): Flow<Status<Int>> = flow {
@@ -24,16 +25,21 @@ class RetrieveAndUpdateConsecutiveDaysUseCase(
                 val consecutiveDays = data.consecutiveDays
 
                 if (lastDate != currentDate) {
-                    val newData = if (lastDate == currentDate.minusDays(1) || consecutiveDays == 0) {
-                        data.copy(
-                            lastDate = currentDate.toString(),
-                            consecutiveDays = consecutiveDays + 1
-                        )
-                    } else {
-                        data.copy(consecutiveDays = 0)
-                    }
+                    val newData =
+                        if (lastDate == currentDate.minusDays(1) || consecutiveDays == 0) {
+                            if (isFirstTimeNotFromHome.not()) {
+                                data.copy(
+                                    lastDate = currentDate.toString(),
+                                    consecutiveDays = consecutiveDays + 1
+                                )
+                            } else {
+                                null
+                            }
+                        } else {
+                            data.copy(consecutiveDays = 0)
+                        }
 
-                    consecutiveDaysRepository.updateConsecutiveDays(newData)
+                    newData?.let { consecutiveDaysRepository.updateConsecutiveDays(it) }
                 }
                 emit(statusSuccess(data.consecutiveDays))
             } else {

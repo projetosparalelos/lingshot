@@ -8,4 +8,5 @@
     <string name="text_label_piechart_goals_home">goals</string>
     <string name="text_label_piechart_completed_home">completed</string>
     <string name="text_label_phrases_played_and_total_phrases">Played %s / %s sentences"</string>
+    <string name="text_label_dropdown_menu_sign_out">Logout</string>
 </resources>

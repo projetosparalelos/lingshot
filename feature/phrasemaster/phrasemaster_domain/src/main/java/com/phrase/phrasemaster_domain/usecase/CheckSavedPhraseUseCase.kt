@@ -1,10 +1,11 @@
 package com.phrase.phrasemaster_domain.usecase
 
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import timber.log.Timber
 
-class CheckSavedPhraseUseCase(
+class CheckSavedPhraseUseCase @Inject constructor(
     private val phraseCollectionRepository: PhraseCollectionRepository
 ) {
     suspend operator fun invoke(originalText: String): Boolean {

@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":domain"))
 
+    implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.permissions)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.lottie.compose)

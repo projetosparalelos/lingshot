@@ -3,37 +3,56 @@ package com.lingshot.language
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lingshot.designsystem.theme.LingshotTheme
+import com.lingshot.language.presentation.MainViewModel
 import com.lingshot.language.presentation.ui.MainRoute
 import com.lingshot.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
-import com.lingshot.swipepermission_presentation.ui.SwipePermissionRoute
-import com.lingshot.swipepermission_presentation.util.allPermissionsGranted
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var screenCaptureFloatingWindowLifecycle: ScreenCaptureFloatingWindowLifecycle
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        installSplashScreen()
+        var isSignInSuccessful by mutableStateOf(false)
+
+        lifecycleScope.launch {
+            viewModel.uiState
+                .onEach {
+                    isSignInSuccessful = it.isSignInSuccessful
+                }
+                .collect()
+        }
+
+        installSplashScreen().apply {
+            if (isSignInSuccessful) {
+                setKeepOnScreenCondition { false }
+            }
+        }
+
         setContent {
             LingshotTheme {
                 LingshotApp()
@@ -47,23 +66,9 @@ class MainActivity : ComponentActivity() {
         systemUiController: SystemUiController = rememberSystemUiController(),
         statusBarColor: Color = MaterialTheme.colorScheme.surface
     ) {
-        var reload by remember { mutableStateOf(false) }
-        val allPermissionsGranted by remember(key1 = reload) {
-            mutableStateOf(allPermissionsGranted(this))
-        }
-
         SideEffect {
             systemUiController.setStatusBarColor(statusBarColor)
         }
-
-        if (allPermissionsGranted) {
-            MainRoute()
-        } else {
-            SwipePermissionRoute(
-                onUpPress = {
-                    reload = !reload
-                }
-            )
-        }
+        MainRoute(viewModel = viewModel)
     }
 }

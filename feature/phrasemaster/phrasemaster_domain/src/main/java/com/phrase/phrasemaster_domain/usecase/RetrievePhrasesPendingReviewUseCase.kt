@@ -4,12 +4,13 @@ import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusError
 import com.lingshot.domain.model.statusSuccess
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 
-class RetrievePhrasesPendingReviewUseCase(
+class RetrievePhrasesPendingReviewUseCase @Inject constructor(
     private val phraseCollectionRepository: PhraseCollectionRepository
 ) {
     operator fun invoke(): Flow<Status<String>> = flow {

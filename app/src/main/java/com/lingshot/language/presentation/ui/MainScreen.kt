@@ -35,10 +35,11 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle.Event.ON_RESUME
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -47,8 +48,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.lingshot.common.util.findActivity
 import com.lingshot.designsystem.component.LingshotOnLifecycleEvent
+import com.lingshot.home_presentation.navigation.HOME_ROUTE
 import com.lingshot.home_presentation.ui.component.HomeToggleServiceButton
-import com.lingshot.home_presentation.ui.navigation.HOME_ROUTE
 import com.lingshot.language.R
 import com.lingshot.language.navigation.LingshotAppState
 import com.lingshot.language.navigation.LingshotNavHost
@@ -60,9 +61,10 @@ import com.lingshot.screencapture.service.ScreenShotService.Companion.getStartIn
 import com.lingshot.screencapture.service.ScreenShotService.Companion.getStopIntent
 import com.lingshot.screencapture.util.isServiceRunning
 import com.lingshot.swipepermission_presentation.ui.intentApplicationDetailsPermission
+import com.lingshot.swipepermission_presentation.util.allPermissionsGranted
 
 @Composable
-fun MainRoute(viewModel: MainViewModel = hiltViewModel()) {
+fun MainRoute(viewModel: MainViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     MainScreen(
@@ -106,6 +108,10 @@ private fun MainScreen(
             }
             else -> {}
         }
+    }
+
+    val allPermissionsAndIsSignInGranted by remember {
+        mutableStateOf(allPermissionsGranted(context) && uiState.isSignInSuccessful)
     }
 
     Scaffold(
@@ -163,7 +169,10 @@ private fun MainScreen(
                         )
                     )
             ) {
-                LingshotNavHost(navController = lingshotAppState.navController)
+                LingshotNavHost(
+                    navController = lingshotAppState.navController,
+                    allPermissionsAndIsSignInGranted = allPermissionsAndIsSignInGranted
+                )
             }
         }
     )

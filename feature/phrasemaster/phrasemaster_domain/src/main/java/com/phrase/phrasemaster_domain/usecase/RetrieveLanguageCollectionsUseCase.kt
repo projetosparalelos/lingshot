@@ -7,12 +7,13 @@ import com.lingshot.domain.model.statusSuccess
 import com.phrase.phrasemaster_domain.model.CollectionInfoDomain
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 
-class RetrieveLanguageCollectionsUseCase(
+class RetrieveLanguageCollectionsUseCase @Inject constructor(
     private val phraseCollectionRepository: PhraseCollectionRepository
 ) {
     operator fun invoke(): Flow<Status<Pair<List<LanguageCollectionDomain>, CollectionInfoDomain>>> = flow {

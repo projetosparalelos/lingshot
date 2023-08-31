@@ -27,19 +27,22 @@ import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
 import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.home_domain.model.HomeTypeSection
+import com.lingshot.home_presentation.HomeEvent
+import com.lingshot.home_presentation.HomeEvent.SignOut
+import com.lingshot.home_presentation.HomeEvent.ToggleExpandDropdownMenuSignOut
 import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.HomeViewModel
+import com.lingshot.home_presentation.navigation.HomeDestination
 import com.lingshot.home_presentation.ui.component.HomeCollectionCard
 import com.lingshot.home_presentation.ui.component.HomeEmptyCollectionCard
 import com.lingshot.home_presentation.ui.component.HomeNeedReviewCard
 import com.lingshot.home_presentation.ui.component.HomeOffensiveTitle
 import com.lingshot.home_presentation.ui.component.HomePierChartCard
 import com.lingshot.home_presentation.ui.component.HomeToolbar
-import com.lingshot.home_presentation.ui.navigation.HomeDestination
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 
 @Composable
-fun HomeRoute(
+internal fun HomeRoute(
     homeDestination: HomeDestination,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -47,6 +50,7 @@ fun HomeRoute(
 
     HomeScreen(
         homeDestination = homeDestination,
+        handleEvent = viewModel::handleEvent,
         uiState = uiState
     )
 }
@@ -54,13 +58,23 @@ fun HomeRoute(
 @Composable
 private fun HomeScreen(
     homeDestination: HomeDestination,
+    handleEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState
 ) {
     Surface {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            HomeToolbar(userDomain = uiState.userDomain)
+            HomeToolbar(
+                userDomain = uiState.userDomain,
+                isExpandedDropdownMenuSignOut = uiState.isExpandedDropdownMenuSignOut,
+                onToggleExpandDropdownMenuSignOut = {
+                    handleEvent(ToggleExpandDropdownMenuSignOut)
+                },
+                onSignOut = {
+                    handleEvent(SignOut(homeDestination.onSignOut))
+                }
+            )
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
                 modifier = Modifier.fillMaxSize(),
@@ -152,6 +166,7 @@ private fun HomeScreen(
 private fun HomeScreenPreview() {
     HomeScreen(
         homeDestination = HomeDestination(),
+        handleEvent = {},
         uiState = HomeUiState()
     )
 }

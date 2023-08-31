@@ -6,10 +6,11 @@ import com.lingshot.domain.model.statusError
 import com.lingshot.domain.model.statusSuccess
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 import timber.log.Timber
 
-class RetrievePhrasesForNextReviewUseCase(
+class RetrievePhrasesForNextReviewUseCase @Inject constructor(
     private val phraseCollectionRepository: PhraseCollectionRepository
 ) {
     suspend operator fun invoke(languageId: String): Status<List<PhraseDomain>> {
