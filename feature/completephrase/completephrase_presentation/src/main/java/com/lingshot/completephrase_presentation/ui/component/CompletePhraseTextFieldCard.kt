@@ -37,10 +37,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lingshot.completephrase_presentation.R
 import com.lingshot.designsystem.component.LingshotMeasureUnconstrained
 import com.lingshot.designsystem.component.LingshotPulseAnimation
 import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
@@ -135,6 +139,7 @@ private fun CompletePhraseRenderTextWithField(
 ) {
     val textTypography = MaterialTheme.typography.headlineSmall
     val textColor = MaterialTheme.colorScheme.primary
+    val focusRequester = FocusRequester()
 
     listWords.forEach { word ->
         if (word == "(($wordWithoutParentheses))") {
@@ -157,6 +162,7 @@ private fun CompletePhraseRenderTextWithField(
             }) { measuredWidth, measuredHeight ->
                 BasicTextField(
                     modifier = Modifier
+                        .focusRequester(focusRequester)
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(4.dp)
                         .size(width = measuredWidth, height = measuredHeight)
@@ -187,6 +193,10 @@ private fun CompletePhraseRenderTextWithField(
             )
         }
     }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 }
 
 @Composable
@@ -200,7 +210,7 @@ private fun ColumnScope.CompletePhraseShowWordButton(
         onClick = onFillWord
     ) {
         Text(
-            text = "Show word"
+            text = stringResource(R.string.text_button_show_word_complete_phrase)
         )
     }
 }

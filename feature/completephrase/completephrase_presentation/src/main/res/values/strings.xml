@@ -6,4 +6,5 @@
     <string name="text_button_continue_answer_sheet_complete_phrase">Continue</string>
     <string name="text_label_sheet_correct_answer_complete_phrase">"Answer: "</string>
     <string name="text_title_complete_phrase">Complete phrase</string>
+    <string name="text_button_show_word_complete_phrase">Show word</string>
 </resources>

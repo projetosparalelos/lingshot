@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,9 +52,15 @@ fun HomeNeedReviewCard(pendingReview: String?, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineSmall
             )
             Text(
+                modifier = Modifier.weight(1f),
                 text = stringResource(R.string.text_label_phrase_pending_review_home),
                 style = MaterialTheme.typography.bodyMedium
             )
+            IconButton(
+                onClick = { /*TODO*/ }
+            ) {
+                Icon(imageVector = Icons.Default.EditCalendar, contentDescription = null)
+            }
         }
     }
 }
