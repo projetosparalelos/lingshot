@@ -75,7 +75,7 @@ fun HomeCollectionCard(
             )
             Text(
                 text = String.format(
-                    stringResource(id = R.string.text_label_phrases_played_and_total_phrases),
+                    stringResource(id = R.string.text_label_phrases_played_and_total_phrases_home),
                     phrasesPlayed,
                     totalPhrases
                 ),

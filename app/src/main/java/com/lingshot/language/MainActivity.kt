@@ -40,9 +40,9 @@ class MainActivity : ComponentActivity() {
         var isSignInSuccessful by mutableStateOf(false)
 
         lifecycleScope.launch {
-            viewModel.uiState
+            viewModel.isSignInSuccessful
                 .onEach {
-                    isSignInSuccessful = it.isSignInSuccessful
+                    isSignInSuccessful = it
                 }
                 .collect()
         }

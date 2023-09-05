@@ -1,3 +1,4 @@
 <resources>
     <string name="text_message_notification_permission">Please enable post notification permission for updates!</string>
+    <string name="text_message_balloon_overlay_screenshot">Click here to kickstart your language learning journey.</string>
 </resources>

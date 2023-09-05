@@ -6,11 +6,12 @@ import com.phrase.phrasemaster_domain.mapper.LanguageCollectionMapper
 import com.phrase.phrasemaster_domain.repository.ConsecutiveDaysRepository
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
 import com.phrase.phrasemaster_domain.usecase.CheckSavedPhraseUseCase
-import com.phrase.phrasemaster_domain.usecase.RetrieveAndUpdateConsecutiveDaysUseCase
+import com.phrase.phrasemaster_domain.usecase.RetrieveConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrieveLanguageCollectionsUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesForNextReviewUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesPendingReviewUseCase
 import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
+import com.phrase.phrasemaster_domain.usecase.UpdateConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.UpdatePhraseReviewUseCase
 import dagger.Module
 import dagger.Provides
@@ -84,9 +85,17 @@ object PhraseMasterDomainModule {
 
     @Singleton
     @Provides
-    fun provideRetrieveAndUpdateConsecutiveDaysUseCase(
+    fun provideRetrieveConsecutiveDaysUseCase(
         consecutiveDaysRepository: ConsecutiveDaysRepository
-    ): RetrieveAndUpdateConsecutiveDaysUseCase = RetrieveAndUpdateConsecutiveDaysUseCase(
+    ): RetrieveConsecutiveDaysUseCase = RetrieveConsecutiveDaysUseCase(
+        consecutiveDaysRepository
+    )
+
+    @Singleton
+    @Provides
+    fun provideUpdateConsecutiveDaysUseCase(
+        consecutiveDaysRepository: ConsecutiveDaysRepository
+    ): UpdateConsecutiveDaysUseCase = UpdateConsecutiveDaysUseCase(
         consecutiveDaysRepository
     )
 }

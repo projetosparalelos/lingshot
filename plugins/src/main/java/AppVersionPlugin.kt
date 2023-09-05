@@ -27,6 +27,7 @@ class AppVersionPlugin : Plugin<Project> {
 
                 buildTypes {
                     release {
+                        isMinifyEnabled = true
                         proguardFiles("proguard-android.txt", "proguard-rules.pro")
                         consumerProguardFiles("proguard-rules.pro")
                     }

@@ -14,8 +14,6 @@ sealed class CompletePhraseEvent {
 
     object ToggleTranslatedTextVisibility : CompletePhraseEvent()
 
-    object UpdateConsecutiveDays : CompletePhraseEvent()
-
     data class FillWord(val word: String) : CompletePhraseEvent()
 
     data class ShowAnswerSheet(val isAnswerCorrect: Boolean) : CompletePhraseEvent()

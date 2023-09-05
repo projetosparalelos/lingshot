@@ -7,3 +7,7 @@ plugins {
 android {
     namespace = "com.lingshot.domain"
 }
+
+dependencies {
+    implementation(libs.timber)
+}

@@ -6,8 +6,6 @@ import androidx.compose.ui.graphics.Color
 
 @Immutable
 data class SchemeCustom(
-    val balloon: Color = Color.Unspecified,
-    val onBalloon: Color = Color.Unspecified,
     val goalsPieChart: Color = Color.Unspecified,
     val completedPieChart: Color = Color.Unspecified,
     val answerSuccess: Color = Color.Unspecified,
@@ -17,7 +15,8 @@ data class SchemeCustom(
     val answerError: Color = Color.Unspecified,
     val onAnswerError: Color = Color.Unspecified,
     val answerErrorContainer: Color = Color.Unspecified,
-    val onAnswerErrorContainer: Color = Color.Unspecified
+    val onAnswerErrorContainer: Color = Color.Unspecified,
+    val overlay: Color = background_overlay
 )
 
 val LocalSchemeCustom = staticCompositionLocalOf { SchemeCustom() }

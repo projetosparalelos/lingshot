@@ -7,6 +7,11 @@
     <string name="text_label_consecutive_days_home">%s day(s)</string>
     <string name="text_label_piechart_goals_home">goals</string>
     <string name="text_label_piechart_completed_home">completed</string>
-    <string name="text_label_phrases_played_and_total_phrases">Played %s / %s sentences"</string>
-    <string name="text_label_dropdown_menu_sign_out">Logout</string>
+    <string name="text_label_phrases_played_and_total_phrases_home">Played %s / %s sentences"</string>
+    <string name="text_label_dropdown_menu_sign_out_home">Logout</string>
+    <string name="text_button_save_goal_dialog_home">Save</string>
+    <string name="text_button_cancel_goals_dialog_home">Cancel</string>
+    <string name="text_title_goals_dialog_home">Set your goal</string>
+    <string name="text_label_dropdown_menu_item_goals_home">%s phrase(s)</string>
+    <string name="text_label_count_dropdown_menu_goals_home">Count</string>
 </resources>

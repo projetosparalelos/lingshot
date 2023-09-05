@@ -64,11 +64,6 @@ val md_theme_dark_surfaceTint = Color(0xFFCFBDFF)
 val md_theme_dark_outlineVariant = Color(0xFF49454E)
 val md_theme_dark_scrim = Color(0xFF000000)
 
-val light_balloon = Color(0xFFF9A825)
-val light_onBalloon = Color(0xFFFFFFFF)
-val dark_balloon = Color(0xFFFFB957)
-val dark_onBalloon = Color(0xFF462B00)
-
 val light_goals_pieChart = Color(0xFFFF4081)
 val light_completed_pieChart = Color(0xFF1976D2)
 val dark_goals_pieChart = Color(0xFFF06292)
@@ -93,3 +88,5 @@ val dark_answerError = Color(0xFFFFB4AB)
 val dark_onAnswerError = Color(0xFF690004)
 val dark_answerErrorContainer = Color(0xFF1C1B1E)
 val dark_onAnswerErrorContainer = Color(0xFFFFDAD5)
+
+val background_overlay = Color(0xB3000000)

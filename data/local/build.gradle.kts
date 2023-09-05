@@ -14,6 +14,10 @@ dependencies {
     implementation(libs.text.recognition)
     implementation(libs.language.id)
 
+    implementation(libs.datastore.preferences)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
+
     implementation(libs.bundles.coroutines)
     implementation(libs.timber)
 }

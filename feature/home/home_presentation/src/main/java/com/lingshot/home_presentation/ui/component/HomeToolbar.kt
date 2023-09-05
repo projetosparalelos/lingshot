@@ -76,7 +76,9 @@ fun HomeToolbar(
                             Icon(imageVector = Icons.Default.Logout, contentDescription = null)
                         },
                         text = {
-                            Text(stringResource(id = R.string.text_label_dropdown_menu_sign_out))
+                            Text(
+                                stringResource(id = R.string.text_label_dropdown_menu_sign_out_home)
+                            )
                         },
                         onClick = onSignOut
                     )
@@ -84,7 +86,7 @@ fun HomeToolbar(
             }
         },
         actions = {
-            IconButton(onClick = { }) {
+            IconButton(enabled = false, onClick = {}) {
                 Icon(Icons.Rounded.Settings, contentDescription = null)
             }
         }

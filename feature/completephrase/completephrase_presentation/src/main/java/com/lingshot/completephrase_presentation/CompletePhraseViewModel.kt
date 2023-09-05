@@ -10,9 +10,10 @@ import com.lingshot.completephrase_presentation.ui.component.AnswerState
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
+import com.lingshot.domain.usecase.SavePhrasesCompletedGoalsUseCase
 import com.phrase.phrasemaster_domain.model.PhraseDomain
-import com.phrase.phrasemaster_domain.usecase.RetrieveAndUpdateConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesForNextReviewUseCase
+import com.phrase.phrasemaster_domain.usecase.UpdateConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.UpdatePhraseReviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -21,7 +22,6 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -30,8 +30,9 @@ class CompletePhraseViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val languageIdentifierUseCase: LanguageIdentifierUseCase,
     private val retrievePhrasesForNextReviewUseCase: RetrievePhrasesForNextReviewUseCase,
-    private val retrieveAndUpdateConsecutiveDaysUseCase: RetrieveAndUpdateConsecutiveDaysUseCase,
-    private val updatePhraseReviewUseCase: UpdatePhraseReviewUseCase
+    private val updateConsecutiveDaysUseCase: UpdateConsecutiveDaysUseCase,
+    private val updatePhraseReviewUseCase: UpdatePhraseReviewUseCase,
+    private val savePhrasesCompletedGoalsUseCase: SavePhrasesCompletedGoalsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CompletePhraseUiState())
@@ -79,10 +80,6 @@ class CompletePhraseViewModel @Inject constructor(
                 toggleTranslatedTextVisibility()
             }
 
-            is CompletePhraseEvent.UpdateConsecutiveDays -> {
-                updateConsecutiveDays()
-            }
-
             is CompletePhraseEvent.UpdatePhrasePositionOnSuccess -> {
                 updatePhrasePositionOnSuccess(
                     completePhraseEvent.languageId,
@@ -123,6 +120,12 @@ class CompletePhraseViewModel @Inject constructor(
         }
     }
 
+    private fun savePhrasesCompletedGoals() {
+        viewModelScope.launch {
+            savePhrasesCompletedGoalsUseCase()
+        }
+    }
+
     private fun showAnswerSheet(isAnswerCorrect: Boolean) {
         _uiState.update {
             it.copy(
@@ -141,7 +144,7 @@ class CompletePhraseViewModel @Inject constructor(
     private fun updateConsecutiveDays() {
         viewModelScope.launch {
             if (_uiState.value.isFirstTimeSavingConsecutiveDays) {
-                retrieveAndUpdateConsecutiveDaysUseCase().single()
+                updateConsecutiveDaysUseCase()
                 _uiState.update { it.copy(isFirstTimeSavingConsecutiveDays = false) }
             }
         }
@@ -158,6 +161,9 @@ class CompletePhraseViewModel @Inject constructor(
                     updatePhraseReviewUseCase(languageId, phraseDomain)
                 )
             }
+        }.invokeOnCompletion {
+            savePhrasesCompletedGoals()
+            updateConsecutiveDays()
         }
     }
 

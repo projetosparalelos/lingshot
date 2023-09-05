@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.lingshot.home_presentation.ui.component
 
 import androidx.compose.foundation.Canvas
@@ -9,11 +11,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -26,11 +39,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.lingshot.designsystem.theme.LocalSchemeCustom
+import com.lingshot.domain.model.GoalsDomain
+import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.R
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun HomePierChartCard(modifier: Modifier = Modifier) {
+fun HomePierChartCard(
+    goalsDomain: GoalsDomain?,
+    isSetGoalsDialogVisible: Boolean,
+    selectedGoalDays: Int,
+    listCountPhrases: ImmutableList<Int>,
+    onSelectedGoalDays: (Int) -> Unit,
+    onSaveGoals: (Int) -> Unit,
+    onToggleSetGoalsDialog: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val goals = goalsDomain?.targetPhrases ?: 0
+    val completed = goalsDomain?.progressPhrases ?: 0
+
     ElevatedCard {
         Row(
             modifier = modifier
@@ -40,24 +69,118 @@ fun HomePierChartCard(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             HomePieChart(
-                modifier = Modifier.size(120.dp)
+                modifier = Modifier.size(120.dp),
+                goals = goals,
+                completed = completed
             )
             Column {
                 HomePieChartIndicator(
-                    value = "50",
+                    value = goals.toString(),
                     type = stringResource(R.string.text_label_piechart_goals_home),
                     color = LocalSchemeCustom.current.goalsPieChart
                 )
                 HomePieChartIndicator(
-                    value = "20",
+                    value = completed.toString(),
                     type = stringResource(R.string.text_label_piechart_completed_home),
                     color = LocalSchemeCustom.current.completedPieChart
                 )
             }
             IconButton(
-                onClick = { /*TODO*/ }
+                onClick = onToggleSetGoalsDialog
             ) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+            }
+        }
+    }
+
+    if (isSetGoalsDialogVisible) {
+        AlertDialog(
+            onDismissRequest = onToggleSetGoalsDialog,
+            dismissButton = {
+                TextButton(onClick = onToggleSetGoalsDialog) {
+                    Text(text = stringResource(R.string.text_button_cancel_goals_dialog_home))
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    onSaveGoals(selectedGoalDays)
+                }) {
+                    Text(text = stringResource(R.string.text_button_save_goal_dialog_home))
+                }
+            },
+            title = {
+                Text(
+                    text = stringResource(R.string.text_title_goals_dialog_home),
+                    fontSize = 18.sp
+                )
+            },
+            text = {
+                GoalsDropdownMenu(
+                    selectedGoalDays = selectedGoalDays,
+                    listCountPhrases = listCountPhrases,
+                    onSelectedGoalDays = onSelectedGoalDays
+                )
+            }
+        )
+    }
+}
+
+@Composable
+private fun GoalsDropdownMenu(
+    selectedGoalDays: Int,
+    listCountPhrases: ImmutableList<Int>,
+    onSelectedGoalDays: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        modifier = modifier,
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }
+    ) {
+        OutlinedTextField(
+            modifier = Modifier.menuAnchor(),
+            value = stringResource(
+                R.string.text_label_dropdown_menu_item_goals_home,
+                selectedGoalDays
+            ),
+            onValueChange = {},
+            readOnly = true,
+            label = {
+                Text(
+                    text = stringResource(R.string.text_label_count_dropdown_menu_goals_home)
+                )
+            },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded
+                )
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            listCountPhrases.forEach { selectedOption ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = stringResource(
+                                R.string.text_label_dropdown_menu_item_goals_home,
+                                selectedOption
+                            )
+                        )
+                    },
+                    onClick = {
+                        onSelectedGoalDays(selectedOption)
+                        expanded = false
+                    }
+                )
             }
         }
     }
@@ -65,17 +188,21 @@ fun HomePierChartCard(modifier: Modifier = Modifier) {
 
 @Composable
 private fun HomePieChart(
-    modifier: Modifier = Modifier,
-    goals: Int = 50,
-    completed: Int = 20
+    goals: Int,
+    completed: Int,
+    modifier: Modifier = Modifier
 ) {
     val schemeCustom = LocalSchemeCustom.current
     Canvas(modifier = modifier) {
         val adjustedCompleted = if (completed > goals) goals else completed
-        val chartData = listOf(
-            adjustedCompleted.toFloat() / goals,
-            (goals - adjustedCompleted).toFloat() / goals
-        )
+        val chartData = if (goals == 0) {
+            listOf(0.5f, 0.5f)
+        } else {
+            listOf(
+                adjustedCompleted.toFloat() / goals,
+                (goals - adjustedCompleted).toFloat() / goals
+            )
+        }
 
         val chartDegrees = 360
         val canvasSize = size
@@ -128,5 +255,13 @@ private fun HomePieChartIndicator(value: String, type: String, color: Color) {
 @Preview(showBackground = true)
 @Composable
 private fun HomePieChartCardPreview() {
-    HomePierChartCard()
+    HomePierChartCard(
+        goalsDomain = GoalsDomain(),
+        selectedGoalDays = 1,
+        isSetGoalsDialogVisible = false,
+        listCountPhrases = HomeUiState().goalDaysList,
+        onSelectedGoalDays = {},
+        onSaveGoals = {},
+        onToggleSetGoalsDialog = {}
+    )
 }

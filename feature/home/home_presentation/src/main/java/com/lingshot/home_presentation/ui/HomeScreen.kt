@@ -28,8 +28,11 @@ import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.home_domain.model.HomeTypeSection
 import com.lingshot.home_presentation.HomeEvent
+import com.lingshot.home_presentation.HomeEvent.SaveGoals
+import com.lingshot.home_presentation.HomeEvent.SelectedGoalDays
 import com.lingshot.home_presentation.HomeEvent.SignOut
 import com.lingshot.home_presentation.HomeEvent.ToggleExpandDropdownMenuSignOut
+import com.lingshot.home_presentation.HomeEvent.ToggleSetGoalsDialog
 import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.HomeViewModel
 import com.lingshot.home_presentation.navigation.HomeDestination
@@ -122,7 +125,25 @@ private fun HomeScreen(
                         }
 
                         HomeTypeSection.PI_CHART -> {
-                            HomePierChartCard()
+                            HomePierChartCard(
+                                modifier = Modifier.placeholder(
+                                    visible = uiState.isPieChartGoalsVisible.not(),
+                                    highlight = PlaceholderHighlight.fade()
+                                ),
+                                goalsDomain = uiState.goalsDomain,
+                                isSetGoalsDialogVisible = uiState.isSetGoalsDialogVisible,
+                                selectedGoalDays = uiState.selectedGoalDays,
+                                listCountPhrases = uiState.goalDaysList,
+                                onSelectedGoalDays = {
+                                    handleEvent(SelectedGoalDays(it))
+                                },
+                                onSaveGoals = {
+                                    handleEvent(SaveGoals(it))
+                                },
+                                onToggleSetGoalsDialog = {
+                                    handleEvent(ToggleSetGoalsDialog)
+                                }
+                            )
                         }
 
                         HomeTypeSection.COLLECTION -> {

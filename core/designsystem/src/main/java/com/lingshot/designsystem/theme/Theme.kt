@@ -79,8 +79,6 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightAndroidSchemeCustom = SchemeCustom(
-    balloon = light_balloon,
-    onBalloon = light_onBalloon,
     goalsPieChart = light_goals_pieChart,
     completedPieChart = light_completed_pieChart,
     answerSuccess = light_answerSuccess,
@@ -93,8 +91,6 @@ private val LightAndroidSchemeCustom = SchemeCustom(
     onAnswerErrorContainer = light_onAnswerErrorContainer
 )
 private val DarkAndroidSchemeCustom = SchemeCustom(
-    balloon = dark_balloon,
-    onBalloon = dark_onBalloon,
     goalsPieChart = dark_goals_pieChart,
     completedPieChart = dark_completed_pieChart,
     answerSuccess = dark_answerSuccess,

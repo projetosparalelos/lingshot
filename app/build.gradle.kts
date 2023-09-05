@@ -37,6 +37,7 @@ android {
 
     buildTypes {
         release {
+            isMinifyEnabled = true
             proguardFiles("proguard-android.txt", "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
@@ -71,6 +72,7 @@ dependencies {
 
     implementation(libs.hilt.navigation.compose)
     implementation(libs.coil.compose)
+    implementation(libs.balloon.compose)
 
     implementation(libs.play.services.ads)
     implementation(platform(libs.firebase.bom))

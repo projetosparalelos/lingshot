@@ -57,7 +57,8 @@ fun HomeNeedReviewCard(pendingReview: String?, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.bodyMedium
             )
             IconButton(
-                onClick = { /*TODO*/ }
+                enabled = false,
+                onClick = {}
             ) {
                 Icon(imageVector = Icons.Default.EditCalendar, contentDescription = null)
             }

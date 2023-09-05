@@ -1,8 +1,12 @@
 package com.lingshot.domain.di
 
+import com.lingshot.domain.repository.GoalsRepository
 import com.lingshot.domain.repository.GoogleAuthRepository
 import com.lingshot.domain.repository.TextIdentifierRepository
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
+import com.lingshot.domain.usecase.RetrieveGoalsUseCase
+import com.lingshot.domain.usecase.SaveGoalsUseCase
+import com.lingshot.domain.usecase.SavePhrasesCompletedGoalsUseCase
 import com.lingshot.domain.usecase.SignOutUseCase
 import com.lingshot.domain.usecase.UserProfileUseCase
 import dagger.Module
@@ -32,4 +36,26 @@ object DomainModule {
     fun provideLanguageIdentifierUseCase(
         textIdentifierRepository: TextIdentifierRepository
     ): LanguageIdentifierUseCase = LanguageIdentifierUseCase(textIdentifierRepository)
+
+    @Singleton
+    @Provides
+    fun provideRetrieveGoalsUseCase(
+        goalsRepository: GoalsRepository,
+        userProfileUseCase: UserProfileUseCase
+    ): RetrieveGoalsUseCase = RetrieveGoalsUseCase(goalsRepository, userProfileUseCase)
+
+    @Singleton
+    @Provides
+    fun provideSaveGoalsUseCase(
+        goalsRepository: GoalsRepository,
+        userProfileUseCase: UserProfileUseCase
+    ): SaveGoalsUseCase = SaveGoalsUseCase(goalsRepository, userProfileUseCase)
+
+    @Singleton
+    @Provides
+    fun provideSavePhrasesCompletedGoalsUseCase(
+        goalsRepository: GoalsRepository,
+        userProfileUseCase: UserProfileUseCase
+    ): SavePhrasesCompletedGoalsUseCase =
+        SavePhrasesCompletedGoalsUseCase(goalsRepository, userProfileUseCase)
 }

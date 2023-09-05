@@ -2,8 +2,8 @@
 gradlePlugin = "7.4.2"
 kotlin = "1.8.21"
 googleServices = "4.3.15"
-playServicesAds = "22.1.0"
-playServicesAuth = "20.5.0"
+playServicesAds = "22.3.0"
+playServicesAuth = "20.6.0"
 firebaseCrashylytics = "2.9.6"
 
 coreKTX = "1.10.1"
@@ -29,11 +29,12 @@ kotlinxCollectionsImmutable = "0.3.5"
 okHttp = "4.11.0"
 coroutines = "1.7.1"
 datastore = "1.0.0"
+room = "2.5.2"
 timber = "5.0.1"
 chucker = "3.5.2"
 daggerHilt = "2.46.1"
 
-firebaseBom = "32.1.1"
+firebaseBom = "32.2.3"
 
 imageCropper = "4.5.0"
 coil = "2.4.0"
@@ -93,7 +94,9 @@ okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-intercepto
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 chucker-library = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
 chucker-library-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
