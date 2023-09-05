@@ -2,7 +2,7 @@
 
 package com.lingshot.completephrase_presentation.navigation
 
-import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.navigation.NavController
@@ -23,13 +23,13 @@ fun NavGraphBuilder.completePhraseScreen(onBackClick: () -> Unit) {
         route = "$COMPLETE_PHRASE_ROUTE/{$LANGUAGE_ID}",
         enterTransition = {
             slideIntoContainer(
-                towards = AnimatedContentScope.SlideDirection.Left,
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
                 animationSpec = tween(700)
             )
         },
         exitTransition = {
             slideOutOfContainer(
-                towards = AnimatedContentScope.SlideDirection.Right,
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
                 animationSpec = tween(700)
             )
         }

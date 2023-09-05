@@ -1,5 +1,3 @@
-@file:Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
-
 plugins {
     id("lingshot.android.application.plugin")
     id("lingshot.android.hilt.plugin")
@@ -24,6 +22,10 @@ android {
         targetSdk = AppVersionPlugin.TARGET_SDK
 
         setProperty("archivesBaseName", "${parent?.name}-$versionName")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     signingConfigs {
@@ -73,7 +75,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.coil.compose)
     implementation(libs.balloon.compose)
-
     implementation(libs.play.services.ads)
     implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)

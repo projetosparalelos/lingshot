@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 plugins {
     id("lingshot.app.version.plugin")
     id("lingshot.android.hilt.plugin")

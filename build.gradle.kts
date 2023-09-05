@@ -1,9 +1,6 @@
-@file:Suppress("DSL_SCOPE_VIOLATION")
-
 buildscript {
-    repositories {
-        google()
-        mavenCentral()
+    dependencies {
+        classpath(libs.android.r8.plugin)
     }
 }
 

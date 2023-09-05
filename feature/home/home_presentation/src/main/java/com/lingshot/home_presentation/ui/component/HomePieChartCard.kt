@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -142,7 +143,11 @@ private fun GoalsDropdownMenu(
         }
     ) {
         OutlinedTextField(
-            modifier = Modifier.menuAnchor(),
+            modifier = Modifier
+                .menuAnchor()
+                .focusProperties {
+                    canFocus = false
+                },
             value = stringResource(
                 R.string.text_label_dropdown_menu_item_goals_home,
                 selectedGoalDays

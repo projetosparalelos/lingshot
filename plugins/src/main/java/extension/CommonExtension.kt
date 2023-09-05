@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 package extension
 
 import AppVersionPlugin.Companion.javaCompileVersion
@@ -9,7 +7,7 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureAndroidCompose(
-    commonExtension: CommonExtension<*, *, *, *>,
+    commonExtension: CommonExtension<*, *, *, *, *>,
 ) {
     commonExtension.apply {
         buildFeatures {
@@ -20,16 +18,18 @@ internal fun Project.configureAndroidCompose(
             kotlinCompilerExtensionVersion = libs.getVersion("composeCompiler")
         }
 
-        packagingOptions {
-            resources.excludes.apply {
-                add("/META-INF/{AL2.0,LGPL2.1}")
-            }
+        packaging {
+            resources.excludes.addAll(
+                listOf(
+                    "/META-INF/{AL2.0,LGPL2.1}"
+                )
+            )
         }
     }
 }
 
 internal fun Project.configureKotlinJvm(
-    commonExtension: CommonExtension<*, *, *, *>
+    commonExtension: CommonExtension<*, *, *, *, *>
 ) {
     commonExtension.apply {
         compileOptions {
@@ -40,6 +40,9 @@ internal fun Project.configureKotlinJvm(
         project.tasks.withType<KotlinCompile>().configureEach {
             kotlinOptions {
                 jvmTarget = javaCompileVersion.toString()
+                freeCompilerArgs = listOf(
+                    "-Xstring-concat=inline"
+                )
             }
         }
     }

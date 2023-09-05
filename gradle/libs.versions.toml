@@ -1,11 +1,11 @@
 [versions]
-gradlePlugin = "7.4.2"
+gradlePlugin = "8.1.1"
+androidR8 = "8.2.24"
 kotlin = "1.8.21"
 googleServices = "4.3.15"
 playServicesAds = "22.3.0"
-playServicesAuth = "20.6.0"
-firebaseCrashylytics = "2.9.6"
-
+playServicesAuth = "20.7.0"
+firebaseCrashylytics = "2.9.9"
 coreKTX = "1.10.1"
 coreSplashScreen = "1.0.1"
 appCompat = "1.6.1"
@@ -14,10 +14,11 @@ activity = "1.7.2"
 lifecycle = "2.6.1"
 
 composeCompiler = "1.4.7"
-composeBom = "2023.06.00"
-composeMaterial3 = "1.1.0"
+composeBom = "2023.08.00"
+composeMaterial3 = "1.1.1"
 composeHiltNavigation = "1.0.0"
 accompanist = "0.30.1"
+accompanistNavigationAnimation = "0.31.3-beta"
 
 textRecognition = "19.0.0"
 languageID = "17.0.4"
@@ -56,6 +57,7 @@ android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt"}
 ktlint-plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint"}
+android-r8-plugin = { module = "com.android.tools:r8", version.ref = "androidR8"}
 
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKTX" }
 core-splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashScreen" }
@@ -81,7 +83,7 @@ lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
-accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
+accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 
 text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognition" }
 language-id = { module = "com.google.mlkit:language-id", version.ref = "languageID" }

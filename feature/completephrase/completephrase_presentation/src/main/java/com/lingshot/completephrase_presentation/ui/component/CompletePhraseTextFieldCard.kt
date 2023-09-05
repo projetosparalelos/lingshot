@@ -100,10 +100,10 @@ fun CompletePhraseTextFieldCard(
                         visible = isSpeechActive && isShimmerVisible,
                         highlight = PlaceholderHighlight.fade()
                     ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(space = 4.dp)
             ) {
                 CompletePhraseRenderTextWithField(
+                    modifier = Modifier.align(alignment = Alignment.Bottom),
                     listWords = listWords,
                     wordWithoutParentheses = wordWithoutParentheses,
                     wordToFill = wordToFill,
@@ -135,7 +135,8 @@ private fun CompletePhraseRenderTextWithField(
     wordWithoutParentheses: String,
     wordToFill: String,
     onFillWord: (String) -> Unit,
-    onHideKeyboard: () -> Unit
+    onHideKeyboard: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val textTypography = MaterialTheme.typography.headlineSmall
     val textColor = MaterialTheme.colorScheme.primary
@@ -161,7 +162,7 @@ private fun CompletePhraseRenderTextWithField(
                 )
             }) { measuredWidth, measuredHeight ->
                 BasicTextField(
-                    modifier = Modifier
+                    modifier = modifier
                         .focusRequester(focusRequester)
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(4.dp)
@@ -187,6 +188,7 @@ private fun CompletePhraseRenderTextWithField(
             }
         } else {
             Text(
+                modifier = modifier,
                 text = word,
                 style = textTypography,
                 color = textColor

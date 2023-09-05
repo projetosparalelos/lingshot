@@ -9,13 +9,13 @@ import org.gradle.kotlin.dsl.getByType
 
 class AppVersionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
+
         with(project) {
             pluginManager.apply {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
                 apply("org.jetbrains.kotlin.kapt")
             }
-
             val extension = extensions.getByType<LibraryExtension>()
 
             extension.apply {
@@ -32,6 +32,10 @@ class AppVersionPlugin : Plugin<Project> {
                         consumerProguardFiles("proguard-rules.pro")
                     }
                 }
+
+                buildFeatures {
+                    buildConfig = true
+                }
                 configureKotlinJvm(this)
             }
         }
@@ -42,9 +46,9 @@ class AppVersionPlugin : Plugin<Project> {
     const val VERSION_CODE = 1
     const val VERSION_NAME = "1.0"
 
-    const val COMPILE_SDK = 33
-    const val TARGET_SDK = 33
+    const val COMPILE_SDK = 34
+    const val TARGET_SDK = 34
     const val MIN_SDK = 26
-    val javaCompileVersion = JavaVersion.VERSION_1_8
+    val javaCompileVersion = JavaVersion.VERSION_17
   }
 }

@@ -99,6 +99,9 @@ private fun SwipePermissionScreen(
             }
         } else {
             INITIAL.ordinal
+        },
+        pageCount = {
+            uiState.swipePermissionItemList.size
         }
     )
 
@@ -119,7 +122,6 @@ private fun SwipePermissionScreen(
     Surface {
         HorizontalPager(
             modifier = modifier,
-            pageCount = uiState.swipePermissionItemList.size,
             state = pagerState,
             userScrollEnabled = false,
             key = { uiState.swipePermissionItemList[it] }
