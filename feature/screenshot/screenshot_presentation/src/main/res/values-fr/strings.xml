@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_label_navigation_bar_item_translate">Traduire</string>
+    <string name="text_label_navigation_bar_item_listen">Écouter</string>
+    <string name="text_label_navigation_bar_item_focus">Focus</string>
+    <string name="text_label_navigation_bar_item_i_speak">Je parle</string>
+    <string name="text_message_illegible_phrase">Il n\'y a pas de texte lisible.</string>
+    <string name="text_select_language_speak_message">Sélectionnez une langue que vous parlez.</string>
+    <string name="text_button_action_select_snack_bar">Sélectionner</string>
+    <string name="text_title_translate_bottom_sheet">Votre traduction</string>
+    <string name="text_button_add_to_list_bottom_sheet">Ajouté</string>
+    <string name="text_title_dictionary_full_screen_dialog_screenshot">Dictionnaire</string>
+</resources>

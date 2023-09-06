@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Lingshot</string>
+
+    <!-- NotificationClearScreenshot -->
+    <string name="text_notification_message_clean_up_gallery">Nettoyez vos captures d\'écran dans la galerie.</string>
+
+    <!-- UtilExtension -->
+    <string name="text_button_action_close_snack_bar_util">Fermer</string>
+</resources>

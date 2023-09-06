@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_message_notification_permission">Vänligen aktivera aviseringstillståndet för uppdateringar!</string>
+    <string name="text_message_balloon_overlay_screenshot">Klicka här för att påbörja din språkinlärningsresa.</string>
+</resources>

@@ -102,7 +102,7 @@ private fun LanguageChoiceList(
             ) {
                 LanguageChoiceEmojiFlag(emojiFlag = language.flagEmoji)
                 Text(
-                    text = language.displayName,
+                    text = stringResource(id = language.displayName),
                     modifier = Modifier.padding(start = 14.dp)
                 )
             }

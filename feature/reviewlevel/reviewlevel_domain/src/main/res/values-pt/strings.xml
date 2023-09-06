@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_label_new_word_review">Nova palavra</string>
+    <string name="text_label_under_construction_review">Em construção</string>
+    <string name="text_label_contextualized_review">Contextualizado</string>
+    <string name="text_label_knowledgeable_review">Informado</string>
+    <string name="text_label_master_review">Mestre</string>
+</resources>

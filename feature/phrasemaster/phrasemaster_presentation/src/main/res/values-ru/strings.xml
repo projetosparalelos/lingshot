@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_title_toolbar_edit_phrase">Редактировать фразу</string>
+    <string name="text_label_original_input_edit_phrase">Оригинал</string>
+    <string name="text_label_translate_input_edit_phrase">Перевод</string>
+    <string name="text_markdown_enclose_word_edit_phrase">Ограничьте слово, которое вы хотите тренировать, в `(( ))`, например: `Как ваше ((имя))?`</string>
+    <string name="text_markdown_alert_enclose_word_edit_phrase">⚠️ **Предупреждение:** Фраза должна содержать только одно слово, заключенное в двойные скобки `((слово))`.</string>
+    <string name="text_button_save_edit_phrase">Сохранить</string>
+    <string name="text_message_invalid_language">Неверный язык. Проверьте поле оригинала.</string>
+</resources>

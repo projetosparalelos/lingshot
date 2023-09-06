@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ScreenShotService -->
+    <string name="text_notification_title_display_display_tuned_on">Экран включен!</string>
+    <string name="text_notification_message_display_reading_is_ready_to_use">Ваше чтение готово к использованию.</string>
+    <string name="text_notification_message_clean_up_gallery">Очистите свои скриншоты в галерее.</string>
+    <string name="text_notification_button_display_turn_off">Выключить</string>
+</resources>

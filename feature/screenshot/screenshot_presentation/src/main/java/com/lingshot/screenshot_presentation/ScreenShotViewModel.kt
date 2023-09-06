@@ -4,7 +4,6 @@ package com.lingshot.screenshot_presentation
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.speech.tts.TextToSpeech.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingshot.common.helper.TextToSpeechFacade
@@ -29,7 +28,7 @@ import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.FOCUS
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LANGUAGE
+import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.I_SPEAK
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LISTEN
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import com.phrase.phrasemaster_domain.model.PhraseDomain
@@ -39,7 +38,6 @@ import com.phrase.phrasemaster_domain.usecase.SaveOrDeleteResult
 import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.util.*
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -76,7 +74,7 @@ class ScreenShotViewModel @Inject constructor(
             }
 
             is ScreenShotEvent.FetchTextRecognizer -> {
-                fetchTextRecognizer(screenShotEvent.imageBitmap)
+                fetchTextRecognizer(screenShotEvent.imageBitmap, screenShotEvent.illegiblePhrase)
             }
 
             is ScreenShotEvent.SaveLanguage -> {
@@ -156,7 +154,7 @@ class ScreenShotViewModel @Inject constructor(
                 croppedImage(FOCUS_IMAGE)
             }
 
-            LANGUAGE -> {
+            I_SPEAK -> {
                 toggleLanguageDialog()
             }
         }
@@ -228,14 +226,14 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun fetchTextRecognizer(imageBitmap: Bitmap?) {
+    private fun fetchTextRecognizer(imageBitmap: Bitmap?, illegiblePhrase: String) {
         viewModelScope.launch {
             when (val status = textIdentifierRepository.fetchTextRecognizer(imageBitmap)) {
                 is Status.Success -> {
                     val textFormatted = status.data.formatText()
                     when (_uiState.value.navigationBarItem) {
                         TRANSLATE -> fetchPhraseToTranslate(textFormatted)
-                        LISTEN -> fetchLanguageIdentifier(textFormatted)
+                        LISTEN -> fetchLanguageIdentifier(textFormatted, illegiblePhrase)
                         else -> Unit
                     }
                 }
@@ -260,7 +258,7 @@ class ScreenShotViewModel @Inject constructor(
                     messages = listOf(
                         MessageDomain(
                             role = "system",
-                            content = PROMPT_TRANSLATE(getLanguage()?.displayName)
+                            content = PROMPT_TRANSLATE(getLanguage()?.name?.lowercase())
                         ),
                         MessageDomain(
                             role = "user",
@@ -302,11 +300,12 @@ class ScreenShotViewModel @Inject constructor(
         })
     }
 
-    private fun fetchLanguageIdentifier(text: String) {
+    private fun fetchLanguageIdentifier(text: String, illegiblePhrase: String) {
         viewModelScope.launch {
-            when (val status = textIdentifierRepository.fetchLanguageIdentifier(text)) {
+            val newText = text.ifBlank { illegiblePhrase }
+            when (val status = textIdentifierRepository.fetchLanguageIdentifier(newText)) {
                 is Status.Success -> {
-                    textToSpeech.speakText(text.ifBlank { ILLEGIBLE_TEXT }, status.data.toString())
+                    textToSpeech.speakText(newText, status.data.toString())
                 }
 
                 is Status.Error -> {
@@ -379,9 +378,5 @@ class ScreenShotViewModel @Inject constructor(
             .replace("\n", " ")
             .lowercase()
             .replaceFirstChar { it.uppercase() }
-    }
-
-    companion object {
-        const val ILLEGIBLE_TEXT = "There isn't any legible text."
     }
 }

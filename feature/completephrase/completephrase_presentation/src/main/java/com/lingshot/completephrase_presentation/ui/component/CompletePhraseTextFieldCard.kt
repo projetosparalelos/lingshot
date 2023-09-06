@@ -66,6 +66,7 @@ fun CompletePhraseTextFieldCard(
     modifier: Modifier = Modifier
 ) {
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
     var isShimmerVisible by remember { mutableStateOf(true) }
 
     ElevatedCard(
@@ -105,6 +106,7 @@ fun CompletePhraseTextFieldCard(
                 CompletePhraseRenderTextWithField(
                     modifier = Modifier.align(alignment = Alignment.CenterVertically),
                     listWords = listWords,
+                    focusRequester = focusRequester,
                     wordWithoutParentheses = wordWithoutParentheses,
                     wordToFill = wordToFill,
                     onFillWord = onFillWord,
@@ -124,6 +126,12 @@ fun CompletePhraseTextFieldCard(
         }
     }
 
+    LaunchedEffect(isSpeechActive) {
+        if (isSpeechActive.not()) {
+            focusRequester.requestFocus()
+        }
+    }
+
     LaunchedEffect(Unit) {
         onSpeakText()
     }
@@ -132,6 +140,7 @@ fun CompletePhraseTextFieldCard(
 @Composable
 private fun CompletePhraseRenderTextWithField(
     listWords: ImmutableList<String>,
+    focusRequester: FocusRequester,
     wordWithoutParentheses: String,
     wordToFill: String,
     onFillWord: (String) -> Unit,
@@ -140,7 +149,6 @@ private fun CompletePhraseRenderTextWithField(
 ) {
     val textTypography = MaterialTheme.typography.headlineSmall
     val textColor = MaterialTheme.colorScheme.primary
-    val focusRequester = FocusRequester()
 
     listWords.forEach { word ->
         if (word == "(($wordWithoutParentheses))") {
@@ -195,10 +203,6 @@ private fun CompletePhraseRenderTextWithField(
             )
         }
     }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
 }
 
 @Composable
@@ -233,7 +237,7 @@ private fun CompletePhraseReviewLevel(reviewLevel: ReviewLevel) {
         }
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = reviewLevel.label,
+            text = stringResource(id = reviewLevel.label),
             color = MaterialTheme.colorScheme.secondary
         )
     }

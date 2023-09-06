@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_message_notification_permission">Veuillez activer l\'autorisation de notification pour les mises à jour!</string>
+    <string name="text_message_balloon_overlay_screenshot">Cliquez ici pour démarrer votre parcours d\'apprentissage des langues.</string>
+</resources>

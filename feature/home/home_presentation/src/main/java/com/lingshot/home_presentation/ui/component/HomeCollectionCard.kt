@@ -55,10 +55,22 @@ fun HomeCollectionCard(
         ) {
             val text = buildAnnotatedString {
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)) {
-                    append("${languageFrom?.flagEmoji} ${languageFrom?.displayName} ")
+                    val displayName = languageFrom?.displayName?.let { stringResource(id = it) }
+                    append(
+                        "${languageFrom?.flagEmoji} $displayName"
+                    )
                 }
+                append(" ")
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
-                    append("from ${languageTo?.displayName}")
+                    val displayName = languageTo?.displayName?.let { stringResource(id = it) }
+                    append(
+                        String.format(
+                            stringResource(
+                                id = R.string.text_title_language_from_to_collection_card_home
+                            ),
+                            displayName
+                        )
+                    )
                 }
             }
             Text(text = text)

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_button_verify_complete_phrase">Verifiera</string>
+    <string name="text_message_answers_finished_complete_phrase">Utmärkt arbete! Du har framgångsrikt avslutat Fråga Färdigt-quizet!</string>
+    <string name="text_message_collection_empty_complete_phrase">Hoppsan! Det verkar inte finnas några nya meningar att lära dig för tillfället. Fortsätt det goda arbetet!</string>
+    <string name="text_button_continue_answer_sheet_complete_phrase">Fortsätt</string>
+    <string name="text_label_sheet_correct_answer_complete_phrase">"Svar: "</string>
+    <string name="text_title_complete_phrase">Slutför meningen</string>
+    <string name="text_button_show_word_complete_phrase">Visa ord</string>
+
+    <string-array name="answer_success_phrases">
+        <item>Snyggt jobbat!</item>
+        <item>Perfekt svar!</item>
+        <item>Mitt i prick!</item>
+        <item>Rätt på målet!</item>
+        <item>Felfritt svar!</item>
+        <item>Du har rätt!</item>
+        <item>Utmärkt jobbat!</item>
+        <item>Bravo! Du har rätt!</item>
+        <item>Det är det!</item>
+        <item>Bra jobbat!</item>
+    </string-array>
+
+    <string-array name="answer_error_phrases">
+        <item>Fortsätt försöka!</item>
+        <item>Lär dig av detta.</item>
+        <item>Ge inte upp.</item>
+        <item>Försök igen senare.</item>
+        <item>Fortsätt driva dig framåt.</item>
+        <item>Var ihärdig.</item>
+        <item>Lär och väx.</item>
+        <item>Fortsätt framåt.</item>
+        <item>Fortsätt öva!</item>
+        <item>Du kommer att klara det!</item>
+    </string-array>
+</resources>

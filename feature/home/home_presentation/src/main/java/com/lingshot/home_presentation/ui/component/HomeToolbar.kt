@@ -45,7 +45,12 @@ fun HomeToolbar(
                         visible = userDomain == null,
                         highlight = PlaceholderHighlight.fade()
                     ),
-                text = "Hi, ${userDomain?.firstName}",
+                text = String.format(
+                    stringResource(
+                        R.string.text_label_name_user_logged_home,
+                        userDomain?.firstName.toString()
+                    )
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

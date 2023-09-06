@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_button_verify_complete_phrase">Überprüfen</string>
+    <string name="text_message_answers_finished_complete_phrase">Großartige Arbeit! Sie haben das "Komplettieren Sie den Satz" Quiz erfolgreich abgeschlossen!</string>
+    <string name="text_message_collection_empty_complete_phrase">Hoppla! Es scheint, dass es momentan keine neuen Sätze für Sie zu lernen gibt. Machen Sie weiter so!</string>
+    <string name="text_button_continue_answer_sheet_complete_phrase">Weiter</string>
+    <string name="text_label_sheet_correct_answer_complete_phrase">"Antwort: "</string>
+    <string name="text_title_complete_phrase">Vervollständige den Satz</string>
+    <string name="text_button_show_word_complete_phrase">Wort anzeigen</string>
+
+    <string-array name="answer_success_phrases">
+        <item>Perfekt gemacht!</item>
+        <item>Perfekte Antwort!</item>
+        <item>Volltreffer!</item>
+        <item>Voll ins Schwarze!</item>
+        <item>Fehlerlose Antwort!</item>
+        <item>Sie haben recht!</item>
+        <item>Hervorragende Arbeit!</item>
+        <item>Bravo! Sie haben recht!</item>
+        <item>Das ist es!</item>
+        <item>Gut gemacht!</item>
+    </string-array>
+
+    <string-array name="answer_error_phrases">
+        <item>Weiter versuchen!</item>
+        <item>Lernen Sie daraus.</item>
+        <item>Geben Sie nicht auf.</item>
+        <item>Später noch einmal versuchen.</item>
+        <item>Halten Sie durch.</item>
+        <item>Bleiben Sie hartnäckig.</item>
+        <item>Lernen und wachsen Sie.</item>
+        <item>Immer weitermachen.</item>
+        <item>Üben Sie weiter!</item>
+        <item>Sie schaffen das!</item>
+    </string-array>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_label_navigation_bar_item_translate">Перевести</string>
+    <string name="text_label_navigation_bar_item_listen">Слушать</string>
+    <string name="text_label_navigation_bar_item_focus">Фокус</string>
+    <string name="text_label_navigation_bar_item_i_speak">Я говорю</string>
+    <string name="text_message_illegible_phrase">Нет читаемого текста.</string>
+    <string name="text_select_language_speak_message">Выберите язык, на котором вы говорите.</string>
+    <string name="text_button_action_select_snack_bar">Выбрать</string>
+    <string name="text_title_translate_bottom_sheet">Ваш перевод</string>
+    <string name="text_button_add_to_list_bottom_sheet">Добавлено</string>
+    <string name="text_title_dictionary_full_screen_dialog_screenshot">Словарь</string>
+</resources>

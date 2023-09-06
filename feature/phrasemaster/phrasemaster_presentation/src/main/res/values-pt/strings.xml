@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_title_toolbar_edit_phrase">Editar frase</string>
+    <string name="text_label_original_input_edit_phrase">Original</string>
+    <string name="text_label_translate_input_edit_phrase">Tradução</string>
+    <string name="text_markdown_enclose_word_edit_phrase">Coloque uma palavra que você deseja praticar em `(( ))`, por exemplo: `Qual é o seu ((nome))?`</string>
+    <string name="text_markdown_alert_enclose_word_edit_phrase">⚠️ **Aviso:** A frase deve conter apenas uma palavra cercada por parênteses duplo `((palavra))`.</string>
+    <string name="text_button_save_edit_phrase">Salvar</string>
+    <string name="text_message_invalid_language">Idioma inválido. Verifique o campo original.</string>
+</resources>

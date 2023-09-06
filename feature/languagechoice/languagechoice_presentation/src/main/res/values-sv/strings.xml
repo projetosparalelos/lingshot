@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_select_language_speak_message">Välj ett språk som du talar.</string>
+    <string name="text_title_dialog_choose_language">Välj språk</string>
+    <string name="text_button_select_dialog_choose_language">Välj</string>
+    <string name="text_button_dialog_cancel">Avbryt</string>
+</resources>

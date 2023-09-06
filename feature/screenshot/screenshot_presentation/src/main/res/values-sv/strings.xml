@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_label_navigation_bar_item_translate">Översätt</string>
+    <string name="text_label_navigation_bar_item_listen">Lyssna</string>
+    <string name="text_label_navigation_bar_item_focus">Fokus</string>
+    <string name="text_label_navigation_bar_item_i_speak">Jag talar</string>
+    <string name="text_message_illegible_phrase">Det finns ingen läsbar text.</string>
+    <string name="text_select_language_speak_message">Välj ett språk du talar.</string>
+    <string name="text_button_action_select_snack_bar">Välj</string>
+    <string name="text_title_translate_bottom_sheet">Din översättning</string>
+    <string name="text_button_add_to_list_bottom_sheet">Tillagd</string>
+    <string name="text_title_dictionary_full_screen_dialog_screenshot">Ordbok</string>
+</resources>

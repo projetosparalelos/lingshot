@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_display_name_english_language">Engelska</string>
+    <string name="text_display_name_french_language">Franska</string>
+    <string name="text_display_name_german_language">Tyska</string>
+    <string name="text_display_name_italian_language">Italienska</string>
+    <string name="text_display_name_portuguese_language">Portugisiska</string>
+    <string name="text_display_name_russian_language">Ryska</string>
+    <string name="text_display_name_spanish_language">Spanska</string>
+    <string name="text_display_name_swedish_language">Svenska</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_label_name_user_logged_home">Hej, %s</string>
+    <string name="text_emoji_empty_collection_card_home">(  * _ *  )</string>
+    <string name="text_message_empty_collection_card_home">Samlingen är tom. Lägg till en fras!</string>
+    <string name="text_label_phrase_pending_review_home">meningar väntar på granskning.</string>
+    <string name="text_label_your_offence_home">Ditt brott är:</string>
+    <string name="text_label_consecutive_days_home">%s dag(ar)</string>
+    <string name="text_label_piechart_goals_home">mål</string>
+    <string name="text_label_piechart_completed_home">avklarade</string>
+    <string name="text_label_header_collections_home">Samlingar</string>
+    <string name="text_title_language_from_to_collection_card_home">från %s</string>
+    <string name="text_label_phrases_played_and_total_phrases_home">Spelade %1$d / %2$d meningar</string>
+    <string name="text_label_dropdown_menu_sign_out_home">Logga ut</string>
+    <string name="text_button_save_goal_dialog_home">Spara</string>
+    <string name="text_button_cancel_goals_dialog_home">Avbryt</string>
+    <string name="text_title_goals_dialog_home">Sätt ditt mål</string>
+    <string name="text_label_dropdown_menu_item_goals_home">%s fras(er)</string>
+    <string name="text_label_count_dropdown_menu_goals_home">Räkna</string>
+</resources>

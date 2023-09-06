@@ -2,7 +2,7 @@ package com.lingshot.home_domain.model
 
 data class HomeSection(
     val typeSection: HomeTypeSection,
-    val title: String? = null
+    val title: Int = 0
 )
 
 enum class HomeTypeSection {

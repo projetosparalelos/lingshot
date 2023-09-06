@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_title_toolbar_edit_phrase">Modifier la phrase</string>
+    <string name="text_label_original_input_edit_phrase">Original</string>
+    <string name="text_label_translate_input_edit_phrase">Traduction</string>
+    <string name="text_markdown_enclose_word_edit_phrase">Encadrez un mot que vous voulez pratiquer dans `(( ))`, par exemple: `Quel est ton ((nom))?`</string>
+    <string name="text_markdown_alert_enclose_word_edit_phrase">⚠️ **Attention:** La phrase doit contenir un seul mot encadré de doubles parenthèses `((mot))`.</string>
+    <string name="text_button_save_edit_phrase">Enregistrer</string>
+    <string name="text_message_invalid_language">Langue invalide. Veuillez vérifier le champ d\'origine.</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ScreenShotService -->
+    <string name="text_notification_title_display_display_tuned_on">Display ligado!</string>
+    <string name="text_notification_message_display_reading_is_ready_to_use">Sua leitura está pronta para ser usada.</string>
+    <string name="text_notification_message_clean_up_gallery">Limpe seus screenshots na galeria.</string>
+    <string name="text_notification_button_display_turn_off">Desligar</string>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_message_notification_permission">Bitte aktivieren Sie die Benachrichtigungsberechtigung für Updates!</string>
+    <string name="text_message_balloon_overlay_screenshot">Klicken Sie hier, um Ihre Sprachlernreise zu starten.</string>
+</resources>

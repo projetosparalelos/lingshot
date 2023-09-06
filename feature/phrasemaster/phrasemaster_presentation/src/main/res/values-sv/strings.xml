@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_title_toolbar_edit_phrase">Redigera mening</string>
+    <string name="text_label_original_input_edit_phrase">Original</string>
+    <string name="text_label_translate_input_edit_phrase">Översättning</string>
+    <string name="text_markdown_enclose_word_edit_phrase">Sätt in ett ord du vill öva på i `(( ))`, till exempel: `Vad är ditt ((namn))?`</string>
+    <string name="text_markdown_alert_enclose_word_edit_phrase">⚠️ **Varning:** Meningsstrukturen bör endast innehålla ett ord som är omslutet av dubbla parenteser `((ord))`.</string>
+    <string name="text_button_save_edit_phrase">Spara</string>
+    <string name="text_message_invalid_language">Ogiltigt språk. Kontrollera det ursprungliga fältet.</string>
+</resources>

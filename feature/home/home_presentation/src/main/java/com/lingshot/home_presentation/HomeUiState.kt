@@ -27,7 +27,7 @@ data class HomeUiState(
         HomeSection(HomeTypeSection.OFFENSIVE_TITLE),
         HomeSection(HomeTypeSection.NEED_REVIEW),
         HomeSection(HomeTypeSection.PI_CHART),
-        HomeSection(HomeTypeSection.HEADER, "Collections"),
+        HomeSection(HomeTypeSection.HEADER, R.string.text_label_header_collections_home),
         HomeSection(HomeTypeSection.COLLECTION)
     ).toImmutableList()
 

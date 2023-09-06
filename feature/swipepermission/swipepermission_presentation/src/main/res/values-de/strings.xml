@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_button_sign_with_google_swiper_permission">Mit Google anmelden</string>
+    <string name="text_title_swipe_initial">Willkommen bei Lingshot!</string>
+    <string name="text_message_swipe_initial">Erkunden Sie den Bildschirm und lassen Sie unsere künstliche Intelligenz für Sie übersetzen, um das Lernen noch einfacher und ansprechender zu gestalten.</string>
+    <string name="text_title_swipe_read_and_write">Intelligente Übersetzung mit einem Bildschirmfoto!</string>
+    <string name="text_message_swipe_read_and_write">Um Ihre Bildschirmfotos zu übersetzen, bitten wir um Ihre Erlaubnis, die Bilder auf Ihrem Gerät zu speichern.\n\nWir garantieren die Datenschutz Ihrer Daten, die ausschließlich für diesen Zweck verwendet werden!</string>
+    <string name="text_second_message_swipe_read_and_write">Um die volle Funktionalität sicherzustellen, ist es erforderlich, die Erlaubnis zum Speichern der Bildschirmfotos zu erteilen.\n\nBitte überprüfen Sie Ihre Entscheidung und erteilen Sie die Erlaubnis, fortzufahren!</string>
+    <string name="text_title_swipe_overlay">Screenshots leicht gemacht</string>
+    <string name="text_message_swipe_overlay">Um Screenshots zu generieren, bitten wir um Ihre Erlaubnis zur Verwendung der Overlay-Funktion.\n\nDiese Erlaubnis ermöglicht es uns, den Bildschirm schnell und bequem zu erfassen.</string>
+    <string name="text_button_swipe">Weiter</string>
+</resources>

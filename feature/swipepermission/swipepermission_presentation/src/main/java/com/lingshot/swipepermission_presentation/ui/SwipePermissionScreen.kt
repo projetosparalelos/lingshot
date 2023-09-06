@@ -19,6 +19,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -129,11 +130,14 @@ private fun SwipePermissionScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(horizontal = 16.dp)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
             ) {
                 val item = uiState.swipePermissionItemList[index]
+
+                Spacer(modifier = Modifier)
 
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -194,6 +198,7 @@ private fun SwipePermissionScreen(
                         Text(stringResource(id = R.string.text_button_swipe))
                     }
                 }
+                Spacer(modifier = Modifier)
             }
         }
     }

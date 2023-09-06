@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_button_verify_complete_phrase">Проверить</string>
+    <string name="text_message_answers_finished_complete_phrase">Отличная работа! Вы успешно завершили викторину "Завершите фразу"!</string>
+    <string name="text_message_collection_empty_complete_phrase">Упс! Похоже, что в данный момент нет новых предложений для изучения. Продолжайте в том же духе!</string>
+    <string name="text_button_continue_answer_sheet_complete_phrase">Продолжить</string>
+    <string name="text_label_sheet_correct_answer_complete_phrase">"Ответ: "</string>
+    <string name="text_title_complete_phrase">Завершите фразу</string>
+    <string name="text_button_show_word_complete_phrase">Показать слово</string>
+
+    <string-array name="answer_success_phrases">
+        <item>Молодец!</item>
+        <item>Отличный ответ!</item>
+        <item>Попали в яблочко!</item>
+        <item>Точно в цель!</item>
+        <item>Безупречный ответ!</item>
+        <item>Вы правильно ответили!</item>
+        <item>Отличная работа!</item>
+        <item>Браво! Вы правильно!</item>
+        <item>Вот и всё!</item>
+        <item>Хорошо сделано!</item>
+    </string-array>
+
+    <string-array name="answer_error_phrases">
+        <item>Продолжайте попытки!</item>
+        <item>Учитесь на ошибках.</item>
+        <item>Не сдавайтесь.</item>
+        <item>Попробуйте позже.</item>
+        <item>Продолжайте двигаться вперед.</item>
+        <item>Будьте настойчивы.</item>
+        <item>Учитесь и растете.</item>
+        <item>Продолжайте двигаться вперед.</item>
+        <item>Продолжайте практиковаться!</item>
+        <item>Вы справитесь!</item>
+    </string-array>
+</resources>

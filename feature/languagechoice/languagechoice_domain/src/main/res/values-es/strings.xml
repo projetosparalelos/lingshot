@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_display_name_english_language">Inglés</string>
+    <string name="text_display_name_french_language">Francés</string>
+    <string name="text_display_name_german_language">Alemán</string>
+    <string name="text_display_name_italian_language">Italiano</string>
+    <string name="text_display_name_portuguese_language">Portugués</string>
+    <string name="text_display_name_russian_language">Ruso</string>
+    <string name="text_display_name_spanish_language">Español</string>
+    <string name="text_display_name_swedish_language">Sueco</string>
+</resources>

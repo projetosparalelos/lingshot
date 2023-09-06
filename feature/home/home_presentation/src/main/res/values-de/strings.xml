@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_label_name_user_logged_home">Hallo, %s</string>
+    <string name="text_emoji_empty_collection_card_home">(  * _ *  )</string>
+    <string name="text_message_empty_collection_card_home">Die Sammlung ist leer. Fügen Sie einen Satz hinzu!</string>
+    <string name="text_label_phrase_pending_review_home">Sätze in Überprüfung.</string>
+    <string name="text_label_your_offence_home">Ihr Vergehen ist:</string>
+    <string name="text_label_consecutive_days_home">%s Tag(e)</string>
+    <string name="text_label_piechart_goals_home">Ziele</string>
+    <string name="text_label_piechart_completed_home">abgeschlossen</string>
+    <string name="text_label_header_collections_home">Sammlungen</string>
+    <string name="text_title_language_from_to_collection_card_home">aus dem %s</string>
+    <string name="text_label_phrases_played_and_total_phrases_home">Gespielt %1$d / %2$d Sätze</string>
+    <string name="text_label_dropdown_menu_sign_out_home">Abmelden</string>
+    <string name="text_button_save_goal_dialog_home">Speichern</string>
+    <string name="text_button_cancel_goals_dialog_home">Abbrechen</string>
+    <string name="text_title_goals_dialog_home">Setzen Sie Ihr Ziel</string>
+    <string name="text_label_dropdown_menu_item_goals_home">%s Satz/Sätze</string>
+    <string name="text_label_count_dropdown_menu_goals_home">Anzahl</string>
+</resources>

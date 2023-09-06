@@ -17,8 +17,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -50,7 +52,7 @@ fun RowScope.ScreenShotNavigationBarItem(
             icon = {
                 Icon(imageVector = item.icon, contentDescription = item.name)
             },
-            label = { Text(item.label) },
+            label = { Text(stringResource(id = item.label)) },
             selected = (navigationBarItem == item),
             onClick = {
                 onSelectedOptionsNavigationBar(item)
@@ -74,13 +76,12 @@ private fun ScreenShotNavigationBarPreview() {
     }
 }
 
-enum class NavigationBarItem(val icon: ImageVector) {
-    TRANSLATE(Icons.Default.Translate),
-    LISTEN(Icons.Default.VolumeUp),
-    FOCUS(Icons.Default.ZoomOutMap),
-    LANGUAGE(Icons.Default.Language);
-
-    val label: String =
-        name.lowercase()
-            .replaceFirstChar { it.titlecase() }
+enum class NavigationBarItem(val label: Int, val icon: ImageVector) {
+    TRANSLATE(
+        label = R.string.text_label_navigation_bar_item_translate,
+        icon = Icons.Default.Translate
+    ),
+    LISTEN(label = R.string.text_label_navigation_bar_item_listen, icon = Icons.Default.VolumeUp),
+    FOCUS(label = R.string.text_label_navigation_bar_item_focus, icon = Icons.Default.ZoomOutMap),
+    I_SPEAK(label = R.string.text_label_navigation_bar_item_i_speak, icon = Icons.Default.Language);
 }

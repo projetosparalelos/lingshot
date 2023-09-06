@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ScreenShotService -->
+    <string name="text_notification_title_display_display_tuned_on">Bildschirm eingeschaltet!</string>
+    <string name="text_notification_message_display_reading_is_ready_to_use">Ihre Leseanzeige ist bereit zur Verwendung.</string>
+    <string name="text_notification_message_clean_up_gallery">Reinigen Sie Ihre Screenshots in der Galerie.</string>
+    <string name="text_notification_button_display_turn_off">Ausschalten</string>
+</resources>

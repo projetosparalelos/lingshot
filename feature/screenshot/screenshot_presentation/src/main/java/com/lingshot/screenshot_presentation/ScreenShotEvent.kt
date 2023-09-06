@@ -44,7 +44,8 @@ sealed class ScreenShotEvent {
     ) : ScreenShotEvent()
 
     data class FetchTextRecognizer(
-        val imageBitmap: Bitmap?
+        val imageBitmap: Bitmap?,
+        val illegiblePhrase: String
     ) : ScreenShotEvent()
 
     data class ToggleDictionaryFullScreenDialog(

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_button_sign_with_google_swiper_permission">Logga in med Google</string>
+    <string name="text_title_swipe_initial">Välkommen till Lingshot!</string>
+    <string name="text_message_swipe_initial">Utforska skärmen och låt vår artificiella intelligens översätta åt dig, vilket gör inlärningen ännu enklare och mer engagerande.</string>
+    <string name="text_title_swipe_read_and_write">Intelligent översättning med en skärmbild!</string>
+    <string name="text_message_swipe_read_and_write">För att översätta dina skärmbilder begär vi din tillåtelse att spara bilderna på din enhet.\n\nVi garanterar sekretessen för dina data, som endast kommer att användas för detta ändamål!</string>
+    <string name="text_second_message_swipe_read_and_write">För att säkerställa full funktionalitet är det nödvändigt att bevilja tillstånd att spara skärmbilderna.\n\nVänligen granska ditt beslut och bevilja tillstånd att fortsätta!</string>
+    <string name="text_title_swipe_overlay">Fånga skärmbilder med lätthet</string>
+    <string name="text_message_swipe_overlay">För att generera skärmbilder begär vi din tillåtelse att använda överläggningsfunktionen.\n\nDetta tillstånd gör det möjligt för oss att snabbt och bekvämt ta skärmbilder.</string>
+    <string name="text_button_swipe">Fortsätt</string>
+</resources>

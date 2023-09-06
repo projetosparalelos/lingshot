@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_title_toolbar_edit_phrase">Satz bearbeiten</string>
+    <string name="text_label_original_input_edit_phrase">Original</string>
+    <string name="text_label_translate_input_edit_phrase">Übersetzung</string>
+    <string name="text_markdown_enclose_word_edit_phrase">Umschließen Sie ein Wort, das Sie üben möchten, in `(( ))`, zum Beispiel: `Wie ist Ihr ((Name))?`</string>
+    <string name="text_markdown_alert_enclose_word_edit_phrase">⚠️ **Warnung:** Der Satz darf nur ein Wort in doppelten Klammern `((Wort))` enthalten.</string>
+    <string name="text_button_save_edit_phrase">Speichern</string>
+    <string name="text_message_invalid_language">Ungültige Sprache. Bitte überprüfen Sie das Originalfeld.</string>
+</resources>

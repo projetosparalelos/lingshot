@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="text_label_name_user_logged_home">Hi, %s</string>
     <string name="text_emoji_empty_collection_card_home">(  * _ *  )</string>
     <string name="text_message_empty_collection_card_home">Collection is empty. Add a phrase!</string>
     <string name="text_label_phrase_pending_review_home">sentences pending review.</string>
@@ -7,7 +8,9 @@
     <string name="text_label_consecutive_days_home">%s day(s)</string>
     <string name="text_label_piechart_goals_home">goals</string>
     <string name="text_label_piechart_completed_home">completed</string>
-    <string name="text_label_phrases_played_and_total_phrases_home">Played %s / %s sentences"</string>
+    <string name="text_label_header_collections_home">Collections</string>
+    <string name="text_title_language_from_to_collection_card_home">from %s</string>
+    <string name="text_label_phrases_played_and_total_phrases_home">Played %1$d / %2$d sentences</string>
     <string name="text_label_dropdown_menu_sign_out_home">Logout</string>
     <string name="text_button_save_goal_dialog_home">Save</string>
     <string name="text_button_cancel_goals_dialog_home">Cancel</string>

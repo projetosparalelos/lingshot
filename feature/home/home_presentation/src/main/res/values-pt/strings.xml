@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_label_name_user_logged_home">Olá, %s</string>
+    <string name="text_emoji_empty_collection_card_home">(  * _ *  )</string>
+    <string name="text_message_empty_collection_card_home">A coleção está vazia. Adicione uma frase!</string>
+    <string name="text_label_phrase_pending_review_home">frases aguardando revisão.</string>
+    <string name="text_label_your_offence_home">Sua ofensiva é de:</string>
+    <string name="text_label_consecutive_days_home">%s dia(s)</string>
+    <string name="text_label_piechart_goals_home">metas</string>
+    <string name="text_label_piechart_completed_home">completadas</string>
+    <string name="text_label_header_collections_home">Coleções</string>
+    <string name="text_title_language_from_to_collection_card_home">a partir do %s</string>
+    <string name="text_label_phrases_played_and_total_phrases_home">Jogou %1$d / %2$d frases</string>
+    <string name="text_label_dropdown_menu_sign_out_home">Sair</string>
+    <string name="text_button_save_goal_dialog_home">Salvar</string>
+    <string name="text_button_cancel_goals_dialog_home">Cancelar</string>
+    <string name="text_title_goals_dialog_home">Defina sua meta</string>
+    <string name="text_label_dropdown_menu_item_goals_home">%s frase(s)</string>
+    <string name="text_label_count_dropdown_menu_goals_home">Quantidade</string>
+</resources>

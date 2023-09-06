@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,7 +39,6 @@ import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleLanguageDialog
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleLanguageDialogAndHideSelectionAlert
 import com.lingshot.screenshot_presentation.ScreenShotUiState
 import com.lingshot.screenshot_presentation.ScreenShotViewModel
-import com.lingshot.screenshot_presentation.ScreenShotViewModel.Companion.ILLEGIBLE_TEXT
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotBalloon
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotCropImage
@@ -75,10 +75,11 @@ private fun ScreenShotScreen(
             .navigationBarsPadding()
             .background(Color.Black)
     ) {
+        val illegiblePhrase = stringResource(id = R.string.text_message_illegible_phrase)
         ScreenShotCropImage(
             actionCropImage = uiState.actionCropImage,
             onCropImageResult = { bitmap ->
-                handleEvent(FetchTextRecognizer(bitmap))
+                handleEvent(FetchTextRecognizer(bitmap, illegiblePhrase))
             },
             onCroppedImage = {
                 handleEvent(CroppedImage(it))
@@ -93,7 +94,7 @@ private fun ScreenShotScreen(
 
             uiState.screenShotStatus.onEmpty {
                 ScreenShotBalloon(
-                    text = ILLEGIBLE_TEXT,
+                    text = illegiblePhrase,
                     onDismiss = {
                         handleEvent(ClearStatus)
                     }
