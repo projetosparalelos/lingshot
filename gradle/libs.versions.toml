@@ -45,7 +45,7 @@ markdown = "0.3.5"
 
 jUnit = "4.13.2"
 
-ktlint = "11.4.2"
+ktlint = "11.5.1"
 detekt = "1.22.0"
 composeDetekt = "0.0.26"
 composeLintChecks = "1.2.0"
