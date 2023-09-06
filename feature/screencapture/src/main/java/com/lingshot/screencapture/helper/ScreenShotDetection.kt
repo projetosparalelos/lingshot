@@ -136,8 +136,6 @@ class ScreenShotDetection @AssistedInject constructor(
                 activity,
                 permission
             ) == PackageManager.PERMISSION_GRANTED
-        } ?: run {
-            false
         }
     }
 

@@ -13,7 +13,7 @@ class AndroidApplicationPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.kapt")
+                apply("com.google.devtools.ksp")
             }
             val extension = extensions.getByType<ApplicationExtension>()
 

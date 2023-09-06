@@ -5,7 +5,9 @@ import com.lingshot.domain.repository.GoalsRepository
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class SaveGoalsUseCase @Inject constructor(
@@ -18,17 +20,19 @@ class SaveGoalsUseCase @Inject constructor(
         val date = LocalDate.now().toString()
         try {
             val goals = goalsRepository.getGoalByUserAndDate(userId, date).first()
-            if (goals != null) {
-                val newValue = goals.copy(targetPhrases = targetPhrases)
-                goalsRepository.upsertGoal(newValue)
-            } else {
-                goalsRepository.upsertGoal(
-                    goals = GoalsDomain(
-                        userId = userId,
-                        date = date,
-                        targetPhrases = targetPhrases
+            withContext(Dispatchers.IO) {
+                if (goals != null) {
+                    val newValue = goals.copy(targetPhrases = targetPhrases)
+                    goalsRepository.upsertGoal(newValue)
+                } else {
+                    goalsRepository.upsertGoal(
+                        goals = GoalsDomain(
+                            userId = userId,
+                            date = date,
+                            targetPhrases = targetPhrases
+                        )
                     )
-                )
+                }
             }
         } catch (e: Exception) {
             Timber.e(e)

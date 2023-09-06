@@ -15,8 +15,9 @@ dependencies {
     implementation(libs.language.id)
 
     implementation(libs.datastore.preferences)
+    implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
 
     implementation(libs.bundles.coroutines)
     implementation(libs.timber)

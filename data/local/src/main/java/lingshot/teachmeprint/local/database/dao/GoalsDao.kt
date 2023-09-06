@@ -9,7 +9,7 @@ import lingshot.teachmeprint.local.model.GoalsEntity
 @Dao
 interface GoalsDao {
     @Upsert
-    suspend fun upsertGoal(goals: GoalsEntity)
+    fun upsertGoal(goals: GoalsEntity)
 
     @Query("SELECT * FROM goals WHERE userId = :userId AND date = :date")
     fun getGoalByUserAndDate(userId: String, date: String): Flow<GoalsEntity?>

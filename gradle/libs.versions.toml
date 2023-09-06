@@ -1,7 +1,7 @@
 [versions]
 gradlePlugin = "8.1.1"
 androidR8 = "8.2.24"
-kotlin = "1.8.21"
+kotlin = "1.9.0"
 googleServices = "4.3.15"
 playServicesAds = "22.3.0"
 playServicesAuth = "20.7.0"
@@ -13,11 +13,11 @@ material = "1.9.0"
 activity = "1.7.2"
 lifecycle = "2.6.1"
 
-composeCompiler = "1.4.7"
+composeCompiler = "1.5.0"
 composeBom = "2023.08.00"
 composeMaterial3 = "1.1.1"
 composeHiltNavigation = "1.0.0"
-accompanist = "0.30.1"
+accompanist = "0.32.0"
 accompanistNavigationAnimation = "0.31.3-beta"
 
 textRecognition = "19.0.0"
@@ -27,6 +27,7 @@ retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 kotlinxSerializationJson = "1.6.0"
 kotlinxCollectionsImmutable = "0.3.5"
+ksp = "1.9.0-1.0.13"
 okHttp = "4.11.0"
 coroutines = "1.7.3"
 datastore = "1.0.0"
@@ -58,6 +59,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt"}
 ktlint-plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint"}
 android-r8-plugin = { module = "com.android.tools:r8", version.ref = "androidR8"}
+ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKTX" }
 core-splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashScreen" }
@@ -97,6 +99,7 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -138,8 +141,8 @@ firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx"]
 android-application = { id = "com.android.application", version.ref = "gradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "gradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashylytics" }

@@ -103,7 +103,7 @@ fun CompletePhraseTextFieldCard(
                 horizontalArrangement = Arrangement.spacedBy(space = 4.dp)
             ) {
                 CompletePhraseRenderTextWithField(
-                    modifier = Modifier.align(alignment = Alignment.Bottom),
+                    modifier = Modifier.align(alignment = Alignment.CenterVertically),
                     listWords = listWords,
                     wordWithoutParentheses = wordWithoutParentheses,
                     wordToFill = wordToFill,

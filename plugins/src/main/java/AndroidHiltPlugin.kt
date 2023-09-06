@@ -15,7 +15,7 @@ class AndroidHiltPlugin : Plugin<Project> {
 
             dependencies {
                 add("implementation", libs.getLibrary("dagger-hilt-android"))
-                add("kapt", libs.getLibrary("dagger-hilt-compiler"))
+                add("ksp", libs.getLibrary("dagger-hilt-compiler"))
             }
         }
     }

@@ -13,7 +13,7 @@ class GoalsRepositoryImpl @Inject constructor(
     private val goalsDao: GoalsDao
 ) : GoalsRepository {
 
-    override suspend fun upsertGoal(goals: GoalsDomain) {
+    override fun upsertGoal(goals: GoalsDomain) {
         val goalsEntity = goals.toGoalsEntity()
         goalsDao.upsertGoal(goalsEntity)
     }
