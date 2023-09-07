@@ -15,7 +15,7 @@ import timber.log.Timber
 class UpdatePhraseReviewUseCase @Inject constructor(
     private val phraseCollectionRepository: PhraseCollectionRepository
 ) {
-    suspend operator fun invoke(languageId: String?, phraseDomain: PhraseDomain): Status<Unit> {
+    suspend operator fun invoke(languageId: String, phraseDomain: PhraseDomain): Status<Unit> {
         return try {
             var reviewLevel = from(phraseDomain.reviewLevel).level
 
@@ -26,7 +26,7 @@ class UpdatePhraseReviewUseCase @Inject constructor(
             val nextReviewTimestamp = getNextReviewTimestamp(from(reviewLevel))
 
             phraseCollectionRepository.updatePhraseInLanguageCollections(
-                languageId = languageId.toString(),
+                languageId = languageId,
                 phraseDomain = phraseDomain.copy(
                     reviewLevel = reviewLevel,
                     nextReviewTimestamp = nextReviewTimestamp

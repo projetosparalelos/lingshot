@@ -21,7 +21,7 @@ accompanist = "0.32.0"
 accompanistNavigationAnimation = "0.31.3-beta"
 
 textRecognition = "19.0.0"
-languageID = "17.0.4"
+languageID = "17.0.0"
 
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
@@ -88,7 +88,7 @@ accompanist-webview = { module = "com.google.accompanist:accompanist-webview", v
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 
 text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognition" }
-language-id = { module = "com.google.mlkit:language-id", version.ref = "languageID" }
+language-id = { module = "com.google.android.gms:play-services-mlkit-language-id", version.ref = "languageID" }
 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }

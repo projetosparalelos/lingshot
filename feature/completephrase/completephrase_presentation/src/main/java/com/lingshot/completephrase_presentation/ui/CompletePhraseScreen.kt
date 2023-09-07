@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -59,7 +59,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun CompletePhraseScreenRoute(
-    languageId: String?,
+    languageId: String,
+    languageFrom: String,
+    @Suppress("UNUSED_PARAMETER") languageTo: String,
     onBackClick: () -> Unit,
     viewModel: CompletePhraseViewModel = hiltViewModel()
 ) {
@@ -73,6 +75,7 @@ internal fun CompletePhraseScreenRoute(
         uiState = uiState,
         handleEvent = viewModel::handleEvent,
         languageId = languageId,
+        languageFrom = languageFrom,
         onBackClick = onBackClick
     )
 }
@@ -81,13 +84,14 @@ internal fun CompletePhraseScreenRoute(
 private fun CompletePhraseScreen(
     uiState: CompletePhraseUiState,
     handleEvent: (CompletePhraseEvent) -> Unit,
-    languageId: String?,
+    languageId: String,
+    languageFrom: String,
     onBackClick: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
-    var currentPageIndex by remember { mutableStateOf(0) }
+    var currentPageIndex by remember { mutableIntStateOf(0) }
     val currentPage = (currentPageIndex + 1)
 
     LingshotLayout(
@@ -136,7 +140,9 @@ private fun CompletePhraseScreen(
                                     },
                                     isSpeechActive = uiState.isSpeechActive,
                                     onSpeakText = {
-                                        handleEvent(FetchTextToSpeech(phraseDomain.original))
+                                        handleEvent(
+                                            FetchTextToSpeech(phraseDomain.original, languageFrom)
+                                        )
                                     },
                                     reviewLevel = ReviewLevel.from(phraseDomain.reviewLevel)
                                 )
@@ -237,6 +243,7 @@ private fun CompletePhraseScreenPreview() {
             uiState = CompletePhraseUiState(),
             handleEvent = {},
             languageId = "id",
+            languageFrom = "en",
             onBackClick = {}
         )
     }

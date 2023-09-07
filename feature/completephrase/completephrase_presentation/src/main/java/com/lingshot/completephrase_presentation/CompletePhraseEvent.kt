@@ -18,10 +18,10 @@ sealed class CompletePhraseEvent {
 
     data class ShowAnswerSheet(val isAnswerCorrect: Boolean) : CompletePhraseEvent()
 
-    data class FetchTextToSpeech(val text: String) : CompletePhraseEvent()
+    data class FetchTextToSpeech(val text: String, val languageFrom: String) : CompletePhraseEvent()
 
     data class UpdatePhrasePositionOnSuccess(
-        val languageId: String?,
+        val languageId: String,
         val phraseDomain: PhraseDomain
     ) : CompletePhraseEvent()
 

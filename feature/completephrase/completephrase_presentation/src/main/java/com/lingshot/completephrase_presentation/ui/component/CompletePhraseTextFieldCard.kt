@@ -51,10 +51,8 @@ import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
 import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.reviewlevel_domain.model.ReviewLevel
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.delay
 
 @Composable
 fun CompletePhraseTextFieldCard(
@@ -133,7 +131,6 @@ fun CompletePhraseTextFieldCard(
     }
 
     LaunchedEffect(isSpeechActive) {
-        delay(200.milliseconds)
         if (isSpeechActive.not()) {
             focusRequester.requestFocus()
         }

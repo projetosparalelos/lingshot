@@ -13,14 +13,21 @@ import com.lingshot.completephrase_presentation.ui.CompletePhraseScreenRoute
 
 const val COMPLETE_PHRASE_ROUTE = "complete_phrase_route"
 private const val LANGUAGE_ID = "languageId"
+private const val LANGUAGE_FROM = "languageFrom"
+private const val LANGUAGE_TO = "languageTo"
 
-fun NavController.navigateToCompletePhrase(languageId: String, navOptions: NavOptions? = null) {
-    this.navigate("$COMPLETE_PHRASE_ROUTE/$languageId", navOptions)
+fun NavController.navigateToCompletePhrase(
+    languageId: String,
+    languageFrom: String,
+    languageTo: String,
+    navOptions: NavOptions? = null
+) {
+    this.navigate("$COMPLETE_PHRASE_ROUTE/$languageId/$languageFrom/$languageTo", navOptions)
 }
 
 fun NavGraphBuilder.completePhraseScreen(onBackClick: () -> Unit) {
     composable(
-        route = "$COMPLETE_PHRASE_ROUTE/{$LANGUAGE_ID}",
+        route = "$COMPLETE_PHRASE_ROUTE/{$LANGUAGE_ID}/{$LANGUAGE_FROM}/{$LANGUAGE_TO}",
         enterTransition = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Left,
@@ -34,7 +41,14 @@ fun NavGraphBuilder.completePhraseScreen(onBackClick: () -> Unit) {
             )
         }
     ) { navBackStackEntry ->
-        val languageId = navBackStackEntry.arguments?.getString(LANGUAGE_ID)
-        CompletePhraseScreenRoute(languageId = languageId, onBackClick = onBackClick)
+        val languageId = navBackStackEntry.arguments?.getString(LANGUAGE_ID).orEmpty()
+        val languageFrom = navBackStackEntry.arguments?.getString(LANGUAGE_FROM).orEmpty()
+        val languageTo = navBackStackEntry.arguments?.getString(LANGUAGE_TO).orEmpty()
+        CompletePhraseScreenRoute(
+            languageId = languageId,
+            languageFrom = languageFrom,
+            languageTo = languageTo,
+            onBackClick = onBackClick
+        )
     }
 }

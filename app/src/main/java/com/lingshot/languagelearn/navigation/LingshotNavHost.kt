@@ -51,8 +51,8 @@ private val homeDestination: (NavHostController) -> HomeDestination = { nav ->
                 navOptions = navOptions { popUpToTop(nav) }
             )
         },
-        onNavigateToCompletePhrase = { languageId ->
-            nav.navigateToCompletePhrase(languageId)
+        onNavigateToCompletePhrase = { languageId, languageFrom, languageTo ->
+            nav.navigateToCompletePhrase(languageId, languageFrom, languageTo)
         }
     )
 }

@@ -9,7 +9,6 @@ import com.lingshot.completephrase_presentation.helper.AnswerSoundFacade
 import com.lingshot.completephrase_presentation.ui.component.AnswerState
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
-import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.lingshot.domain.usecase.SavePhrasesCompletedGoalsUseCase
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesForNextReviewUseCase
@@ -28,7 +27,6 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class CompletePhraseViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    private val languageIdentifierUseCase: LanguageIdentifierUseCase,
     private val retrievePhrasesForNextReviewUseCase: RetrievePhrasesForNextReviewUseCase,
     private val updateConsecutiveDaysUseCase: UpdateConsecutiveDaysUseCase,
     private val updatePhraseReviewUseCase: UpdatePhraseReviewUseCase,
@@ -65,7 +63,7 @@ class CompletePhraseViewModel @Inject constructor(
             }
 
             is CompletePhraseEvent.FetchTextToSpeech -> {
-                fetchTextToSpeech(completePhraseEvent.text)
+                fetchTextToSpeech(completePhraseEvent.text, completePhraseEvent.languageFrom)
             }
 
             is CompletePhraseEvent.HideAnswerSheet -> {
@@ -151,7 +149,7 @@ class CompletePhraseViewModel @Inject constructor(
     }
 
     private fun updatePhrasePositionOnSuccess(
-        languageId: String?,
+        languageId: String,
         phraseDomain: PhraseDomain
     ) {
         viewModelScope.launch {
@@ -220,10 +218,10 @@ class CompletePhraseViewModel @Inject constructor(
         }
     }
 
-    private fun fetchTextToSpeech(text: String) {
+    private fun fetchTextToSpeech(text: String, languageFrom: String) {
         viewModelScope.launch {
-            val languageCode = languageIdentifierUseCase(text)
-            textToSpeech.speakText(text, languageCode)
+            delay(1.seconds)
+            textToSpeech.speakText(text, languageFrom)
         }
     }
 

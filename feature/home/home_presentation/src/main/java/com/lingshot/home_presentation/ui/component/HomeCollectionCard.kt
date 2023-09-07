@@ -33,7 +33,7 @@ fun HomeCollectionCard(
     totalPhrases: Int,
     phrasesPlayed: Int,
     modifier: Modifier = Modifier,
-    onNavigateToCompletePhrase: (String) -> Unit
+    onNavigateToCompletePhrase: (String, String, String) -> Unit
 ) {
     val languageFrom = AvailableLanguage.from(languageCollectionDomain.from)
     val languageTo = AvailableLanguage.from(languageCollectionDomain.to)
@@ -48,7 +48,9 @@ fun HomeCollectionCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    onNavigateToCompletePhrase(languageCollectionDomain.id)
+                    languageCollectionDomain.also {
+                        onNavigateToCompletePhrase(it.id, it.from, it.to)
+                    }
                 }
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -104,6 +106,6 @@ private fun HomeCollectionCardPreview() {
         languageCollectionDomain = LanguageCollectionDomain(),
         totalPhrases = 1,
         phrasesPlayed = 1,
-        onNavigateToCompletePhrase = {}
+        onNavigateToCompletePhrase = { _, _, _ -> }
     )
 }

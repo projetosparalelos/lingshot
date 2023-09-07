@@ -158,7 +158,7 @@ private fun HomeScreen(
                                         languageCollectionDomain = LanguageCollectionDomain(),
                                         totalPhrases = 0,
                                         phrasesPlayed = 0,
-                                        onNavigateToCompletePhrase = {}
+                                        onNavigateToCompletePhrase = { _, _, _ -> }
                                     )
                                 }
                                 .onEmpty {
