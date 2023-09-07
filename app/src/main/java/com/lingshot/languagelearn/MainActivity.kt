@@ -1,4 +1,4 @@
-package com.lingshot.language
+package com.lingshot.languagelearn
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,8 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lingshot.designsystem.theme.LingshotTheme
-import com.lingshot.language.presentation.MainViewModel
-import com.lingshot.language.presentation.ui.MainRoute
+import com.lingshot.languagelearn.presentation.MainViewModel
+import com.lingshot.languagelearn.presentation.ui.MainRoute
 import com.lingshot.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

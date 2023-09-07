@@ -1,4 +1,4 @@
-package com.lingshot.language.presentation
+package com.lingshot.languagelearn.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

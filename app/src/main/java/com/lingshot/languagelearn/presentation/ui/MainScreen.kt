@@ -3,7 +3,7 @@
     ExperimentalLayoutApi::class
 )
 
-package com.lingshot.language.presentation.ui
+package com.lingshot.languagelearn.presentation.ui
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
@@ -54,13 +54,13 @@ import com.lingshot.designsystem.theme.LocalSchemeCustom
 import com.lingshot.designsystem.theme.SchemeCustom
 import com.lingshot.home_presentation.navigation.HOME_ROUTE
 import com.lingshot.home_presentation.ui.component.HomeToggleServiceButton
-import com.lingshot.language.R
-import com.lingshot.language.navigation.LingshotAppState
-import com.lingshot.language.navigation.LingshotNavHost
-import com.lingshot.language.navigation.rememberLingshotAppState
-import com.lingshot.language.presentation.MainEvent
-import com.lingshot.language.presentation.MainUiState
-import com.lingshot.language.presentation.MainViewModel
+import com.lingshot.languagelearn.R
+import com.lingshot.languagelearn.navigation.LingshotAppState
+import com.lingshot.languagelearn.navigation.LingshotNavHost
+import com.lingshot.languagelearn.navigation.rememberLingshotAppState
+import com.lingshot.languagelearn.presentation.MainEvent
+import com.lingshot.languagelearn.presentation.MainUiState
+import com.lingshot.languagelearn.presentation.MainViewModel
 import com.lingshot.screencapture.service.ScreenShotService.Companion.getStartIntent
 import com.lingshot.screencapture.service.ScreenShotService.Companion.getStopIntent
 import com.lingshot.screencapture.util.isServiceRunning

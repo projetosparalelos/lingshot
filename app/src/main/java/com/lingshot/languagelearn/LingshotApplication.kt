@@ -1,4 +1,4 @@
-package com.lingshot.language
+package com.lingshot.languagelearn
 
 import android.app.Application
 import android.app.NotificationChannel

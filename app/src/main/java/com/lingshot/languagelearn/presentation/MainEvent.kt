@@ -1,4 +1,4 @@
-package com.lingshot.language.presentation
+package com.lingshot.languagelearn.presentation
 
 sealed class MainEvent {
     object ToggleServiceButton : MainEvent()

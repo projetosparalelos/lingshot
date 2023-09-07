@@ -1,4 +1,4 @@
-package com.lingshot.language.presentation
+package com.lingshot.languagelearn.presentation
 
 data class MainUiState(
     val isServiceRunning: Boolean = false,

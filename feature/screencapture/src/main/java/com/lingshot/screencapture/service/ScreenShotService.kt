@@ -121,7 +121,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
     }
 
     companion object {
-        private const val MAIN_ACTIVITY_PATH = "com.lingshot.language.MainActivity"
+        private const val MAIN_ACTIVITY_PATH = "com.lingshot.languagelearn.MainActivity"
         private const val SCREEN_CAPTURE_DATA = "SCREEN_CAPTURE_DATA"
         private const val STOP_SERVICE = "STOP_SERVICE"
         private const val NOTIFICATION_FOREGROUND_ID = 1
