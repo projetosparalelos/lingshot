@@ -6,8 +6,8 @@ enum class DictionaryType {
     REVERSO_CONTEXT {
         override fun url(languageCodeFrom: String, languageCodeTo: String, word: String): String {
             val baseUrl = "https://context.reverso.net/translation"
-            val languageFrom = AvailableLanguage.from(languageCodeFrom)?.displayName
-            val languageTo = AvailableLanguage.from(languageCodeTo)?.displayName
+            val languageFrom = AvailableLanguage.from(languageCodeFrom)?.name
+            val languageTo = AvailableLanguage.from(languageCodeTo)?.name
 
             return "$baseUrl/$languageFrom-$languageTo/$word".removeCharactersFromEnd()
         }

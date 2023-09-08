@@ -1,10 +1,11 @@
 -keep class io.grpc.** {*;}
 -keepattributes Signature
--keepclassmembers class com.phrase.phrasemaster_domain.model.** {
-    *;
- }
--keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
+-keepclassmembers class com.phrase.phrasemaster_domain.model.** {*;}
+-keep class * extends com.google.protobuf.GeneratedMessageLite {*;}
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+-keep public class com.google.firebase.** {*;}
+-keep class com.google.android.gms.internal.** {*;}
+-keepclasseswithmembers class com.google.firebase.FirebaseException
 -dontwarn com.squareup.okhttp.CipherSuite
 -dontwarn com.squareup.okhttp.ConnectionSpec
 -dontwarn com.squareup.okhttp.TlsVersion
