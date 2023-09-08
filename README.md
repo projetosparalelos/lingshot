@@ -77,7 +77,6 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Compose Lints](https://slackhq.github.io/compose-lints/rules/)
 * Gradle
   * [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
-  * Custom tasks
   * [Versions catalog](https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog) - define dependencies
   * [Type safe accessors](https://docs.gradle.org/7.0/release-notes.html)
 * GitHub Boots
