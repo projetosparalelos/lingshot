@@ -45,12 +45,12 @@ This project takes advantage of best practices, and many popular libraries and t
 * Modern Architecture
   * [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
   * Single activity architecture
-  * MVVM + MVI (presentation layer)
+  * MVVM
   * [Android Architecture components](https://developer.android.com/topic/libraries/architecture)
     ([ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
     , [Kotlin Flow](https://kotlinlang.org/docs/flow.html)
     , [Navigation](https://developer.android.com/jetpack/androidx/releases/navigation))
-  * [Android KTX](https://developer.android.com/kotlin/ktx) - Jetpack Kotlin extensions
+  * [Android KTX](https://developer.android.com/kotlin/ktx)
 * UI
   * [Jetpack Compose](https://developer.android.com/jetpack/compose)
   * [Material Design 3](https://m3.material.io/)
