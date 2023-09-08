@@ -46,9 +46,9 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Coil](https://github.com/coil-kt/coil)
   * [Lottie](http://airbnb.io/lottie)
 * Modern Architecture
-  * [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
   * Single activity architecture
   * MVVM
+  * [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
   * [Android Architecture components](https://developer.android.com/topic/libraries/architecture)
     ([ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
     , [Kotlin Flow](https://kotlinlang.org/docs/flow.html)
