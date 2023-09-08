@@ -4,6 +4,8 @@
 ![build](https://github.com/CharlesMoreira1/lingshot/actions/workflows/build-ci.yml/badge.svg)
 <a href="https://ktlint.github.io/"><img src="https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg" alt="ktlint"></a>
 
+<img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/5786aa7d-3aae-41a1-9799-c48024f324f9" width="200">
+
 # Lingshot
 
 Welcome to Lingshot, your ultimate companion for smart and effective language learning! This revolutionary app combines powerful features to help you master new languages in a fun and productive way.
