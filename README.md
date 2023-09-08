@@ -36,6 +36,7 @@ This project takes advantage of best practices, and many popular libraries and t
     + [Kotlin Flow](https://kotlinlang.org/docs/flow.html)
     + [Kotlin Symbol Processing](https://kotlinlang.org/docs/ksp-overview.html)
     + [Kotlin Serialization](https://kotlinlang.org/docs/serialization.html)
+    + [Kotlin Immutable Collections](https://github.com/Kotlin/kotlinx.collections.immutable)
   * [Retrofit](https://square.github.io/retrofit/)
   * [Jetpack](https://developer.android.com/jetpack)
     * [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle) 
