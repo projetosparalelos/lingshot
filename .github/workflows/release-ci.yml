@@ -75,7 +75,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-          packageName: com.lingshot.language
+          packageName: com.lingshot.languagelearn
           releaseFiles: ./app/build/outputs/bundle/release/*.aab
           status: ${{ github.event.inputs.status }}
           track: ${{ github.event.inputs.track }}
