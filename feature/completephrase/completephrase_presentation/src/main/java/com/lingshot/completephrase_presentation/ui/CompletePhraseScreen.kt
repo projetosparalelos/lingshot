@@ -81,7 +81,7 @@ internal fun CompletePhraseScreenRoute(
 }
 
 @Composable
-private fun CompletePhraseScreen(
+internal fun CompletePhraseScreen(
     uiState: CompletePhraseUiState,
     handleEvent: (CompletePhraseEvent) -> Unit,
     languageId: String,

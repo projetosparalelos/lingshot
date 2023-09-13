@@ -80,7 +80,7 @@ internal fun SwipePermissionRoute(
 }
 
 @Composable
-private fun SwipePermissionScreen(
+internal fun SwipePermissionScreen(
     uiState: SwipePermissionUiState,
     onSignIn: suspend () -> IntentSender?,
     handleEvent: (SwipePermissionEvent) -> Unit,

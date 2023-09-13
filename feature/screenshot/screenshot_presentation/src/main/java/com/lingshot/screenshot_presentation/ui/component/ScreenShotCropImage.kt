@@ -26,7 +26,7 @@ import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_I
 import timber.log.Timber
 
 @Composable
-fun ScreenShotCropImage(
+internal fun ScreenShotCropImage(
     actionCropImage: ActionCropImage?,
     onCroppedImage: (ActionCropImage?) -> Unit,
     modifier: Modifier = Modifier,

@@ -10,7 +10,7 @@ import com.lingshot.designsystem.component.LingshotWebView
 import com.lingshot.screenshot_presentation.R
 
 @Composable
-fun ScreenShotDictionaryFullScreenDialog(
+internal fun ScreenShotDictionaryFullScreenDialog(
     url: String,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit

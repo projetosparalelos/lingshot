@@ -24,7 +24,7 @@ import com.lingshot.designsystem.component.placeholder.fade
 import com.lingshot.designsystem.component.placeholder.placeholder
 
 @Composable
-fun CompletePhraseTranslateCard(
+internal fun CompletePhraseTranslateCard(
     translateText: String,
     isTranslatedTextVisible: Boolean,
     onToggleTranslatedTextVisibility: () -> Unit,

@@ -38,7 +38,7 @@ import com.lingshot.completephrase_presentation.R
 import com.lingshot.designsystem.theme.LocalSchemeCustom
 
 @Composable
-fun CompletePhraseAnswerSheet(
+internal fun CompletePhraseAnswerSheet(
     answerState: AnswerState,
     correctAnswer: String,
     onContinue: () -> Unit,

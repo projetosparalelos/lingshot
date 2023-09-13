@@ -14,6 +14,7 @@ class AndroidApplicationPlugin : Plugin<Project> {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
                 apply("com.google.devtools.ksp")
+                apply("app.cash.paparazzi")
             }
             val extension = extensions.getByType<ApplicationExtension>()
 

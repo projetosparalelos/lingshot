@@ -8,7 +8,7 @@ import com.lingshot.designsystem.component.LingshotSnackBar
 import com.lingshot.screenshot_presentation.R
 
 @Composable
-fun ScreenShotSnackBarSelectLanguage(
+internal fun ScreenShotSnackBarSelectLanguage(
     modifier: Modifier = Modifier,
     onToggleLanguageDialogAndHideSelectionAlert: () -> Unit
 ) {

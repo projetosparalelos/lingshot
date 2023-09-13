@@ -43,13 +43,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lingshot.designsystem.theme.LocalSchemeCustom
 import com.lingshot.domain.model.GoalsDomain
+import com.lingshot.domain.model.UserLocalDomain
 import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.R
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun HomePierChartCard(
-    goalsDomain: GoalsDomain?,
+internal fun HomePierChartCard(
+    goals: Pair<UserLocalDomain?, GoalsDomain?>?,
     isSetGoalsDialogVisible: Boolean,
     selectedGoalDays: Int,
     listCountPhrases: ImmutableList<Int>,
@@ -58,8 +59,8 @@ fun HomePierChartCard(
     onToggleSetGoalsDialog: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val goals = goalsDomain?.targetPhrases ?: 0
-    val completed = goalsDomain?.progressPhrases ?: 0
+    val newGoals = goals?.first?.goal ?: 0
+    val completed = goals?.second?.progressPhrases ?: 0
 
     ElevatedCard {
         Row(
@@ -71,12 +72,12 @@ fun HomePierChartCard(
         ) {
             HomePieChart(
                 modifier = Modifier.size(120.dp),
-                goals = goals,
+                goals = newGoals,
                 completed = completed
             )
             Column {
                 HomePieChartIndicator(
-                    value = goals.toString(),
+                    value = newGoals.toString(),
                     type = stringResource(R.string.text_label_piechart_goals_home),
                     color = LocalSchemeCustom.current.goalsPieChart
                 )
@@ -261,7 +262,7 @@ private fun HomePieChartIndicator(value: String, type: String, color: Color) {
 @Composable
 private fun HomePieChartCardPreview() {
     HomePierChartCard(
-        goalsDomain = GoalsDomain(),
+        goals = Pair(UserLocalDomain(), GoalsDomain()),
         selectedGoalDays = 1,
         isSetGoalsDialogVisible = false,
         listCountPhrases = HomeUiState().goalDaysList,

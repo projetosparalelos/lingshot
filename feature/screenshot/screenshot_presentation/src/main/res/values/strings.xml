@@ -2,7 +2,7 @@
     <string name="text_label_navigation_bar_item_translate">Translate</string>
     <string name="text_label_navigation_bar_item_listen">Listen</string>
     <string name="text_label_navigation_bar_item_focus">Focus</string>
-    <string name="text_label_navigation_bar_item_i_speak">I speak</string>
+    <string name="text_label_navigation_bar_item_language">Language</string>
     <string name="text_message_illegible_phrase">There isn\'t any legible text.</string>
     <string name="text_select_language_speak_message">Select a language you speak.</string>
     <string name="text_button_action_select_snack_bar">Select</string>

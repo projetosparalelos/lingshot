@@ -28,7 +28,7 @@ import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 
 @Composable
-fun HomeCollectionCard(
+internal fun HomeCollectionCard(
     languageCollectionDomain: LanguageCollectionDomain,
     totalPhrases: Int,
     phrasesPlayed: Int,

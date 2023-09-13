@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CompletePhraseIndicatorPage(
+internal fun CompletePhraseIndicatorPage(
     currentPage: Int,
     totalPage: Int,
     modifier: Modifier = Modifier

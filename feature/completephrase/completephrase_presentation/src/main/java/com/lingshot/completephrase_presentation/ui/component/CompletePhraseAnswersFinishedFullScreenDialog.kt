@@ -25,7 +25,7 @@ import com.lingshot.completephrase_presentation.R
 import com.lingshot.designsystem.component.LingshotFullScreenDialog
 
 @Composable
-fun CompletePhraseAnswersFinishedFullScreenDialog(
+internal fun CompletePhraseAnswersFinishedFullScreenDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit
 ) {
@@ -64,6 +64,6 @@ fun CompletePhraseAnswersFinishedFullScreenDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun CompletePhraseAnswersFinishedFullScreenDialogPreview() {
+private fun CompletePhraseAnswersFinishedFullScreenDialogPreview() {
     CompletePhraseAnswersFinishedFullScreenDialog(onDismiss = {})
 }

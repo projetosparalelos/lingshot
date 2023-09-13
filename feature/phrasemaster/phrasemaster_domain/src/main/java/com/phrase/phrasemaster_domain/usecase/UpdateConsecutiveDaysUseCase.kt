@@ -10,15 +10,15 @@ import timber.log.Timber
 class UpdateConsecutiveDaysUseCase @Inject constructor(
     private val consecutiveDaysRepository: ConsecutiveDaysRepository
 ) {
-    suspend operator fun invoke(isFirstTimeNotFromHome: Boolean = false) {
+    suspend operator fun invoke(isFirstTimeNotFromMain: Boolean = false) {
         try {
             val currentDate = LocalDate.now()
             val data = consecutiveDaysRepository.getConsecutiveDays()
 
             if (data != null) {
-                handleExistingData(data, currentDate, isFirstTimeNotFromHome)
+                handleExistingData(data, currentDate, isFirstTimeNotFromMain)
             } else {
-                handleNoData(currentDate, isFirstTimeNotFromHome)
+                handleNoData(currentDate, isFirstTimeNotFromMain)
             }
         } catch (e: Exception) {
             Timber.e(e)
@@ -29,14 +29,14 @@ class UpdateConsecutiveDaysUseCase @Inject constructor(
     private suspend fun handleExistingData(
         data: ConsecutiveDaysDomain,
         currentDate: LocalDate,
-        isFirstTimeNotFromHome: Boolean
+        isFirstTimeNotFromMain: Boolean
     ) {
         val lastDate = LocalDate.parse(data.lastDate)
         val consecutiveDays = data.consecutiveDays
 
         if (lastDate != currentDate) {
             val newData = if (lastDate == currentDate.minusDays(1) || consecutiveDays == 0) {
-                if (isFirstTimeNotFromHome.not()) {
+                if (isFirstTimeNotFromMain.not()) {
                     data.copy(
                         lastDate = currentDate.toString(),
                         consecutiveDays = consecutiveDays + 1

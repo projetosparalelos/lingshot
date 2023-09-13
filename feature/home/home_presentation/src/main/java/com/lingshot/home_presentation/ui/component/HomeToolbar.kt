@@ -29,7 +29,7 @@ import com.lingshot.domain.model.UserDomain
 import com.lingshot.home_presentation.R
 
 @Composable
-fun HomeToolbar(
+internal fun HomeToolbar(
     userDomain: UserDomain?,
     isExpandedDropdownMenuSignOut: Boolean,
     onToggleExpandDropdownMenuSignOut: () -> Unit,

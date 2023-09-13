@@ -1,6 +1,8 @@
 package com.lingshot.domain.usecase
 
+import com.lingshot.domain.model.GoalsDomain
 import com.lingshot.domain.repository.GoalsRepository
+import com.lingshot.domain.repository.UserLocalRepository
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
@@ -11,6 +13,7 @@ import timber.log.Timber
 
 class SavePhrasesCompletedGoalsUseCase @Inject constructor(
     private val goalsRepository: GoalsRepository,
+    private val userLocalRepository: UserLocalRepository,
     private val userProfileUseCase: UserProfileUseCase
 ) {
 
@@ -19,11 +22,16 @@ class SavePhrasesCompletedGoalsUseCase @Inject constructor(
         val date = LocalDate.now().toString()
 
         try {
-            val goals = goalsRepository.getGoalByUserAndDate(userId, date).first()
+            val getByUser = userLocalRepository.getByUser(userId).first()
+            val getGoalByUserAndDate = goalsRepository.getGoalByUserAndDate(userId, date).first()
+
             withContext(Dispatchers.IO) {
-                if (goals != null) {
-                    val progressPhrases = (goals.progressPhrases + 1)
-                    val newValue = goals.copy(progressPhrases = progressPhrases)
+                if (getByUser != null) {
+                    val newValueGoal = getGoalByUserAndDate?.copy(targetPhrases = getByUser.goal)
+                        ?: GoalsDomain(userId = userId, date = date, targetPhrases = getByUser.goal)
+
+                    val progressPhrases = (newValueGoal.progressPhrases + 1)
+                    val newValue = newValueGoal.copy(progressPhrases = progressPhrases)
                     goalsRepository.upsertGoal(newValue)
                 }
             }

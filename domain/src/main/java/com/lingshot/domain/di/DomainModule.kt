@@ -3,6 +3,7 @@ package com.lingshot.domain.di
 import com.lingshot.domain.repository.GoalsRepository
 import com.lingshot.domain.repository.GoogleAuthRepository
 import com.lingshot.domain.repository.TextIdentifierRepository
+import com.lingshot.domain.repository.UserLocalRepository
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.lingshot.domain.usecase.RetrieveGoalsUseCase
 import com.lingshot.domain.usecase.SaveGoalsUseCase
@@ -41,21 +42,28 @@ object DomainModule {
     @Provides
     fun provideRetrieveGoalsUseCase(
         goalsRepository: GoalsRepository,
+        userLocalRepository: UserLocalRepository,
         userProfileUseCase: UserProfileUseCase
-    ): RetrieveGoalsUseCase = RetrieveGoalsUseCase(goalsRepository, userProfileUseCase)
+    ): RetrieveGoalsUseCase = RetrieveGoalsUseCase(
+        goalsRepository,
+        userLocalRepository,
+        userProfileUseCase
+    )
 
     @Singleton
     @Provides
     fun provideSaveGoalsUseCase(
         goalsRepository: GoalsRepository,
+        userLocalRepository: UserLocalRepository,
         userProfileUseCase: UserProfileUseCase
-    ): SaveGoalsUseCase = SaveGoalsUseCase(goalsRepository, userProfileUseCase)
+    ): SaveGoalsUseCase = SaveGoalsUseCase(goalsRepository, userLocalRepository, userProfileUseCase)
 
     @Singleton
     @Provides
     fun provideSavePhrasesCompletedGoalsUseCase(
         goalsRepository: GoalsRepository,
+        userLocalRepository: UserLocalRepository,
         userProfileUseCase: UserProfileUseCase
     ): SavePhrasesCompletedGoalsUseCase =
-        SavePhrasesCompletedGoalsUseCase(goalsRepository, userProfileUseCase)
+        SavePhrasesCompletedGoalsUseCase(goalsRepository, userLocalRepository, userProfileUseCase)
 }

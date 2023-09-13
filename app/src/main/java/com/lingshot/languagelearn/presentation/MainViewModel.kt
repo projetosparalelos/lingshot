@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingshot.domain.repository.BalloonOverlayRepository
 import com.lingshot.domain.usecase.UserProfileUseCase
+import com.phrase.phrasemaster_domain.usecase.UpdateConsecutiveDaysUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,10 +20,15 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val balloonOverlayRepository: BalloonOverlayRepository,
+    private val updateConsecutiveDaysUseCase: UpdateConsecutiveDaysUseCase,
     private val userProfileUseCase: UserProfileUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiState())
+
+    init {
+        updateConsecutiveDays()
+    }
 
     val isSignInSuccessful: StateFlow<Boolean> =
         flow { emit(userProfileUseCase()) }
@@ -67,5 +73,11 @@ class MainViewModel @Inject constructor(
 
     private fun toggleServiceButton() {
         _uiState.update { it.copy(isServiceRunning = !it.isServiceRunning) }
+    }
+
+    private fun updateConsecutiveDays() {
+        viewModelScope.launch {
+            updateConsecutiveDaysUseCase(isFirstTimeNotFromMain = true)
+        }
     }
 }

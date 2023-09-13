@@ -28,7 +28,7 @@ import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.FOCUS
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.I_SPEAK
+import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LANGUAGE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LISTEN
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import com.phrase.phrasemaster_domain.model.PhraseDomain
@@ -154,7 +154,7 @@ class ScreenShotViewModel @Inject constructor(
                 croppedImage(FOCUS_IMAGE)
             }
 
-            I_SPEAK -> {
+            LANGUAGE -> {
                 toggleLanguageDialog()
             }
         }

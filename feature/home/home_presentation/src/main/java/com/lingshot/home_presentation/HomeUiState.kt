@@ -3,6 +3,7 @@ package com.lingshot.home_presentation
 import com.lingshot.domain.model.GoalsDomain
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.UserDomain
+import com.lingshot.domain.model.UserLocalDomain
 import com.lingshot.domain.model.statusLoading
 import com.lingshot.home_domain.model.HomeSection
 import com.lingshot.home_domain.model.HomeTypeSection
@@ -20,7 +21,7 @@ data class HomeUiState(
         statusLoading(),
     val phrasesPendingReviewStatus: Status<String> = statusLoading(),
     val consecutiveDaysStatus: Status<Int> = statusLoading(),
-    val goalsDomain: GoalsDomain? = null
+    val goals: Pair<UserLocalDomain?, GoalsDomain?>? = null
 ) {
 
     val homeSection = listOf(

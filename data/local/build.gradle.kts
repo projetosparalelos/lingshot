@@ -6,6 +6,12 @@ plugins {
 
 android {
     namespace = "com.lingshot.local"
+
+    defaultConfig {
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+    }
 }
 
 dependencies {

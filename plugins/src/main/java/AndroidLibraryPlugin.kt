@@ -10,7 +10,9 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidLibraryPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
-
+            pluginManager.apply {
+                apply("app.cash.paparazzi")
+            }
             dependencies {
                 add("implementation", libs.getLibrary("core-ktx"))
                 add("implementation", libs.getLibrary("appcompat"))

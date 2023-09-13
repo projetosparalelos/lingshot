@@ -6,6 +6,7 @@ googleServices = "4.3.15"
 playServicesAds = "22.3.0"
 playServicesAuth = "20.6.0"
 firebaseCrashylytics = "2.9.2"
+paparazzi = "1.3.1"
 coreKTX = "1.10.1"
 coreSplashScreen = "1.0.1"
 appCompat = "1.6.1"
@@ -146,3 +147,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashylytics" }
+paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }

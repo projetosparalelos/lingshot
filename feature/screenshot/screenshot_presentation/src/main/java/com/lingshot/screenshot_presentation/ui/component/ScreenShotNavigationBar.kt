@@ -26,7 +26,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-fun ScreenShotNavigationBar(
+internal fun ScreenShotNavigationBar(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit
 ) {
@@ -40,7 +40,7 @@ fun ScreenShotNavigationBar(
 }
 
 @Composable
-fun RowScope.ScreenShotNavigationBarItem(
+internal fun RowScope.ScreenShotNavigationBarItem(
     navigationBarItem: NavigationBarItem,
     navigationBarItemList: ImmutableList<NavigationBarItem>,
     modifier: Modifier = Modifier,
@@ -83,5 +83,8 @@ enum class NavigationBarItem(val label: Int, val icon: ImageVector) {
     ),
     LISTEN(label = R.string.text_label_navigation_bar_item_listen, icon = Icons.Default.VolumeUp),
     FOCUS(label = R.string.text_label_navigation_bar_item_focus, icon = Icons.Default.ZoomOutMap),
-    I_SPEAK(label = R.string.text_label_navigation_bar_item_i_speak, icon = Icons.Default.Language);
+    LANGUAGE(
+        label = R.string.text_label_navigation_bar_item_language,
+        icon = Icons.Default.Language
+    );
 }

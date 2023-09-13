@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.lingshot.home_presentation.R
 
 @Composable
-fun HomeEmptyCollectionCard(modifier: Modifier = Modifier) {
+internal fun HomeEmptyCollectionCard(modifier: Modifier = Modifier) {
     val text = buildAnnotatedString {
         withStyle(
             style = SpanStyle(

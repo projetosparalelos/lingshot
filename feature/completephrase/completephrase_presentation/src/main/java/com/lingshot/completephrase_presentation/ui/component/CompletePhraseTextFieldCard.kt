@@ -55,7 +55,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-fun CompletePhraseTextFieldCard(
+internal fun CompletePhraseTextFieldCard(
     listWords: ImmutableList<String>,
     wordWithoutParentheses: String,
     wordToFill: String,

@@ -60,7 +60,7 @@ internal fun HomeRoute(
 }
 
 @Composable
-private fun HomeScreen(
+internal fun HomeScreen(
     homeDestination: HomeDestination,
     handleEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState
@@ -131,7 +131,7 @@ private fun HomeScreen(
                                     visible = uiState.isPieChartGoalsVisible.not(),
                                     highlight = PlaceholderHighlight.fade()
                                 ),
-                                goalsDomain = uiState.goalsDomain,
+                                goals = uiState.goals,
                                 isSetGoalsDialogVisible = uiState.isSetGoalsDialogVisible,
                                 selectedGoalDays = uiState.selectedGoalDays,
                                 listCountPhrases = uiState.goalDaysList,

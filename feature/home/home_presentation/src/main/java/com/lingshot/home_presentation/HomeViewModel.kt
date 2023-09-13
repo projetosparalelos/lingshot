@@ -13,7 +13,6 @@ import com.lingshot.domain.usecase.UserProfileUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrieveConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrieveLanguageCollectionsUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesPendingReviewUseCase
-import com.phrase.phrasemaster_domain.usecase.UpdateConsecutiveDaysUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
@@ -34,7 +33,6 @@ class HomeViewModel @Inject constructor(
     private val signOutUseCase: SignOutUseCase,
     private val saveGoalsUseCase: SaveGoalsUseCase,
     private val retrieveGoalsUseCase: RetrieveGoalsUseCase,
-    private val updateConsecutiveDaysUseCase: UpdateConsecutiveDaysUseCase,
     retrieveLanguageCollectionsUseCase: RetrieveLanguageCollectionsUseCase,
     retrievePhrasesPendingReviewUseCase: RetrievePhrasesPendingReviewUseCase,
     retrieveConsecutiveDaysUseCase: RetrieveConsecutiveDaysUseCase
@@ -42,10 +40,6 @@ class HomeViewModel @Inject constructor(
 
     private val userDomain = flow { emit(userProfileUseCase()) }
     private val _uiState = MutableStateFlow(HomeUiState())
-
-    init {
-        updateConsecutiveDays()
-    }
 
     val uiState: StateFlow<HomeUiState> =
         combine(
@@ -58,7 +52,7 @@ class HomeViewModel @Inject constructor(
         ) { languageCollectionsStatus,
             phrasesPendingReviewStatus,
             consecutiveDaysStatus,
-            goalsDomain,
+            goals,
             uiState, userDomain ->
             if (languageCollectionsStatus.isLoadingStatus.not() &&
                 phrasesPendingReviewStatus.isLoadingStatus.not() &&
@@ -67,7 +61,7 @@ class HomeViewModel @Inject constructor(
             ) {
                 uiState.copy(
                     userDomain = userDomain,
-                    goalsDomain = goalsDomain,
+                    goals = goals,
                     isPieChartGoalsVisible = true,
                     phrasesPendingReviewStatus = phrasesPendingReviewStatus,
                     languageCollectionsStatus = languageCollectionsStatus,
@@ -133,16 +127,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    selectedGoalDays = retrieveGoalsUseCase().first()?.targetPhrases ?: 1,
+                    selectedGoalDays = retrieveGoalsUseCase().first().first?.goal ?: 1,
                     isSetGoalsDialogVisible = !it.isSetGoalsDialogVisible
                 )
             }
-        }
-    }
-
-    private fun updateConsecutiveDays() {
-        viewModelScope.launch {
-            updateConsecutiveDaysUseCase(isFirstTimeNotFromHome = true)
         }
     }
 }

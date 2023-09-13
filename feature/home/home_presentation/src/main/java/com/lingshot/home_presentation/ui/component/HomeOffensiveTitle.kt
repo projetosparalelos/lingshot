@@ -14,7 +14,7 @@ import com.lingshot.designsystem.theme.LingshotTheme
 import com.lingshot.home_presentation.R
 
 @Composable
-fun HomeOffensiveTitle(consecutiveDays: Int, modifier: Modifier = Modifier) {
+internal fun HomeOffensiveTitle(consecutiveDays: Int, modifier: Modifier = Modifier) {
     val text = buildAnnotatedString {
         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
             append(stringResource(R.string.text_label_your_offence_home))

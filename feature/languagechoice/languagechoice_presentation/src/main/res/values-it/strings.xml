@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="text_select_language_speak_message">Seleziona una lingua che parli.</string>
-    <string name="text_title_dialog_choose_language">Scegli la lingua</string>
-    <string name="text_button_select_dialog_choose_language">Seleziona</string>
-    <string name="text_button_dialog_cancel">Annulla</string>
-</resources>

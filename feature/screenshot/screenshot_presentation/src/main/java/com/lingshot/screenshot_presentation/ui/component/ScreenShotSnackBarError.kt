@@ -6,7 +6,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.lingshot.designsystem.component.LingshotSnackBar
 
 @Composable
-fun ScreenShotSnackBarError(
+internal fun ScreenShotSnackBarError(
     message: String,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit

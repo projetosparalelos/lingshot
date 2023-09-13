@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="text_select_language_speak_message">Выберите язык, который вы говорите.</string>
-    <string name="text_title_dialog_choose_language">Выберите язык</string>
-    <string name="text_button_select_dialog_choose_language">Выбрать</string>
-    <string name="text_button_dialog_cancel">Отмена</string>
-</resources>

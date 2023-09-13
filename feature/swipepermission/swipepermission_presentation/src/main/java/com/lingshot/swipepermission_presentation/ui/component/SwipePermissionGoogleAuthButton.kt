@@ -17,7 +17,7 @@ import com.lingshot.common.util.singleClick
 import com.lingshot.swipepermission_presentation.R
 
 @Composable
-fun SwipePermissionGoogleAuthButton(
+internal fun SwipePermissionGoogleAuthButton(
     modifier: Modifier = Modifier,
     onSignIn: () -> Unit
 ) {
@@ -39,6 +39,6 @@ fun SwipePermissionGoogleAuthButton(
 
 @Preview(showBackground = true)
 @Composable
-fun SwipePermissionGoogleAuthButtonPreview() {
+private fun SwipePermissionGoogleAuthButtonPreview() {
     SwipePermissionGoogleAuthButton {}
 }

@@ -18,7 +18,7 @@ import com.skydoves.balloon.compose.rememberBalloonBuilder
 import com.skydoves.balloon.compose.setBackgroundColor
 
 @Composable
-fun ScreenShotBalloon(
+internal fun ScreenShotBalloon(
     text: String,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit

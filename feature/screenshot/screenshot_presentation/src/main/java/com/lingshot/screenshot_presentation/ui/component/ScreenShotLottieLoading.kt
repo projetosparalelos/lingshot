@@ -15,7 +15,7 @@ import com.airbnb.lottie.compose.*
 import com.lingshot.screenshot_presentation.R
 
 @Composable
-fun ScreenShotLottieLoading(
+internal fun ScreenShotLottieLoading(
     @RawRes loading: Int,
     modifier: Modifier = Modifier
 ) {

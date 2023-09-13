@@ -55,7 +55,7 @@ import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
 import com.lingshot.screenshot_presentation.R
 
 @Composable
-fun ScreenShotTranslateBottomSheet(
+internal fun ScreenShotTranslateBottomSheet(
     languageTranslationDomain: LanguageTranslationDomain,
     correctedOriginalTextStatus: Status<String>,
     onCorrectedOriginalText: (String) -> Unit,

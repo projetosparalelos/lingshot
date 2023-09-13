@@ -64,7 +64,7 @@ internal fun ScreenShotRoute(
 }
 
 @Composable
-private fun ScreenShotScreen(
+internal fun ScreenShotScreen(
     uiState: ScreenShotUiState,
     modifier: Modifier = Modifier,
     handleEvent: (event: ScreenShotEvent) -> Unit

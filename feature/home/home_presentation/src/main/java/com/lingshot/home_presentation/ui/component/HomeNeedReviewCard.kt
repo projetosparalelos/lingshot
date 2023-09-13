@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.lingshot.home_presentation.R
 
 @Composable
-fun HomeNeedReviewCard(pendingReview: String?, modifier: Modifier = Modifier) {
+internal fun HomeNeedReviewCard(pendingReview: String?, modifier: Modifier = Modifier) {
     ElevatedCard(
         modifier = modifier,
         colors = CardDefaults.cardColors(
