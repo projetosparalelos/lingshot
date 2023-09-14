@@ -48,6 +48,31 @@ jobs:
       - name: Build the app
         run: ./gradlew clean build
 
+  testSnapshot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup checkout
+        uses: actions/checkout@v3
+
+      - name: Set environment variables
+        run: |
+          chmod +x .github/set-key.sh
+          .github/set-key.sh
+        shell: bash
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Verify paparazzi snapshot
+        run: ./gradlew verifyPaparazziDebug
+
   quality:
     runs-on: ubuntu-latest
 
