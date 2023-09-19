@@ -1,104 +1,80 @@
 package com.lingshot.home_presentation.ui
 
-import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
-import app.cash.paparazzi.detectEnvironment
-import com.lingshot.designsystem.theme.LingshotTheme
+import com.google.testing.junit.testparameterinjector.TestParameter
+import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import com.lingshot.domain.model.GoalsDomain
 import com.lingshot.domain.model.UserDomain
 import com.lingshot.domain.model.UserLocalDomain
 import com.lingshot.domain.model.statusSuccess
 import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.navigation.HomeDestination
+import com.lingshot.testing.helper.DefaultTestDevices
+import com.lingshot.testing.helper.MultiTheme
+import com.lingshot.testing.helper.replaceCompileSdkToSnapshot
+import com.lingshot.testing.helper.snapshotMultiDevice
 import com.phrase.phrasemaster_domain.model.CollectionInfoDomain
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(TestParameterInjector::class)
 internal class HomeScreenSnapshotTest {
+
     @get:Rule
     val paparazzi = Paparazzi(
-        environment = detectEnvironment().run {
-            copy(compileSdkVersion = 33, platformDir = platformDir.replace("34", "33"))
-        },
-        deviceConfig = DeviceConfig.PIXEL_4A
+        environment = replaceCompileSdkToSnapshot()
     )
 
     @Test
-    fun homeScreen_Displayed_By_Default_And_Loading() {
-        paparazzi.snapshot {
-            LingshotTheme {
-                HomeScreen(
-                    homeDestination = HomeDestination(),
-                    handleEvent = {},
-                    uiState = HomeUiState()
-                )
-            }
+    fun homeScreen_Displayed_By_Default_And_Loading(
+        @TestParameter defaultTestDevices: DefaultTestDevices,
+        @TestParameter multiTheme: MultiTheme
+    ) {
+        paparazzi.snapshotMultiDevice(
+            defaultTestDevices = defaultTestDevices,
+            multiTheme = multiTheme
+        ) {
+            HomeScreen(
+                homeDestination = HomeDestination(),
+                handleEvent = {},
+                uiState = HomeUiState()
+            )
         }
     }
 
     @Test
-    fun homeScreen_Displayed_With_Dark_Mode_And_Loading() {
-        paparazzi.snapshot {
-            LingshotTheme(isDarkTheme = true) {
-                HomeScreen(
-                    homeDestination = HomeDestination(),
-                    handleEvent = {},
-                    uiState = HomeUiState()
-                )
-            }
+    fun homeScreen_Displayed_By_Default_And_Success(
+        @TestParameter defaultTestDevices: DefaultTestDevices,
+        @TestParameter multiTheme: MultiTheme
+    ) {
+        paparazzi.snapshotMultiDevice(
+            defaultTestDevices = defaultTestDevices,
+            multiTheme = multiTheme
+        ) {
+            HomeScreen(
+                homeDestination = HomeDestination(),
+                handleEvent = {},
+                uiState = fakeUiStateSuccess()
+            )
         }
     }
 
     @Test
-    fun homeScreen_Displayed_By_Default_And_Success() {
-        paparazzi.snapshot {
-            LingshotTheme {
-                HomeScreen(
-                    homeDestination = HomeDestination(),
-                    handleEvent = {},
-                    uiState = fakeUiStateSuccess()
-                )
-            }
-        }
-    }
-
-    @Test
-    fun homeScreen_Displayed_With_Dark_Mode_And_Success() {
-        paparazzi.snapshot {
-            LingshotTheme(isDarkTheme = true) {
-                HomeScreen(
-                    homeDestination = HomeDestination(),
-                    handleEvent = {},
-                    uiState = fakeUiStateSuccess()
-                )
-            }
-        }
-    }
-
-    @Test
-    fun homeScreen_Displayed_By_Default_And_Goals_Dialog_Visible() {
-        paparazzi.snapshot {
-            LingshotTheme {
-                HomeScreen(
-                    homeDestination = HomeDestination(),
-                    handleEvent = {},
-                    uiState = fakeUiStateSuccess().copy(isSetGoalsDialogVisible = true)
-                )
-            }
-        }
-    }
-
-    @Test
-    fun homeScreen_Displayed_With_Dark_Mode_And_Goals_Dialog_Visible() {
-        paparazzi.snapshot {
-            LingshotTheme(isDarkTheme = true) {
-                HomeScreen(
-                    homeDestination = HomeDestination(),
-                    handleEvent = {},
-                    uiState = fakeUiStateSuccess().copy(isSetGoalsDialogVisible = true)
-                )
-            }
+    fun homeScreen_Displayed_By_Default_And_Goals_Dialog_Visible(
+        @TestParameter defaultTestDevices: DefaultTestDevices,
+        @TestParameter multiTheme: MultiTheme
+    ) {
+        paparazzi.snapshotMultiDevice(
+            defaultTestDevices = defaultTestDevices,
+            multiTheme = multiTheme
+        ) {
+            HomeScreen(
+                homeDestination = HomeDestination(),
+                handleEvent = {},
+                uiState = fakeUiStateSuccess().copy(isSetGoalsDialogVisible = true)
+            )
         }
     }
 

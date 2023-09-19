@@ -57,6 +57,6 @@ internal fun HomeEmptyCollectionCard(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-private fun HomeEmptyCollectionCardPreview(modifier: Modifier = Modifier) {
+private fun HomeEmptyCollectionCardPreview() {
     HomeEmptyCollectionCard()
 }

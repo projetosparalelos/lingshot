@@ -22,7 +22,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
                 add("implementation", libs.getBundle("coroutines"))
                 add("implementation", libs.getLibrary("timber"))
 
-                add("testImplementation", libs.getLibrary("junit"))
+                add("testImplementation", libs.getBundle("testing-unit"))
             }
         }
     }
