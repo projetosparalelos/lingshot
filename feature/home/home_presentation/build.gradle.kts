@@ -12,12 +12,13 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":core:testing"))
     implementation(project(":domain"))
     implementation(project(":core:designsystem"))
     implementation(project(":feature:home:home_domain"))
     implementation(project(":feature:languagechoice:languagechoice_domain"))
     implementation(project(":feature:phrasemaster:phrasemaster_domain"))
+
+    testImplementation(project(":core:testing"))
 
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.lottie.compose)

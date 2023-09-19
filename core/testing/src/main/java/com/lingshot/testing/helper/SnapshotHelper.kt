@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "LongParameterList")
 
 package com.lingshot.testing.helper
 
