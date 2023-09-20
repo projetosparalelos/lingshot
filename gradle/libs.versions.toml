@@ -46,13 +46,12 @@ lottie = "6.1.0"
 markdown = "0.3.5"
 
 jUnit = "4.13.2"
+testParameterInjector = "1.8"
 
 ktlint = "11.5.1"
 detekt = "1.22.0"
 composeDetekt = "0.0.26"
 composeLintChecks = "1.2.0"
-junit = "1.1.5"
-espresso-core = "3.5.1"
 
 [libraries]
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
@@ -80,6 +79,7 @@ compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
@@ -127,16 +127,17 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "markdown" }
 
 junit = { module = "junit:junit", version.ref = "jUnit" }
+paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
+test-parameter-injector = { module = "com.google.testparameterinjector:test-parameter-injector", version.ref = "testParameterInjector" }
 
 compose-detekt = { module = "com.twitter.compose.rules:detekt", version.ref = "composeDetekt" }
 compose-lint-checks = { module = "com.slack.lint.compose:compose-lint-checks", version.ref = "composeLintChecks" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 
 [bundles]
 lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service", "lifecycle-runtimeCompose", "lifecycle-viewModelCompose"]
 coroutines = ["coroutines-android", "coroutines-core", "coroutines-play-services"]
 firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx"]
+testing-unit = ["junit", "test-parameter-injector"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradlePlugin" }

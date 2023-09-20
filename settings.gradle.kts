@@ -23,6 +23,7 @@ rootProject.name = "Lingshot"
 include(":app")
 include(":core:common")
 include(":core:designsystem")
+include(":core:testing")
 include(":data:local")
 include(":data:remote")
 include(":domain")

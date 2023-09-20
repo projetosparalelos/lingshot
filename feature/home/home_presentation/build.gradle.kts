@@ -18,8 +18,9 @@ dependencies {
     implementation(project(":feature:languagechoice:languagechoice_domain"))
     implementation(project(":feature:phrasemaster:phrasemaster_domain"))
 
-    implementation(libs.accompanist.navigation.animation)
+    testImplementation(project(":core:testing"))
 
+    implementation(libs.accompanist.navigation.animation)
     implementation(libs.lottie.compose)
     implementation(libs.coil.compose)
     implementation(libs.hilt.navigation.compose)
