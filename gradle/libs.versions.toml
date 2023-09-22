@@ -127,6 +127,8 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "markdown" }
 
 junit = { module = "junit:junit", version.ref = "jUnit" }
+coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
 test-parameter-injector = { module = "com.google.testparameterinjector:test-parameter-injector", version.ref = "testParameterInjector" }
 
@@ -137,7 +139,7 @@ compose-lint-checks = { module = "com.slack.lint.compose:compose-lint-checks", v
 lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service", "lifecycle-runtimeCompose", "lifecycle-viewModelCompose"]
 coroutines = ["coroutines-android", "coroutines-core", "coroutines-play-services"]
 firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx"]
-testing-unit = ["junit", "test-parameter-injector"]
+testing-unit = ["junit", "coroutines-test", "test-parameter-injector"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradlePlugin" }

@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.lingshot.home_presentation.ui
 
 import app.cash.paparazzi.Paparazzi
@@ -9,12 +11,18 @@ import com.lingshot.domain.model.UserLocalDomain
 import com.lingshot.domain.model.statusSuccess
 import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.navigation.HomeDestination
+import com.lingshot.testing.helper.BASE_URL_COIL
 import com.lingshot.testing.helper.DefaultTestDevices
 import com.lingshot.testing.helper.MultiTheme
 import com.lingshot.testing.helper.replaceCompileSdkToSnapshot
 import com.lingshot.testing.helper.snapshotMultiDevice
+import com.lingshot.testing.helper.startCoilFakeImage
+import com.lingshot.testing.rule.MainCoroutineRule
 import com.phrase.phrasemaster_domain.model.CollectionInfoDomain
 import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,6 +34,16 @@ internal class HomeScreenSnapshotTest {
     val paparazzi = Paparazzi(
         environment = replaceCompileSdkToSnapshot()
     )
+
+    @get:Rule
+    val mainCoroutineRule: MainCoroutineRule = MainCoroutineRule(
+        testDispatcher = UnconfinedTestDispatcher()
+    )
+
+    @Before
+    fun setup() {
+        startCoilFakeImage(paparazzi.context)
+    }
 
     @Test
     fun homeScreen_Displayed_By_Default_And_Loading(
@@ -81,7 +99,8 @@ internal class HomeScreenSnapshotTest {
     private fun fakeUiStateSuccess() =
         HomeUiState(
             userDomain = UserDomain(
-                username = "UserTest"
+                username = "UserTest",
+                profilePictureUrl = BASE_URL_COIL
             ),
             isPieChartGoalsVisible = true,
             languageCollectionsStatus = statusSuccess(

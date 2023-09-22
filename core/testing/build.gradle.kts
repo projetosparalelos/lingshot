@@ -30,4 +30,6 @@ dependencies {
     implementation(libs.compose.ui.test)
 
     implementation(libs.paparazzi)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.test)
 }
