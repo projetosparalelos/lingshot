@@ -26,6 +26,10 @@ The primary focus of this project lies in promoting a modular, scalable, maintai
 
 The design principles and architectural choices applied in this project are ideally suited for larger teams and extended [application lifecycles](https://en.wikipedia.org/wiki/Application_lifecycle_management). This application is not just about showcasing functionalities, but it is also a testament to how well-structured and well-written code serves as a stable backbone for scalable and maintainable software development projects.
 
+## Download
+
+<a href='https://play.google.com/store/apps/details?id=com.lingshot.languagelearn'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width=240/></a>
+
 ## Tech-Stack
 
 This project takes advantage of best practices, and many popular libraries and tools in the Android ecosystem.
