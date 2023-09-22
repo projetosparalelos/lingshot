@@ -76,6 +76,7 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Danger System](https://danger.systems/ruby/)
 * Testing
   * [Paparazzi Snapshot](https://github.com/cashapp/paparazzi)
+  * [Test Parameter Injector](https://github.com/google/TestParameterInjector)
 * Static analysis tools (linters)
   * [Ktlint](https://github.com/pinterest/ktlint)
   * [Detekt](https://github.com/arturbosch/detekt#with-gradle)
