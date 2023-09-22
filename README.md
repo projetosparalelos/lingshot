@@ -74,6 +74,8 @@ This project takes advantage of best practices, and many popular libraries and t
 * CI
   * [GitHub Actions](https://github.com/features/actions)
   * [Danger System](https://danger.systems/ruby/)
+* Testing
+  * [Paparazzi Snapshot](https://github.com/cashapp/paparazzi)
 * Static analysis tools (linters)
   * [Ktlint](https://github.com/pinterest/ktlint)
   * [Detekt](https://github.com/arturbosch/detekt#with-gradle)
