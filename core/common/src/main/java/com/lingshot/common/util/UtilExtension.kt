@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.common.util
 
 import android.app.Activity
@@ -13,7 +28,7 @@ fun Context.fadeAnimation(): Bundle? =
     ActivityOptions.makeCustomAnimation(
         this,
         R.anim.fade_in,
-        R.anim.fade_out
+        R.anim.fade_out,
     ).toBundle()
 
 fun View.isViewOverlapping(other: View, deltaX: Int = 0, deltaY: Int = 0): Boolean {
@@ -27,7 +42,7 @@ fun View.isViewOverlapping(other: View, deltaX: Int = 0, deltaY: Int = 0): Boole
         .intersect(
             otherXY.let {
                 Rect(it[0], it[1], it[0] + other.width, it[1] + other.height)
-            }
+            },
         )
 }
 

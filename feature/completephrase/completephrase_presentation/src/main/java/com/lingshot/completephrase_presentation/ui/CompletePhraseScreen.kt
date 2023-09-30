@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.completephrase_presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
@@ -63,7 +78,7 @@ internal fun CompletePhraseScreenRoute(
     languageFrom: String,
     @Suppress("UNUSED_PARAMETER") languageTo: String,
     onBackClick: () -> Unit,
-    viewModel: CompletePhraseViewModel = hiltViewModel()
+    viewModel: CompletePhraseViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -76,7 +91,7 @@ internal fun CompletePhraseScreenRoute(
         handleEvent = viewModel::handleEvent,
         languageId = languageId,
         languageFrom = languageFrom,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
     )
 }
 
@@ -86,7 +101,7 @@ internal fun CompletePhraseScreen(
     handleEvent: (CompletePhraseEvent) -> Unit,
     languageId: String,
     languageFrom: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
@@ -96,10 +111,10 @@ internal fun CompletePhraseScreen(
 
     LingshotLayout(
         title = stringResource(R.string.text_title_complete_phrase),
-        onClickNavigation = onBackClick
+        onClickNavigation = onBackClick,
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             if (uiState.isLoading) {
                 LingshotLoading(modifier = Modifier.align(Alignment.Center))
@@ -108,7 +123,7 @@ internal fun CompletePhraseScreen(
                     val phraseDomain = uiState.phrasesByLanguageCollections[currentPageIndex]
 
                     val listWords = processPhraseWithDoubleParentheses(
-                        phraseDomain.original
+                        phraseDomain.original,
                     ).toImmutableList()
 
                     val wordWithoutParentheses =
@@ -117,11 +132,11 @@ internal fun CompletePhraseScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .verticalScroll(scrollState)
+                            .verticalScroll(scrollState),
                     ) {
                         CompletePhraseIndicatorPage(
                             currentPage,
-                            uiState.phrasesByLanguageCollections.size
+                            uiState.phrasesByLanguageCollections.size,
                         )
                         key(currentPageIndex) {
                             Column(
@@ -129,7 +144,7 @@ internal fun CompletePhraseScreen(
                                     .fillMaxSize()
                                     .padding(horizontal = 16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                                verticalArrangement = Arrangement.spacedBy(16.dp),
                             ) {
                                 CompletePhraseTextFieldCard(
                                     listWords = listWords,
@@ -141,19 +156,19 @@ internal fun CompletePhraseScreen(
                                     isSpeechActive = uiState.isSpeechActive,
                                     onSpeakText = {
                                         handleEvent(
-                                            FetchTextToSpeech(phraseDomain.original, languageFrom)
+                                            FetchTextToSpeech(phraseDomain.original, languageFrom),
                                         )
                                     },
-                                    reviewLevel = ReviewLevel.from(phraseDomain.reviewLevel)
+                                    reviewLevel = ReviewLevel.from(phraseDomain.reviewLevel),
                                 )
                                 CompletePhraseTranslateCard(
                                     translateText = phraseDomain.translate,
                                     isTranslatedTextVisible = uiState.isTranslatedTextVisible,
                                     onToggleTranslatedTextVisibility = {
                                         handleEvent(
-                                            ToggleTranslatedTextVisibility
+                                            ToggleTranslatedTextVisibility,
                                         )
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -173,11 +188,11 @@ internal fun CompletePhraseScreen(
                             if (uiState.isSpeechActive.not()) {
                                 val isAnswerCorrect = uiState.wordToFill.equals(
                                     wordWithoutParentheses,
-                                    ignoreCase = true
+                                    ignoreCase = true,
                                 )
                                 handleEvent(ShowAnswerSheet(isAnswerCorrect))
                             }
-                        }
+                        },
                     )
 
                     if (uiState.isAnswerSheetVisible) {
@@ -187,7 +202,7 @@ internal fun CompletePhraseScreen(
                             onContinue = {
                                 if (uiState.answerState.isSuccess) {
                                     handleEvent(
-                                        UpdatePhrasePositionOnSuccess(languageId, phraseDomain)
+                                        UpdatePhrasePositionOnSuccess(languageId, phraseDomain),
                                     )
                                 } else {
                                     scope.launch {
@@ -200,7 +215,7 @@ internal fun CompletePhraseScreen(
                             },
                             onDismiss = {
                                 handleEvent(HideAnswerSheet)
-                            }
+                            },
                         )
                     }
                 } else {
@@ -209,7 +224,7 @@ internal fun CompletePhraseScreen(
 
                 if (uiState.isAnswersFinished) {
                     CompletePhraseAnswersFinishedFullScreenDialog(
-                        onDismiss = onBackClick
+                        onDismiss = onBackClick,
                     )
                 }
             }
@@ -244,7 +259,7 @@ private fun CompletePhraseScreenPreview() {
             handleEvent = {},
             languageId = "id",
             languageFrom = "en",
-            onBackClick = {}
+            onBackClick = {},
         )
     }
 }

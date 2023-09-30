@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 @file:Suppress("LongParameterList")
 
 package com.lingshot.common.util
@@ -11,7 +26,7 @@ inline fun <T1, T2, T3, T4, T5, T6, R> combine(
     flow4: Flow<T4>,
     flow5: Flow<T5>,
     flow6: Flow<T6>,
-    crossinline transform: suspend (T1, T2, T3, T4, T5, T6) -> R
+    crossinline transform: suspend (T1, T2, T3, T4, T5, T6) -> R,
 ): Flow<R> {
     return kotlinx.coroutines.flow.combine(flow, flow2, flow3, flow4, flow5, flow6) { args: Array<*> ->
         @Suppress("UNCHECKED_CAST")
@@ -21,7 +36,7 @@ inline fun <T1, T2, T3, T4, T5, T6, R> combine(
             args[2] as T3,
             args[3] as T4,
             args[4] as T5,
-            args[5] as T6
+            args[5] as T6,
         )
     }
 }

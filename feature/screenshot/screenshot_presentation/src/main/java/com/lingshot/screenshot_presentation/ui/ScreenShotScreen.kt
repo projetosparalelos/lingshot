@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.screenshot_presentation.ui
 
 import androidx.compose.foundation.background
@@ -53,13 +68,13 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun ScreenShotRoute(
-    viewModel: ScreenShotViewModel = hiltViewModel()
+    viewModel: ScreenShotViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     ScreenShotScreen(
         uiState = uiState,
-        handleEvent = viewModel::handleEvent
+        handleEvent = viewModel::handleEvent,
     )
 }
 
@@ -67,13 +82,13 @@ internal fun ScreenShotRoute(
 internal fun ScreenShotScreen(
     uiState: ScreenShotUiState,
     modifier: Modifier = Modifier,
-    handleEvent: (event: ScreenShotEvent) -> Unit
+    handleEvent: (event: ScreenShotEvent) -> Unit,
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
             .navigationBarsPadding()
-            .background(Color.Black)
+            .background(Color.Black),
     ) {
         val illegiblePhrase = stringResource(id = R.string.text_message_illegible_phrase)
         ScreenShotCropImage(
@@ -83,12 +98,12 @@ internal fun ScreenShotScreen(
             },
             onCroppedImage = {
                 handleEvent(CroppedImage(it))
-            }
+            },
         )
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
@@ -97,7 +112,7 @@ internal fun ScreenShotScreen(
                     text = illegiblePhrase,
                     onDismiss = {
                         handleEvent(ClearStatus)
-                    }
+                    },
                 )
             }.onLoading {
                 val loading = uiState.navigationBarItem
@@ -106,7 +121,7 @@ internal fun ScreenShotScreen(
 
                 ScreenShotLottieLoading(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    loading = loading
+                    loading = loading,
                 )
             }.onSuccess {
                 if (uiState.navigationBarItem == TRANSLATE) {
@@ -119,15 +134,15 @@ internal fun ScreenShotScreen(
                         },
                         onCheckPhraseInLanguageCollection = { originalText ->
                             handleEvent(
-                                CheckPhraseInLanguageCollection(originalText)
+                                CheckPhraseInLanguageCollection(originalText),
                             )
                         },
                         onSetPhraseDomain = { originalText, translatedText ->
                             handleEvent(
                                 ScreenShotEvent.SetPhraseDomain(
                                     originalText,
-                                    translatedText
-                                )
+                                    translatedText,
+                                ),
                             )
                         },
                         onToggleDictionaryFullScreenDialog = { url ->
@@ -135,7 +150,7 @@ internal fun ScreenShotScreen(
                         },
                         onDismiss = {
                             handleEvent(ClearStatus)
-                        }
+                        },
                     )
                 }
             }.onError {
@@ -144,7 +159,7 @@ internal fun ScreenShotScreen(
                     message = it,
                     onDismiss = {
                         handleEvent(ClearStatus)
-                    }
+                    },
                 )
             }
             if (uiState.isLanguageSelectionAlertVisible) {
@@ -152,11 +167,11 @@ internal fun ScreenShotScreen(
                     modifier = Modifier.padding(bottom = 16.dp),
                     onToggleLanguageDialogAndHideSelectionAlert = {
                         handleEvent(ToggleLanguageDialogAndHideSelectionAlert)
-                    }
+                    },
                 )
             }
             ScreenShotNavigationBar(
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp),
             ) {
                 ScreenShotNavigationBarItem(
                     navigationBarItem = uiState.navigationBarItem,
@@ -165,7 +180,7 @@ internal fun ScreenShotScreen(
                         if (!uiState.screenShotStatus.isLoadingStatus) {
                             handleEvent(SelectedOptionsNavigationBar(item))
                         }
-                    }
+                    },
                 )
             }
         }
@@ -182,7 +197,7 @@ internal fun ScreenShotScreen(
             },
             onDismiss = {
                 handleEvent(ToggleLanguageDialog)
-            }
+            },
         )
     }
 
@@ -199,7 +214,7 @@ internal fun ScreenShotScreen(
             },
             onDismiss = {
                 handleEvent(ScreenShotEvent.HideEditPhraseFullScreenDialog)
-            }
+            },
         )
     }
 }
@@ -209,6 +224,6 @@ internal fun ScreenShotScreen(
 private fun ScreenShotScreenPreview() {
     ScreenShotScreen(
         uiState = ScreenShotUiState(),
-        handleEvent = {}
+        handleEvent = {},
     )
 }

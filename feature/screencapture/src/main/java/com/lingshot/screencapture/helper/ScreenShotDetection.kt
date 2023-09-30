@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 @file:Suppress("Range", "Unused")
 
 package com.lingshot.screencapture.helper
@@ -26,7 +41,7 @@ import timber.log.Timber
 
 class ScreenShotDetection @AssistedInject constructor(
     @ApplicationContext private val context: Context,
-    @Assisted private val listener: ScreenshotDetectionListener
+    @Assisted private val listener: ScreenshotDetectionListener,
 ) {
 
     private var job: Job? = null
@@ -62,7 +77,7 @@ class ScreenShotDetection @AssistedInject constructor(
         context.contentResolver?.registerContentObserver(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             true,
-            contentObserver
+            contentObserver,
         )
         awaitClose {
             context.contentResolver?.unregisterContentObserver(contentObserver)
@@ -108,11 +123,11 @@ class ScreenShotDetection @AssistedInject constructor(
                 uri,
                 arrayOf(
                     MediaStore.Images.Media.DISPLAY_NAME,
-                    MediaStore.Images.Media.DATA
+                    MediaStore.Images.Media.DATA,
                 ),
                 null,
                 null,
-                null
+                null,
             )?.let { cursor ->
                 cursor.moveToFirst()
                 val path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
@@ -134,7 +149,7 @@ class ScreenShotDetection @AssistedInject constructor(
         return context.let { activity ->
             ContextCompat.checkSelfPermission(
                 activity,
-                permission
+                permission,
             ) == PackageManager.PERMISSION_GRANTED
         }
     }

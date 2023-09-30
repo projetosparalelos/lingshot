@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.screenshot_presentation.ui.component
 
 import androidx.compose.foundation.layout.RowScope
@@ -28,10 +43,10 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun ScreenShotNavigationBar(
     modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     NavigationBar(
-        modifier = modifier.clip(CircleShape)
+        modifier = modifier.clip(CircleShape),
     ) {
         Spacer(modifier = Modifier.width(8.dp))
         content()
@@ -44,7 +59,7 @@ internal fun RowScope.ScreenShotNavigationBarItem(
     navigationBarItem: NavigationBarItem,
     navigationBarItemList: ImmutableList<NavigationBarItem>,
     modifier: Modifier = Modifier,
-    onSelectedOptionsNavigationBar: (NavigationBarItem) -> Unit
+    onSelectedOptionsNavigationBar: (NavigationBarItem) -> Unit,
 ) {
     navigationBarItemList.forEach { item ->
         NavigationBarItem(
@@ -56,7 +71,7 @@ internal fun RowScope.ScreenShotNavigationBarItem(
             selected = (navigationBarItem == item),
             onClick = {
                 onSelectedOptionsNavigationBar(item)
-            }
+            },
         )
     }
 }
@@ -71,7 +86,7 @@ private fun ScreenShotNavigationBarPreview() {
             enumValues<NavigationBarItem>()
                 .toList()
                 .toImmutableList(),
-            onSelectedOptionsNavigationBar = {}
+            onSelectedOptionsNavigationBar = {},
         )
     }
 }
@@ -79,12 +94,12 @@ private fun ScreenShotNavigationBarPreview() {
 enum class NavigationBarItem(val label: Int, val icon: ImageVector) {
     TRANSLATE(
         label = R.string.text_label_navigation_bar_item_translate,
-        icon = Icons.Default.Translate
+        icon = Icons.Default.Translate,
     ),
     LISTEN(label = R.string.text_label_navigation_bar_item_listen, icon = Icons.Default.VolumeUp),
     FOCUS(label = R.string.text_label_navigation_bar_item_focus, icon = Icons.Default.ZoomOutMap),
     LANGUAGE(
         label = R.string.text_label_navigation_bar_item_language,
-        icon = Icons.Default.Language
-    );
+        icon = Icons.Default.Language,
+    ),
 }

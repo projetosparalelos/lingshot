@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
 package com.lingshot.home_presentation.ui
@@ -32,12 +47,12 @@ internal class HomeScreenSnapshotTest {
 
     @get:Rule
     val paparazzi = Paparazzi(
-        environment = replaceCompileSdkToSnapshot()
+        environment = replaceCompileSdkToSnapshot(),
     )
 
     @get:Rule
     val mainCoroutineRule: MainCoroutineRule = MainCoroutineRule(
-        testDispatcher = UnconfinedTestDispatcher()
+        testDispatcher = UnconfinedTestDispatcher(),
     )
 
     @Before
@@ -48,16 +63,16 @@ internal class HomeScreenSnapshotTest {
     @Test
     fun homeScreen_Displayed_By_Default_And_Loading(
         @TestParameter defaultTestDevices: DefaultTestDevices,
-        @TestParameter multiTheme: MultiTheme
+        @TestParameter multiTheme: MultiTheme,
     ) {
         paparazzi.snapshotMultiDevice(
             defaultTestDevices = defaultTestDevices,
-            multiTheme = multiTheme
+            multiTheme = multiTheme,
         ) {
             HomeScreen(
                 homeDestination = HomeDestination(),
                 handleEvent = {},
-                uiState = HomeUiState()
+                uiState = HomeUiState(),
             )
         }
     }
@@ -65,16 +80,16 @@ internal class HomeScreenSnapshotTest {
     @Test
     fun homeScreen_Displayed_By_Default_And_Success(
         @TestParameter defaultTestDevices: DefaultTestDevices,
-        @TestParameter multiTheme: MultiTheme
+        @TestParameter multiTheme: MultiTheme,
     ) {
         paparazzi.snapshotMultiDevice(
             defaultTestDevices = defaultTestDevices,
-            multiTheme = multiTheme
+            multiTheme = multiTheme,
         ) {
             HomeScreen(
                 homeDestination = HomeDestination(),
                 handleEvent = {},
-                uiState = fakeUiStateSuccess()
+                uiState = fakeUiStateSuccess(),
             )
         }
     }
@@ -82,16 +97,16 @@ internal class HomeScreenSnapshotTest {
     @Test
     fun homeScreen_Displayed_By_Default_And_Goals_Dialog_Visible(
         @TestParameter defaultTestDevices: DefaultTestDevices,
-        @TestParameter multiTheme: MultiTheme
+        @TestParameter multiTheme: MultiTheme,
     ) {
         paparazzi.snapshotMultiDevice(
             defaultTestDevices = defaultTestDevices,
-            multiTheme = multiTheme
+            multiTheme = multiTheme,
         ) {
             HomeScreen(
                 homeDestination = HomeDestination(),
                 handleEvent = {},
-                uiState = fakeUiStateSuccess().copy(isSetGoalsDialogVisible = true)
+                uiState = fakeUiStateSuccess().copy(isSetGoalsDialogVisible = true),
             )
         }
     }
@@ -100,20 +115,20 @@ internal class HomeScreenSnapshotTest {
         HomeUiState(
             userDomain = UserDomain(
                 username = "UserTest",
-                profilePictureUrl = BASE_URL_COIL
+                profilePictureUrl = BASE_URL_COIL,
             ),
             isPieChartGoalsVisible = true,
             languageCollectionsStatus = statusSuccess(
                 Pair(
                     listOf(LanguageCollectionDomain(from = "en", to = "pt")),
-                    CollectionInfoDomain(listOf(10), listOf(10))
-                )
+                    CollectionInfoDomain(listOf(10), listOf(10)),
+                ),
             ),
             phrasesPendingReviewStatus = statusSuccess("1"),
             consecutiveDaysStatus = statusSuccess(1),
             goals = Pair(
                 UserLocalDomain(goal = 10),
-                GoalsDomain(progressPhrases = 5)
-            )
+                GoalsDomain(progressPhrases = 5),
+            ),
         )
 }

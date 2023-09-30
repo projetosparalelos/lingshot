@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.home_presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
@@ -48,14 +63,14 @@ import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 @Composable
 internal fun HomeRoute(
     homeDestination: HomeDestination,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
         homeDestination = homeDestination,
         handleEvent = viewModel::handleEvent,
-        uiState = uiState
+        uiState = uiState,
     )
 }
 
@@ -63,11 +78,11 @@ internal fun HomeRoute(
 internal fun HomeScreen(
     homeDestination: HomeDestination,
     handleEvent: (HomeEvent) -> Unit,
-    uiState: HomeUiState
+    uiState: HomeUiState,
 ) {
     Surface {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             HomeToolbar(
                 userDomain = uiState.userDomain,
@@ -77,12 +92,12 @@ internal fun HomeScreen(
                 },
                 onSignOut = {
                     handleEvent(SignOut(homeDestination.onSignOut))
-                }
+                },
             )
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 items(uiState.homeSection) { section ->
                     when (section.typeSection) {
@@ -90,7 +105,7 @@ internal fun HomeScreen(
                             Text(
                                 text = stringResource(id = section.title),
                                 style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
                             )
                         }
 
@@ -99,9 +114,9 @@ internal fun HomeScreen(
                                 HomeOffensiveTitle(
                                     modifier = Modifier.placeholder(
                                         visible = true,
-                                        highlight = PlaceholderHighlight.fade()
+                                        highlight = PlaceholderHighlight.fade(),
                                     ),
-                                    consecutiveDays = 0
+                                    consecutiveDays = 0,
                                 )
                             }.onSuccess { data ->
                                 HomeOffensiveTitle(consecutiveDays = data)
@@ -114,13 +129,13 @@ internal fun HomeScreen(
                                     HomeNeedReviewCard(
                                         modifier = Modifier.placeholder(
                                             visible = true,
-                                            highlight = PlaceholderHighlight.fade()
+                                            highlight = PlaceholderHighlight.fade(),
                                         ),
-                                        pendingReview = null
+                                        pendingReview = null,
                                     )
                                 }.onSuccess { data ->
                                     HomeNeedReviewCard(
-                                        pendingReview = data
+                                        pendingReview = data,
                                     )
                                 }
                         }
@@ -129,7 +144,7 @@ internal fun HomeScreen(
                             HomePierChartCard(
                                 modifier = Modifier.placeholder(
                                     visible = uiState.isPieChartGoalsVisible.not(),
-                                    highlight = PlaceholderHighlight.fade()
+                                    highlight = PlaceholderHighlight.fade(),
                                 ),
                                 goals = uiState.goals,
                                 isSetGoalsDialogVisible = uiState.isSetGoalsDialogVisible,
@@ -143,7 +158,7 @@ internal fun HomeScreen(
                                 },
                                 onToggleSetGoalsDialog = {
                                     handleEvent(ToggleSetGoalsDialog)
-                                }
+                                },
                             )
                         }
 
@@ -153,12 +168,12 @@ internal fun HomeScreen(
                                     HomeCollectionCard(
                                         modifier = Modifier.placeholder(
                                             visible = true,
-                                            highlight = PlaceholderHighlight.fade()
+                                            highlight = PlaceholderHighlight.fade(),
                                         ),
                                         languageCollectionDomain = LanguageCollectionDomain(),
                                         totalPhrases = 0,
                                         phrasesPlayed = 0,
-                                        onNavigateToCompletePhrase = { _, _, _ -> }
+                                        onNavigateToCompletePhrase = { _, _, _ -> },
                                     )
                                 }
                                 .onEmpty {
@@ -170,7 +185,7 @@ internal fun HomeScreen(
                                             languageCollectionDomain = item,
                                             totalPhrases = data.second.listTotalPhrases[position],
                                             phrasesPlayed = data.second.listPhrasesPlayed[position],
-                                            onNavigateToCompletePhrase = homeDestination.onNavigateToCompletePhrase
+                                            onNavigateToCompletePhrase = homeDestination.onNavigateToCompletePhrase,
                                         )
                                         Spacer(modifier = Modifier.height(8.dp))
                                     }
@@ -189,6 +204,6 @@ private fun HomeScreenPreview() {
     HomeScreen(
         homeDestination = HomeDestination(),
         handleEvent = {},
-        uiState = HomeUiState()
+        uiState = HomeUiState(),
     )
 }

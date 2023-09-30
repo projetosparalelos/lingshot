@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.remote.repository
 
 import android.content.Intent
@@ -11,13 +26,13 @@ import com.lingshot.domain.model.SignInResult
 import com.lingshot.domain.model.UserDomain
 import com.lingshot.domain.repository.GoogleAuthRepository
 import com.lingshot.remote.BuildConfig
-import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 class GoogleAuthRepositoryImpl @Inject constructor(
-    private val signInClient: SignInClient
+    private val signInClient: SignInClient,
 ) : GoogleAuthRepository {
 
     private val auth = Firebase.auth
@@ -25,7 +40,7 @@ class GoogleAuthRepositoryImpl @Inject constructor(
     override suspend fun signIn(): IntentSender? {
         val result = try {
             signInClient.beginSignIn(
-                buildSignInRequest()
+                buildSignInRequest(),
             ).await()
         } catch (e: Exception) {
             Timber.e(e)
@@ -46,17 +61,17 @@ class GoogleAuthRepositoryImpl @Inject constructor(
                     UserDomain(
                         userId = uid,
                         username = displayName,
-                        profilePictureUrl = photoUrl?.toString()
+                        profilePictureUrl = photoUrl?.toString(),
                     )
                 },
-                errorMessage = null
+                errorMessage = null,
             )
         } catch (e: Exception) {
             Timber.e(e)
             if (e is CancellationException) throw e
             SignInResult(
                 userDomain = null,
-                errorMessage = e.message
+                errorMessage = e.message,
             )
         }
     }
@@ -75,7 +90,7 @@ class GoogleAuthRepositoryImpl @Inject constructor(
         UserDomain(
             userId = uid,
             username = displayName,
-            profilePictureUrl = photoUrl?.toString()
+            profilePictureUrl = photoUrl?.toString(),
         )
     }
 
@@ -86,7 +101,7 @@ class GoogleAuthRepositoryImpl @Inject constructor(
                     .setSupported(true)
                     .setFilterByAuthorizedAccounts(false)
                     .setServerClientId(BuildConfig.GOOGLE_AUTH_ID)
-                    .build()
+                    .build(),
             )
             .setAutoSelectEnabled(true)
             .build()

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.languagechoice_presentation.ui
 
 import androidx.compose.foundation.background
@@ -35,7 +50,7 @@ fun LanguageChoiceDialog(
     onSaveLanguage: (AvailableLanguage?) -> Unit,
     onSelectedOptionsLanguage: (AvailableLanguage?) -> Unit,
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     AlertDialog(
         modifier = modifier.height(500.dp),
@@ -56,16 +71,16 @@ fun LanguageChoiceDialog(
         title = {
             Text(
                 text = stringResource(id = R.string.text_title_dialog_choose_language),
-                fontSize = 18.sp
+                fontSize = 18.sp,
             )
         },
         text = {
             LanguageChoiceList(
                 availableLanguage = availableLanguage,
                 availableLanguageList = availableLanguageList,
-                onSelectedOptionsLanguage = onSelectedOptionsLanguage
+                onSelectedOptionsLanguage = onSelectedOptionsLanguage,
             )
-        }
+        },
     )
 }
 
@@ -73,12 +88,12 @@ fun LanguageChoiceDialog(
 private fun LanguageChoiceList(
     availableLanguage: AvailableLanguage?,
     availableLanguageList: ImmutableList<AvailableLanguage>,
-    onSelectedOptionsLanguage: (AvailableLanguage?) -> Unit
+    onSelectedOptionsLanguage: (AvailableLanguage?) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     LazyColumn(
         state = lazyListState,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         items(availableLanguageList, key = { it.languageCode }) { language ->
             Row(
@@ -88,22 +103,22 @@ private fun LanguageChoiceList(
                         selected = (language == availableLanguage),
                         onClick = {
                             onSelectedOptionsLanguage(language)
-                        }
+                        },
                     )
                     .background(
                         if (language == availableLanguage) {
                             MaterialTheme.colorScheme.primaryContainer
                         } else {
                             Color.Transparent
-                        }
+                        },
                     )
                     .padding(14.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 LanguageChoiceEmojiFlag(emojiFlag = language.flagEmoji)
                 Text(
                     text = stringResource(id = language.displayName),
-                    modifier = Modifier.padding(start = 14.dp)
+                    modifier = Modifier.padding(start = 14.dp),
                 )
             }
         }
@@ -121,12 +136,12 @@ private fun LanguageChoiceList(
 @Composable
 private fun LanguageChoiceEmojiFlag(
     emojiFlag: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = emojiFlag,
         fontSize = 32.sp,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -138,6 +153,6 @@ private fun LanguageChoiceEmojiFlagPreview() {
         availableLanguageList = enumValues<AvailableLanguage>().toList().toImmutableList(),
         onSaveLanguage = {},
         onSelectedOptionsLanguage = {},
-        onDismiss = {}
+        onDismiss = {},
     )
 }

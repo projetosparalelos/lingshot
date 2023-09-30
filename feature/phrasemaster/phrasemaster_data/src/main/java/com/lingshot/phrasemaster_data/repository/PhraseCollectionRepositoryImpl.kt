@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.phrasemaster_data.repository
 
 import com.google.firebase.firestore.AggregateSource
@@ -10,12 +25,12 @@ import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 import com.phrase.phrasemaster_domain.model.encodeId
 import com.phrase.phrasemaster_domain.repository.PhraseCollectionRepository
-import javax.inject.Inject
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
 class PhraseCollectionRepositoryImpl @Inject constructor(
     private val useCase: UserProfileUseCase,
-    private val languageCollectionMapper: LanguageCollectionMapper
+    private val languageCollectionMapper: LanguageCollectionMapper,
 ) : PhraseCollectionRepository {
 
     private val db = Firebase.firestore
@@ -27,7 +42,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
                 .collection(COLLECTION_LANGUAGES)
 
     override suspend fun savePhraseInLanguageCollections(
-        phraseDomain: PhraseDomain
+        phraseDomain: PhraseDomain,
     ) {
         val languageCollectionDomain = languageCollectionMapper(phraseDomain.original)
         queryCollectionByLanguages
@@ -41,7 +56,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
 
     override suspend fun updatePhraseInLanguageCollections(
         languageId: String,
-        phraseDomain: PhraseDomain
+        phraseDomain: PhraseDomain,
     ) {
         queryCollectionByLanguages
             .document(languageId)
@@ -87,7 +102,7 @@ class PhraseCollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPhrasesForNextReview(
-        languageId: String
+        languageId: String,
     ): List<PhraseDomain> {
         return queryCollectionByLanguages
             .document(languageId)

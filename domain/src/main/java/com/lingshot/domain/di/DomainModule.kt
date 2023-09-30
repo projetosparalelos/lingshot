@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.domain.di
 
 import com.lingshot.domain.repository.GoalsRepository
@@ -23,19 +38,19 @@ object DomainModule {
     @Singleton
     @Provides
     fun provideUserProfileUseCase(
-        googleAuthRepository: GoogleAuthRepository
+        googleAuthRepository: GoogleAuthRepository,
     ): UserProfileUseCase = UserProfileUseCase(googleAuthRepository)
 
     @Singleton
     @Provides
     fun provideSignOutUseCase(
-        googleAuthRepository: GoogleAuthRepository
+        googleAuthRepository: GoogleAuthRepository,
     ): SignOutUseCase = SignOutUseCase(googleAuthRepository)
 
     @Singleton
     @Provides
     fun provideLanguageIdentifierUseCase(
-        textIdentifierRepository: TextIdentifierRepository
+        textIdentifierRepository: TextIdentifierRepository,
     ): LanguageIdentifierUseCase = LanguageIdentifierUseCase(textIdentifierRepository)
 
     @Singleton
@@ -43,11 +58,11 @@ object DomainModule {
     fun provideRetrieveGoalsUseCase(
         goalsRepository: GoalsRepository,
         userLocalRepository: UserLocalRepository,
-        userProfileUseCase: UserProfileUseCase
+        userProfileUseCase: UserProfileUseCase,
     ): RetrieveGoalsUseCase = RetrieveGoalsUseCase(
         goalsRepository,
         userLocalRepository,
-        userProfileUseCase
+        userProfileUseCase,
     )
 
     @Singleton
@@ -55,7 +70,7 @@ object DomainModule {
     fun provideSaveGoalsUseCase(
         goalsRepository: GoalsRepository,
         userLocalRepository: UserLocalRepository,
-        userProfileUseCase: UserProfileUseCase
+        userProfileUseCase: UserProfileUseCase,
     ): SaveGoalsUseCase = SaveGoalsUseCase(goalsRepository, userLocalRepository, userProfileUseCase)
 
     @Singleton
@@ -63,7 +78,7 @@ object DomainModule {
     fun provideSavePhrasesCompletedGoalsUseCase(
         goalsRepository: GoalsRepository,
         userLocalRepository: UserLocalRepository,
-        userProfileUseCase: UserProfileUseCase
+        userProfileUseCase: UserProfileUseCase,
     ): SavePhrasesCompletedGoalsUseCase =
         SavePhrasesCompletedGoalsUseCase(goalsRepository, userLocalRepository, userProfileUseCase)
 }

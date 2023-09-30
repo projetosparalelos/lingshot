@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 @file:OptIn(ExperimentalLayoutApi::class, ExperimentalComposeUiApi::class)
 
 package com.lingshot.completephrase_presentation.ui.component
@@ -63,7 +78,7 @@ internal fun CompletePhraseTextFieldCard(
     isSpeechActive: Boolean,
     onSpeakText: () -> Unit,
     reviewLevel: ReviewLevel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -72,16 +87,16 @@ internal fun CompletePhraseTextFieldCard(
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onSecondary
-        )
+            containerColor = MaterialTheme.colorScheme.onSecondary,
+        ),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.Start,
             ) {
                 CompletePhraseReviewLevel(reviewLevel)
                 Spacer(modifier = Modifier.weight(1f))
@@ -90,7 +105,7 @@ internal fun CompletePhraseTextFieldCard(
                     onSpeakText = {
                         onSpeakText()
                         isShimmerVisible = false
-                    }
+                    },
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -99,9 +114,9 @@ internal fun CompletePhraseTextFieldCard(
                     .fillMaxWidth()
                     .placeholder(
                         visible = isSpeechActive && isShimmerVisible,
-                        highlight = PlaceholderHighlight.fade()
+                        highlight = PlaceholderHighlight.fade(),
                     ),
-                horizontalArrangement = Arrangement.spacedBy(space = 4.dp)
+                horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
             ) {
                 CompletePhraseRenderTextWithField(
                     modifier = Modifier.align(alignment = Alignment.CenterVertically),
@@ -112,7 +127,7 @@ internal fun CompletePhraseTextFieldCard(
                     onFillWord = onFillWord,
                     onHideKeyboard = {
                         softwareKeyboardController?.hide()
-                    }
+                    },
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -121,7 +136,7 @@ internal fun CompletePhraseTextFieldCard(
                 onFillWord = {
                     onFillWord(wordWithoutParentheses)
                     softwareKeyboardController?.hide()
-                }
+                },
             )
         }
     }
@@ -145,7 +160,7 @@ private fun CompletePhraseRenderTextWithField(
     wordToFill: String,
     onFillWord: (String) -> Unit,
     onHideKeyboard: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val textTypography = MaterialTheme.typography.headlineSmall
     val textColor = MaterialTheme.colorScheme.primary
@@ -154,7 +169,7 @@ private fun CompletePhraseRenderTextWithField(
         if (word == "(($wordWithoutParentheses))") {
             val isError = wordToFill.isNotEmpty() && !wordToFill.startsWith(
                 wordWithoutParentheses.substring(0, wordToFill.length),
-                ignoreCase = true
+                ignoreCase = true,
             )
 
             val colorBasicTextField = if (isError) {
@@ -166,7 +181,7 @@ private fun CompletePhraseRenderTextWithField(
                 Text(
                     text = wordWithoutParentheses,
                     style = textTypography,
-                    modifier = Modifier.padding(horizontal = 5.dp)
+                    modifier = Modifier.padding(horizontal = 5.dp),
                 )
             }) { measuredWidth, measuredHeight ->
                 BasicTextField(
@@ -179,7 +194,7 @@ private fun CompletePhraseRenderTextWithField(
                     value = wordToFill,
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
-                        autoCorrect = true
+                        autoCorrect = true,
                     ),
                     textStyle = textTypography.copy(color = colorBasicTextField),
                     cursorBrush = SolidColor(colorBasicTextField),
@@ -191,7 +206,7 @@ private fun CompletePhraseRenderTextWithField(
                                 onHideKeyboard()
                             }
                         }
-                    }
+                    },
                 )
             }
         } else {
@@ -199,7 +214,7 @@ private fun CompletePhraseRenderTextWithField(
                 modifier = modifier,
                 text = word,
                 style = textTypography,
-                color = textColor
+                color = textColor,
             )
         }
     }
@@ -208,15 +223,15 @@ private fun CompletePhraseRenderTextWithField(
 @Composable
 private fun ColumnScope.CompletePhraseShowWordButton(
     enabledButton: Boolean,
-    onFillWord: () -> Unit
+    onFillWord: () -> Unit,
 ) {
     ElevatedButton(
         modifier = Modifier.align(Alignment.End),
         enabled = enabledButton,
-        onClick = onFillWord
+        onClick = onFillWord,
     ) {
         Text(
-            text = stringResource(R.string.text_button_show_word_complete_phrase)
+            text = stringResource(R.string.text_button_show_word_complete_phrase),
         )
     }
 }
@@ -232,13 +247,13 @@ private fun CompletePhraseReviewLevel(reviewLevel: ReviewLevel) {
                 modifier = Modifier.size(18.dp),
                 tint = MaterialTheme.colorScheme.secondary,
                 imageVector = icon,
-                contentDescription = null
+                contentDescription = null,
             )
         }
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = stringResource(id = reviewLevel.label),
-            color = MaterialTheme.colorScheme.secondary
+            color = MaterialTheme.colorScheme.secondary,
         )
     }
 }
@@ -247,11 +262,11 @@ private fun CompletePhraseReviewLevel(reviewLevel: ReviewLevel) {
 private fun CompletePhrasePlayAudioButton(isSpeechActive: Boolean, onSpeakText: () -> Unit) {
     LingshotPulseAnimation(enableAnimation = isSpeechActive) {
         IconButton(
-            onClick = onSpeakText
+            onClick = onSpeakText,
         ) {
             Icon(
                 imageVector = Icons.Default.VolumeUp,
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }
@@ -267,6 +282,6 @@ private fun CompletePhraseTextFieldCardPreview() {
         onFillWord = {},
         isSpeechActive = false,
         onSpeakText = {},
-        reviewLevel = ReviewLevel.NEW_WORD
+        reviewLevel = ReviewLevel.NEW_WORD,
     )
 }

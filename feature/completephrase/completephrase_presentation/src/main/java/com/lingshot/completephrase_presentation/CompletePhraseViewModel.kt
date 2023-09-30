@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.lingshot.completephrase_presentation
 
 import android.content.Context
@@ -16,13 +31,13 @@ import com.phrase.phrasemaster_domain.usecase.UpdateConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.UpdatePhraseReviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class CompletePhraseViewModel @Inject constructor(
@@ -30,7 +45,7 @@ class CompletePhraseViewModel @Inject constructor(
     private val retrievePhrasesForNextReviewUseCase: RetrievePhrasesForNextReviewUseCase,
     private val updateConsecutiveDaysUseCase: UpdateConsecutiveDaysUseCase,
     private val updatePhraseReviewUseCase: UpdatePhraseReviewUseCase,
-    private val savePhrasesCompletedGoalsUseCase: SavePhrasesCompletedGoalsUseCase
+    private val savePhrasesCompletedGoalsUseCase: SavePhrasesCompletedGoalsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CompletePhraseUiState())
@@ -81,7 +96,7 @@ class CompletePhraseViewModel @Inject constructor(
             is CompletePhraseEvent.UpdatePhrasePositionOnSuccess -> {
                 updatePhrasePositionOnSuccess(
                     completePhraseEvent.languageId,
-                    completePhraseEvent.phraseDomain
+                    completePhraseEvent.phraseDomain,
                 )
             }
 
@@ -99,7 +114,7 @@ class CompletePhraseViewModel @Inject constructor(
                 isSpeechActive = true,
                 isTranslatedTextVisible = false,
                 wordToFill = "",
-                updatePhraseInLanguageCollectionsStatus = statusDefault()
+                updatePhraseInLanguageCollectionsStatus = statusDefault(),
             )
         }
     }
@@ -113,7 +128,7 @@ class CompletePhraseViewModel @Inject constructor(
     private fun hideAnswerSheet() {
         _uiState.update {
             it.copy(
-                isAnswerSheetVisible = false
+                isAnswerSheetVisible = false,
             )
         }
     }
@@ -128,7 +143,7 @@ class CompletePhraseViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 isAnswerSheetVisible = true,
-                answerState = it.answerState.copy(isSuccess = isAnswerCorrect)
+                answerState = it.answerState.copy(isSuccess = isAnswerCorrect),
             )
         }
     }
@@ -150,13 +165,13 @@ class CompletePhraseViewModel @Inject constructor(
 
     private fun updatePhrasePositionOnSuccess(
         languageId: String,
-        phraseDomain: PhraseDomain
+        phraseDomain: PhraseDomain,
     ) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
                     updatePhraseInLanguageCollectionsStatus =
-                    updatePhraseReviewUseCase(languageId, phraseDomain)
+                    updatePhraseReviewUseCase(languageId, phraseDomain),
                 )
             }
         }.invokeOnCompletion {
@@ -171,7 +186,7 @@ class CompletePhraseViewModel @Inject constructor(
                 phrasesByLanguageCollections =
                 it.phrasesByLanguageCollections.toMutableList().apply {
                     add(phraseDomain)
-                }
+                },
             )
         }
     }
@@ -184,7 +199,7 @@ class CompletePhraseViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         phrasesByLanguageCollections = phraseDomain.data ?: emptyList(),
-                        isLoading = false
+                        isLoading = false,
                     )
                 }
             }
@@ -193,7 +208,7 @@ class CompletePhraseViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         phrasesByLanguageCollections = emptyList(),
-                        isLoading = false
+                        isLoading = false,
                     )
                 }
             }

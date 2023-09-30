@@ -43,8 +43,8 @@ This project takes advantage of best practices, and many popular libraries and t
     + [Kotlin Immutable Collections](https://github.com/Kotlin/kotlinx.collections.immutable)
   * [Retrofit](https://square.github.io/retrofit/)
   * [Jetpack](https://developer.android.com/jetpack)
-    * [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle) 
-    * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) 
+    * [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+    * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
     * [Room](https://developer.android.com/jetpack/androidx/releases/room)
   * [Hilt](https://dagger.dev/hilt/)
   * [Coil](https://github.com/coil-kt/coil)
@@ -70,7 +70,7 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition/v2)
   * [Text Speech](https://developer.android.com/reference/android/speech/tts/TextToSpeech)
   * [Language Identification](https://developers.google.com/ml-kit/language/identification)
-   
+
 * CI
   * [GitHub Actions](https://github.com/features/actions)
   * [Danger System](https://danger.systems/ruby/)
@@ -78,8 +78,8 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Paparazzi Snapshot](https://github.com/cashapp/paparazzi)
   * [Test Parameter Injector](https://github.com/google/TestParameterInjector)
 * Static analysis tools (linters)
-  * [Ktlint](https://github.com/pinterest/ktlint)
-  * [Detekt](https://github.com/arturbosch/detekt#with-gradle)
+  * [Detekt](https://github.com/arturbosch/detekt)
+  * [Spotless](https://github.com/diffplug/spotless)
   * [Compose Rules](https://github.com/twitter/compose-rules)
   * [Compose Lints](https://slackhq.github.io/compose-lints/rules/)
 * Gradle

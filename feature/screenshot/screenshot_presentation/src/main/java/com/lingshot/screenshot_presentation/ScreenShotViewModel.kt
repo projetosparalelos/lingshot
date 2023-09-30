@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 @file:Suppress("LongParameterList")
 
 package com.lingshot.screenshot_presentation
@@ -38,12 +53,12 @@ import com.phrase.phrasemaster_domain.usecase.SaveOrDeleteResult
 import com.phrase.phrasemaster_domain.usecase.SavePhraseLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class ScreenShotViewModel @Inject constructor(
@@ -53,7 +68,7 @@ class ScreenShotViewModel @Inject constructor(
     private val languageChoiceRepository: LanguageChoiceRepository,
     private val checkSavedPhraseUseCase: CheckSavedPhraseUseCase,
     private val savePhraseLanguageUseCase: SavePhraseLanguageUseCase,
-    private val languageIdentifierUseCase: LanguageIdentifierUseCase
+    private val languageIdentifierUseCase: LanguageIdentifierUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScreenShotUiState())
@@ -96,7 +111,7 @@ class ScreenShotViewModel @Inject constructor(
             is ScreenShotEvent.SetPhraseDomain -> {
                 setPhraseDomain(
                     screenShotEvent.originalText,
-                    screenShotEvent.translatedText
+                    screenShotEvent.translatedText,
                 )
             }
 
@@ -164,7 +179,7 @@ class ScreenShotViewModel @Inject constructor(
     private fun showLanguageSelectionAlert() {
         _uiState.update {
             it.copy(
-                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible
+                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible,
             )
         }
     }
@@ -174,7 +189,7 @@ class ScreenShotViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     isLanguageDialogVisible = !it.isLanguageDialogVisible,
-                    availableLanguage = getLanguage()
+                    availableLanguage = getLanguage(),
                 )
             }
         }
@@ -184,7 +199,7 @@ class ScreenShotViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 isLanguageDialogVisible = !it.isLanguageDialogVisible,
-                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible
+                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible,
             )
         }
     }
@@ -198,7 +213,7 @@ class ScreenShotViewModel @Inject constructor(
             it.copy(
                 screenShotStatus = statusDefault(),
                 correctedOriginalTextStatus = statusDefault(),
-                isPhraseSaved = false
+                isPhraseSaved = false,
             )
         }
     }
@@ -211,7 +226,7 @@ class ScreenShotViewModel @Inject constructor(
         val phraseDomain = PhraseDomain(
             id = originalText.encodeId(),
             original = originalText,
-            translate = translatedText
+            translate = translatedText,
         )
 
         if (_uiState.value.isPhraseSaved) {
@@ -221,7 +236,7 @@ class ScreenShotViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 phraseState = PhraseState(phraseDomain, true),
-                isEditFullScreenDialogVisible = true
+                isEditFullScreenDialogVisible = true,
             )
         }
     }
@@ -241,7 +256,7 @@ class ScreenShotViewModel @Inject constructor(
                 is Status.Error -> {
                     _uiState.update { value ->
                         value.copy(
-                            screenShotStatus = statusError(status.statusMessage)
+                            screenShotStatus = statusError(status.statusMessage),
                         )
                     }
                 }
@@ -258,19 +273,19 @@ class ScreenShotViewModel @Inject constructor(
                     messages = listOf(
                         MessageDomain(
                             role = "system",
-                            content = PROMPT_TRANSLATE(getLanguage()?.name?.lowercase())
+                            content = PROMPT_TRANSLATE(getLanguage()?.name?.lowercase()),
                         ),
                         MessageDomain(
                             role = "user",
-                            content = text
-                        )
-                    )
+                            content = text,
+                        ),
+                    ),
                 )
                 LanguageTranslationDomain(
                     originalText = text,
                     translatedText = chatGPTRepository.get(requestBody),
                     languageCodeFrom = languageIdentifierUseCase(text),
-                    languageCodeTo = getLanguage()?.languageCode.toString()
+                    languageCodeTo = getLanguage()?.languageCode.toString(),
                 )
             }, { status ->
                 _uiState.update { it.copy(screenShotStatus = status) }
@@ -286,13 +301,13 @@ class ScreenShotViewModel @Inject constructor(
                 messages = listOf(
                     MessageDomain(
                         role = "system",
-                        content = PROMPT_CORRECT_SPELLING
+                        content = PROMPT_CORRECT_SPELLING,
                     ),
                     MessageDomain(
                         role = "user",
-                        content = originalText
-                    )
-                )
+                        content = originalText,
+                    ),
+                ),
             )
             chatGPTRepository.get(requestBody)
         }, { status ->
@@ -311,7 +326,7 @@ class ScreenShotViewModel @Inject constructor(
                 is Status.Error -> {
                     _uiState.update { value ->
                         value.copy(
-                            screenShotStatus = statusError(status.statusMessage)
+                            screenShotStatus = statusError(status.statusMessage),
                         )
                     }
                 }
@@ -337,7 +352,7 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun saveOrDeletePhraseInLanguageCollection(
-        phraseDomain: PhraseDomain
+        phraseDomain: PhraseDomain,
     ) {
         viewModelScope.launch {
             _uiState.update {
@@ -353,7 +368,7 @@ class ScreenShotViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isPhraseSaved = result.isPhraseSaved,
-                            isEditFullScreenDialogVisible = false
+                            isEditFullScreenDialogVisible = false,
                         )
                     }
                 }
@@ -362,12 +377,12 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun checkPhraseInLanguageCollection(
-        originalText: String
+        originalText: String,
     ) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isPhraseSaved = checkSavedPhraseUseCase(originalText)
+                    isPhraseSaved = checkSavedPhraseUseCase(originalText),
                 )
             }
         }

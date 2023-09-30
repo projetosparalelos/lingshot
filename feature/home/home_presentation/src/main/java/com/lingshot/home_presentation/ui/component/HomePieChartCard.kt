@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.lingshot.home_presentation.ui.component
@@ -57,7 +72,7 @@ internal fun HomePierChartCard(
     onSelectedGoalDays: (Int) -> Unit,
     onSaveGoals: (Int) -> Unit,
     onToggleSetGoalsDialog: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val newGoals = goals?.first?.goal ?: 0
     val completed = goals?.second?.progressPhrases ?: 0
@@ -68,27 +83,27 @@ internal fun HomePierChartCard(
                 .fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             HomePieChart(
                 modifier = Modifier.size(120.dp),
                 goals = newGoals,
-                completed = completed
+                completed = completed,
             )
             Column {
                 HomePieChartIndicator(
                     value = newGoals.toString(),
                     type = stringResource(R.string.text_label_piechart_goals_home),
-                    color = LocalSchemeCustom.current.goalsPieChart
+                    color = LocalSchemeCustom.current.goalsPieChart,
                 )
                 HomePieChartIndicator(
                     value = completed.toString(),
                     type = stringResource(R.string.text_label_piechart_completed_home),
-                    color = LocalSchemeCustom.current.completedPieChart
+                    color = LocalSchemeCustom.current.completedPieChart,
                 )
             }
             IconButton(
-                onClick = onToggleSetGoalsDialog
+                onClick = onToggleSetGoalsDialog,
             ) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = null)
             }
@@ -113,16 +128,16 @@ internal fun HomePierChartCard(
             title = {
                 Text(
                     text = stringResource(R.string.text_title_goals_dialog_home),
-                    fontSize = 18.sp
+                    fontSize = 18.sp,
                 )
             },
             text = {
                 GoalsDropdownMenu(
                     selectedGoalDays = selectedGoalDays,
                     listCountPhrases = listCountPhrases,
-                    onSelectedGoalDays = onSelectedGoalDays
+                    onSelectedGoalDays = onSelectedGoalDays,
                 )
-            }
+            },
         )
     }
 }
@@ -132,7 +147,7 @@ private fun GoalsDropdownMenu(
     selectedGoalDays: Int,
     listCountPhrases: ImmutableList<Int>,
     onSelectedGoalDays: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -141,7 +156,7 @@ private fun GoalsDropdownMenu(
         expanded = expanded,
         onExpandedChange = {
             expanded = !expanded
-        }
+        },
     ) {
         OutlinedTextField(
             modifier = Modifier
@@ -151,26 +166,26 @@ private fun GoalsDropdownMenu(
                 },
             value = stringResource(
                 R.string.text_label_dropdown_menu_item_goals_home,
-                selectedGoalDays
+                selectedGoalDays,
             ),
             onValueChange = {},
             readOnly = true,
             label = {
                 Text(
-                    text = stringResource(R.string.text_label_count_dropdown_menu_goals_home)
+                    text = stringResource(R.string.text_label_count_dropdown_menu_goals_home),
                 )
             },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
+                    expanded = expanded,
                 )
             },
-            colors = ExposedDropdownMenuDefaults.textFieldColors()
+            colors = ExposedDropdownMenuDefaults.textFieldColors(),
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
         ) {
             listCountPhrases.forEach { selectedOption ->
                 DropdownMenuItem(
@@ -178,14 +193,14 @@ private fun GoalsDropdownMenu(
                         Text(
                             text = stringResource(
                                 R.string.text_label_dropdown_menu_item_goals_home,
-                                selectedOption
-                            )
+                                selectedOption,
+                            ),
                         )
                     },
                     onClick = {
                         onSelectedGoalDays(selectedOption)
                         expanded = false
-                    }
+                    },
                 )
             }
         }
@@ -196,7 +211,7 @@ private fun GoalsDropdownMenu(
 private fun HomePieChart(
     goals: Int,
     completed: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val schemeCustom = LocalSchemeCustom.current
     Canvas(modifier = modifier) {
@@ -206,7 +221,7 @@ private fun HomePieChart(
         } else {
             listOf(
                 adjustedCompleted.toFloat() / goals,
-                (goals - adjustedCompleted).toFloat() / goals
+                (goals - adjustedCompleted).toFloat() / goals,
             )
         }
 
@@ -230,7 +245,7 @@ private fun HomePieChart(
                 sweepAngle = sweepAngle,
                 size = Size(radius * 2, radius * 2),
                 useCenter = true,
-                style = Fill
+                style = Fill,
             )
             startAngle += sweepAngle
         }
@@ -249,7 +264,7 @@ private fun HomePieChartIndicator(value: String, type: String, color: Color) {
     }
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Canvas(modifier = Modifier.size(8.dp)) {
             drawCircle(color = color)
@@ -268,6 +283,6 @@ private fun HomePieChartCardPreview() {
         listCountPhrases = HomeUiState().goalDaysList,
         onSelectedGoalDays = {},
         onSaveGoals = {},
-        onToggleSetGoalsDialog = {}
+        onToggleSetGoalsDialog = {},
     )
 }
