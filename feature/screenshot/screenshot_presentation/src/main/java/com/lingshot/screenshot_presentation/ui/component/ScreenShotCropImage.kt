@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lingshot.screenshot_presentation.ui.component
 
 import android.content.ContentResolver
@@ -31,7 +47,7 @@ internal fun ScreenShotCropImage(
     onCroppedImage: (ActionCropImage?) -> Unit,
     modifier: Modifier = Modifier,
     imageUri: Uri? = rememberImageUriPath(),
-    onCropImageResult: (Bitmap?) -> Unit
+    onCropImageResult: (Bitmap?) -> Unit,
 ) {
     val cropImage = rememberCropImage()
 
@@ -42,7 +58,7 @@ internal fun ScreenShotCropImage(
                 setImageUriAsync(imageUri)
                 cropRectDefault()
             }
-        }
+        },
     ) { cropImageView ->
         when (actionCropImage) {
             ActionCropImage.CROPPED_IMAGE -> {
@@ -84,7 +100,7 @@ private fun rememberCropImage(context: Context = LocalContext.current) = remembe
         val cropImageOptions = CropImageOptions(
             guidelines = OFF,
             cornerShape = OVAL,
-            showProgressBar = false
+            showProgressBar = false,
         )
         layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
         setImageCropOptions(cropImageOptions)
@@ -115,11 +131,11 @@ private fun ScreenShotCropImagePreview() {
         imageUri = imageUri,
         actionCropImage = FOCUS_IMAGE,
         onCroppedImage = {},
-        onCropImageResult = {}
+        onCropImageResult = {},
     )
 }
 
 enum class ActionCropImage {
     CROPPED_IMAGE,
-    FOCUS_IMAGE
+    FOCUS_IMAGE,
 }

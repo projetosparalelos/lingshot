@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("LongParameterList")
 
 /*
@@ -65,7 +81,7 @@ object PlaceholderDefaults {
     val fadeAnimationSpec: InfiniteRepeatableSpec<Float> by lazy {
         infiniteRepeatable(
             animation = tween(delayMillis = 200, durationMillis = 600),
-            repeatMode = RepeatMode.Reverse
+            repeatMode = RepeatMode.Reverse,
         )
     }
 
@@ -75,7 +91,7 @@ object PlaceholderDefaults {
     val shimmerAnimationSpec: InfiniteRepeatableSpec<Float> by lazy {
         infiniteRepeatable(
             animation = tween(durationMillis = 1700, delayMillis = 200),
-            repeatMode = RepeatMode.Restart
+            repeatMode = RepeatMode.Restart,
         )
     }
 }
@@ -115,7 +131,7 @@ fun Modifier.placeholderDefault(
     shape: Shape = RectangleShape,
     highlight: PlaceholderHighlight? = null,
     placeholderFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
-    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() }
+    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
 ): Modifier = composed(
     inspectorInfo = debugInspectorInfo {
         name = "placeholder"
@@ -124,7 +140,7 @@ fun Modifier.placeholderDefault(
         properties["color"] = color
         properties["highlight"] = highlight
         properties["shape"] = shape
-    }
+    },
 ) {
     // Values used for caching purposes
     val lastSize = remember { Ref<Size>() }
@@ -143,12 +159,12 @@ fun Modifier.placeholderDefault(
     val placeholderAlpha by transition.animateFloat(
         transitionSpec = placeholderFadeTransitionSpec,
         label = "placeholder_fade",
-        targetValueByState = { placeholderVisible -> if (placeholderVisible) 1f else 0f }
+        targetValueByState = { placeholderVisible -> if (placeholderVisible) 1f else 0f },
     )
     val contentAlpha by transition.animateFloat(
         transitionSpec = contentFadeTransitionSpec,
         label = "content_fade",
-        targetValueByState = { placeholderVisible -> if (placeholderVisible) 0f else 1f }
+        targetValueByState = { placeholderVisible -> if (placeholderVisible) 0f else 1f },
     )
 
     // Run the optional animation spec and update the progress if the placeholder is visible
@@ -159,7 +175,7 @@ fun Modifier.placeholderDefault(
             initialValue = 0f,
             targetValue = 1f,
             animationSpec = animationSpec,
-            label = ""
+            label = "",
         ).value
     }
 
@@ -193,7 +209,7 @@ fun Modifier.placeholderDefault(
                         progress = highlightProgress,
                         lastOutline = lastOutline.value,
                         lastLayoutDirection = lastLayoutDirection.value,
-                        lastSize = lastSize.value
+                        lastSize = lastSize.value,
                     )
                 }
             } else if (placeholderAlpha >= 0.99f) {
@@ -205,7 +221,7 @@ fun Modifier.placeholderDefault(
                     progress = highlightProgress,
                     lastOutline = lastOutline.value,
                     lastLayoutDirection = lastLayoutDirection.value,
-                    lastSize = lastSize.value
+                    lastSize = lastSize.value,
                 )
             }
 
@@ -252,7 +268,7 @@ fun Modifier.placeholder(
     shape: Shape? = null,
     highlight: PlaceholderHighlight? = null,
     placeholderFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
-    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() }
+    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
 ): Modifier = composed {
     Modifier.placeholderDefault(
         visible = visible,
@@ -260,7 +276,7 @@ fun Modifier.placeholder(
         shape = shape ?: MaterialTheme.shapes.small,
         highlight = highlight,
         placeholderFadeTransitionSpec = placeholderFadeTransitionSpec,
-        contentFadeTransitionSpec = contentFadeTransitionSpec
+        contentFadeTransitionSpec = contentFadeTransitionSpec,
     )
 }
 
@@ -271,7 +287,7 @@ private fun DrawScope.drawPlaceholder(
     progress: Float,
     lastOutline: Outline?,
     lastLayoutDirection: LayoutDirection?,
-    lastSize: Size?
+    lastSize: Size?,
 ): Outline? {
     // shortcut to avoid Outline calculation and allocation
     if (shape === RectangleShape) {
@@ -281,7 +297,7 @@ private fun DrawScope.drawPlaceholder(
         if (highlight != null) {
             drawRect(
                 brush = highlight.brush(progress, size),
-                alpha = highlight.alpha(progress)
+                alpha = highlight.alpha(progress),
             )
         }
         // We didn't create an outline so return null
@@ -300,7 +316,7 @@ private fun DrawScope.drawPlaceholder(
         drawOutline(
             outline = outline,
             brush = highlight.brush(progress, size),
-            alpha = highlight.alpha(progress)
+            alpha = highlight.alpha(progress),
         )
     }
 
@@ -321,7 +337,7 @@ private fun DrawScope.drawPlaceholder(
 fun PlaceholderDefaults.color(
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = contentColorFor(backgroundColor),
-    contentAlpha: Float = 0.1f
+    contentAlpha: Float = 0.1f,
 ): Color = contentColor.copy(contentAlpha).compositeOver(backgroundColor)
 
 /**
@@ -335,7 +351,7 @@ fun PlaceholderDefaults.color(
 @Composable
 fun PlaceholderDefaults.fadeHighlightColor(
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
-    alpha: Float = 0.3f
+    alpha: Float = 0.3f,
 ): Color = backgroundColor.copy(alpha = alpha)
 
 /**
@@ -349,14 +365,14 @@ fun PlaceholderDefaults.fadeHighlightColor(
 @Composable
 fun PlaceholderDefaults.shimmerHighlightColor(
     backgroundColor: Color = MaterialTheme.colorScheme.inverseSurface,
-    alpha: Float = 0.75f
+    alpha: Float = 0.75f,
 ): Color {
     return backgroundColor.copy(alpha = alpha)
 }
 
 private inline fun DrawScope.withLayer(
     paint: Paint,
-    drawBlock: DrawScope.() -> Unit
+    drawBlock: DrawScope.() -> Unit,
 ) = drawIntoCanvas { canvas ->
     canvas.saveLayer(size.toRect(), paint)
     drawBlock()

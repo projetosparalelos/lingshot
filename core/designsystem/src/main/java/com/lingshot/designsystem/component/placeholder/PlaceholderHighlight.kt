@@ -1,11 +1,11 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2021 Lingshot
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,7 +47,7 @@ interface PlaceholderHighlight {
      */
     fun brush(
         @FloatRange(from = 0.0, to = 1.0) progress: Float,
-        size: Size
+        size: Size,
     ): Brush
 
     /**
@@ -63,10 +63,10 @@ interface PlaceholderHighlight {
 
 @Composable
 fun PlaceholderHighlight.Companion.fade(
-    animationSpec: InfiniteRepeatableSpec<Float> = PlaceholderDefaults.fadeAnimationSpec
+    animationSpec: InfiniteRepeatableSpec<Float> = PlaceholderDefaults.fadeAnimationSpec,
 ): PlaceholderHighlight = Fade(
     highlightColor = PlaceholderDefaults.fadeHighlightColor(),
-    animationSpec = animationSpec
+    animationSpec = animationSpec,
 )
 
 /**
@@ -85,16 +85,16 @@ fun PlaceholderHighlight.Companion.fade(
 @Composable
 fun PlaceholderHighlight.Companion.shimmer(
     animationSpec: InfiniteRepeatableSpec<Float> = PlaceholderDefaults.shimmerAnimationSpec,
-    @FloatRange(from = 0.0, to = 1.0) progressForMaxAlpha: Float = 0.6f
+    @FloatRange(from = 0.0, to = 1.0) progressForMaxAlpha: Float = 0.6f,
 ): PlaceholderHighlight = Shimmer(
     highlightColor = PlaceholderDefaults.shimmerHighlightColor(),
     animationSpec = animationSpec,
-    progressForMaxAlpha = progressForMaxAlpha
+    progressForMaxAlpha = progressForMaxAlpha,
 )
 
 private data class Fade(
     private val highlightColor: Color,
-    override val animationSpec: InfiniteRepeatableSpec<Float>
+    override val animationSpec: InfiniteRepeatableSpec<Float>,
 ) : PlaceholderHighlight {
     private val brush = SolidColor(highlightColor)
 
@@ -105,19 +105,19 @@ private data class Fade(
 private data class Shimmer(
     private val highlightColor: Color,
     override val animationSpec: InfiniteRepeatableSpec<Float>,
-    private val progressForMaxAlpha: Float = 0.6f
+    private val progressForMaxAlpha: Float = 0.6f,
 ) : PlaceholderHighlight {
     override fun brush(
         progress: Float,
-        size: Size
+        size: Size,
     ): Brush = Brush.radialGradient(
         colors = listOf(
             highlightColor.copy(alpha = 0f),
             highlightColor,
-            highlightColor.copy(alpha = 0f)
+            highlightColor.copy(alpha = 0f),
         ),
         center = Offset(x = 0f, y = 0f),
-        radius = (max(size.width, size.height) * progress * 2).coerceAtLeast(0.01f)
+        radius = (max(size.width, size.height) * progress * 2).coerceAtLeast(0.01f),
     )
 
     override fun alpha(progress: Float): Float = when {
@@ -126,7 +126,7 @@ private data class Shimmer(
             lerp(
                 start = 0f,
                 stop = 1f,
-                fraction = progress / progressForMaxAlpha
+                fraction = progress / progressForMaxAlpha,
             )
         }
         // From ProgressForOpaqueAlpha..1f we animate from 1..0
@@ -134,7 +134,7 @@ private data class Shimmer(
             lerp(
                 start = 1f,
                 stop = 0f,
-                fraction = (progress - progressForMaxAlpha) / (1f - progressForMaxAlpha)
+                fraction = (progress - progressForMaxAlpha) / (1f - progressForMaxAlpha),
             )
         }
     }

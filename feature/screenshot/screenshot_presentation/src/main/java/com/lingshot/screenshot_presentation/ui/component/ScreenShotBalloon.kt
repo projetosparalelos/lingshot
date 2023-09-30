@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lingshot.screenshot_presentation.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +37,7 @@ import com.skydoves.balloon.compose.setBackgroundColor
 internal fun ScreenShotBalloon(
     text: String,
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     Balloon(
         modifier = modifier,
@@ -33,9 +49,9 @@ internal fun ScreenShotBalloon(
                 fontSize = 14.sp,
                 lineHeight = 16.sp,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
-                text = text.limitCharactersWithEllipsize(280)
+                text = text.limitCharactersWithEllipsize(280),
             )
-        }
+        },
     ) { balloonWindow ->
         balloonWindow.showAtCenter(centerAlign = START)
         balloonWindow.setOnBalloonDismissListener(onDismiss)

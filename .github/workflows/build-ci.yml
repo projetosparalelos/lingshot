@@ -96,14 +96,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Check code formatting
-        run: ./gradlew ktlintCheck
-
-      - name: Upload code formatting
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: Artifact ktlint
-          path: '**/reports/ktlint/ktlintMainSourceSetCheck/'
+        run: ./gradlew spotlessCheck
 
       - name: Check code smells
         if: always()
@@ -130,12 +123,6 @@ jobs:
         with:
           ruby-version: 3.0
           bundler-cache: true
-
-      - name: Download code formatting
-        uses: actions/download-artifact@v3
-        with:
-          name: Artifact ktlint
-          path: '**/reports/ktlint/ktlintMainSourceSetCheck/'
 
       - name: Download code smells
         uses: actions/download-artifact@v3

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 
 package com.lingshot.screenshot_presentation.ui.component
@@ -64,27 +80,27 @@ internal fun ScreenShotTranslateBottomSheet(
     onSetPhraseDomain: (String, String) -> Unit,
     onToggleDictionaryFullScreenDialog: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     var correctedOriginalText by remember { mutableStateOf(languageTranslationDomain.originalText) }
     ModalBottomSheet(
         modifier = modifier,
         sheetState = sheetState,
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(R.string.text_title_translate_bottom_sheet),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 ScreenShotButtonAddToList(
                     isPhraseSaved = isPhraseSaved,
@@ -92,16 +108,16 @@ internal fun ScreenShotTranslateBottomSheet(
                     onSetPhraseDomain = {
                         onSetPhraseDomain(
                             correctedOriginalText,
-                            languageTranslationDomain.translatedText.toString()
+                            languageTranslationDomain.translatedText.toString(),
                         )
-                    }
+                    },
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     modifier = Modifier
@@ -110,7 +126,7 @@ internal fun ScreenShotTranslateBottomSheet(
                         .padding(12.dp),
                     imageVector = Icons.Default.Translate,
                     tint = MaterialTheme.colorScheme.onPrimary,
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
 
@@ -118,7 +134,7 @@ internal fun ScreenShotTranslateBottomSheet(
                     Text(
                         text = languageTranslationDomain.translatedText.orEmpty(),
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     ScreenShotCorrectedOriginalText(
@@ -126,9 +142,9 @@ internal fun ScreenShotTranslateBottomSheet(
                         isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
                         onToggleDictionaryFullScreenDialog = {
                             onToggleDictionaryFullScreenDialog(
-                                languageTranslationDomain.dictionaryUrl(it)
+                                languageTranslationDomain.dictionaryUrl(it),
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -153,7 +169,7 @@ private fun ScreenShotButtonAddToList(
     isPhraseSaved: Boolean,
     isLoadingStatus: Boolean,
     onSetPhraseDomain: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val iconTint = if (isPhraseSaved) {
         Color.Red
@@ -164,21 +180,21 @@ private fun ScreenShotButtonAddToList(
     FilledTonalButton(
         modifier = modifier,
         enabled = !isLoadingStatus,
-        onClick = onSetPhraseDomain
+        onClick = onSetPhraseDomain,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = Icons.Default.Favorite,
                 tint = iconTint,
-                contentDescription = null
+                contentDescription = null,
             )
             AnimatedVisibility(
                 visible = isPhraseSaved,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically),
             ) {
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
-                    text = stringResource(R.string.text_button_add_to_list_bottom_sheet)
+                    text = stringResource(R.string.text_button_add_to_list_bottom_sheet),
                 )
             }
         }
@@ -190,26 +206,26 @@ private fun ScreenShotCorrectedOriginalText(
     correctedOriginalText: String,
     isLoadingStatus: Boolean,
     onToggleDictionaryFullScreenDialog: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
             imageVector = Icons.Default.SubdirectoryArrowRight,
-            contentDescription = null
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.width(4.dp))
         ScreenShotOpenDictionaryByWord(
             modifier = Modifier
                 .placeholder(
                     visible = isLoadingStatus,
-                    highlight = PlaceholderHighlight.shimmer()
+                    highlight = PlaceholderHighlight.shimmer(),
                 ),
             text = correctedOriginalText,
-            onToggleDictionaryFullScreenDialog = onToggleDictionaryFullScreenDialog
+            onToggleDictionaryFullScreenDialog = onToggleDictionaryFullScreenDialog,
         )
     }
 }
@@ -218,7 +234,7 @@ private fun ScreenShotCorrectedOriginalText(
 fun ScreenShotOpenDictionaryByWord(
     text: String,
     modifier: Modifier = Modifier,
-    onToggleDictionaryFullScreenDialog: (String) -> Unit
+    onToggleDictionaryFullScreenDialog: (String) -> Unit,
 ) {
     val words = text.split(" ")
     FlowRow(modifier = modifier) {
@@ -229,7 +245,7 @@ fun ScreenShotOpenDictionaryByWord(
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier
                     .clickable { onToggleDictionaryFullScreenDialog(word) }
-                    .padding(horizontal = 4.dp)
+                    .padding(horizontal = 4.dp),
             )
         }
     }
@@ -243,7 +259,7 @@ private fun ScreenShotTranslateBottomSheetPreview() {
             "Original",
             "Translated",
             "en",
-            "pt"
+            "pt",
         ),
         isPhraseSaved = false,
         correctedOriginalTextStatus = statusSuccess("Corrected original"),
@@ -251,6 +267,6 @@ private fun ScreenShotTranslateBottomSheetPreview() {
         onCheckPhraseInLanguageCollection = {},
         onSetPhraseDomain = { _, _ -> },
         onToggleDictionaryFullScreenDialog = {},
-        onDismiss = {}
+        onDismiss = {},
     )
 }

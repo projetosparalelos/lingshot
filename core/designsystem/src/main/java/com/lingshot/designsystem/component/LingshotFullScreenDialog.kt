@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.lingshot.designsystem.component
@@ -22,21 +38,21 @@ fun LingshotFullScreenDialog(
     modifier: Modifier = Modifier,
     title: String = "",
     onActions: @Composable RowScope.() -> Unit = {},
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     AlertDialog(
         modifier = modifier,
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             dismissOnBackPress = true,
-            usePlatformDefaultWidth = false
-        )
+            usePlatformDefaultWidth = false,
+        ),
     ) {
         LingshotLayout(
             title = title,
             icon = Icons.Default.Close,
             onClickNavigation = onDismiss,
-            actions = onActions
+            actions = onActions,
         ) {
             content()
         }
@@ -45,7 +61,7 @@ fun LingshotFullScreenDialog(
 
 @Composable
 fun LingshotFullScreenDialogStatusBarColor(
-    color: Color = MaterialTheme.colorScheme.surface
+    color: Color = MaterialTheme.colorScheme.surface,
 ) {
     val systemUiController: SystemUiController = rememberSystemUiController()
 

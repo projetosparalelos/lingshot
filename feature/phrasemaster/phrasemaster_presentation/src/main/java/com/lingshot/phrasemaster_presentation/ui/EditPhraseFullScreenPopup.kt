@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.lingshot.phrasemaster_presentation.ui
@@ -37,7 +53,7 @@ fun EditPhraseFullScreenDialog(
     phraseState: PhraseState,
     onSavePhraseInLanguageCollection: (PhraseDomain) -> Unit,
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
     var state by remember { mutableStateOf(phraseState) }
@@ -56,38 +72,38 @@ fun EditPhraseFullScreenDialog(
             }) {
                 Text(text = stringResource(R.string.text_button_save_edit_phrase))
             }
-        }
+        },
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = state.phraseDomain.original,
                 onValueChange = { newValue ->
                     state = state.copy(
-                        phraseDomain = state.phraseDomain.copy(original = newValue)
+                        phraseDomain = state.phraseDomain.copy(original = newValue),
                     )
 
                     state.updateParenthesesStatus()
                 },
                 label = {
                     Text(
-                        text = stringResource(R.string.text_label_original_input_edit_phrase)
+                        text = stringResource(R.string.text_label_original_input_edit_phrase),
                     )
-                }
+                },
             )
             MarkdownText(
                 color = MaterialTheme.colorScheme.onSurface,
-                markdown = stringResource(R.string.text_markdown_enclose_word_edit_phrase)
+                markdown = stringResource(R.string.text_markdown_enclose_word_edit_phrase),
             )
             AnimatedVisibility(visible = state.hasWordInDoubleParentheses.not()) {
                 MarkdownText(
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(top = 4.dp),
-                    markdown = stringResource(R.string.text_markdown_alert_enclose_word_edit_phrase)
+                    markdown = stringResource(R.string.text_markdown_alert_enclose_word_edit_phrase),
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -96,14 +112,14 @@ fun EditPhraseFullScreenDialog(
                 value = state.phraseDomain.translate,
                 onValueChange = { newValue ->
                     state = state.copy(
-                        phraseDomain = state.phraseDomain.copy(translate = newValue)
+                        phraseDomain = state.phraseDomain.copy(translate = newValue),
                     )
                 },
                 label = {
                     Text(
-                        text = stringResource(R.string.text_label_translate_input_edit_phrase)
+                        text = stringResource(R.string.text_label_translate_input_edit_phrase),
                     )
-                }
+                },
             )
         }
     }
@@ -114,7 +130,7 @@ fun EditPhraseFullScreenDialog(
         Toast.makeText(
             context,
             stringResource(R.string.text_message_invalid_language),
-            Toast.LENGTH_LONG
+            Toast.LENGTH_LONG,
         ).show()
     }
 }
@@ -127,17 +143,17 @@ private fun EditPhraseFullScreenDialogPreview() {
         phraseState = PhraseState(
             PhraseDomain(
                 "What's your name?",
-                "Qual seu nome?"
-            )
+                "Qual seu nome?",
+            ),
         ),
-        onSavePhraseInLanguageCollection = {}
+        onSavePhraseInLanguageCollection = {},
     )
 }
 
 @Immutable
 data class PhraseState(
     val phraseDomain: PhraseDomain = PhraseDomain(),
-    val isValidLanguage: Boolean = true
+    val isValidLanguage: Boolean = true,
 ) {
     var hasWordInDoubleParentheses by mutableStateOf(true)
         private set

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
 
 package com.lingshot.swipepermission_presentation.ui
@@ -63,7 +79,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun SwipePermissionRoute(
     viewModel: SwipePermissionViewModel = hiltViewModel(),
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -75,7 +91,7 @@ internal fun SwipePermissionRoute(
         uiState = uiState,
         onSignIn = viewModel::signIn,
         handleEvent = viewModel::handleEvent,
-        onNavigateToHome = onNavigateToHome
+        onNavigateToHome = onNavigateToHome,
     )
 }
 
@@ -86,7 +102,7 @@ internal fun SwipePermissionScreen(
     handleEvent: (SwipePermissionEvent) -> Unit,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
 ) {
     val permissionState = rememberMultiplePermissionsState(PERMISSIONS)
     val scope = rememberCoroutineScope()
@@ -103,7 +119,7 @@ internal fun SwipePermissionScreen(
         },
         pageCount = {
             uiState.swipePermissionItemList.size
-        }
+        },
     )
 
     val launcherOverlayPermission =
@@ -125,7 +141,7 @@ internal fun SwipePermissionScreen(
             modifier = modifier,
             state = pagerState,
             userScrollEnabled = false,
-            key = { uiState.swipePermissionItemList[it] }
+            key = { uiState.swipePermissionItemList[it] },
         ) { index ->
             Column(
                 modifier = Modifier
@@ -133,7 +149,7 @@ internal fun SwipePermissionScreen(
                     .padding(horizontal = 16.dp)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
             ) {
                 val item = uiState.swipePermissionItemList[index]
 
@@ -143,7 +159,7 @@ internal fun SwipePermissionScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     text = stringResource(id = item.title),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
                 )
 
                 SwipePermissionAnimationIcon(icon = item.icon)
@@ -156,7 +172,7 @@ internal fun SwipePermissionScreen(
 
                 Text(
                     text = stringResource(id = text),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
 
                 if (item == INITIAL) {
@@ -164,10 +180,10 @@ internal fun SwipePermissionScreen(
                         onSignIn = {
                             scope.launch {
                                 launcherSignIn.launch(
-                                    intentSignIn(onSignIn() ?: return@launch)
+                                    intentSignIn(onSignIn() ?: return@launch),
                                 )
                             }
-                        }
+                        },
                     )
                 } else {
                     Button(onClick = {
@@ -175,7 +191,7 @@ internal fun SwipePermissionScreen(
                             READ_AND_WRITE -> {
                                 if (permissionState.shouldShowRationale) {
                                     context.startActivity(
-                                        intentApplicationDetailsPermission(context)
+                                        intentApplicationDetailsPermission(context),
                                     )
                                 } else {
                                     permissionState.launchMultiplePermissionRequest()
@@ -185,7 +201,7 @@ internal fun SwipePermissionScreen(
                             DISPLAY_OVERLAY -> {
                                 if (!hasOverlayPermission(context)) {
                                     launcherOverlayPermission.launch(
-                                        intentOverlayPermission()
+                                        intentOverlayPermission(),
                                     )
                                 } else {
                                     onNavigateToHome()
@@ -206,7 +222,7 @@ internal fun SwipePermissionScreen(
     LaunchedEffect(
         key1 = permissionState.allPermissionsGranted,
         key2 = uiState.isSignInSuccessful,
-        key3 = uiState.signInError
+        key3 = uiState.signInError,
     ) {
         if (uiState.isSignInSuccessful) {
             if (permissionState.allPermissionsGranted) {
@@ -233,7 +249,7 @@ private fun SwipePermissionScreenPreview() {
         uiState = SwipePermissionUiState(),
         onSignIn = { null },
         handleEvent = {},
-        onNavigateToHome = {}
+        onNavigateToHome = {},
     )
 }
 
@@ -241,24 +257,24 @@ enum class SwipePermissionItem(
     @StringRes val title: Int,
     @StringRes val text: Int,
     @StringRes val secondText: Int? = null,
-    @RawRes val icon: Int
+    @RawRes val icon: Int,
 ) {
     INITIAL(
         title = R.string.text_title_swipe_initial,
         text = R.string.text_message_swipe_initial,
-        icon = R.raw.swipe_initial_animation
+        icon = R.raw.swipe_initial_animation,
     ),
     READ_AND_WRITE(
         title = R.string.text_title_swipe_read_and_write,
         text = R.string.text_message_swipe_read_and_write,
         secondText = R.string.text_second_message_swipe_read_and_write,
-        icon = R.raw.swipe_read_and_write_animation
+        icon = R.raw.swipe_read_and_write_animation,
     ),
     DISPLAY_OVERLAY(
         title = R.string.text_title_swipe_overlay,
         text = R.string.text_message_swipe_overlay,
-        icon = R.raw.swipe_overlay_animation
-    );
+        icon = R.raw.swipe_overlay_animation,
+    ),
 }
 
 private fun intentSignIn(intentSender: IntentSender) =
@@ -270,5 +286,5 @@ private fun intentOverlayPermission() =
 fun intentApplicationDetailsPermission(context: Context) =
     Intent(
         ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.parse("package:${context.packageName}")
+        Uri.parse("package:${context.packageName}"),
     )

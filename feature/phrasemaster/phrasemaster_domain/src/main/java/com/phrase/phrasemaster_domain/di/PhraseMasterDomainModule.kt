@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.phrase.phrasemaster_domain.di
 
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
@@ -27,75 +43,75 @@ object PhraseMasterDomainModule {
     @Provides
     fun provideSavePhraseLanguageUseCase(
         phraseCollectionRepository: PhraseCollectionRepository,
-        languageIdentifierUseCase: LanguageIdentifierUseCase
+        languageIdentifierUseCase: LanguageIdentifierUseCase,
     ): SavePhraseLanguageUseCase = SavePhraseLanguageUseCase(
         phraseCollectionRepository,
-        languageIdentifierUseCase
+        languageIdentifierUseCase,
     )
 
     @Singleton
     @Provides
     fun provideCheckSavedPhraseUseCase(
-        phraseCollectionRepository: PhraseCollectionRepository
+        phraseCollectionRepository: PhraseCollectionRepository,
     ): CheckSavedPhraseUseCase = CheckSavedPhraseUseCase(
-        phraseCollectionRepository
+        phraseCollectionRepository,
     )
 
     @Singleton
     @Provides
     fun provideRetrieveLanguageCollectionsUseCase(
-        phraseCollectionRepository: PhraseCollectionRepository
+        phraseCollectionRepository: PhraseCollectionRepository,
     ): RetrieveLanguageCollectionsUseCase = RetrieveLanguageCollectionsUseCase(
-        phraseCollectionRepository
+        phraseCollectionRepository,
     )
 
     @Singleton
     @Provides
     fun provideRetrievePhrasesForNextReviewUseCase(
-        phraseCollectionRepository: PhraseCollectionRepository
+        phraseCollectionRepository: PhraseCollectionRepository,
     ): RetrievePhrasesForNextReviewUseCase = RetrievePhrasesForNextReviewUseCase(
-        phraseCollectionRepository
+        phraseCollectionRepository,
     )
 
     @Singleton
     @Provides
     fun provideRetrievePhrasesPendingReviewUseCase(
-        phraseCollectionRepository: PhraseCollectionRepository
+        phraseCollectionRepository: PhraseCollectionRepository,
     ): RetrievePhrasesPendingReviewUseCase = RetrievePhrasesPendingReviewUseCase(
-        phraseCollectionRepository
+        phraseCollectionRepository,
     )
 
     @Singleton
     @Provides
     fun provideUpdatePhraseReviewUseCase(
-        phraseCollectionRepository: PhraseCollectionRepository
+        phraseCollectionRepository: PhraseCollectionRepository,
     ): UpdatePhraseReviewUseCase = UpdatePhraseReviewUseCase(
-        phraseCollectionRepository
+        phraseCollectionRepository,
     )
 
     @Singleton
     @Provides
     fun provideLanguageCollectionMapper(
         languageChoiceRepository: LanguageChoiceRepository,
-        languageIdentifierUseCase: LanguageIdentifierUseCase
+        languageIdentifierUseCase: LanguageIdentifierUseCase,
     ): LanguageCollectionMapper = LanguageCollectionMapper(
         languageChoiceRepository,
-        languageIdentifierUseCase
+        languageIdentifierUseCase,
     )
 
     @Singleton
     @Provides
     fun provideRetrieveConsecutiveDaysUseCase(
-        consecutiveDaysRepository: ConsecutiveDaysRepository
+        consecutiveDaysRepository: ConsecutiveDaysRepository,
     ): RetrieveConsecutiveDaysUseCase = RetrieveConsecutiveDaysUseCase(
-        consecutiveDaysRepository
+        consecutiveDaysRepository,
     )
 
     @Singleton
     @Provides
     fun provideUpdateConsecutiveDaysUseCase(
-        consecutiveDaysRepository: ConsecutiveDaysRepository
+        consecutiveDaysRepository: ConsecutiveDaysRepository,
     ): UpdateConsecutiveDaysUseCase = UpdateConsecutiveDaysUseCase(
-        consecutiveDaysRepository
+        consecutiveDaysRepository,
     )
 }

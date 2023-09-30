@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.lingshot.completephrase_presentation.ui.component
@@ -43,10 +59,10 @@ internal fun CompletePhraseAnswerSheet(
     correctAnswer: String,
     onContinue: () -> Unit,
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val state = rememberModalBottomSheetState(
-        confirmValueChange = { false }
+        confirmValueChange = { false },
     )
 
     ModalBottomSheet(
@@ -56,35 +72,35 @@ internal fun CompletePhraseAnswerSheet(
         shape = RoundedCornerShape(0.dp),
         sheetState = state,
         dragHandle = null,
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = answerState.icon,
                 tint = answerState.itemColor,
-                contentDescription = null
+                contentDescription = null,
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column(
                 modifier = Modifier.weight(2f),
-                horizontalAlignment = Alignment.Start
+                horizontalAlignment = Alignment.Start,
             ) {
                 Text(
                     text = answerState.phrase,
-                    color = answerState.itemColor
+                    color = answerState.itemColor,
                 )
                 if (!answerState.isSuccess) {
                     val text = buildAnnotatedString {
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                             append(
                                 stringResource(
-                                    R.string.text_label_sheet_correct_answer_complete_phrase
-                                )
+                                    R.string.text_label_sheet_correct_answer_complete_phrase,
+                                ),
                             )
                         }
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Light)) {
@@ -93,14 +109,14 @@ internal fun CompletePhraseAnswerSheet(
                     }
                     Text(
                         text = text,
-                        color = answerState.itemColor
+                        color = answerState.itemColor,
                     )
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
             FilledTonalButton(
                 colors = answerState.buttonColor,
-                onClick = onContinue
+                onClick = onContinue,
             ) {
                 Text(stringResource(R.string.text_button_continue_answer_sheet_complete_phrase))
             }
@@ -115,13 +131,13 @@ private fun CompletePhraseAnswerSheetPreview() {
         answerState = AnswerState(),
         correctAnswer = "go",
         onContinue = {},
-        onDismiss = {}
+        onDismiss = {},
     )
 }
 
 @Stable
 data class AnswerState(
-    val isSuccess: Boolean = true
+    val isSuccess: Boolean = true,
 ) {
     private val localSchemeCustom
         @Composable get() = LocalSchemeCustom.current
@@ -169,6 +185,6 @@ data class AnswerState(
                     localSchemeCustom.onAnswerSuccess
                 } else {
                     localSchemeCustom.onAnswerError
-                }
+                },
             )
 }

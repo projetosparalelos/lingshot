@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lingshot.home_presentation.ui.component
 
 import androidx.compose.foundation.clickable
@@ -33,7 +49,7 @@ internal fun HomeCollectionCard(
     totalPhrases: Int,
     phrasesPlayed: Int,
     modifier: Modifier = Modifier,
-    onNavigateToCompletePhrase: (String, String, String) -> Unit
+    onNavigateToCompletePhrase: (String, String, String) -> Unit,
 ) {
     val languageFrom = AvailableLanguage.from(languageCollectionDomain.from)
     val languageTo = AvailableLanguage.from(languageCollectionDomain.to)
@@ -41,8 +57,8 @@ internal fun HomeCollectionCard(
     ElevatedCard(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onSecondary
-        )
+            containerColor = MaterialTheme.colorScheme.onSecondary,
+        ),
     ) {
         Column(
             modifier = Modifier
@@ -53,13 +69,13 @@ internal fun HomeCollectionCard(
                     }
                 }
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             val text = buildAnnotatedString {
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)) {
                     val displayName = languageFrom?.displayName?.let { stringResource(id = it) }
                     append(
-                        "${languageFrom?.flagEmoji} $displayName"
+                        "${languageFrom?.flagEmoji} $displayName",
                     )
                 }
                 append(" ")
@@ -68,10 +84,10 @@ internal fun HomeCollectionCard(
                     append(
                         String.format(
                             stringResource(
-                                id = R.string.text_title_language_from_to_collection_card_home
+                                id = R.string.text_title_language_from_to_collection_card_home,
                             ),
-                            displayName
-                        )
+                            displayName,
+                        ),
                     )
                 }
             }
@@ -85,15 +101,15 @@ internal fun HomeCollectionCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(12.dp)
-                    .clip(RoundedCornerShape(4.dp))
+                    .clip(RoundedCornerShape(4.dp)),
             )
             Text(
                 text = String.format(
                     stringResource(id = R.string.text_label_phrases_played_and_total_phrases_home),
                     phrasesPlayed,
-                    totalPhrases
+                    totalPhrases,
                 ),
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
             )
         }
     }
@@ -106,6 +122,6 @@ private fun HomeCollectionCardPreview() {
         languageCollectionDomain = LanguageCollectionDomain(),
         totalPhrases = 1,
         phrasesPlayed = 1,
-        onNavigateToCompletePhrase = { _, _, _ -> }
+        onNavigateToCompletePhrase = { _, _, _ -> },
     )
 }

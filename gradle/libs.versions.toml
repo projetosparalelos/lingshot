@@ -48,8 +48,8 @@ markdown = "0.3.5"
 jUnit = "4.13.2"
 testParameterInjector = "1.8"
 
-ktlint = "11.5.1"
 detekt = "1.22.0"
+spotless = "6.22.0"
 composeDetekt = "0.0.26"
 composeLintChecks = "1.2.0"
 
@@ -57,7 +57,7 @@ composeLintChecks = "1.2.0"
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt"}
-ktlint-plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint"}
+spotless-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 android-r8-plugin = { module = "com.android.tools:r8", version.ref = "androidR8"}
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 

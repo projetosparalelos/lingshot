@@ -1,6 +1,22 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(
     ExperimentalPermissionsApi::class,
-    ExperimentalLayoutApi::class
+    ExperimentalLayoutApi::class,
 )
 
 package com.lingshot.languagelearn.presentation.ui
@@ -84,7 +100,7 @@ fun MainRoute(viewModel: MainViewModel) {
     MainScreen(
         uiState = uiState,
         isSignInSuccessful = isSignInSuccessful,
-        handleEvent = viewModel::handleEvent
+        handleEvent = viewModel::handleEvent,
     )
 }
 
@@ -95,7 +111,7 @@ private fun MainScreen(
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
     lingshotAppState: LingshotAppState = rememberLingshotAppState(),
-    handleEvent: (MainEvent) -> Unit
+    handleEvent: (MainEvent) -> Unit,
 ) {
     val activity = context.findActivity()
 
@@ -139,10 +155,10 @@ private fun MainScreen(
             AnimatedVisibility(
                 visible = shouldShowHomeScreen,
                 enter = fadeIn(),
-                exit = fadeOut()
+                exit = fadeOut(),
             ) {
                 val textMessageNotificationPermission = stringResource(
-                    id = R.string.text_message_notification_permission
+                    id = R.string.text_message_notification_permission,
                 )
                 Balloon(builder = rememberBalloonBuilder()) { balloonWindow ->
                     HomeToggleServiceButton(
@@ -151,12 +167,12 @@ private fun MainScreen(
                             if (notificationPermissionState?.status?.isGranted?.not() == true) {
                                 if (notificationPermissionState.status.shouldShowRationale) {
                                     context.startActivity(
-                                        intentApplicationDetailsPermission(context)
+                                        intentApplicationDetailsPermission(context),
                                     )
                                     makeText(
                                         context,
                                         textMessageNotificationPermission,
-                                        LENGTH_LONG
+                                        LENGTH_LONG,
                                     ).show()
                                 } else {
                                     notificationPermissionState.launchPermissionRequest()
@@ -173,7 +189,7 @@ private fun MainScreen(
                         },
                         onFinishActivity = {
                             activity?.finish()
-                        }
+                        },
                     )
                     if (uiState.isBalloonOverlayVisible) {
                         balloonWindow.apply {
@@ -194,16 +210,16 @@ private fun MainScreen(
                     .consumeWindowInsets(padding)
                     .windowInsetsPadding(
                         WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Horizontal
-                        )
-                    )
+                            WindowInsetsSides.Horizontal,
+                        ),
+                    ),
             ) {
                 LingshotNavHost(
                     navController = lingshotAppState.navController,
-                    allPermissionsAndIsSignInGranted = allPermissionsAndIsSignInGranted
+                    allPermissionsAndIsSignInGranted = allPermissionsAndIsSignInGranted,
                 )
             }
-        }
+        },
     )
 }
 
@@ -212,7 +228,7 @@ private fun rememberBalloonBuilder(
     context: Context = LocalContext.current,
     colorSchemeCustom: SchemeCustom = LocalSchemeCustom.current,
     containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
-    textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
+    textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
 ) = rememberBalloonBuilder {
     setText(context.getString(R.string.text_message_balloon_overlay_screenshot))
     setTextSize(14f)

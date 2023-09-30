@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:SuppressLint("NewApi")
 
 package com.lingshot.designsystem.theme
@@ -43,7 +59,7 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = md_theme_light_inversePrimary,
     surfaceTint = md_theme_light_surfaceTint,
     outlineVariant = md_theme_light_outlineVariant,
-    scrim = md_theme_light_scrim
+    scrim = md_theme_light_scrim,
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -75,7 +91,7 @@ private val DarkColorScheme = darkColorScheme(
     inversePrimary = md_theme_dark_inversePrimary,
     surfaceTint = md_theme_dark_surfaceTint,
     outlineVariant = md_theme_dark_outlineVariant,
-    scrim = md_theme_dark_scrim
+    scrim = md_theme_dark_scrim,
 )
 
 private val LightAndroidSchemeCustom = SchemeCustom(
@@ -88,7 +104,7 @@ private val LightAndroidSchemeCustom = SchemeCustom(
     answerError = light_answerError,
     onAnswerError = light_onAnswerError,
     answerErrorContainer = light_answerErrorContainer,
-    onAnswerErrorContainer = light_onAnswerErrorContainer
+    onAnswerErrorContainer = light_onAnswerErrorContainer,
 )
 private val DarkAndroidSchemeCustom = SchemeCustom(
     goalsPieChart = dark_goals_pieChart,
@@ -100,14 +116,14 @@ private val DarkAndroidSchemeCustom = SchemeCustom(
     answerError = dark_answerError,
     onAnswerError = dark_onAnswerError,
     answerErrorContainer = dark_answerErrorContainer,
-    onAnswerErrorContainer = dark_onAnswerErrorContainer
+    onAnswerErrorContainer = dark_onAnswerErrorContainer,
 )
 
 @Composable
 fun LingshotTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     isDynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val dynamicColor = isDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val colorScheme = when {
@@ -123,12 +139,12 @@ fun LingshotTheme(
     }
 
     CompositionLocalProvider(
-        LocalSchemeCustom provides schemeCustom
+        LocalSchemeCustom provides schemeCustom,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,
-            content = content
+            content = content,
         )
     }
 }

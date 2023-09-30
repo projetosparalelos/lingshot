@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("Deprecation", "InflateParams", "ClickableViewAccessibility")
 
 package com.lingshot.screencapture
@@ -13,9 +29,9 @@ import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.core.view.isVisible
 import com.lingshot.common.util.isViewOverlapping
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
-import kotlinx.coroutines.*
 
 class ScreenCaptureFloatingWindow @Inject constructor(private val context: Context) {
 
@@ -50,7 +66,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
 
     fun onFloating(
         coroutineScope: CoroutineScope,
-        onScreenShot: () -> Unit
+        onScreenShot: () -> Unit,
     ) {
         with(imageButtonScreenCaptureFloating) {
             setOnClickListener {
@@ -132,7 +148,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-            PixelFormat.TRANSLUCENT
+            PixelFormat.TRANSLUCENT,
         ).apply {
             gravity = Gravity.TOP or Gravity.START
             x = 0
@@ -152,7 +168,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-            PixelFormat.TRANSLUCENT
+            PixelFormat.TRANSLUCENT,
         ).apply {
             gravity = Gravity.CENTER or Gravity.BOTTOM
             x = 0

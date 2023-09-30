@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("Deprecation")
 
 package com.lingshot.screencapture.service
@@ -48,7 +64,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
             lifecycleScope,
             onScreenShot = {
                 screenCaptureManager.captureScreenshot(lifecycleScope)
-            }
+            },
         )
         screenCaptureFloatingWindow.onFloatingClose { stopSelf() }
     }
@@ -89,7 +105,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
             .setContentTitle(getString(R.string.text_notification_title_display_display_tuned_on))
             .setContentIntent(intentMainActivity())
             .setContentText(
-                getString(R.string.text_notification_message_display_reading_is_ready_to_use)
+                getString(R.string.text_notification_message_display_reading_is_ready_to_use),
             )
             .setSmallIcon(R.drawable.ic_translate_24).run {
                 startForeground(NOTIFICATION_FOREGROUND_ID, build())
@@ -102,7 +118,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
                 this@ScreenShotService,
                 0,
                 this,
-                FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+                FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT,
             )
         }
 

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lingshot.home_presentation.ui.component
 
 import androidx.compose.foundation.background
@@ -23,8 +39,8 @@ internal fun HomeEmptyCollectionCard(modifier: Modifier = Modifier) {
         withStyle(
             style = SpanStyle(
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
-            )
+                fontSize = 24.sp,
+            ),
         ) {
             append(stringResource(R.string.text_emoji_empty_collection_card_home))
         }
@@ -32,8 +48,8 @@ internal fun HomeEmptyCollectionCard(modifier: Modifier = Modifier) {
         withStyle(
             style = SpanStyle(
                 fontWeight = FontWeight.Light,
-                fontSize = 12.sp
-            )
+                fontSize = 12.sp,
+            ),
         ) {
             append(stringResource(R.string.text_message_empty_collection_card_home))
         }
@@ -46,12 +62,12 @@ internal fun HomeEmptyCollectionCard(modifier: Modifier = Modifier) {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.Transparent,
-                        Color.Black.copy(alpha = 0f)
-                    )
-                )
+                        Color.Black.copy(alpha = 0f),
+                    ),
+                ),
             ),
         lineHeight = 32.sp,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 

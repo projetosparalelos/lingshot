@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.lingshot.home_presentation.ui.component
@@ -34,7 +50,7 @@ internal fun HomeToolbar(
     isExpandedDropdownMenuSignOut: Boolean,
     onToggleExpandDropdownMenuSignOut: () -> Unit,
     onSignOut: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         modifier = modifier,
@@ -43,38 +59,38 @@ internal fun HomeToolbar(
                 modifier = Modifier
                     .placeholder(
                         visible = userDomain == null,
-                        highlight = PlaceholderHighlight.fade()
+                        highlight = PlaceholderHighlight.fade(),
                     ),
                 text = String.format(
                     stringResource(
                         R.string.text_label_name_user_logged_home,
-                        userDomain?.firstName.toString()
-                    )
+                        userDomain?.firstName.toString(),
+                    ),
                 ),
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         },
         navigationIcon = {
             IconButton(
                 onClick = onToggleExpandDropdownMenuSignOut,
-                enabled = userDomain != null
+                enabled = userDomain != null,
             ) {
                 AsyncImage(
                     modifier = Modifier
                         .placeholder(
                             visible = userDomain == null,
-                            highlight = PlaceholderHighlight.fade()
+                            highlight = PlaceholderHighlight.fade(),
                         )
                         .clip(CircleShape),
                     model = userDomain?.profilePictureUrl,
                     contentDescription = null,
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
                 )
                 DropdownMenu(
                     expanded = isExpandedDropdownMenuSignOut,
-                    onDismissRequest = onToggleExpandDropdownMenuSignOut
+                    onDismissRequest = onToggleExpandDropdownMenuSignOut,
                 ) {
                     DropdownMenuItem(
                         leadingIcon = {
@@ -82,10 +98,10 @@ internal fun HomeToolbar(
                         },
                         text = {
                             Text(
-                                stringResource(id = R.string.text_label_dropdown_menu_sign_out_home)
+                                stringResource(id = R.string.text_label_dropdown_menu_sign_out_home),
                             )
                         },
-                        onClick = onSignOut
+                        onClick = onSignOut,
                     )
                 }
             }
@@ -94,7 +110,7 @@ internal fun HomeToolbar(
             IconButton(enabled = false, onClick = {}) {
                 Icon(Icons.Rounded.Settings, contentDescription = null)
             }
-        }
+        },
     )
 }
 
@@ -105,6 +121,6 @@ private fun HomeToolbarPreview() {
         userDomain = UserDomain(),
         isExpandedDropdownMenuSignOut = false,
         onToggleExpandDropdownMenuSignOut = {},
-        onSignOut = {}
+        onSignOut = {},
     )
 }

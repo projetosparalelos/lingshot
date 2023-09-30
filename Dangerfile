@@ -1,9 +1,3 @@
-# Ktlint
-checkstyle_format.base_path = Dir.pwd
-Dir["**/reports/ktlint/ktlintMainSourceSetCheck/**.xml"].each do |file_name|
-  checkstyle_format.report file_name
-end
-
 # Detekt
 Dir["**/reports/detekt/detekt.xml"].each do |file_name|
   kotlin_detekt.severity = "warning"

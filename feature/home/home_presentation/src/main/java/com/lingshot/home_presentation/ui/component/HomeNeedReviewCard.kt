@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lingshot.home_presentation.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
@@ -29,36 +45,36 @@ internal fun HomeNeedReviewCard(pendingReview: String?, modifier: Modifier = Mod
     ElevatedCard(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onSecondary
+            containerColor = MaterialTheme.colorScheme.onSecondary,
         ),
-        shape = CircleShape
+        shape = CircleShape,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 modifier = Modifier.size(32.dp),
                 imageVector = Icons.Default.ArrowRight,
-                contentDescription = null
+                contentDescription = null,
             )
             Text(
                 text = pendingReview.toString(),
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
             )
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.text_label_phrase_pending_review_home),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
             IconButton(
                 enabled = false,
-                onClick = {}
+                onClick = {},
             ) {
                 Icon(imageVector = Icons.Default.EditCalendar, contentDescription = null)
             }

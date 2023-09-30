@@ -7,7 +7,7 @@ dependencies {
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.ksp.gradle.plugin)
     implementation(libs.detekt.plugin)
-    implementation(libs.ktlint.plugin)
+    implementation(libs.spotless.plugin)
 }
 
 gradlePlugin {

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lingshot.screencapture.helper
 
 import android.annotation.SuppressLint
@@ -17,17 +33,17 @@ import android.os.Build
 import android.os.Environment.DIRECTORY_PICTURES
 import android.os.Environment.getExternalStoragePublicDirectory
 import com.lingshot.screencapture.navigation.NavigationIntent
-import java.io.File
-import java.io.FileOutputStream
-import java.util.*
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.util.*
+import javax.inject.Inject
 
 class ScreenCaptureManager @Inject constructor(
-    private val context: Context
+    private val context: Context,
 ) {
 
     private val mediaProjectionManager: MediaProjectionManager =
@@ -46,7 +62,7 @@ class ScreenCaptureManager @Inject constructor(
             displayMetrics.widthPixels,
             displayMetrics.heightPixels,
             android.graphics.PixelFormat.RGBA_8888,
-            2
+            2,
         )
         virtualDisplay = mediaProjection?.createVirtualDisplay(
             VIRTUAL_NAME_DISPLAY,
@@ -56,7 +72,7 @@ class ScreenCaptureManager @Inject constructor(
             VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or VIRTUAL_DISPLAY_FLAG_PUBLIC,
             imageReader?.surface,
             null,
-            null
+            null,
         )
     }
 
@@ -86,7 +102,7 @@ class ScreenCaptureManager @Inject constructor(
         val bitmap = Bitmap.createBitmap(
             displayMetrics.widthPixels + rowPadding / pixelStride,
             displayMetrics.heightPixels,
-            Bitmap.Config.ARGB_8888
+            Bitmap.Config.ARGB_8888,
         )
         bitmap.copyPixelsFromBuffer(buffer)
         return Bitmap.createBitmap(
@@ -94,7 +110,7 @@ class ScreenCaptureManager @Inject constructor(
             0,
             0,
             displayMetrics.widthPixels,
-            displayMetrics.heightPixels
+            displayMetrics.heightPixels,
         )
     }
 
@@ -104,7 +120,7 @@ class ScreenCaptureManager @Inject constructor(
         val croppedBitmap = Bitmap.createBitmap(
             bitmap.width,
             bitmap.height - topHeight - bottomHeight,
-            Bitmap.Config.ARGB_8888
+            Bitmap.Config.ARGB_8888,
         )
         val canvas = Canvas(croppedBitmap)
         canvas.drawBitmap(bitmap, 0f, (-topHeight).toFloat(), null)
@@ -120,7 +136,9 @@ class ScreenCaptureManager @Inject constructor(
         val file = fileScreenShot()
 
         coroutineScope.launch {
-            if (file.exists()) { file.delete() }
+            if (file.exists()) {
+                file.delete()
+            }
 
             withContext(Dispatchers.IO) {
                 val newFile = fileScreenShot()
@@ -136,7 +154,7 @@ class ScreenCaptureManager @Inject constructor(
                         context.let {
                             NavigationIntent.launchScreenShotActivity(
                                 it,
-                                Uri.fromFile(newFile)
+                                Uri.fromFile(newFile),
                             )
                         }
                     }

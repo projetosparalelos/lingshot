@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 Lingshot
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("ComplexCondition", "LongParameterList")
 
 package com.lingshot.home_presentation
@@ -14,9 +30,6 @@ import com.phrase.phrasemaster_domain.usecase.RetrieveConsecutiveDaysUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrieveLanguageCollectionsUseCase
 import com.phrase.phrasemaster_domain.usecase.RetrievePhrasesPendingReviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -26,6 +39,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -35,7 +51,7 @@ class HomeViewModel @Inject constructor(
     private val retrieveGoalsUseCase: RetrieveGoalsUseCase,
     retrieveLanguageCollectionsUseCase: RetrieveLanguageCollectionsUseCase,
     retrievePhrasesPendingReviewUseCase: RetrievePhrasesPendingReviewUseCase,
-    retrieveConsecutiveDaysUseCase: RetrieveConsecutiveDaysUseCase
+    retrieveConsecutiveDaysUseCase: RetrieveConsecutiveDaysUseCase,
 ) : ViewModel() {
 
     private val userDomain = flow { emit(userProfileUseCase()) }
@@ -48,12 +64,13 @@ class HomeViewModel @Inject constructor(
             retrieveConsecutiveDaysUseCase(),
             retrieveGoalsUseCase(),
             _uiState,
-            userDomain
+            userDomain,
         ) { languageCollectionsStatus,
             phrasesPendingReviewStatus,
             consecutiveDaysStatus,
             goals,
-            uiState, userDomain ->
+            uiState, userDomain,
+            ->
             if (languageCollectionsStatus.isLoadingStatus.not() &&
                 phrasesPendingReviewStatus.isLoadingStatus.not() &&
                 consecutiveDaysStatus.isLoadingStatus.not() &&
@@ -65,7 +82,7 @@ class HomeViewModel @Inject constructor(
                     isPieChartGoalsVisible = true,
                     phrasesPendingReviewStatus = phrasesPendingReviewStatus,
                     languageCollectionsStatus = languageCollectionsStatus,
-                    consecutiveDaysStatus = consecutiveDaysStatus
+                    consecutiveDaysStatus = consecutiveDaysStatus,
                 )
             } else {
                 uiState
@@ -73,7 +90,7 @@ class HomeViewModel @Inject constructor(
         }.stateIn(
             scope = viewModelScope,
             started = WhileSubscribed(5_000),
-            initialValue = _uiState.value
+            initialValue = _uiState.value,
         )
 
     fun handleEvent(homeEvent: HomeEvent) {
@@ -128,7 +145,7 @@ class HomeViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     selectedGoalDays = retrieveGoalsUseCase().first().first?.goal ?: 1,
-                    isSetGoalsDialogVisible = !it.isSetGoalsDialogVisible
+                    isSetGoalsDialogVisible = !it.isSetGoalsDialogVisible,
                 )
             }
         }
