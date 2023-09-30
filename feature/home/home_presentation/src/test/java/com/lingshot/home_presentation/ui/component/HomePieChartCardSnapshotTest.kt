@@ -21,6 +21,7 @@ import com.lingshot.domain.model.GoalsDomain
 import com.lingshot.domain.model.UserLocalDomain
 import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.testing.helper.DefaultTestDevices
+import com.lingshot.testing.helper.LocaleLanguage
 import com.lingshot.testing.helper.MultiTheme
 import com.lingshot.testing.helper.paparazziRealSize
 import com.lingshot.testing.helper.snapshotMultiDevice
@@ -37,10 +38,12 @@ class HomePieChartCardSnapshotTest {
     @Test
     fun homePieChart_Displayed_By_Default(
         @TestParameter defaultTestDevices: DefaultTestDevices,
+        @TestParameter localeLanguage: LocaleLanguage,
         @TestParameter multiTheme: MultiTheme,
     ) {
         paparazzi.snapshotMultiDevice(
             defaultTestDevices = defaultTestDevices,
+            localeLanguage = localeLanguage,
             multiTheme = multiTheme,
             isRealSize = true,
         ) {
@@ -62,10 +65,12 @@ class HomePieChartCardSnapshotTest {
     @Test
     fun homePieChart_Displayed_By_Default_And_Selected_Goal(
         @TestParameter defaultTestDevices: DefaultTestDevices,
+        @TestParameter localeLanguage: LocaleLanguage,
         @TestParameter multiTheme: MultiTheme,
     ) {
         paparazzi.snapshotMultiDevice(
             defaultTestDevices = defaultTestDevices,
+            localeLanguage = localeLanguage,
             multiTheme = multiTheme,
             isRealSize = true,
         ) {

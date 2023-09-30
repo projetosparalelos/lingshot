@@ -28,6 +28,7 @@ import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.navigation.HomeDestination
 import com.lingshot.testing.helper.BASE_URL_COIL
 import com.lingshot.testing.helper.DefaultTestDevices
+import com.lingshot.testing.helper.LocaleLanguage
 import com.lingshot.testing.helper.MultiTheme
 import com.lingshot.testing.helper.replaceCompileSdkToSnapshot
 import com.lingshot.testing.helper.snapshotMultiDevice
@@ -63,10 +64,12 @@ internal class HomeScreenSnapshotTest {
     @Test
     fun homeScreen_Displayed_By_Default_And_Loading(
         @TestParameter defaultTestDevices: DefaultTestDevices,
+        @TestParameter localeLanguage: LocaleLanguage,
         @TestParameter multiTheme: MultiTheme,
     ) {
         paparazzi.snapshotMultiDevice(
             defaultTestDevices = defaultTestDevices,
+            localeLanguage = localeLanguage,
             multiTheme = multiTheme,
         ) {
             HomeScreen(
@@ -80,10 +83,12 @@ internal class HomeScreenSnapshotTest {
     @Test
     fun homeScreen_Displayed_By_Default_And_Success(
         @TestParameter defaultTestDevices: DefaultTestDevices,
+        @TestParameter localeLanguage: LocaleLanguage,
         @TestParameter multiTheme: MultiTheme,
     ) {
         paparazzi.snapshotMultiDevice(
             defaultTestDevices = defaultTestDevices,
+            localeLanguage = localeLanguage,
             multiTheme = multiTheme,
         ) {
             HomeScreen(
@@ -97,10 +102,12 @@ internal class HomeScreenSnapshotTest {
     @Test
     fun homeScreen_Displayed_By_Default_And_Goals_Dialog_Visible(
         @TestParameter defaultTestDevices: DefaultTestDevices,
+        @TestParameter localeLanguage: LocaleLanguage,
         @TestParameter multiTheme: MultiTheme,
     ) {
         paparazzi.snapshotMultiDevice(
             defaultTestDevices = defaultTestDevices,
+            localeLanguage = localeLanguage,
             multiTheme = multiTheme,
         ) {
             HomeScreen(

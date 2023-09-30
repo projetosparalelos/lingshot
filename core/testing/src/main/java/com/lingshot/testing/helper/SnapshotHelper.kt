@@ -41,6 +41,16 @@ enum class DefaultTestDevices(val deviceConfig: DeviceConfig) {
     TABLET(deviceConfig = NEXUS_7_2012),
 }
 
+enum class LocaleLanguage(
+    val code: String,
+) {
+    ENGLISH("en"),
+    FRENCH("fr"),
+    PORTUGUESE("pt"),
+    SPANISH("es"),
+    SWEDISH("sv"),
+}
+
 enum class MultiTheme {
     LIGHT,
     DARK,
@@ -49,6 +59,7 @@ enum class MultiTheme {
 fun Paparazzi.snapshotMultiDevice(
     defaultTestDevices: DefaultTestDevices,
     multiTheme: MultiTheme,
+    localeLanguage: LocaleLanguage,
     name: String? = null,
     theme: String? = null,
     renderingMode: SessionParams.RenderingMode? = null,
@@ -61,7 +72,7 @@ fun Paparazzi.snapshotMultiDevice(
         defaultTestDevices.deviceConfig
     }
     unsafeUpdateConfig(
-        deviceConfig = deviceConfig,
+        deviceConfig = deviceConfig.copy(locale = localeLanguage.code),
         theme = theme,
         renderingMode = renderingMode,
     )
