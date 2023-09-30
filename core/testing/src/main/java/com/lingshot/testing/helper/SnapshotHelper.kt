@@ -67,12 +67,12 @@ fun Paparazzi.snapshotMultiDevice(
     composable: @Composable () -> Unit,
 ) {
     val deviceConfig = if (isRealSize) {
-        defaultTestDevices.deviceConfig.copy(softButtons = false, screenHeight = 1)
+        defaultTestDevices.deviceConfig.copy(screenHeight = 1)
     } else {
         defaultTestDevices.deviceConfig
     }
     unsafeUpdateConfig(
-        deviceConfig = deviceConfig.copy(locale = localeLanguage.code),
+        deviceConfig = deviceConfig.copy(softButtons = false, locale = localeLanguage.code),
         theme = theme,
         renderingMode = renderingMode,
     )
