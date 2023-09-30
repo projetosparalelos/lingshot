@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lingshot.languagechoice_data.repository
 
 import com.lingshot.languagechoice_data.storage.LanguageChoiceLocalStorage

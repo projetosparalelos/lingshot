@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lingshot.swipepermission_presentation.util
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lingshot.screenshot_presentation
 
 import com.lingshot.domain.model.Status

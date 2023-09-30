@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lingshot.completephrase_presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement

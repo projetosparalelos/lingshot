@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @file:Suppress("Range", "Unused")
 
 package com.lingshot.screencapture.helper
