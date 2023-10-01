@@ -18,13 +18,7 @@ class AndroidNetworkPlugin : Plugin<Project> {
             extension.apply {
                 defaultConfig {
                     buildConfigField("String", "BASE_API", BASE_API)
-                }
-
-                defaultConfig {
                     buildConfigField("String", "GOOGLE_AUTH_ID", KeyHelper.getValue("GOOGLE_AUTH_ID"))
-                }
-
-                defaultConfig {
                     buildConfigField("String", "CHAT_GPT_KEY", KeyHelper.getValue("CHAT_GPT_KEY"))
                 }
             }
