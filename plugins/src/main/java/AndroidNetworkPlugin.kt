@@ -17,34 +17,21 @@ class AndroidNetworkPlugin : Plugin<Project> {
 
             extension.apply {
                 defaultConfig {
-                    buildConfigField("String", "BASE_API", "\"https://api.openai.com/v1/\"")
+                    buildConfigField("String", "BASE_API", BASE_API)
                 }
 
                 defaultConfig {
                     buildConfigField("String", "GOOGLE_AUTH_ID", KeyHelper.getValue("GOOGLE_AUTH_ID"))
                 }
 
-                buildTypes {
-                    release {
-                        buildConfigField(
-                            "String",
-                            "CHAT_GPT_KEY",
-                            KeyHelper.getValue("CHAT_GPT_KEY_RELEASE")
-                        )
-                    }
-                    debug {
-                        buildConfigField(
-                            "String",
-                            "CHAT_GPT_KEY",
-                            KeyHelper.getValue("CHAT_GPT_KEY_DEBUG")
-                        )
-                    }
+                defaultConfig {
+                    buildConfigField("String", "CHAT_GPT_KEY", KeyHelper.getValue("CHAT_GPT_KEY"))
                 }
             }
         }
     }
 
     companion object {
-        private const val BASE_API: String = "https://api.openai.com/v1/"
+        private const val BASE_API: String = "\"https://api.openai.com/v1/\""
     }
 }

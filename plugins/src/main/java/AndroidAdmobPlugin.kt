@@ -17,15 +17,20 @@ class AndroidAdmobPlugin : Plugin<Project> {
 
                 buildTypes {
                     release {
-                        resValue("string", "ADMOB_APP_ID", KeyHelper.getValue("ADMOB_APP_ID_RELEASE"))
-                        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", KeyHelper.getValue("ADMOB_INTERSTITIAL_ID_RELEASE"))
+                        resValue("string", "ADMOB_APP_ID", KeyHelper.getValue("ADMOB_APP_ID"))
+                        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", KeyHelper.getValue("ADMOB_INTERSTITIAL_ID"))
                     }
                     debug {
-                        resValue("string", "ADMOB_APP_ID", KeyHelper.getValue("ADMOB_APP_ID_DEBUG"))
-                        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", KeyHelper.getValue("ADMOB_INTERSTITIAL_ID_DEBUG"))
+                        resValue("string", "ADMOB_APP_ID", ADMOB_APP_ID_DEBUG)
+                        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", ADMOB_INTERSTITIAL_ID_DEBUG)
                     }
                 }
             }
         }
+    }
+
+    companion object {
+        private const val ADMOB_APP_ID_DEBUG = "\"ca-app-pub-3940256099942544~3347511713\""
+        private const val ADMOB_INTERSTITIAL_ID_DEBUG = "\"ca-app-pub-3940256099942544/1033173712\""
     }
 }
