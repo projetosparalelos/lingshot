@@ -22,7 +22,6 @@ import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.DeviceConfig.Companion.NEXUS_4
 import app.cash.paparazzi.DeviceConfig.Companion.NEXUS_7_2012
 import app.cash.paparazzi.DeviceConfig.Companion.PIXEL_6
-import app.cash.paparazzi.DeviceConfig.Companion.PIXEL_6_PRO
 import app.cash.paparazzi.Environment
 import app.cash.paparazzi.Paparazzi
 import app.cash.paparazzi.detectEnvironment
@@ -35,10 +34,9 @@ val paparazziRealSize = Paparazzi(
 )
 
 enum class DefaultTestDevices(val deviceConfig: DeviceConfig) {
-    PHONE_SMALL(deviceConfig = NEXUS_4),
-    PHONE_NORMAL(deviceConfig = PIXEL_6),
-    PHONE_LARGE(deviceConfig = PIXEL_6_PRO),
-    TABLET(deviceConfig = NEXUS_7_2012),
+    PHONE_COMPACT(deviceConfig = NEXUS_4),
+    PHONE_STANDARD(deviceConfig = PIXEL_6),
+    TABLET_STANDARD(deviceConfig = NEXUS_7_2012),
 }
 
 enum class LocaleLanguage(
