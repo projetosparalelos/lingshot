@@ -185,14 +185,16 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
         rootViewFloating.isVisible = isVisible
     }
 
-    fun start() = runCatching {
-        windowManager.addView(rootViewFloating, windowParamsFloating)
-        windowManager.addView(rootViewFloatingClose, windowParamsFloatingClose)
+    fun start(isScreenCaptureByDevice: Boolean) = runCatching {
+        if (isScreenCaptureByDevice.not()) {
+            windowManager.addView(rootViewFloating, windowParamsFloating)
+            windowManager.addView(rootViewFloatingClose, windowParamsFloatingClose)
+        }
     }.getOrNull()
 
     fun close() = runCatching {
-        windowManager.removeView(rootViewFloating)
-        windowManager.removeView(rootViewFloatingClose)
+        rootViewFloating?.let { windowManager.removeView(it) }
+        rootViewFloatingClose?.let { windowManager.removeView(it) }
     }.getOrNull()
 
     companion object {

@@ -17,7 +17,7 @@
 
 package com.lingshot.phrasemaster_presentation.ui
 
-import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -46,6 +46,7 @@ import com.lingshot.designsystem.component.LingshotFullScreenDialogStatusBarColo
 import com.lingshot.phrasemaster_presentation.R
 import com.phrase.phrasemaster_domain.model.PhraseDomain
 import dev.jeziellago.compose.markdowntext.MarkdownText
+import es.dmoral.toasty.Toasty.warning
 
 @Composable
 fun EditPhraseFullScreenDialog(
@@ -126,10 +127,11 @@ fun EditPhraseFullScreenDialog(
     LingshotFullScreenDialogStatusBarColor()
 
     if (phraseState.isValidLanguage.not()) {
-        Toast.makeText(
+        warning(
             context,
             stringResource(R.string.text_message_invalid_language),
-            Toast.LENGTH_LONG,
+            LENGTH_LONG,
+            true,
         ).show()
     }
 }

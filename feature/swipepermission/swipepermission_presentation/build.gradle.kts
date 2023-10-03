@@ -19,4 +19,5 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.lottie.compose)
+    implementation(libs.toasty)
 }

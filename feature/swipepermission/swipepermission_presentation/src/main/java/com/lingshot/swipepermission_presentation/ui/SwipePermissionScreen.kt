@@ -24,7 +24,7 @@ import android.content.IntentSender
 import android.net.Uri
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
-import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -73,6 +73,7 @@ import com.lingshot.swipepermission_presentation.ui.component.SwipePermissionAni
 import com.lingshot.swipepermission_presentation.ui.component.SwipePermissionGoogleAuthButton
 import com.lingshot.swipepermission_presentation.util.PERMISSIONS
 import com.lingshot.swipepermission_presentation.util.hasOverlayPermission
+import es.dmoral.toasty.Toasty.error
 import kotlinx.coroutines.launch
 
 @Composable
@@ -235,7 +236,7 @@ internal fun SwipePermissionScreen(
             }
         }
         uiState.signInError?.let { error ->
-            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            error(context, error, LENGTH_SHORT, true).show()
             handleEvent(ClearState)
         }
     }
