@@ -23,5 +23,5 @@
     <string name="text_second_message_swipe_read_and_write">Para garantizar el pleno funcionamiento, es necesario otorgar permiso para guardar las capturas de pantalla.\n\nPor favor, revise su decisión y otorgue permiso para continuar.</string>
     <string name="text_title_swipe_overlay">Captura de pantallas con facilidad</string>
     <string name="text_message_swipe_overlay">Para generar las capturas de pantalla, solicitamos su permiso para utilizar la función de superposición.\n\nEste permiso nos permite capturar la pantalla de manera rápida y conveniente.</string>
-    <string name="text_button_swipe">Continuar</string>
+    <string name="text_button_swipe">Conceder permiso</string>
 </resources>

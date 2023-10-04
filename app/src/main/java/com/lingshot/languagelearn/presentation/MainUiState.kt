@@ -16,6 +16,7 @@
 package com.lingshot.languagelearn.presentation
 
 data class MainUiState(
+    val isOptionScreenShotSheetVisible: Boolean = false,
     val isServiceRunning: Boolean = false,
     val isBalloonOverlayVisible: Boolean = false,
 )

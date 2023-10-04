@@ -74,6 +74,10 @@ class MainViewModel @Inject constructor(
                 hideBalloonOverlay()
             }
 
+            is MainEvent.ToggleOptionScreenShotSheetVisibility -> {
+                toggleOptionScreenShotSheetVisibility()
+            }
+
             is MainEvent.ToggleServiceButton -> {
                 toggleServiceButton()
             }
@@ -84,6 +88,10 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             balloonOverlayRepository.saveAndHideBalloonOverlay()
         }
+    }
+
+    private fun toggleOptionScreenShotSheetVisibility() {
+        _uiState.update { it.copy(isOptionScreenShotSheetVisible = !it.isOptionScreenShotSheetVisible) }
     }
 
     private fun toggleServiceButton() {

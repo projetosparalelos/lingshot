@@ -28,6 +28,9 @@ import android.content.Intent
 import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.widget.Toast.LENGTH_LONG
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -64,12 +67,16 @@ import com.lingshot.designsystem.component.LingshotOnLifecycleEvent
 import com.lingshot.designsystem.theme.LocalSchemeCustom
 import com.lingshot.designsystem.theme.SchemeCustom
 import com.lingshot.home_presentation.navigation.HOME_ROUTE
+import com.lingshot.home_presentation.ui.component.HomeOptionScreenShotBottomSheet
 import com.lingshot.home_presentation.ui.component.HomeToggleServiceButton
 import com.lingshot.languagelearn.R
 import com.lingshot.languagelearn.navigation.LingshotAppState
 import com.lingshot.languagelearn.navigation.LingshotNavHost
 import com.lingshot.languagelearn.navigation.rememberLingshotAppState
 import com.lingshot.languagelearn.presentation.MainEvent
+import com.lingshot.languagelearn.presentation.MainEvent.HideBalloonOverlay
+import com.lingshot.languagelearn.presentation.MainEvent.ToggleOptionScreenShotSheetVisibility
+import com.lingshot.languagelearn.presentation.MainEvent.ToggleServiceButton
 import com.lingshot.languagelearn.presentation.MainUiState
 import com.lingshot.languagelearn.presentation.MainViewModel
 import com.lingshot.screencapture.service.ScreenShotService.Companion.screenShotServiceIntent
@@ -120,11 +127,18 @@ private fun MainScreen(
         null
     }
 
+    val launcherScreenShotService =
+        rememberLauncherForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == ComponentActivity.RESULT_OK) {
+                activity?.startScreenShotServiceWithResult(result.data)
+            }
+        }
+
     LingshotOnLifecycleEvent { _, event ->
         when (event) {
             ON_RESUME -> {
                 if (isServiceRunning(context) != uiState.isServiceRunning) {
-                    handleEvent(MainEvent.ToggleServiceButton)
+                    handleEvent(ToggleServiceButton)
                 }
             }
 
@@ -171,10 +185,10 @@ private fun MainScreen(
                             }
                             if (uiState.isServiceRunning) {
                                 activity?.stopScreenShotService()
+                                handleEvent(ToggleServiceButton)
                             } else {
-                                activity?.startScreenShotService()
+                                handleEvent(ToggleOptionScreenShotSheetVisibility)
                             }
-                            handleEvent(MainEvent.ToggleServiceButton)
                         },
                         onFinishActivity = {
                             activity?.finish()
@@ -184,7 +198,7 @@ private fun MainScreen(
                         balloonWindow.apply {
                             showAlignTop()
                             setOnBalloonDismissListener {
-                                handleEvent(MainEvent.HideBalloonOverlay)
+                                handleEvent(HideBalloonOverlay)
                             }
                         }
                     }
@@ -207,6 +221,20 @@ private fun MainScreen(
                     navController = lingshotAppState.navController,
                     allPermissionsAndIsSignInGranted = allPermissionsAndIsSignInGranted,
                 )
+                if (uiState.isOptionScreenShotSheetVisible) {
+                    HomeOptionScreenShotBottomSheet(
+                        onScreenShotByDeviceButton = {
+                            activity?.startScreenShotService()
+                            handleEvent(ToggleServiceButton)
+                        },
+                        onScreenShotByFloatingWindow = {
+                            launcherScreenShotService.launch(activity?.mediaProjectionIntent())
+                        },
+                        onDismiss = {
+                            handleEvent(ToggleOptionScreenShotSheetVisibility)
+                        },
+                    )
+                }
             }
         },
     )
@@ -241,7 +269,7 @@ private fun Activity.startScreenShotService() =
     }
 
 @Suppress("UnusedPrivateMember")
-private fun Activity.startScreenShotServiceWithMediaProjection(
+private fun Activity.startScreenShotServiceWithResult(
     resultData: Intent?,
 ) = screenShotServiceIntentWithMediaProjection(this, resultData).also {
     startService(it)

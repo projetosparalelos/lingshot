@@ -32,4 +32,13 @@
     <string name="text_title_goals_dialog_home">Sätt ditt mål</string>
     <string name="text_label_dropdown_menu_item_goals_home">%s fras(er)</string>
     <string name="text_label_count_dropdown_menu_goals_home">Räkna</string>
+    <string name="text_button_by_device_button_home">Enheten</string>
+    <string name="text_button_by_floating_balloon_home">Ballong</string>
+    <string name="text_markdown_tutorial_type_button_screenshot_home">
+        ### Appen har två sätt att ta en skärmbild
+        \n\n
+        **Enheten knapp** - Med detta alternativ kan du ta en skärmbild med hjälp av din enhets standardknappar, utan behov av ytterligare behörigheter.
+        \n\n
+        **Flytande ballong** - Detta alternativ kräver behörighet att visa din skärm för att generera en bild, vilket ger dig en flytande knapp på din skärm för enkel.
+</string>
 </resources>

@@ -23,5 +23,5 @@
     <string name="text_second_message_swipe_read_and_write">Para garantir a funcionalidade completa, é necessário conceder permissão para salvar as capturas de tela.\n\nPor favor, reveja sua decisão e conceda permissão para continuar!</string>
     <string name="text_title_swipe_overlay">Captura de tela fácil</string>
     <string name="text_message_swipe_overlay">Para gerar as capturas de tela, solicitamos sua permissão para usar a função de sobreposição.\n\nEsta permissão nos permite capturar a tela de forma rápida e conveniente.</string>
-    <string name="text_button_swipe">Continuar</string>
+    <string name="text_button_swipe">Conceder permissão</string>
 </resources>

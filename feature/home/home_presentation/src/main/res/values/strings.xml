@@ -32,4 +32,13 @@
     <string name="text_title_goals_dialog_home">Set your goal</string>
     <string name="text_label_dropdown_menu_item_goals_home">%s phrase(s)</string>
     <string name="text_label_count_dropdown_menu_goals_home">Count</string>
+    <string name="text_button_by_device_button_home">Device</string>
+    <string name="text_button_by_floating_balloon_home">Balloon</string>
+    <string name="text_markdown_tutorial_type_button_screenshot_home">
+        ### The app has two ways to take a screenshot
+        \n\n
+        **Device button** - With this option, you can take a screenshot using your device\'s standard buttons, without the need for any additional permissions.
+        \n\n
+        **Floating balloon** - This option requires permission to view your screen in order to generate an image, allowing you to have a floating button on your screen for easy.
+    </string>
 </resources>
