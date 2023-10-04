@@ -16,6 +16,9 @@
 package com.lingshot.languagelearn.presentation
 
 sealed class MainEvent {
+
+    object ToggleOptionScreenShotSheetVisibility : MainEvent()
+
     object ToggleServiceButton : MainEvent()
 
     object HideBalloonOverlay : MainEvent()

@@ -32,4 +32,14 @@
     <string name="text_title_goals_dialog_home">Establece tu objetivo</string>
     <string name="text_label_dropdown_menu_item_goals_home">%s frase(s)</string>
     <string name="text_label_count_dropdown_menu_goals_home">Contar</string>
+    <string name="text_button_by_device_button_home">Dispositivo</string>
+    <string name="text_button_by_floating_balloon_home">Globo</string>
+    <string name="text_markdown_tutorial_type_button_screenshot_home">
+        ### La aplicación tiene dos formas de tomar una captura de pantalla
+        \n\n
+        **Botón del dispositivo** - Con esta opción, puedes tomar una captura de pantalla utilizando los botones estándar de tu dispositivo, sin necesidad de permisos adicionales.
+        \n\n
+        **Globo flotante** - Esta opción requiere permisos para ver tu pantalla con el fin de generar una imagen, permitiéndote tener un globo flotante en tu pantalla para capturar fácilmente.
+</string>
+
 </resources>

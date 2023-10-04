@@ -23,5 +23,6 @@ dependencies {
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.lottie.compose)
     implementation(libs.coil.compose)
+    implementation(libs.compose.markdown)
     implementation(libs.hilt.navigation.compose)
 }

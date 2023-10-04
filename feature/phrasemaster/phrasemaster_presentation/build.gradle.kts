@@ -19,4 +19,5 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.compose.markdown)
+    implementation(libs.toasty)
 }

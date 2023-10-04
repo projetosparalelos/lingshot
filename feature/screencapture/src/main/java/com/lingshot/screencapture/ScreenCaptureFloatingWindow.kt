@@ -19,7 +19,6 @@ package com.lingshot.screencapture
 
 import android.content.Context
 import android.graphics.PixelFormat
-import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -102,6 +101,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     windowParamsFloating.x = (initialX + event.rawX - initialTouchX).toInt()
                     windowParamsFloating.y = (initialY + event.rawY - initialTouchY).toInt()
@@ -122,6 +122,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
                     }
                     windowManager.updateViewLayout(rootViewFloating, windowParamsFloating)
                 }
+
                 MotionEvent.ACTION_UP -> {
                     rootViewFloatingClose.isVisible = false
                     setupFloatingCloseService(onStopService)
@@ -139,11 +140,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
         windowParamsFloating = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_PHONE
-            },
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
@@ -159,11 +156,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
         windowParamsFloatingClose = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_PHONE
-            },
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
@@ -185,9 +178,11 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
         rootViewFloating.isVisible = isVisible
     }
 
-    fun start() = runCatching {
+    fun start(isScreenCaptureByDevice: Boolean) = runCatching {
         windowManager.addView(rootViewFloating, windowParamsFloating)
         windowManager.addView(rootViewFloatingClose, windowParamsFloatingClose)
+
+        imageButtonScreenCaptureFloating.isVisible = isScreenCaptureByDevice.not()
     }.getOrNull()
 
     fun close() = runCatching {

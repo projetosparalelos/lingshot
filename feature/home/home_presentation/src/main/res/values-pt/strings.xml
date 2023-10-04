@@ -32,4 +32,13 @@
     <string name="text_title_goals_dialog_home">Defina sua meta</string>
     <string name="text_label_dropdown_menu_item_goals_home">%s frase(s)</string>
     <string name="text_label_count_dropdown_menu_goals_home">Quantidade</string>
+    <string name="text_button_by_device_button_home">Dispositivo</string>
+    <string name="text_button_by_floating_balloon_home">Balão</string>
+    <string name="text_markdown_tutorial_type_button_screenshot_home">
+        ### O aplicativo possui duas maneiras de fazer uma captura de tela
+        \n\n
+        **Botão do dispositivo** - Com esta opção, você pode tirar uma captura de tela usando os botões padrão do seu dispositivo, sem a necessidade de permissões adicionais.
+        \n\n
+        **Balão flutuante** - Esta opção requer permissão para visualizar sua tela a fim de gerar uma imagem, permitindo que você tenha um balão flutuante na sua tela para capturar facilmente.
+</string>
 </resources>

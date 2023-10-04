@@ -32,4 +32,14 @@
     <string name="text_title_goals_dialog_home">Définissez votre objectif</string>
     <string name="text_label_dropdown_menu_item_goals_home">%s phrase(s)</string>
     <string name="text_label_count_dropdown_menu_goals_home">Compter</string>
+    <string name="text_button_by_device_button_home">Dispositif</string>
+    <string name="text_button_by_floating_balloon_home">Bulle</string>
+    <string name="text_markdown_tutorial_type_button_screenshot_home">
+        ### L\'application propose deux méthodes pour prendre une capture d\'écran
+        \n\n
+        **Bouton du dispositif** - Avec cette option, vous pouvez prendre une capture d\'écran en utilisant les boutons standard de votre appareil, sans nécessiter des autorisations supplémentaires.
+        \n\n
+        **Bulle flottante** - Cette option requiert l\'autorisation d\'afficher votre écran pour générer une image, vous permettant d\'avoir une bulle flottante sur votre écran pour capturer facilement.
+</string>
+
 </resources>

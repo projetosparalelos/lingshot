@@ -44,6 +44,7 @@ coil = "2.4.0"
 balloon = "1.5.4"
 lottie = "6.1.0"
 markdown = "0.3.5"
+toasty = "1.5.2"
 
 jUnit = "4.13.2"
 testParameterInjector = "1.8"
@@ -125,6 +126,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "markdown" }
+toasty = { module = "com.github.grenderg:toasty", version.ref = "toasty" }
 
 junit = { module = "junit:junit", version.ref = "jUnit" }
 coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }

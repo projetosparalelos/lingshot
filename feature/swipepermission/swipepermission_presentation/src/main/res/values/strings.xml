@@ -23,5 +23,5 @@
     <string name="text_second_message_swipe_read_and_write">To ensure full functionality, it is necessary to grant permission to save the screenshots.\n\nPlease review your decision and grant permission to continue!</string>
     <string name="text_title_swipe_overlay">Capture Screens with Ease</string>
     <string name="text_message_swipe_overlay">To generate the screenshots, we request your permission to use the overlay feature.\n\nThis permission allows us to capture the screen quickly and conveniently.</string>
-    <string name="text_button_swipe">Continue</string>
+    <string name="text_button_swipe">Grant permission</string>
 </resources>

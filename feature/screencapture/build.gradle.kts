@@ -13,4 +13,5 @@ dependencies {
     implementation(project(":core:common"))
 
     implementation(libs.activity.compose)
+    implementation(libs.toasty)
 }

@@ -26,6 +26,7 @@ import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.net.Uri
 import android.os.Build
+import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
@@ -37,8 +38,12 @@ import com.lingshot.screencapture.helper.ScreenCaptureManager
 import com.lingshot.screencapture.helper.ScreenShotDetection
 import com.lingshot.screencapture.navigation.NavigationIntent
 import dagger.hilt.android.AndroidEntryPoint
+import es.dmoral.toasty.Toasty.success
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
@@ -57,15 +62,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
 
     override fun onCreate() {
         super.onCreate()
-        screenCaptureFloatingWindow.start()
         screenshotDetection.startScreenshotDetection()
-        screenCaptureFloatingWindow.onFloating(
-            lifecycleScope,
-            onScreenShot = {
-                screenCaptureManager.captureScreenshot(lifecycleScope)
-            },
-        )
-        screenCaptureFloatingWindow.onFloatingClose { stopSelf() }
     }
 
     override fun onConfigurationChanged(configuration: Configuration) {
@@ -81,13 +78,33 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        setupNotificationForeground()
+        intent.setupScreenCaptureFloatingWindow()
+        intent.sendIntentScreenCapture()
+
         if (intent?.action == STOP_SERVICE) {
             screenCaptureManager.deleteScreenShot()
             stopSelf()
         }
-        setupNotificationForeground()
-        intent.sendIntentScreenCapture()
+
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun Intent?.setupScreenCaptureFloatingWindow() {
+        val isScreenCaptureByDevice =
+            this?.getBooleanExtra(SCREEN_CAPTURE_BY_DEVICE, false) ?: false
+        screenCaptureFloatingWindow.start(isScreenCaptureByDevice)
+        screenCaptureFloatingWindow.onFloating(
+            lifecycleScope,
+            onScreenShot = {
+                screenCaptureManager.captureScreenshot(lifecycleScope)
+            },
+        )
+        screenCaptureFloatingWindow.onFloatingClose { stopSelf() }
+
+        if (isScreenCaptureByDevice) {
+            setupToastMessageCaptureScreenDeviceButton()
+        }
     }
 
     private fun Intent?.sendIntentScreenCapture() {
@@ -97,6 +114,18 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
             this?.getParcelableExtra(SCREEN_CAPTURE_DATA)
         }
         data?.let { screenCaptureManager.startCapture(RESULT_OK, it) }
+    }
+
+    private fun setupToastMessageCaptureScreenDeviceButton() {
+        lifecycleScope.launch {
+            delay(1.seconds)
+            success(
+                baseContext,
+                getString(R.string.text_toast_message_device_button_screen_capture),
+                LENGTH_LONG,
+                true,
+            ).show()
+        }
     }
 
     private fun setupNotificationForeground() {
@@ -138,17 +167,20 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
     companion object {
         private const val MAIN_ACTIVITY_PATH = "com.lingshot.languagelearn.MainActivity"
         private const val SCREEN_CAPTURE_DATA = "SCREEN_CAPTURE_DATA"
+        private const val SCREEN_CAPTURE_BY_DEVICE = "SCREEN_CAPTURE_BY_DEVICE"
         private const val STOP_SERVICE = "STOP_SERVICE"
         private const val NOTIFICATION_FOREGROUND_ID = 1
 
-        fun getStartIntent(context: Context?, data: Intent?): Intent {
+        fun screenShotServiceIntent(context: Context?): Intent {
             return Intent(context, ScreenShotService::class.java).apply {
-                putExtra(SCREEN_CAPTURE_DATA, data)
+                putExtra(SCREEN_CAPTURE_BY_DEVICE, true)
             }
         }
 
-        fun getStopIntent(context: Context): Intent {
-            return Intent(context, ScreenShotService::class.java)
+        fun screenShotServiceIntentWithMediaProjection(context: Context?, data: Intent?): Intent {
+            return Intent(context, ScreenShotService::class.java).apply {
+                putExtra(SCREEN_CAPTURE_DATA, data)
+            }
         }
     }
 }

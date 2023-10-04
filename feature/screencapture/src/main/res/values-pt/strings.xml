@@ -20,4 +20,5 @@
     <string name="text_notification_message_display_reading_is_ready_to_use">Sua leitura está pronta para ser usada.</string>
     <string name="text_notification_message_clean_up_gallery">Limpe seus screenshots na galeria.</string>
     <string name="text_notification_button_display_turn_off">Desligar</string>
+    <string name="text_toast_message_device_button_screen_capture">Para capturar a tela, utilize os botões de captura de tela do dispositivo.</string>
 </resources>

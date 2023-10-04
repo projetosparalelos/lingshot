@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.accompanist.navigation.animation)
 
     implementation(libs.core.splash.screen)
+    implementation(libs.toasty)
 
     implementation(libs.hilt.navigation.compose)
     implementation(libs.coil.compose)
