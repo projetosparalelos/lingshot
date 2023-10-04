@@ -127,6 +127,6 @@ private fun HomeOptionScreenShotBottomSheetPreview() {
     HomeOptionScreenShotBottomSheet(
         onScreenShotByDeviceButton = {},
         onScreenShotByFloatingWindow = {},
-        onDismiss = {}
+        onDismiss = {},
     )
 }
