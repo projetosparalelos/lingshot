@@ -8,17 +8,19 @@
 
 # Lingshot
 
-Welcome to Lingshot, your ultimate companion for smart and effective language learning! This revolutionary app combines powerful features to help you master new languages in a fun and productive way.
+Lingshot is a simple yet powerful screenshot capture tool that makes multilingual communication more accessible than ever before. With this app, you can take a screenshot of any text you come across and instantly translate it into your preferred language.
 
-📷 Screen Capture: Snap screenshots of any text you come across, whether in a book, website, or even in the real world. Lingshot is always ready to capture knowledge.
+Key Features:
 
-📖 Instant OCR: Our advanced Optical Character Recognition (OCR) instantly turns your captures into editable text within seconds. No more typing!
+📸 Easy Screen Capture: Quickly take a screenshot of any text on your device.
 
-🌐 Instant Translation with ChatGPT: Connect to ChatGPT, an intelligent language assistant, to quickly translate captured text into dozens of languages. Learn with fluency and authenticity.
+🔍 Automatic Text Recognition (OCR): The built-in OCR automatically recognizes text in your screenshots.
 
-🧠 Spaced Repetition Memorization: Save your translations and phrases to create a personalized study plan using the spaced repetition method. Reinforce your memories and accelerate learning.
+🌐 Instant Translation: Translate recognized text with just a tap.
 
-🗺️ Multilingual Support: Learn a variety of languages, from the most popular to the most exotic. Explore the linguistic diversity of the world.
+💬 ChatGPT Integration: Our app leverages the powerful AI of ChatGPT for translation and context enhancement when needed.
+
+🔒 Privacy Guaranteed: We value your privacy and ensure that your screenshots and translations remain secure and confidential.
 
 <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/c4db7ed7-86e1-4884-b724-25ec6d393e11" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/03ab419c-3dc9-43f9-ac54-caab293c78db" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/43120296-1fd0-46eb-b519-6ac8e8f043a8" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/bd778f50-2fed-4bb9-8708-8b127bc8e1c4" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/e2854fae-eb5e-4e02-9061-b0222671b2dc" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/6342d849-6b70-4430-a528-a8ff08603565" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/127698cd-d09f-488e-a5ce-35a26f60d8b6" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/47dbc815-a291-4258-a995-958a7fd4ea02" width="186">
 
@@ -63,9 +65,6 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Material Design 3](https://m3.material.io/)
     * [Dark Theme](https://material.io/develop/android/theming/dark)
     * [Dynamic Theming](https://m3.material.io/styles/color/dynamic-color/overview)
-* Firebase
-  * [Firestore](https://firebase.google.com/docs/firestore/quickstart)
-  * [Google Sign-In](https://developers.google.com/identity/sign-in/android/start-integrating)
 * ML Kit
   * [Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition/v2)
   * [Text Speech](https://developer.android.com/reference/android/speech/tts/TextToSpeech)
