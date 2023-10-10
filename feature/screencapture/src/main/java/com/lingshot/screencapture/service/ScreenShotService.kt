@@ -91,8 +91,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
     }
 
     private fun Intent?.setupScreenCaptureFloatingWindow() {
-        val isScreenCaptureByDevice =
-            this?.getBooleanExtra(SCREEN_CAPTURE_BY_DEVICE, false) ?: false
+        isScreenCaptureByDevice = this?.getBooleanExtra(SCREEN_CAPTURE_BY_DEVICE, false) ?: false
         screenCaptureFloatingWindow.start(isScreenCaptureByDevice)
         screenCaptureFloatingWindow.onFloating(
             lifecycleScope,
@@ -170,6 +169,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
         private const val SCREEN_CAPTURE_BY_DEVICE = "SCREEN_CAPTURE_BY_DEVICE"
         private const val STOP_SERVICE = "STOP_SERVICE"
         private const val NOTIFICATION_FOREGROUND_ID = 1
+        var isScreenCaptureByDevice: Boolean = false
 
         fun screenShotServiceIntent(context: Context?): Intent {
             return Intent(context, ScreenShotService::class.java).apply {

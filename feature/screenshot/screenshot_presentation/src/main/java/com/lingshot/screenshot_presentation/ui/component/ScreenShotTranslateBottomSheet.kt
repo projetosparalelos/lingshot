@@ -17,7 +17,6 @@
 
 package com.lingshot.screenshot_presentation.ui.component
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,11 +32,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.SubdirectoryArrowRight
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -51,7 +48,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,9 +70,6 @@ internal fun ScreenShotTranslateBottomSheet(
     languageTranslationDomain: LanguageTranslationDomain,
     correctedOriginalTextStatus: Status<String>,
     onCorrectedOriginalText: (String) -> Unit,
-    isPhraseSaved: Boolean,
-    onCheckPhraseInLanguageCollection: (String) -> Unit,
-    onSetPhraseDomain: (String, String) -> Unit,
     onToggleDictionaryFullScreenDialog: (String) -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
@@ -100,16 +93,6 @@ internal fun ScreenShotTranslateBottomSheet(
                 Text(
                     text = stringResource(R.string.text_title_translate_bottom_sheet),
                     style = MaterialTheme.typography.titleLarge,
-                )
-                ScreenShotButtonAddToList(
-                    isPhraseSaved = isPhraseSaved,
-                    isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
-                    onSetPhraseDomain = {
-                        onSetPhraseDomain(
-                            correctedOriginalText,
-                            languageTranslationDomain.translatedText.toString(),
-                        )
-                    },
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -153,50 +136,12 @@ internal fun ScreenShotTranslateBottomSheet(
             .onLoading { correctedOriginalText = languageTranslationDomain.originalText }
             .onSuccess {
                 correctedOriginalText = it
-                onCheckPhraseInLanguageCollection(it)
             }
             .onError { correctedOriginalText = it }
     }
 
     LaunchedEffect(Unit) {
         onCorrectedOriginalText(languageTranslationDomain.originalText)
-    }
-}
-
-@Composable
-private fun ScreenShotButtonAddToList(
-    isPhraseSaved: Boolean,
-    isLoadingStatus: Boolean,
-    onSetPhraseDomain: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val iconTint = if (isPhraseSaved) {
-        Color.Red
-    } else {
-        MaterialTheme.colorScheme.onSecondaryContainer
-    }
-
-    FilledTonalButton(
-        modifier = modifier,
-        enabled = !isLoadingStatus,
-        onClick = onSetPhraseDomain,
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                tint = iconTint,
-                contentDescription = null,
-            )
-            AnimatedVisibility(
-                visible = isPhraseSaved,
-                modifier = Modifier.align(Alignment.CenterVertically),
-            ) {
-                Text(
-                    modifier = Modifier.padding(start = 8.dp),
-                    text = stringResource(R.string.text_button_add_to_list_bottom_sheet),
-                )
-            }
-        }
     }
 }
 
@@ -260,11 +205,8 @@ private fun ScreenShotTranslateBottomSheetPreview() {
             "en",
             "pt",
         ),
-        isPhraseSaved = false,
         correctedOriginalTextStatus = statusSuccess("Corrected original"),
         onCorrectedOriginalText = {},
-        onCheckPhraseInLanguageCollection = {},
-        onSetPhraseDomain = { _, _ -> },
         onToggleDictionaryFullScreenDialog = {},
         onDismiss = {},
     )

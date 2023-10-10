@@ -15,5 +15,8 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_message_notification_permission_home">¡Por favor, active el permiso de notificación para las actualizaciones!</string>
+    <string name="text_description_floating_balloon_home">Denna alternativ kräver behörighet att visa din skärm för att generera en bild, vilket gör att du kan ha en flytande knapp på din skärm för enkel åtkomst. Var lugn, bilderna lämnar aldrig din enhet.</string>
+    <string name="text_description_device_button_home">När du tar en skärmbild. Kräver inga ytterligare behörigheter.</string>
+    <string name="text_title_by_floating_balloon_home">Med Flytande Ballong</string>
+    <string name="text_title_by_device_button_home">Med Enhetsknapp</string>
 </resources>

@@ -15,13 +15,13 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_button_sign_with_google_swiper_permission">Iniciar sesión con Google</string>
     <string name="text_title_swipe_initial">¡Bienvenido a Lingshot!</string>
-    <string name="text_message_swipe_initial">Explore la pantalla y deje que nuestra inteligencia artificial traduzca para usted, haciendo que el aprendizaje sea aún más fácil y atractivo.</string>
+    <string name="text_message_swipe_initial">Explore la pantalla y deje que nuestra inteligencia artificial traduzca para usted.</string>
     <string name="text_title_swipe_read_and_write">Traducción inteligente con una captura de pantalla.</string>
     <string name="text_message_swipe_read_and_write">Para traducir sus capturas de pantalla, solicitamos su permiso para guardar las imágenes en su dispositivo.\n\nGarantizamos la privacidad de sus datos, que se utilizarán exclusivamente para este propósito.</string>
     <string name="text_second_message_swipe_read_and_write">Para garantizar el pleno funcionamiento, es necesario otorgar permiso para guardar las capturas de pantalla.\n\nPor favor, revise su decisión y otorgue permiso para continuar.</string>
     <string name="text_title_swipe_overlay">Captura de pantallas con facilidad</string>
     <string name="text_message_swipe_overlay">Para generar las capturas de pantalla, solicitamos su permiso para utilizar la función de superposición.\n\nEste permiso nos permite capturar la pantalla de manera rápida y conveniente.</string>
+    <string name="text_button_swipe_initial">Comenzar</string>
     <string name="text_button_swipe">Conceder permiso</string>
 </resources>

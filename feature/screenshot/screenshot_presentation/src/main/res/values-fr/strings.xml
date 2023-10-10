@@ -19,7 +19,7 @@
     <string name="text_label_navigation_bar_item_listen">Écouter</string>
     <string name="text_label_navigation_bar_item_focus">Focus</string>
     <string name="text_label_navigation_bar_item_language">Langue</string>
-    <string name="text_message_illegible_phrase">Il n\'y a pas de texte lisible.</string>
+    <string name="text_message_illegible_phrase">Langue illisible ou inconnue!</string>
     <string name="text_select_language_speak_message">Sélectionnez une langue que vous parlez.</string>
     <string name="text_button_action_select_snack_bar">Sélectionner</string>
     <string name="text_title_translate_bottom_sheet">Votre traduction</string>

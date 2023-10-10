@@ -15,30 +15,5 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_label_name_user_logged_home">Hi, %s</string>
-    <string name="text_emoji_empty_collection_card_home">(  * _ *  )</string>
-    <string name="text_message_empty_collection_card_home">Collection is empty. Add a phrase!</string>
-    <string name="text_label_phrase_pending_review_home">sentences pending review.</string>
-    <string name="text_label_your_offence_home">Your offence is:</string>
-    <string name="text_label_consecutive_days_home">%s day(s)</string>
-    <string name="text_label_piechart_goals_home">goals</string>
-    <string name="text_label_piechart_completed_home">completed</string>
-    <string name="text_label_header_collections_home">Collections</string>
-    <string name="text_title_language_from_to_collection_card_home">from %s</string>
-    <string name="text_label_phrases_played_and_total_phrases_home">Played %1$d / %2$d sentences</string>
-    <string name="text_label_dropdown_menu_sign_out_home">Logout</string>
-    <string name="text_button_save_goal_dialog_home">Save</string>
-    <string name="text_button_cancel_goals_dialog_home">Cancel</string>
-    <string name="text_title_goals_dialog_home">Set your goal</string>
-    <string name="text_label_dropdown_menu_item_goals_home">%s phrase(s)</string>
-    <string name="text_label_count_dropdown_menu_goals_home">Count</string>
-    <string name="text_button_by_device_button_home">Device</string>
-    <string name="text_button_by_floating_balloon_home">Balloon</string>
-    <string name="text_markdown_tutorial_type_button_screenshot_home">
-        ### The app has two ways to take a screenshot
-        \n\n
-        **Device button** - With this option, you can take a screenshot using your device\'s standard buttons, without the need for any additional permissions.
-        \n\n
-        **Floating balloon** - This option requires permission to view your screen in order to generate an image, allowing you to have a floating button on your screen for easy.
-    </string>
+    <string name="text_message_notification_permission_home">Please enable post notification permission for updates!</string>
 </resources>

@@ -58,14 +58,10 @@ dependencies {
     implementation(project(":data:local"))
     implementation(project(":data:remote"))
     implementation(project(":domain"))
-    implementation(project(":feature:completephrase:completephrase_presentation"))
     implementation(project(":feature:home:home_presentation"))
     implementation(project(":feature:languagechoice:languagechoice_data"))
     implementation(project(":feature:languagechoice:languagechoice_domain"))
     implementation(project(":feature:languagechoice:languagechoice_presentation"))
-    implementation(project(":feature:phrasemaster:phrasemaster_data"))
-    implementation(project(":feature:phrasemaster:phrasemaster_domain"))
-    implementation(project(":feature:phrasemaster:phrasemaster_presentation"))
     implementation(project(":feature:screencapture"))
     implementation(project(":feature:screenshot:screenshot_domain"))
     implementation(project(":feature:screenshot:screenshot_presentation"))
@@ -73,7 +69,6 @@ dependencies {
 
     implementation(libs.compose.material3)
     implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.navigation.animation)
 
     implementation(libs.core.splash.screen)
@@ -81,7 +76,6 @@ dependencies {
 
     implementation(libs.hilt.navigation.compose)
     implementation(libs.coil.compose)
-    implementation(libs.balloon.compose)
     implementation(libs.play.services.ads)
     implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)

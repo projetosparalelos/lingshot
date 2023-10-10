@@ -38,10 +38,8 @@ import com.lingshot.common.helper.onError
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
 import com.lingshot.languagechoice_presentation.ui.LanguageChoiceDialog
-import com.lingshot.phrasemaster_presentation.ui.EditPhraseFullScreenDialog
 import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ScreenShotEvent
-import com.lingshot.screenshot_presentation.ScreenShotEvent.CheckPhraseInLanguageCollection
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ClearStatus
 import com.lingshot.screenshot_presentation.ScreenShotEvent.CroppedImage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchCorrectedOriginalText
@@ -127,23 +125,9 @@ internal fun ScreenShotScreen(
                 if (uiState.navigationBarItem == TRANSLATE) {
                     ScreenShotTranslateBottomSheet(
                         languageTranslationDomain = it,
-                        isPhraseSaved = uiState.isPhraseSaved,
                         correctedOriginalTextStatus = uiState.correctedOriginalTextStatus,
                         onCorrectedOriginalText = { original ->
                             handleEvent(FetchCorrectedOriginalText(original))
-                        },
-                        onCheckPhraseInLanguageCollection = { originalText ->
-                            handleEvent(
-                                CheckPhraseInLanguageCollection(originalText),
-                            )
-                        },
-                        onSetPhraseDomain = { originalText, translatedText ->
-                            handleEvent(
-                                ScreenShotEvent.SetPhraseDomain(
-                                    originalText,
-                                    translatedText,
-                                ),
-                            )
                         },
                         onToggleDictionaryFullScreenDialog = { url ->
                             handleEvent(ToggleDictionaryFullScreenDialog(url))
@@ -205,17 +189,6 @@ internal fun ScreenShotScreen(
         ScreenShotDictionaryFullScreenDialog(url) {
             handleEvent(ToggleDictionaryFullScreenDialog(null))
         }
-    }
-    if (uiState.isEditFullScreenDialogVisible) {
-        EditPhraseFullScreenDialog(
-            phraseState = uiState.phraseState,
-            onSavePhraseInLanguageCollection = {
-                handleEvent(ScreenShotEvent.SavePhraseInLanguageCollection(it))
-            },
-            onDismiss = {
-                handleEvent(ScreenShotEvent.HideEditPhraseFullScreenDialog)
-            },
-        )
     }
 }
 

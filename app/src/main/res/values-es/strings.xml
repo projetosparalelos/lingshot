@@ -14,7 +14,4 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-    <string name="text_message_notification_permission">¡Por favor, active el permiso de notificación para las actualizaciones!</string>
-    <string name="text_message_balloon_overlay_screenshot">Haga clic aquí para iniciar su viaje de aprendizaje de idiomas.</string>
-</resources>
+<resources/>

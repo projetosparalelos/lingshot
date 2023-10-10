@@ -93,31 +93,6 @@ private val DarkColorScheme = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
-private val LightAndroidSchemeCustom = SchemeCustom(
-    goalsPieChart = light_goals_pieChart,
-    completedPieChart = light_completed_pieChart,
-    answerSuccess = light_answerSuccess,
-    onAnswerSuccess = light_onAnswerSuccess,
-    answerSuccessContainer = light_answerSuccessContainer,
-    onAnswerSuccessContainer = light_onAnswerSuccessContainer,
-    answerError = light_answerError,
-    onAnswerError = light_onAnswerError,
-    answerErrorContainer = light_answerErrorContainer,
-    onAnswerErrorContainer = light_onAnswerErrorContainer,
-)
-private val DarkAndroidSchemeCustom = SchemeCustom(
-    goalsPieChart = dark_goals_pieChart,
-    completedPieChart = dark_completed_pieChart,
-    answerSuccess = dark_answerSuccess,
-    onAnswerSuccess = dark_onAnswerSuccess,
-    answerSuccessContainer = dark_answerSuccessContainer,
-    onAnswerSuccessContainer = dark_onAnswerSuccessContainer,
-    answerError = dark_answerError,
-    onAnswerError = dark_onAnswerError,
-    answerErrorContainer = dark_answerErrorContainer,
-    onAnswerErrorContainer = dark_onAnswerErrorContainer,
-)
-
 @Composable
 fun LingshotTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
@@ -132,14 +107,7 @@ fun LingshotTheme(
         else -> LightColorScheme
     }
 
-    val schemeCustom = when {
-        isDarkTheme -> DarkAndroidSchemeCustom
-        else -> LightAndroidSchemeCustom
-    }
-
-    CompositionLocalProvider(
-        LocalSchemeCustom provides schemeCustom,
-    ) {
+    CompositionLocalProvider {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,

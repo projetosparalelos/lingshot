@@ -15,5 +15,9 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_message_notification_permission_home">¡Por favor, active el permiso de notificación para las actualizaciones!</string>
+    <string name="text_description_floating_balloon_home">Cette option nécessite l\'autorisation de visualiser votre écran afin de générer une image, vous permettant d\'avoir un bouton flottant sur votre écran pour un accès facile. Soyez assuré, les images ne quittent jamais votre appareil.</string>
+    <string name="text_description_device_button_home">Lorsque vous prenez une capture d\'écran. Nécessite aucune autorisation supplémentaire.</string>
+    <string name="text_title_by_floating_balloon_home">Par Ballon Flottant</string>
+    <string name="text_title_by_device_button_home">Par Bouton de l\'Appareil</string>
+
 </resources>

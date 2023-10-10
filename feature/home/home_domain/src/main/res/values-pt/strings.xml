@@ -15,5 +15,8 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_message_notification_permission_home">¡Por favor, active el permiso de notificación para las actualizaciones!</string>
+    <string name="text_description_floating_balloon_home">Esta opção requer permissão para visualizar sua tela a fim de gerar uma imagem, permitindo que você tenha um botão flutuante em sua tela para acesso fácil. Fique tranquilo, as imagens nunca saem do seu dispositivo.</string>
+    <string name="text_description_device_button_home">Quando você tira uma captura de tela. Não requer nenhuma permissão adicional.</string>
+    <string name="text_title_by_floating_balloon_home">Por Balão Flutuante</string>
+    <string name="text_title_by_device_button_home">Por Botão do Dispositivo</string>
 </resources>

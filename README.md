@@ -63,9 +63,6 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Material Design 3](https://m3.material.io/)
     * [Dark Theme](https://material.io/develop/android/theming/dark)
     * [Dynamic Theming](https://m3.material.io/styles/color/dynamic-color/overview)
-* Firebase
-  * [Firestore](https://firebase.google.com/docs/firestore/quickstart)
-  * [Google Sign-In](https://developers.google.com/identity/sign-in/android/start-integrating)
 * ML Kit
   * [Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition/v2)
   * [Text Speech](https://developer.android.com/reference/android/speech/tts/TextToSpeech)
