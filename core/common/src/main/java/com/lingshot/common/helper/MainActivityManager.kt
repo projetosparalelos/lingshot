@@ -34,6 +34,6 @@ object MainActivityManager {
 
     private const val ERROR_MESSAGE =
         "MainActivity reference is null. " +
-                "Please make sure to set the main activity using setMainActivity() " +
-                "before calling getMainActivity()."
+            "Please make sure to set the main activity using setMainActivity() " +
+            "before calling getMainActivity()."
 }
