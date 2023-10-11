@@ -1,8 +1,9 @@
-![screenshot1](https://github.com/CharlesMoreira1/lingshot/assets/55266908/69155b2a-7790-4c4f-a40b-66cd0035292b)[![Kotlin Version](https://img.shields.io/badge/Kotlin-1.9.x-blue.svg)](https://kotlinlang.org)
 [![AGP](https://img.shields.io/badge/AGP-8.x-blue?style=flat)](https://developer.android.com/studio/releases/gradle-plugin)
 [![Gradle](https://img.shields.io/badge/Gradle-8.x-blue?style=flat)](https://gradle.org)
 ![build](https://github.com/CharlesMoreira1/lingshot/actions/workflows/build-ci.yml/badge.svg)
 <a href="https://github.com/diffplug/spotless"><img src="https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg" alt="spotless"></a>
+
+<img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/5786aa7d-3aae-41a1-9799-c48024f324f9" width="200">
 
 # Lingshot
 
