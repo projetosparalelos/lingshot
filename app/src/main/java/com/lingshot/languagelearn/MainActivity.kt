@@ -26,12 +26,18 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.lingshot.common.helper.MainActivityManager.setMainActivity
 import com.lingshot.designsystem.theme.LingshotTheme
 import com.lingshot.languagelearn.presentation.ui.MainRoute
+import com.lingshot.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var screenCaptureFloatingWindowLifecycle: ScreenCaptureFloatingWindowLifecycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +48,8 @@ class MainActivity : ComponentActivity() {
                 LingshotApp()
             }
         }
+        setMainActivity(this)
+        screenCaptureFloatingWindowLifecycle(this)
     }
 
     @Composable

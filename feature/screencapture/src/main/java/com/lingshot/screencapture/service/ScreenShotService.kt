@@ -32,6 +32,7 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.lingshot.common.CommonConstant.CHANNEL_ID
+import com.lingshot.common.helper.MainActivityManager.getMainActivity
 import com.lingshot.screencapture.R
 import com.lingshot.screencapture.ScreenCaptureFloatingWindow
 import com.lingshot.screencapture.helper.ScreenCaptureManager
@@ -86,7 +87,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
             screenCaptureManager.deleteScreenShot()
             stopSelf()
         }
-
+        setupFinishMainActivity()
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -115,16 +116,20 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
         data?.let { screenCaptureManager.startCapture(RESULT_OK, it) }
     }
 
-    private fun setupToastMessageCaptureScreenDeviceButton() {
+    private fun setupFinishMainActivity() {
         lifecycleScope.launch {
             delay(1.seconds)
-            success(
-                baseContext,
-                getString(R.string.text_toast_message_device_button_screen_capture),
-                LENGTH_LONG,
-                true,
-            ).show()
+            getMainActivity()?.finish()
         }
+    }
+
+    private fun setupToastMessageCaptureScreenDeviceButton() {
+        success(
+            baseContext,
+            getString(R.string.text_toast_message_device_button_screen_capture),
+            LENGTH_LONG,
+            true,
+        ).show()
     }
 
     private fun setupNotificationForeground() {
