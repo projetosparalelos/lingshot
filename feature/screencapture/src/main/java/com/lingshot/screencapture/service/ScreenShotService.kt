@@ -32,6 +32,7 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.lingshot.common.CommonConstant.CHANNEL_ID
+import com.lingshot.common.helper.MainActivityManager.getMainActivity
 import com.lingshot.screencapture.R
 import com.lingshot.screencapture.ScreenCaptureFloatingWindow
 import com.lingshot.screencapture.helper.ScreenCaptureManager
@@ -86,13 +87,12 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
             screenCaptureManager.deleteScreenShot()
             stopSelf()
         }
-
+        setupFinishMainActivity()
         return super.onStartCommand(intent, flags, startId)
     }
 
     private fun Intent?.setupScreenCaptureFloatingWindow() {
-        val isScreenCaptureByDevice =
-            this?.getBooleanExtra(SCREEN_CAPTURE_BY_DEVICE, false) ?: false
+        isScreenCaptureByDevice = this?.getBooleanExtra(SCREEN_CAPTURE_BY_DEVICE, false) ?: false
         screenCaptureFloatingWindow.start(isScreenCaptureByDevice)
         screenCaptureFloatingWindow.onFloating(
             lifecycleScope,
@@ -116,16 +116,20 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
         data?.let { screenCaptureManager.startCapture(RESULT_OK, it) }
     }
 
-    private fun setupToastMessageCaptureScreenDeviceButton() {
+    private fun setupFinishMainActivity() {
         lifecycleScope.launch {
             delay(1.seconds)
-            success(
-                baseContext,
-                getString(R.string.text_toast_message_device_button_screen_capture),
-                LENGTH_LONG,
-                true,
-            ).show()
+            getMainActivity()?.finish()
         }
+    }
+
+    private fun setupToastMessageCaptureScreenDeviceButton() {
+        success(
+            baseContext,
+            getString(R.string.text_toast_message_device_button_screen_capture),
+            LENGTH_LONG,
+            true,
+        ).show()
     }
 
     private fun setupNotificationForeground() {
@@ -170,6 +174,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
         private const val SCREEN_CAPTURE_BY_DEVICE = "SCREEN_CAPTURE_BY_DEVICE"
         private const val STOP_SERVICE = "STOP_SERVICE"
         private const val NOTIFICATION_FOREGROUND_ID = 1
+        var isScreenCaptureByDevice: Boolean = false
 
         fun screenShotServiceIntent(context: Context?): Intent {
             return Intent(context, ScreenShotService::class.java).apply {

@@ -16,13 +16,14 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":feature:home:home_domain"))
     implementation(project(":feature:languagechoice:languagechoice_domain"))
-    implementation(project(":feature:phrasemaster:phrasemaster_domain"))
+    implementation(project(":feature:screencapture"))
 
     testImplementation(project(":core:testing"))
 
+    implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.lottie.compose)
     implementation(libs.coil.compose)
-    implementation(libs.compose.markdown)
+    implementation(libs.toasty)
     implementation(libs.hilt.navigation.compose)
 }

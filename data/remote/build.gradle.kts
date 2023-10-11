@@ -19,10 +19,6 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.timber)
 
-    implementation(libs.play.services.auth)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth.ktx)
-
     debugImplementation(libs.chucker.library)
     releaseImplementation(libs.chucker.library.no.op)
 }

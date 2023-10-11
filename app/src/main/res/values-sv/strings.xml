@@ -14,7 +14,4 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-    <string name="text_message_notification_permission">Vänligen aktivera aviseringstillståndet för uppdateringar!</string>
-    <string name="text_message_balloon_overlay_screenshot">Klicka här för att påbörja din språkinlärningsresa.</string>
-</resources>
+<resources/>

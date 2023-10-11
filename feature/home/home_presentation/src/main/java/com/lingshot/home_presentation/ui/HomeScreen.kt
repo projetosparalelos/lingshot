@@ -13,8 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(ExperimentalPermissionsApi::class)
+
 package com.lingshot.home_presentation.ui
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.media.projection.MediaProjectionManager
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,42 +37,47 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FitScreen
+import androidx.compose.material.icons.filled.Screenshot
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.lingshot.common.helper.onEmpty
-import com.lingshot.common.helper.onLoading
-import com.lingshot.common.helper.onSuccess
-import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
-import com.lingshot.designsystem.component.placeholder.fade
-import com.lingshot.designsystem.component.placeholder.placeholder
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
+import com.lingshot.common.util.findActivity
+import com.lingshot.designsystem.component.LingshotOnLifecycleEvent
 import com.lingshot.home_domain.model.HomeTypeSection
+import com.lingshot.home_domain.model.TypeActionScreenshot
+import com.lingshot.home_domain.model.TypeActionScreenshot.FLOATING_BALLOON
+import com.lingshot.home_domain.model.screenShotActions
 import com.lingshot.home_presentation.HomeEvent
-import com.lingshot.home_presentation.HomeEvent.SaveGoals
-import com.lingshot.home_presentation.HomeEvent.SelectedGoalDays
-import com.lingshot.home_presentation.HomeEvent.SignOut
-import com.lingshot.home_presentation.HomeEvent.ToggleExpandDropdownMenuSignOut
-import com.lingshot.home_presentation.HomeEvent.ToggleSetGoalsDialog
+import com.lingshot.home_presentation.HomeEvent.ToggleServiceButton
 import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.HomeViewModel
+import com.lingshot.home_presentation.R
 import com.lingshot.home_presentation.navigation.HomeDestination
-import com.lingshot.home_presentation.ui.component.HomeCollectionCard
-import com.lingshot.home_presentation.ui.component.HomeEmptyCollectionCard
-import com.lingshot.home_presentation.ui.component.HomeNeedReviewCard
-import com.lingshot.home_presentation.ui.component.HomeOffensiveTitle
-import com.lingshot.home_presentation.ui.component.HomePierChartCard
+import com.lingshot.home_presentation.ui.component.HomeOptionScreenShotCard
 import com.lingshot.home_presentation.ui.component.HomeToolbar
-import com.phrase.phrasemaster_domain.model.LanguageCollectionDomain
+import com.lingshot.screencapture.service.ScreenShotService
+import com.lingshot.screencapture.service.ScreenShotService.Companion.screenShotServiceIntent
+import com.lingshot.screencapture.service.ScreenShotService.Companion.screenShotServiceIntentWithMediaProjection
+import com.lingshot.screencapture.util.isServiceRunning
+import es.dmoral.toasty.Toasty
 
 @Composable
 internal fun HomeRoute(
@@ -79,117 +98,112 @@ internal fun HomeScreen(
     homeDestination: HomeDestination,
     handleEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
+    context: Context = LocalContext.current,
 ) {
+    val activity = context.findActivity()
+
+    var enabledType by remember {
+        mutableStateOf(getInitialEnabledType())
+    }
+
+    val notificationPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+    } else {
+        null
+    }
+
+    val launcherScreenShotService =
+        rememberLauncherForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == ComponentActivity.RESULT_OK) {
+                activity?.startScreenShotServiceWithResult(result.data)
+            }
+        }
+
+    LingshotOnLifecycleEvent { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                if (isServiceRunning(context) != uiState.isServiceRunning) {
+                    handleEvent(ToggleServiceButton)
+                }
+            }
+
+            else -> Unit
+        }
+    }
+    val textMessageNotificationPermission = stringResource(
+        id = R.string.text_message_notification_permission_home,
+    )
     Surface {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
         ) {
-            HomeToolbar(
-                userDomain = uiState.userDomain,
-                isExpandedDropdownMenuSignOut = uiState.isExpandedDropdownMenuSignOut,
-                onToggleExpandDropdownMenuSignOut = {
-                    handleEvent(ToggleExpandDropdownMenuSignOut)
-                },
-                onSignOut = {
-                    handleEvent(SignOut(homeDestination.onSignOut))
-                },
-            )
+            HomeToolbar(homeDestination)
+
             LazyColumn(
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 items(uiState.homeSection) { section ->
                     when (section.typeSection) {
-                        HomeTypeSection.HEADER -> {
-                            Text(
-                                text = stringResource(id = section.title),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
+                        HomeTypeSection.CARD_BUTTON_SCREEN_SHOT -> {
+                            screenShotActions.fastForEachIndexed { _, item ->
+                                val isCheckForItem = item.typeActionScreenshot == enabledType
+                                HomeOptionScreenShotCard(
+                                    onClickChanged = {
+                                        if (notificationPermissionState?.status?.isGranted?.not() == true) {
+                                            if (notificationPermissionState.status.shouldShowRationale) {
+                                                context.startActivity(
+                                                    intentApplicationDetailsPermission(context),
+                                                )
+                                                Toasty.warning(
+                                                    context,
+                                                    textMessageNotificationPermission,
+                                                    Toast.LENGTH_LONG,
+                                                    true,
+                                                ).show()
+                                            } else {
+                                                notificationPermissionState.launchPermissionRequest()
+                                            }
+                                            return@HomeOptionScreenShotCard
+                                        }
 
-                        HomeTypeSection.OFFENSIVE_TITLE -> {
-                            uiState.consecutiveDaysStatus.onLoading {
-                                HomeOffensiveTitle(
-                                    modifier = Modifier.placeholder(
-                                        visible = true,
-                                        highlight = PlaceholderHighlight.fade(),
-                                    ),
-                                    consecutiveDays = 0,
+                                        if (uiState.isServiceRunning) {
+                                            activity?.stopScreenShotService()
+                                            handleEvent(ToggleServiceButton)
+                                        } else {
+                                            if (item.typeActionScreenshot == FLOATING_BALLOON) {
+                                                launcherScreenShotService.launch(activity?.mediaProjectionIntent())
+                                            } else {
+                                                activity?.startScreenShotService()
+                                                handleEvent(ToggleServiceButton)
+                                            }
+                                            enabledType = item.typeActionScreenshot
+                                        }
+                                    },
+                                    icon = if (item.typeActionScreenshot == FLOATING_BALLOON) {
+                                        Icons.Default.FitScreen
+                                    } else {
+                                        Icons.Default.Screenshot
+                                    },
+                                    imageOnboarding = if (item.typeActionScreenshot == FLOATING_BALLOON) {
+                                        R.drawable.floating_balloon_onboarding
+                                    } else {
+                                        R.drawable.device_button_onboarding
+                                    },
+
+                                    title = item.title,
+                                    description = item.description,
+                                    isEnabled = if (uiState.isServiceRunning.not()) {
+                                        true
+                                    } else {
+                                        isCheckForItem
+                                    },
+                                    isChecked = isCheckForItem && uiState.isServiceRunning,
                                 )
-                            }.onSuccess { data ->
-                                HomeOffensiveTitle(consecutiveDays = data)
+                                Spacer(modifier = Modifier.height(16.dp))
                             }
-                        }
-
-                        HomeTypeSection.NEED_REVIEW -> {
-                            uiState.phrasesPendingReviewStatus
-                                .onLoading {
-                                    HomeNeedReviewCard(
-                                        modifier = Modifier.placeholder(
-                                            visible = true,
-                                            highlight = PlaceholderHighlight.fade(),
-                                        ),
-                                        pendingReview = null,
-                                    )
-                                }.onSuccess { data ->
-                                    HomeNeedReviewCard(
-                                        pendingReview = data,
-                                    )
-                                }
-                        }
-
-                        HomeTypeSection.PI_CHART -> {
-                            HomePierChartCard(
-                                modifier = Modifier.placeholder(
-                                    visible = uiState.isPieChartGoalsVisible.not(),
-                                    highlight = PlaceholderHighlight.fade(),
-                                ),
-                                goals = uiState.goals,
-                                isSetGoalsDialogVisible = uiState.isSetGoalsDialogVisible,
-                                selectedGoalDays = uiState.selectedGoalDays,
-                                listCountPhrases = uiState.goalDaysList,
-                                onSelectedGoalDays = {
-                                    handleEvent(SelectedGoalDays(it))
-                                },
-                                onSaveGoals = {
-                                    handleEvent(SaveGoals(it))
-                                },
-                                onToggleSetGoalsDialog = {
-                                    handleEvent(ToggleSetGoalsDialog)
-                                },
-                            )
-                        }
-
-                        HomeTypeSection.COLLECTION -> {
-                            uiState.languageCollectionsStatus
-                                .onLoading {
-                                    HomeCollectionCard(
-                                        modifier = Modifier.placeholder(
-                                            visible = true,
-                                            highlight = PlaceholderHighlight.fade(),
-                                        ),
-                                        languageCollectionDomain = LanguageCollectionDomain(),
-                                        totalPhrases = 0,
-                                        phrasesPlayed = 0,
-                                        onNavigateToCompletePhrase = { _, _, _ -> },
-                                    )
-                                }
-                                .onEmpty {
-                                    HomeEmptyCollectionCard()
-                                }
-                                .onSuccess { data ->
-                                    data.first.fastForEachIndexed { position, item ->
-                                        HomeCollectionCard(
-                                            languageCollectionDomain = item,
-                                            totalPhrases = data.second.listTotalPhrases[position],
-                                            phrasesPlayed = data.second.listPhrasesPlayed[position],
-                                            onNavigateToCompletePhrase = homeDestination.onNavigateToCompletePhrase,
-                                        )
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                    }
-                                }
                         }
                     }
                 }
@@ -207,3 +221,37 @@ private fun HomeScreenPreview() {
         uiState = HomeUiState(),
     )
 }
+
+private fun getInitialEnabledType(): TypeActionScreenshot {
+    return if (!ScreenShotService.isScreenCaptureByDevice) {
+        FLOATING_BALLOON
+    } else {
+        TypeActionScreenshot.DEVICE_BUTTON
+    }
+}
+
+private fun Activity.startScreenShotService() =
+    screenShotServiceIntent(this).also {
+        startService(it)
+    }
+
+private fun Activity.startScreenShotServiceWithResult(
+    resultData: Intent?,
+) = screenShotServiceIntentWithMediaProjection(this, resultData).also {
+    startService(it)
+}
+
+private fun Activity.stopScreenShotService() =
+    screenShotServiceIntent(this).also {
+        stopService(it)
+    }
+
+private fun Activity.mediaProjectionIntent() =
+    (getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager)
+        .createScreenCaptureIntent()
+
+private fun intentApplicationDetailsPermission(context: Context) =
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.parse("package:${context.packageName}"),
+    )
