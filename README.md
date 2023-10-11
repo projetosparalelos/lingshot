@@ -1,4 +1,4 @@
-[![Kotlin Version](https://img.shields.io/badge/Kotlin-1.9.x-blue.svg)](https://kotlinlang.org)
+![screenshot1](https://github.com/CharlesMoreira1/lingshot/assets/55266908/69155b2a-7790-4c4f-a40b-66cd0035292b)[![Kotlin Version](https://img.shields.io/badge/Kotlin-1.9.x-blue.svg)](https://kotlinlang.org)
 [![AGP](https://img.shields.io/badge/AGP-8.x-blue?style=flat)](https://developer.android.com/studio/releases/gradle-plugin)
 [![Gradle](https://img.shields.io/badge/Gradle-8.x-blue?style=flat)](https://gradle.org)
 ![build](https://github.com/CharlesMoreira1/lingshot/actions/workflows/build-ci.yml/badge.svg)
@@ -22,7 +22,7 @@ Key Features:
 
 🔒 Privacy Guaranteed: We value your privacy and ensure that your screenshots and translations remain secure and confidential.
 
-<img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/f6357924-6cce-4b59-973a-8b95c136bdc0" height="400" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/3fd9a622-446c-4a6a-b309-a57acc33709e" height="400" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/e0b3f005-6b0e-4bd7-a97b-4286834f9230" height="400" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/bd778f50-2fed-4bb9-8708-8b127bc8e1c4" height="400" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/5913f6ec-0b72-4d36-88b3-c11eefb55d55" height="400" width="186">
+<img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/9416ab15-433b-4dba-8fef-698c0b9b80d2" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/d7261250-5957-4673-8309-625864d59242" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/c72d2f64-1430-46d2-bf01-35f361f23e7d" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/bd778f50-2fed-4bb9-8708-8b127bc8e1c4" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/5913f6ec-0b72-4d36-88b3-c11eefb55d55" width="186">
 
 This project's primary focus is to promote a modular, scalable, maintainable, and testable architecture. It incorporates a cutting-edge tech stack and embodies the best practices in software development. While the application may seem straightforward, it encompasses all the essential components that form the foundation for a robust, large-scale application.
 
