@@ -26,6 +26,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.lingshot.common.helper.MainActivityManager.setMainActivity
 import com.lingshot.designsystem.theme.LingshotTheme
 import com.lingshot.languagelearn.presentation.ui.MainRoute
@@ -49,6 +50,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         setMainActivity(this)
+        showFeedBackBottomSheetDialog()
         screenCaptureFloatingWindowLifecycle(this)
     }
 
@@ -61,5 +63,14 @@ class MainActivity : ComponentActivity() {
             systemUiController.setStatusBarColor(statusBarColor)
         }
         MainRoute()
+    }
+
+    private fun showFeedBackBottomSheetDialog() {
+        val reviewManager = ReviewManagerFactory.create(applicationContext)
+        reviewManager.requestReviewFlow().addOnCompleteListener { review ->
+            if (review.isSuccessful) {
+                reviewManager.launchReviewFlow(this, review.result)
+            }
+        }
     }
 }
