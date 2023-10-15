@@ -79,5 +79,4 @@ dependencies {
     implementation(libs.play.services.ads)
     implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)
-    implementation(libs.bundles.play.review)
 }

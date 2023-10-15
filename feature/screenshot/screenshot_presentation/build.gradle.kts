@@ -19,6 +19,8 @@ dependencies {
     implementation(project(":feature:screencapture"))
     implementation(project(":feature:screenshot:screenshot_domain"))
 
+    implementation(libs.bundles.play.review)
+
     implementation(libs.activity.compose)
     implementation(libs.accompanist.systemuicontroller)
 

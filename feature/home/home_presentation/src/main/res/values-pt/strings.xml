@@ -16,4 +16,5 @@
 -->
 <resources>
     <string name="text_message_notification_permission_home">Por favor, habilite a permissão de notificação para atualizações!</string>
+    <string name="text_button_donate">Doar</string>
 </resources>
