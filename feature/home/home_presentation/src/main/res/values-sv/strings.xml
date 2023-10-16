@@ -16,4 +16,5 @@
 -->
 <resources>
     <string name="text_message_notification_permission_home">Vänligen aktivera aviseringstillståndet för uppdateringar!</string>
+    <string name="text_button_donate">Donera</string>
 </resources>
