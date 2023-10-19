@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Setup checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set environment variables
         run: |
@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - name: Setup checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set environment variables
         run: |
@@ -70,7 +70,7 @@ jobs:
 
     steps:
       - name: Setup checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set environment variables
         run: |
@@ -108,7 +108,7 @@ jobs:
     needs: [quality]
     steps:
       - name: Setup checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup ruby
         uses: actions/setup-ruby@v1
