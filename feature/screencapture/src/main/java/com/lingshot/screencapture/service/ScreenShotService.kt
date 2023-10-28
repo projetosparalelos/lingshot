@@ -44,6 +44,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
@@ -100,7 +101,12 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
                 screenCaptureManager.captureScreenshot(lifecycleScope)
             },
         )
-        screenCaptureFloatingWindow.onFloatingClose { stopSelf() }
+        screenCaptureFloatingWindow.onFloatingClose {
+            lifecycleScope.launch {
+                delay(500.milliseconds)
+                stopSelf()
+            }
+        }
 
         if (isScreenCaptureByDevice) {
             setupToastMessageCaptureScreenDeviceButton()
@@ -118,8 +124,12 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
 
     private fun setupFinishMainActivity() {
         lifecycleScope.launch {
-            delay(1.seconds)
-            getMainActivity()?.finish()
+            try {
+                delay(1.seconds)
+                getMainActivity()?.finish()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

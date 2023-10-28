@@ -20,15 +20,12 @@ import com.google.mlkit.nl.languageid.LanguageIdentifier
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions.DEFAULT_OPTIONS
-import com.lingshot.domain.repository.BalloonOverlayRepository
 import com.lingshot.domain.repository.TextIdentifierRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import lingshot.teachmeprint.local.repository.BalloonOverlayRepositoryImpl
 import lingshot.teachmeprint.local.repository.TextIdentifierRepositoryImpl
-import lingshot.teachmeprint.local.storage.BalloonOverlayLocalStorage
 import javax.inject.Singleton
 
 @Module
@@ -42,13 +39,6 @@ object LocalModule {
         languageIdentifier: LanguageIdentifier,
     ): TextIdentifierRepository =
         TextIdentifierRepositoryImpl(textRecognizer, languageIdentifier)
-
-    @Singleton
-    @Provides
-    fun provideBalloonOverlayRepository(
-        balloonOverlayLocalStorage: BalloonOverlayLocalStorage,
-    ): BalloonOverlayRepository =
-        BalloonOverlayRepositoryImpl(balloonOverlayLocalStorage)
 
     @Singleton
     @Provides

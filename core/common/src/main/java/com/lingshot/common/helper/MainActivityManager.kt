@@ -26,14 +26,8 @@ object MainActivityManager {
     }
 
     fun getMainActivity(): Activity? {
-        if (activity == null) {
-            error(ERROR_MESSAGE)
-        }
-        return activity?.get()
+        return runCatching {
+            activity?.get()
+        }.getOrNull()
     }
-
-    private const val ERROR_MESSAGE =
-        "MainActivity reference is null. " +
-            "Please make sure to set the main activity using setMainActivity() " +
-            "before calling getMainActivity()."
 }

@@ -19,6 +19,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
+import androidx.multidex.MultiDex
 import com.lingshot.common.CommonConstant.CHANNEL_ID
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -28,8 +29,13 @@ class LingshotApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        setupMultidex()
         setupNotificationChannel()
         setupTimber()
+    }
+
+    private fun setupMultidex() {
+        MultiDex.install(this)
     }
 
     private fun setupNotificationChannel() {

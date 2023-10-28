@@ -20,6 +20,7 @@ android {
 
         minSdk = AppVersionPlugin.MIN_SDK
         targetSdk = AppVersionPlugin.TARGET_SDK
+        multiDexEnabled = true
 
         setProperty("archivesBaseName", "${parent?.name}-$versionName")
     }
@@ -52,6 +53,8 @@ android {
     }
 }
 
+googleServices.disableVersionCheck = true
+
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
@@ -66,6 +69,8 @@ dependencies {
     implementation(project(":feature:screenshot:screenshot_domain"))
     implementation(project(":feature:screenshot:screenshot_presentation"))
     implementation(project(":feature:swipepermission:swipepermission_presentation"))
+
+    implementation(libs.multidex)
 
     implementation(libs.compose.material3)
     implementation(libs.accompanist.systemuicontroller)

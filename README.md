@@ -46,7 +46,6 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Jetpack](https://developer.android.com/jetpack)
     * [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
     * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
-    * [Room](https://developer.android.com/jetpack/androidx/releases/room)
   * [Hilt](https://dagger.dev/hilt/)
   * [Coil](https://github.com/coil-kt/coil)
   * [Lottie](http://airbnb.io/lottie)

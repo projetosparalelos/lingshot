@@ -17,10 +17,4 @@
 <resources>
     <!-- App -->
     <string name="app_name">Lingshot</string>
-
-    <!-- NotificationClearScreenshot -->
-    <string name="text_notification_message_clean_up_gallery">Rensa dina skärmdumpar i galleriet.</string>
-
-    <!-- UtilExtension -->
-    <string name="text_button_action_close_snack_bar_util">Stäng</string>
 </resources>

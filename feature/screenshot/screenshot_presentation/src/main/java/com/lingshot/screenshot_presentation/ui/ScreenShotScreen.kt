@@ -107,6 +107,7 @@ internal fun ScreenShotScreen(
 
             uiState.screenShotStatus.onEmpty {
                 ScreenShotBalloon(
+                    modifier = Modifier.padding(bottom = 32.dp),
                     text = illegiblePhrase,
                     onDismiss = {
                         handleEvent(ClearStatus)
