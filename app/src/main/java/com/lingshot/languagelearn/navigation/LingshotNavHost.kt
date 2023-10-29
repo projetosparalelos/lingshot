@@ -55,7 +55,7 @@ fun LingshotNavHost(
     }
 }
 
-private val homeDestination: (NavHostController) -> HomeDestination = { nav ->
+private val homeDestination: (NavHostController) -> HomeDestination = { _ ->
     HomeDestination()
 }
 

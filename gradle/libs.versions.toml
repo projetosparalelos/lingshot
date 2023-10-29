@@ -7,6 +7,7 @@ multidex = "2.0.1"
 playReview = "2.0.1"
 playServicesAds = "22.4.0"
 firebaseCrashylytics = "2.9.9"
+firebasePerf = "1.4.2"
 paparazzi = "1.3.1"
 coreKTX = "1.12.0"
 coreSplashScreen = "1.0.1"
@@ -37,7 +38,7 @@ timber = "5.0.1"
 chucker = "3.5.2"
 daggerHilt = "2.48.1"
 
-firebaseBom = "32.4.0"
+firebaseBom = "29.3.0"
 
 imageCropper = "4.5.0"
 coil = "2.4.0"
@@ -47,7 +48,7 @@ markdown = "0.3.6"
 toasty = "1.5.2"
 
 jUnit = "4.13.2"
-testParameterInjector = "1.8"
+testParameterInjector = "1.14"
 
 detekt = "1.22.0"
 spotless = "6.22.0"
@@ -61,6 +62,8 @@ detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 spotless-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 android-r8-plugin = { module = "com.android.tools:r8", version.ref = "androidR8"}
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+firebase-crashlytics-gradlePlugin = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashylytics" }
+firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerf" }
 
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKTX" }
 core-splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashScreen" }
@@ -114,9 +117,11 @@ play-review = { module = "com.google.android.play:review", version.ref="playRevi
 play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref="playReview" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx" }
+firebase-performance-gradle = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerf" }
 
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
@@ -137,7 +142,6 @@ compose-lint-checks = { module = "com.slack.lint.compose:compose-lint-checks", v
 [bundles]
 lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service", "lifecycle-runtimeCompose", "lifecycle-viewModelCompose"]
 coroutines = ["coroutines-android", "coroutines-core", "coroutines-play-services"]
-firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx"]
 play-review = ["play-review", "play-review-ktx"]
 testing-unit = ["junit", "coroutines-test", "test-parameter-injector"]
 
@@ -150,4 +154,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashylytics" }
+firebase-performance = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerf" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }

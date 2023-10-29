@@ -6,6 +6,8 @@ dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.ksp.gradle.plugin)
+    compileOnly(libs.firebase.crashlytics.gradlePlugin)
+    compileOnly(libs.firebase.performance.gradlePlugin)
     implementation(libs.detekt.plugin)
     implementation(libs.spotless.plugin)
 }
@@ -35,6 +37,10 @@ gradlePlugin {
         register("androidQualityPlugin") {
             id = "lingshot.android.quality.plugin"
             implementationClass = "AndroidQualityPlugin"
+        }
+        register("androidFirebase") {
+            id = "lingshot.android.application.firebase"
+            implementationClass = "AndroidApplicationFirebaseConventionPlugin"
         }
         register("androidAdmobPlugin") {
             id = "lingshot.android.admob.plugin"
