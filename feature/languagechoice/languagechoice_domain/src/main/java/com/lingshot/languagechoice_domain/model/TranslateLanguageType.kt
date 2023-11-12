@@ -13,18 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.home_presentation
+package com.lingshot.languagechoice_domain.model
 
-import com.lingshot.languagechoice_domain.model.AvailableLanguage
-import com.lingshot.languagechoice_domain.model.TranslateLanguageType
-
-sealed class HomeEvent {
-
-    object ToggleServiceButton : HomeEvent()
-
-    data class SaveLanguage(val availableLanguage: AvailableLanguage?, val translateLanguageType: TranslateLanguageType?) : HomeEvent()
-
-    data class SelectedOptionsLanguage(val selectedOptionsLanguage: AvailableLanguage?) : HomeEvent()
-
-    data class ToggleLanguageDialog(val translateLanguageType: TranslateLanguageType?) : HomeEvent()
+enum class TranslateLanguageType {
+    FROM,
+    TO,
 }

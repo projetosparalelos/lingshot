@@ -37,19 +37,14 @@ import com.lingshot.common.helper.onEmpty
 import com.lingshot.common.helper.onError
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
-import com.lingshot.languagechoice_presentation.ui.LanguageChoiceDialog
 import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ScreenShotEvent
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ClearStatus
 import com.lingshot.screenshot_presentation.ScreenShotEvent.CroppedImage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchCorrectedOriginalText
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchTextRecognizer
-import com.lingshot.screenshot_presentation.ScreenShotEvent.SaveLanguage
-import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsLanguage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsNavigationBar
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleDictionaryFullScreenDialog
-import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleLanguageDialog
-import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleLanguageDialogAndHideSelectionAlert
 import com.lingshot.screenshot_presentation.ScreenShotUiState
 import com.lingshot.screenshot_presentation.ScreenShotViewModel
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
@@ -60,9 +55,7 @@ import com.lingshot.screenshot_presentation.ui.component.ScreenShotLottieLoading
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotNavigationBar
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotNavigationBarItem
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotSnackBarError
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotSnackBarSelectLanguage
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotTranslateBottomSheet
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun ScreenShotRoute(
@@ -147,14 +140,6 @@ internal fun ScreenShotScreen(
                     },
                 )
             }
-            if (uiState.isLanguageSelectionAlertVisible) {
-                ScreenShotSnackBarSelectLanguage(
-                    modifier = Modifier.padding(bottom = 16.dp),
-                    onToggleLanguageDialogAndHideSelectionAlert = {
-                        handleEvent(ToggleLanguageDialogAndHideSelectionAlert)
-                    },
-                )
-            }
             ScreenShotNavigationBar(
                 modifier = Modifier.padding(bottom = 16.dp),
             ) {
@@ -169,21 +154,6 @@ internal fun ScreenShotScreen(
                 )
             }
         }
-    }
-    if (uiState.isLanguageDialogVisible) {
-        LanguageChoiceDialog(
-            availableLanguage = uiState.availableLanguage,
-            availableLanguageList = uiState.availableLanguageList.toImmutableList(),
-            onSaveLanguage = {
-                handleEvent(SaveLanguage(it))
-            },
-            onSelectedOptionsLanguage = {
-                handleEvent(SelectedOptionsLanguage(it))
-            },
-            onDismiss = {
-                handleEvent(ToggleLanguageDialog)
-            },
-        )
     }
 
     uiState.dictionaryUrl?.let { url ->

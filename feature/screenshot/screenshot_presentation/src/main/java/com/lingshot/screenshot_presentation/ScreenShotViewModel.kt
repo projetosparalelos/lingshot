@@ -35,6 +35,8 @@ import com.lingshot.domain.repository.ChatGPTRepository
 import com.lingshot.domain.repository.TextIdentifierRepository
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType.FROM
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType.TO
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
@@ -42,7 +44,6 @@ import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.FOCUS
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LANGUAGE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LISTEN
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -84,28 +85,12 @@ class ScreenShotViewModel @Inject constructor(
                 fetchTextRecognizer(screenShotEvent.imageBitmap, screenShotEvent.illegiblePhrase)
             }
 
-            is ScreenShotEvent.SaveLanguage -> {
-                saveLanguage(screenShotEvent.availableLanguage)
-            }
-
-            is ScreenShotEvent.SelectedOptionsLanguage -> {
-                selectedOptionsLanguage(screenShotEvent.availableLanguage)
-            }
-
             is ScreenShotEvent.SelectedOptionsNavigationBar -> {
                 selectedOptionsNavigationBar(screenShotEvent.navigationBarItem)
             }
 
             is ScreenShotEvent.ClearStatus -> {
                 clearStatus()
-            }
-
-            is ScreenShotEvent.ToggleLanguageDialog -> {
-                toggleLanguageDialog()
-            }
-
-            is ScreenShotEvent.ToggleLanguageDialogAndHideSelectionAlert -> {
-                toggleLanguageDialogAndHideSelectionAlert()
             }
 
             is ScreenShotEvent.ToggleDictionaryFullScreenDialog -> {
@@ -118,19 +103,11 @@ class ScreenShotViewModel @Inject constructor(
         _uiState.update { it.copy(actionCropImage = actionCropImageType) }
     }
 
-    private fun selectedOptionsLanguage(availableLanguage: AvailableLanguage?) {
-        _uiState.update { it.copy(availableLanguage = availableLanguage) }
-    }
-
     private fun selectedOptionsNavigationBar(navigationBarItem: NavigationBarItem) {
         when (navigationBarItem) {
             TRANSLATE -> {
                 viewModelScope.launch {
-                    getLanguage()?.let {
-                        croppedImage(CROPPED_IMAGE)
-                    } ?: run {
-                        showLanguageSelectionAlert()
-                    }
+                    croppedImage(CROPPED_IMAGE)
                 }
             }
 
@@ -141,40 +118,8 @@ class ScreenShotViewModel @Inject constructor(
             FOCUS -> {
                 croppedImage(FOCUS_IMAGE)
             }
-
-            LANGUAGE -> {
-                toggleLanguageDialog()
-            }
         }
         _uiState.update { it.copy(navigationBarItem = navigationBarItem) }
-    }
-
-    private fun showLanguageSelectionAlert() {
-        _uiState.update {
-            it.copy(
-                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible,
-            )
-        }
-    }
-
-    private fun toggleLanguageDialog() {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    isLanguageDialogVisible = !it.isLanguageDialogVisible,
-                    availableLanguage = getLanguage(),
-                )
-            }
-        }
-    }
-
-    private fun toggleLanguageDialogAndHideSelectionAlert() {
-        _uiState.update {
-            it.copy(
-                isLanguageDialogVisible = !it.isLanguageDialogVisible,
-                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible,
-            )
-        }
     }
 
     private fun toggleDictionaryFullScreenDialog(url: String?) {
@@ -223,7 +168,7 @@ class ScreenShotViewModel @Inject constructor(
                         messages = listOf(
                             MessageDomain(
                                 role = "system",
-                                content = PROMPT_TRANSLATE(getLanguage()?.name?.lowercase()),
+                                content = PROMPT_TRANSLATE(getLanguageTo()?.name?.lowercase()),
                             ),
                             MessageDomain(
                                 role = "user",
@@ -235,7 +180,7 @@ class ScreenShotViewModel @Inject constructor(
                         originalText = text,
                         translatedText = chatGPTRepository.get(requestBody),
                         languageCodeFrom = languageIdentifierUseCase(text),
-                        languageCodeTo = getLanguage()?.languageCode.toString(),
+                        languageCodeTo = getLanguageTo()?.languageCode.toString(),
                     )
                 }, { status ->
                     _uiState.update { it.copy(screenShotStatus = status) }
@@ -296,22 +241,16 @@ class ScreenShotViewModel @Inject constructor(
         textToSpeech.shutdown()
     }
 
-    private suspend fun getLanguage(): AvailableLanguage? {
-        return languageChoiceRepository.getLanguage().first()
+    private suspend fun getLanguageTo(): AvailableLanguage? {
+        return languageChoiceRepository.getLanguage(TO).first()
     }
 
-    private fun saveLanguage(availableLanguage: AvailableLanguage?) {
-        viewModelScope.launch {
-            languageChoiceRepository.saveLanguage(availableLanguage)
-        }
+    private suspend fun getLanguageFrom(): AvailableLanguage? {
+        return languageChoiceRepository.getLanguage(FROM).first()
     }
 
     private suspend fun String.isLanguageAvailable(): Boolean {
-        val availableLanguage = AvailableLanguage.from(
-            languageIdentifierUseCase(this),
-        )
-
-        return availableLanguage?.languageCode != null
+        return languageIdentifierUseCase(this) == getLanguageFrom()?.languageCode
     }
 
     private fun String?.formatText(): String {

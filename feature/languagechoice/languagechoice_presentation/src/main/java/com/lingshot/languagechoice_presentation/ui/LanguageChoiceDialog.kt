@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType
 import com.lingshot.languagechoice_presentation.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -47,6 +48,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun LanguageChoiceDialog(
     availableLanguage: AvailableLanguage?,
     availableLanguageList: ImmutableList<AvailableLanguage>,
+    translateLanguageType: TranslateLanguageType?,
     onSaveLanguage: (AvailableLanguage?) -> Unit,
     onSelectedOptionsLanguage: (AvailableLanguage?) -> Unit,
     modifier: Modifier = Modifier,
@@ -70,7 +72,13 @@ fun LanguageChoiceDialog(
         },
         title = {
             Text(
-                text = stringResource(id = R.string.text_title_dialog_choose_language),
+                text = stringResource(
+                    id = if (translateLanguageType == TranslateLanguageType.FROM) {
+                        R.string.text_title_dialog_choose_language_from
+                    } else {
+                        R.string.text_title_dialog_choose_language_to
+                    },
+                ),
                 fontSize = 18.sp,
             )
         },
@@ -151,6 +159,7 @@ private fun LanguageChoiceEmojiFlagPreview() {
     LanguageChoiceDialog(
         availableLanguage = AvailableLanguage.ENGLISH,
         availableLanguageList = enumValues<AvailableLanguage>().toList().toImmutableList(),
+        translateLanguageType = TranslateLanguageType.FROM,
         onSaveLanguage = {},
         onSelectedOptionsLanguage = {},
         onDismiss = {},

@@ -23,6 +23,7 @@ enum class AvailableLanguage(
     val displayName: Int,
     val languageCode: String,
     val flagEmoji: String,
+    val enabledLanguageFrom: Boolean = true,
 ) {
     ENGLISH(R.string.text_display_name_english_language, "en", "\uD83C\uDDFA\uD83C\uDDF8"),
     FRENCH(R.string.text_display_name_french_language, "fr", "\uD83C\uDDEB\uD83C\uDDF7"),

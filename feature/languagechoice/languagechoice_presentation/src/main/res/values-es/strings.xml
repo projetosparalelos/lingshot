@@ -16,7 +16,8 @@
 -->
 <resources>
     <string name="text_select_language_speak_message">Seleccione un idioma que hable.</string>
-    <string name="text_title_dialog_choose_language">Elegir idioma</string>
+    <string name="text_title_dialog_choose_language_from">Traducir desde</string>
+    <string name="text_title_dialog_choose_language_to">Traducir a</string>
     <string name="text_button_select_dialog_choose_language">Seleccionar</string>
     <string name="text_button_dialog_cancel">Cancelar</string>
 </resources>

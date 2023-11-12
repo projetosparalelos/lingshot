@@ -16,22 +16,87 @@
 package com.lingshot.home_presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lingshot.languagechoice_domain.model.AvailableLanguage
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType.FROM
+import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val languageChoiceRepository: LanguageChoiceRepository,
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState = _uiState.asStateFlow()
+
+    val uiState: StateFlow<HomeUiState> =
+        combine(
+            languageChoiceRepository.getLanguage(FROM),
+            languageChoiceRepository.getLanguage(TranslateLanguageType.TO),
+            _uiState,
+        ) { languageFrom, languageTo, uiState ->
+            uiState.copy(
+                languageFrom = languageFrom,
+                languageTo = languageTo,
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = WhileSubscribed(5_000),
+            initialValue = _uiState.value,
+        )
 
     fun handleEvent(homeEvent: HomeEvent) {
         when (homeEvent) {
+            is HomeEvent.SaveLanguage -> {
+                saveLanguage(homeEvent.availableLanguage, homeEvent.translateLanguageType)
+            }
+
+            is HomeEvent.SelectedOptionsLanguage -> {
+                selectedOptionsLanguage(homeEvent.selectedOptionsLanguage)
+            }
+
+            is HomeEvent.ToggleLanguageDialog -> {
+                toggleLanguageDialog(homeEvent.translateLanguageType)
+            }
+
             is HomeEvent.ToggleServiceButton -> {
                 toggleServiceButton()
+            }
+        }
+    }
+
+    private fun toggleLanguageDialog(translateLanguageType: TranslateLanguageType?) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLanguageDialogVisible = !it.isLanguageDialogVisible,
+                    translateLanguageType = translateLanguageType,
+                    selectedOptionsLanguage = translateLanguageType?.let { type ->
+                        languageChoiceRepository.getLanguage(type).first()
+                    },
+                )
+            }
+        }
+    }
+
+    private fun selectedOptionsLanguage(selectedOptionsLanguage: AvailableLanguage?) {
+        _uiState.update { it.copy(selectedOptionsLanguage = selectedOptionsLanguage) }
+    }
+
+    private fun saveLanguage(availableLanguage: AvailableLanguage?, translateLanguageType: TranslateLanguageType?) {
+        viewModelScope.launch {
+            translateLanguageType?.let {
+                languageChoiceRepository.saveLanguage(availableLanguage, it)
             }
         }
     }
