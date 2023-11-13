@@ -181,6 +181,7 @@ class ScreenShotViewModel @Inject constructor(
                         translatedText = chatGPTRepository.get(requestBody),
                         languageCodeFrom = languageIdentifierUseCase(text),
                         languageCodeTo = getLanguageTo()?.languageCode.toString(),
+                        enabledDictionary = getLanguageFrom()?.enabledDictionary == false,
                     )
                 }, { status ->
                     _uiState.update { it.copy(screenShotStatus = status) }

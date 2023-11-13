@@ -40,7 +40,13 @@ data class HomeUiState(
     val availableLanguageList: ImmutableList<AvailableLanguage>
         get() = enumValues<AvailableLanguage>()
             .toList()
-            .sortedBy { it }
-            .map { it }
+            .let { list ->
+                if (translateLanguageType == TranslateLanguageType.TO) {
+                    list.sortedBy { it.displayName }
+                } else {
+                    list.filter { it.enabledLanguageFrom }
+                        .sortedBy { it.displayName }
+                }
+            }
             .toImmutableList()
 }

@@ -23,4 +23,7 @@
     <string name="text_display_name_russian_language">Ryska</string>
     <string name="text_display_name_spanish_language">Spanska</string>
     <string name="text_display_name_swedish_language">Svenska</string>
+    <string name="text_display_name_japanese_language">Japanska</string>
+    <string name="text_display_name_chinese_language">Kinesiska</string>
+    <string name="text_display_name_korean_language">Koreanska</string>
 </resources>
