@@ -19,7 +19,6 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
-import android.os.Build
 import androidx.multidex.MultiDex
 import com.lingshot.common.CommonConstant.CHANNEL_ID
 import dagger.hilt.android.HiltAndroidApp
@@ -40,14 +39,12 @@ class LingshotApplication : Application() {
     }
 
     private fun setupNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, IMPORTANCE_DEFAULT).apply {
-                description = CHANNEL_DESCRIPTION
-            }
-
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
+        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, IMPORTANCE_DEFAULT).apply {
+            description = CHANNEL_DESCRIPTION
         }
+
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
     }
 
     private fun setupTimber() {
