@@ -23,7 +23,8 @@ composeHiltNavigation = "1.0.0"
 accompanist = "0.32.0"
 accompanistNavigationAnimation = "0.31.3-beta"
 
-textRecognition = "19.0.0"
+textRecognitionDefault = "19.0.0"
+textRecognition = "16.0.0"
 languageID = "17.0.0"
 
 retrofit = "2.9.0"
@@ -93,7 +94,10 @@ accompanist-permissions = { module = "com.google.accompanist:accompanist-permiss
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 
-text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognition" }
+text-recognition = { module = "com.google.android.gms:play-services-mlkit-text-recognition", version.ref = "textRecognitionDefault" }
+text-recognition-chinese = { module = "com.google.android.gms:play-services-mlkit-text-recognition-chinese", version.ref = "textRecognition" }
+text-recognition-japanese = { module = "com.google.android.gms:play-services-mlkit-text-recognition-japanese", version.ref = "textRecognition" }
+text-recognition-korean = { module = "com.google.android.gms:play-services-mlkit-text-recognition-korean", version.ref = "textRecognition" }
 language-id = { module = "com.google.android.gms:play-services-mlkit-language-id", version.ref = "languageID" }
 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":feature:home:home_domain"))
     implementation(project(":feature:languagechoice:languagechoice_domain"))
+    implementation(project(":feature:languagechoice:languagechoice_presentation"))
     implementation(project(":feature:screencapture"))
 
     testImplementation(project(":core:testing"))

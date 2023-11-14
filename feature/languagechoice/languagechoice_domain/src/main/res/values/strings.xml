@@ -23,4 +23,7 @@
     <string name="text_display_name_russian_language">Russian</string>
     <string name="text_display_name_spanish_language">Spanish</string>
     <string name="text_display_name_swedish_language">Swedish</string>
+    <string name="text_display_name_japanese_language">Japanese</string>
+    <string name="text_display_name_chinese_language">Chinese</string>
+    <string name="text_display_name_korean_language">Korean</string>
 </resources>

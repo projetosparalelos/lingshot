@@ -28,18 +28,9 @@ data class ScreenShotUiState(
     val screenShotStatus: Status<LanguageTranslationDomain> = statusDefault(),
     val correctedOriginalTextStatus: Status<String> = statusDefault(),
     val dictionaryUrl: String? = null,
-    val isLanguageSelectionAlertVisible: Boolean = false,
-    val isLanguageDialogVisible: Boolean = false,
     val actionCropImage: ActionCropImage? = null,
     val availableLanguage: AvailableLanguage? = null,
     val navigationBarItem: NavigationBarItem = NavigationBarItem.TRANSLATE,
     val navigationBarItemList: ImmutableList<NavigationBarItem> =
         enumValues<NavigationBarItem>().toList().toImmutableList(),
-) {
-    val availableLanguageList: ImmutableList<AvailableLanguage>
-        get() = enumValues<AvailableLanguage>()
-            .toList()
-            .sortedBy { it }
-            .map { it }
-            .toImmutableList()
-}
+)

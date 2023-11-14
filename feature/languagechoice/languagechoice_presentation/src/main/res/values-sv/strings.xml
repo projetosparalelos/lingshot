@@ -15,8 +15,8 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_select_language_speak_message">Välj ett språk som du talar.</string>
-    <string name="text_title_dialog_choose_language">Välj språk</string>
+    <string name="text_title_dialog_choose_language_from">Översätt från</string>
+    <string name="text_title_dialog_choose_language_to">Översätt till</string>
     <string name="text_button_select_dialog_choose_language">Välj</string>
     <string name="text_button_dialog_cancel">Avbryt</string>
 </resources>

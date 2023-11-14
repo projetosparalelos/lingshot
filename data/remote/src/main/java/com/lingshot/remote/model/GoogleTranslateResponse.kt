@@ -13,18 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.home_presentation
+package com.lingshot.remote.model
 
-import com.lingshot.languagechoice_domain.model.AvailableLanguage
-import com.lingshot.languagechoice_domain.model.TranslateLanguageType
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-sealed class HomeEvent {
+@Serializable
+data class GoogleTranslateResponse(
+    @SerialName("data")
+    val data: TranslationData,
+)
 
-    object ToggleServiceButton : HomeEvent()
+@Serializable
+data class TranslationData(
+    @SerialName("translations")
+    val translations: List<Translation>,
+)
 
-    data class SaveLanguage(val availableLanguage: AvailableLanguage?, val translateLanguageType: TranslateLanguageType?) : HomeEvent()
-
-    data class SelectedOptionsLanguage(val selectedOptionsLanguage: AvailableLanguage?) : HomeEvent()
-
-    data class ToggleLanguageDialog(val translateLanguageType: TranslateLanguageType?) : HomeEvent()
-}
+@Serializable
+data class Translation(
+    @SerialName("translatedText")
+    val translatedText: String?,
+)

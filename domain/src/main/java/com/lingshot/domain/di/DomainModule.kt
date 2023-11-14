@@ -15,8 +15,12 @@
  */
 package com.lingshot.domain.di
 
+import com.lingshot.domain.repository.ChatGPTRepository
+import com.lingshot.domain.repository.GoogleTranslateRepository
 import com.lingshot.domain.repository.TextIdentifierRepository
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
+import com.lingshot.domain.usecase.TranslateApiUseCase
+import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,4 +36,12 @@ object DomainModule {
     fun provideLanguageIdentifierUseCase(
         textIdentifierRepository: TextIdentifierRepository,
     ): LanguageIdentifierUseCase = LanguageIdentifierUseCase(textIdentifierRepository)
+
+    @Singleton
+    @Provides
+    fun provideTranslateApiUseCase(
+        chatGPTRepository: ChatGPTRepository,
+        googleTranslateRepository: GoogleTranslateRepository,
+        languageChoiceRepository: LanguageChoiceRepository,
+    ): TranslateApiUseCase = TranslateApiUseCase(chatGPTRepository, googleTranslateRepository, languageChoiceRepository)
 }

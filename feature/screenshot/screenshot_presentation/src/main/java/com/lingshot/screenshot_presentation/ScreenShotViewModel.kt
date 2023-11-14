@@ -24,7 +24,6 @@ import androidx.lifecycle.viewModelScope
 import com.lingshot.common.helper.TextToSpeechFacade
 import com.lingshot.common.helper.launchWithStatus
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
-import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
 import com.lingshot.domain.model.MessageDomain
 import com.lingshot.domain.model.Status
@@ -34,7 +33,10 @@ import com.lingshot.domain.model.statusError
 import com.lingshot.domain.repository.ChatGPTRepository
 import com.lingshot.domain.repository.TextIdentifierRepository
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
+import com.lingshot.domain.usecase.TranslateApiUseCase
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType.FROM
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType.TO
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
@@ -42,7 +44,6 @@ import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.FOCUS
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LANGUAGE
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LISTEN
 import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,6 +62,7 @@ class ScreenShotViewModel @Inject constructor(
     private val textIdentifierRepository: TextIdentifierRepository,
     private val languageChoiceRepository: LanguageChoiceRepository,
     private val languageIdentifierUseCase: LanguageIdentifierUseCase,
+    private val translateApiUseCase: TranslateApiUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScreenShotUiState())
@@ -84,28 +86,12 @@ class ScreenShotViewModel @Inject constructor(
                 fetchTextRecognizer(screenShotEvent.imageBitmap, screenShotEvent.illegiblePhrase)
             }
 
-            is ScreenShotEvent.SaveLanguage -> {
-                saveLanguage(screenShotEvent.availableLanguage)
-            }
-
-            is ScreenShotEvent.SelectedOptionsLanguage -> {
-                selectedOptionsLanguage(screenShotEvent.availableLanguage)
-            }
-
             is ScreenShotEvent.SelectedOptionsNavigationBar -> {
                 selectedOptionsNavigationBar(screenShotEvent.navigationBarItem)
             }
 
             is ScreenShotEvent.ClearStatus -> {
                 clearStatus()
-            }
-
-            is ScreenShotEvent.ToggleLanguageDialog -> {
-                toggleLanguageDialog()
-            }
-
-            is ScreenShotEvent.ToggleLanguageDialogAndHideSelectionAlert -> {
-                toggleLanguageDialogAndHideSelectionAlert()
             }
 
             is ScreenShotEvent.ToggleDictionaryFullScreenDialog -> {
@@ -118,19 +104,11 @@ class ScreenShotViewModel @Inject constructor(
         _uiState.update { it.copy(actionCropImage = actionCropImageType) }
     }
 
-    private fun selectedOptionsLanguage(availableLanguage: AvailableLanguage?) {
-        _uiState.update { it.copy(availableLanguage = availableLanguage) }
-    }
-
     private fun selectedOptionsNavigationBar(navigationBarItem: NavigationBarItem) {
         when (navigationBarItem) {
             TRANSLATE -> {
                 viewModelScope.launch {
-                    getLanguage()?.let {
-                        croppedImage(CROPPED_IMAGE)
-                    } ?: run {
-                        showLanguageSelectionAlert()
-                    }
+                    croppedImage(CROPPED_IMAGE)
                 }
             }
 
@@ -141,40 +119,8 @@ class ScreenShotViewModel @Inject constructor(
             FOCUS -> {
                 croppedImage(FOCUS_IMAGE)
             }
-
-            LANGUAGE -> {
-                toggleLanguageDialog()
-            }
         }
         _uiState.update { it.copy(navigationBarItem = navigationBarItem) }
-    }
-
-    private fun showLanguageSelectionAlert() {
-        _uiState.update {
-            it.copy(
-                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible,
-            )
-        }
-    }
-
-    private fun toggleLanguageDialog() {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    isLanguageDialogVisible = !it.isLanguageDialogVisible,
-                    availableLanguage = getLanguage(),
-                )
-            }
-        }
-    }
-
-    private fun toggleLanguageDialogAndHideSelectionAlert() {
-        _uiState.update {
-            it.copy(
-                isLanguageDialogVisible = !it.isLanguageDialogVisible,
-                isLanguageSelectionAlertVisible = !it.isLanguageSelectionAlertVisible,
-            )
-        }
     }
 
     private fun toggleDictionaryFullScreenDialog(url: String?) {
@@ -219,23 +165,12 @@ class ScreenShotViewModel @Inject constructor(
         viewModelScope.launch {
             if (text.isLanguageAvailable()) {
                 viewModelScope.launchWithStatus({
-                    val requestBody = ChatGPTPromptBodyDomain(
-                        messages = listOf(
-                            MessageDomain(
-                                role = "system",
-                                content = PROMPT_TRANSLATE(getLanguage()?.name?.lowercase()),
-                            ),
-                            MessageDomain(
-                                role = "user",
-                                content = text,
-                            ),
-                        ),
-                    )
                     LanguageTranslationDomain(
                         originalText = text,
-                        translatedText = chatGPTRepository.get(requestBody),
-                        languageCodeFrom = languageIdentifierUseCase(text),
-                        languageCodeTo = getLanguage()?.languageCode.toString(),
+                        translatedText = translateApiUseCase(text),
+                        languageCodeFrom = getLanguageFrom()?.languageCode.toString(),
+                        languageCodeTo = getLanguageTo()?.languageCode.toString(),
+                        enabledDictionary = getLanguageFrom()?.enabledDictionary == false,
                     )
                 }, { status ->
                     _uiState.update { it.copy(screenShotStatus = status) }
@@ -296,22 +231,19 @@ class ScreenShotViewModel @Inject constructor(
         textToSpeech.shutdown()
     }
 
-    private suspend fun getLanguage(): AvailableLanguage? {
-        return languageChoiceRepository.getLanguage().first()
+    private suspend fun getLanguageTo(): AvailableLanguage? {
+        return languageChoiceRepository.getLanguage(TO).first()
     }
 
-    private fun saveLanguage(availableLanguage: AvailableLanguage?) {
-        viewModelScope.launch {
-            languageChoiceRepository.saveLanguage(availableLanguage)
-        }
+    private suspend fun getLanguageFrom(): AvailableLanguage? {
+        return languageChoiceRepository.getLanguage(FROM).first()
     }
 
     private suspend fun String.isLanguageAvailable(): Boolean {
-        val availableLanguage = AvailableLanguage.from(
-            languageIdentifierUseCase(this),
-        )
-
-        return availableLanguage?.languageCode != null
+        return (
+            languageIdentifierUseCase(this) == getLanguageFrom()?.languageCode ||
+                getLanguageFrom()?.enabledLanguage == false
+            )
     }
 
     private fun String?.formatText(): String {

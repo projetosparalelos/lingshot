@@ -66,18 +66,25 @@ import com.lingshot.home_domain.model.TypeActionScreenshot
 import com.lingshot.home_domain.model.TypeActionScreenshot.FLOATING_BALLOON
 import com.lingshot.home_domain.model.screenShotActions
 import com.lingshot.home_presentation.HomeEvent
+import com.lingshot.home_presentation.HomeEvent.SaveLanguage
+import com.lingshot.home_presentation.HomeEvent.SelectedOptionsLanguage
+import com.lingshot.home_presentation.HomeEvent.ToggleLanguageDialog
 import com.lingshot.home_presentation.HomeEvent.ToggleServiceButton
 import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.HomeViewModel
 import com.lingshot.home_presentation.R
 import com.lingshot.home_presentation.navigation.HomeDestination
+import com.lingshot.home_presentation.ui.component.HomeLanguageChoice
 import com.lingshot.home_presentation.ui.component.HomeOptionScreenShotCard
 import com.lingshot.home_presentation.ui.component.HomeToolbar
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType
+import com.lingshot.languagechoice_presentation.ui.LanguageChoiceDialog
 import com.lingshot.screencapture.service.ScreenShotService
 import com.lingshot.screencapture.service.ScreenShotService.Companion.screenShotServiceIntent
 import com.lingshot.screencapture.service.ScreenShotService.Companion.screenShotServiceIntentWithMediaProjection
 import com.lingshot.screencapture.util.isServiceRunning
 import es.dmoral.toasty.Toasty
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun HomeRoute(
@@ -147,6 +154,19 @@ internal fun HomeScreen(
             ) {
                 items(uiState.homeSection) { section ->
                     when (section.typeSection) {
+                        HomeTypeSection.CARD_LANGUAGE_CHOICE -> {
+                            HomeLanguageChoice(
+                                languageFrom = uiState.languageFrom,
+                                languageTo = uiState.languageTo,
+                                onClickLanguageFrom = {
+                                    handleEvent(ToggleLanguageDialog(TranslateLanguageType.FROM))
+                                },
+                                onClickLanguageTo = {
+                                    handleEvent(ToggleLanguageDialog(TranslateLanguageType.TO))
+                                },
+                            )
+                        }
+
                         HomeTypeSection.CARD_BUTTON_SCREEN_SHOT -> {
                             screenShotActions.fastForEachIndexed { _, item ->
                                 val isCheckForItem = item.typeActionScreenshot == enabledType
@@ -209,6 +229,23 @@ internal fun HomeScreen(
                 }
             }
         }
+    }
+
+    if (uiState.isLanguageDialogVisible) {
+        LanguageChoiceDialog(
+            availableLanguage = uiState.selectedOptionsLanguage,
+            availableLanguageList = uiState.availableLanguageList.toImmutableList(),
+            translateLanguageType = uiState.translateLanguageType,
+            onSaveLanguage = {
+                handleEvent(SaveLanguage(availableLanguage = it, uiState.translateLanguageType))
+            },
+            onSelectedOptionsLanguage = {
+                handleEvent(SelectedOptionsLanguage(selectedOptionsLanguage = it))
+            },
+            onDismiss = {
+                handleEvent(ToggleLanguageDialog(translateLanguageType = uiState.translateLanguageType))
+            },
+        )
     }
 }
 

@@ -19,9 +19,12 @@ import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.lingshot.domain.repository.ChatGPTRepository
+import com.lingshot.domain.repository.GoogleTranslateRepository
 import com.lingshot.remote.BuildConfig
 import com.lingshot.remote.api.ChatGPTService
+import com.lingshot.remote.api.GoogleTranslateService
 import com.lingshot.remote.repository.ChatGPTRepositoryImpl
+import com.lingshot.remote.repository.GoogleTranslateRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -62,8 +65,6 @@ object DataModule {
             val newRequest: Request =
                 chain.request()
                     .newBuilder()
-                    .addHeader(CONTENT_TYPE, APPLICATION_JSON)
-                    .addHeader(AUTHORIZATION, BEARER)
                     .build()
             chain.proceed(newRequest)
         }.apply {
@@ -78,7 +79,7 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
+    fun provideRetrofit(client: OkHttpClient): Retrofit.Builder {
         val contentType = "application/json".toMediaType()
         val json = Json {
             encodeDefaults = true
@@ -87,14 +88,13 @@ object DataModule {
         return Retrofit.Builder()
             .client(client)
             .addConverterFactory(json.asConverterFactory(contentType))
-            .baseUrl(BuildConfig.BASE_API)
-            .build()
     }
 
     @Singleton
     @Provides
-    fun provideChatGPTService(retrofit: Retrofit): ChatGPTService =
-        retrofit.create(ChatGPTService::class.java)
+    fun provideChatGPTService(retrofit: Retrofit.Builder): ChatGPTService =
+        retrofit.baseUrl(BuildConfig.BASE_CHAT_GPT_API).build()
+            .create(ChatGPTService::class.java)
 
     @Singleton
     @Provides
@@ -102,8 +102,15 @@ object DataModule {
         api: ChatGPTService,
     ): ChatGPTRepository = ChatGPTRepositoryImpl(api)
 
-    private const val CONTENT_TYPE = "Content-Type"
-    private const val APPLICATION_JSON = "application/json"
-    private const val AUTHORIZATION = "Authorization"
-    private const val BEARER = "Bearer ${BuildConfig.CHAT_GPT_KEY}"
+    @Singleton
+    @Provides
+    fun provideGoogleTranslateService(retrofit: Retrofit.Builder): GoogleTranslateService =
+        retrofit.baseUrl(BuildConfig.BASE_GOOGLE_TRANSLATE_API).build()
+            .create(GoogleTranslateService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideGoogleTranslateRepository(
+        api: GoogleTranslateService,
+    ): GoogleTranslateRepository = GoogleTranslateRepositoryImpl(api)
 }

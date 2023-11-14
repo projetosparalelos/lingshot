@@ -30,6 +30,6 @@ fun ChatGPTPromptBodyDomain.toRequestBodyEntity(): RequestBody {
         model = model,
         messages = messages,
         temperature = temperature,
-        max_tokens = maxTokens,
+        maxTokens = maxTokens,
     )
 }

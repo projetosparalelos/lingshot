@@ -16,12 +16,12 @@
 package com.lingshot.languagechoice_domain.repository
 
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType
 import kotlinx.coroutines.flow.Flow
 
 interface LanguageChoiceRepository {
-    fun getLanguage(): Flow<AvailableLanguage?>
 
-    suspend fun saveLanguage(availableLanguage: AvailableLanguage?)
+    fun getLanguage(translateLanguageType: TranslateLanguageType): Flow<AvailableLanguage?>
 
-    suspend fun deleteLanguage()
+    suspend fun saveLanguage(availableLanguage: AvailableLanguage?, translateLanguageType: TranslateLanguageType?)
 }

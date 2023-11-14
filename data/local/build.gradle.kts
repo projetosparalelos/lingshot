@@ -10,8 +10,12 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":feature:languagechoice:languagechoice_domain"))
 
     implementation(libs.text.recognition)
+    implementation(libs.text.recognition.chinese)
+    implementation(libs.text.recognition.japanese)
+    implementation(libs.text.recognition.korean)
     implementation(libs.language.id)
 
     implementation(libs.datastore.preferences)

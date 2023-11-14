@@ -22,9 +22,11 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 import javax.inject.Inject
 
 class LanguageChoiceLocalStorage @Inject constructor(
@@ -35,27 +37,31 @@ class LanguageChoiceLocalStorage @Inject constructor(
         name = LANGUAGE_DATA,
     )
 
-    fun getLanguage(): Flow<AvailableLanguage?> {
+    fun getLanguage(translateLanguageType: TranslateLanguageType): Flow<AvailableLanguage?> {
         return context.dataStore.data.map { preferences ->
-            val languageCode = preferences[LANGUAGE_CODE_KEY]
+            val languageCode =
+                if (translateLanguageType == TranslateLanguageType.FROM) {
+                    preferences[LANGUAGE_FROM_CODE_KEY] ?: AvailableLanguage.ENGLISH.languageCode
+                } else {
+                    preferences[LANGUAGE_TO_CODE_KEY] ?: Locale.getDefault().language
+                }
             AvailableLanguage.from(languageCode)
         }
     }
 
-    suspend fun saveLanguage(availableLanguage: AvailableLanguage?) {
+    suspend fun saveLanguage(availableLanguage: AvailableLanguage?, translateLanguageType: TranslateLanguageType?) {
         context.dataStore.edit { preferences ->
-            preferences[LANGUAGE_CODE_KEY] = availableLanguage?.languageCode.toString()
-        }
-    }
-
-    suspend fun deleteLanguage() {
-        context.dataStore.edit { preferences ->
-            preferences.clear()
+            if (translateLanguageType == TranslateLanguageType.FROM) {
+                preferences[LANGUAGE_FROM_CODE_KEY] = availableLanguage?.languageCode.toString()
+            } else {
+                preferences[LANGUAGE_TO_CODE_KEY] = availableLanguage?.languageCode.toString()
+            }
         }
     }
 
     companion object {
         private const val LANGUAGE_DATA: String = "LANGUAGE_DATA"
-        private val LANGUAGE_CODE_KEY = stringPreferencesKey("LANGUAGE_CODE_KEY")
+        private val LANGUAGE_FROM_CODE_KEY = stringPreferencesKey("LANGUAGE_FROM_CODE_KEY")
+        private val LANGUAGE_TO_CODE_KEY = stringPreferencesKey("LANGUAGE_TO_CODE_KEY")
     }
 }

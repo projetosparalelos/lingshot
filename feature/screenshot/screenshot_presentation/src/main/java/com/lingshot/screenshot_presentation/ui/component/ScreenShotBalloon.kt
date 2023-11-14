@@ -60,7 +60,7 @@ internal fun ScreenShotBalloon(
 
 @Composable
 private fun rememberBalloonBuilder(background: Color) = rememberBalloonBuilder {
-    setArrowPosition(0.16f)
+    setArrowPosition(0.18f)
     setMarginHorizontal(16)
     setPadding(12)
     setCornerRadius(24f)

@@ -20,6 +20,7 @@ data class LanguageTranslationDomain(
     val translatedText: String?,
     val languageCodeFrom: String,
     val languageCodeTo: String,
+    val enabledDictionary: Boolean,
 ) {
     val dictionaryUrl: (String) -> String = { word ->
         DictionaryType.REVERSO_CONTEXT.url(

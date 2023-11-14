@@ -9,5 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:languagechoice:languagechoice_domain"))
+
     implementation(libs.timber)
 }

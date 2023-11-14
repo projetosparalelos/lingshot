@@ -18,11 +18,7 @@
     <string name="text_label_navigation_bar_item_translate">Traduire</string>
     <string name="text_label_navigation_bar_item_listen">Écouter</string>
     <string name="text_label_navigation_bar_item_focus">Focus</string>
-    <string name="text_label_navigation_bar_item_language">Langue</string>
-    <string name="text_message_illegible_phrase">Langue illisible ou inconnue!</string>
-    <string name="text_select_language_speak_message">Sélectionnez une langue que vous parlez.</string>
-    <string name="text_button_action_select_snack_bar">Sélectionner</string>
+    <string name="text_message_illegible_phrase">Langue différente de celle sélectionnée ou inconnue!</string>
     <string name="text_title_translate_bottom_sheet">Votre traduction</string>
-    <string name="text_button_add_to_list_bottom_sheet">Ajouté</string>
     <string name="text_title_dictionary_full_screen_dialog_screenshot">Dictionnaire</string>
 </resources>

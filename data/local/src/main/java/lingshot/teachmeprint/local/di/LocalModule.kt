@@ -17,10 +17,8 @@ package lingshot.teachmeprint.local.di
 
 import com.google.mlkit.nl.languageid.LanguageIdentification
 import com.google.mlkit.nl.languageid.LanguageIdentifier
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizer
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions.DEFAULT_OPTIONS
 import com.lingshot.domain.repository.TextIdentifierRepository
+import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,15 +33,10 @@ object LocalModule {
     @Singleton
     @Provides
     fun provideScreenShotRepository(
-        textRecognizer: TextRecognizer,
+        languageChoiceRepository: LanguageChoiceRepository,
         languageIdentifier: LanguageIdentifier,
     ): TextIdentifierRepository =
-        TextIdentifierRepositoryImpl(textRecognizer, languageIdentifier)
-
-    @Singleton
-    @Provides
-    fun provideTextRecognition() =
-        TextRecognition.getClient(DEFAULT_OPTIONS)
+        TextIdentifierRepositoryImpl(languageChoiceRepository, languageIdentifier)
 
     @Singleton
     @Provides

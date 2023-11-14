@@ -17,11 +17,36 @@ package com.lingshot.home_presentation
 
 import com.lingshot.home_domain.model.HomeSection
 import com.lingshot.home_domain.model.HomeTypeSection
+import com.lingshot.languagechoice_domain.model.AvailableLanguage
+import com.lingshot.languagechoice_domain.model.TranslateLanguageType
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import java.util.Locale
 
-data class HomeUiState(val isServiceRunning: Boolean = false) {
+data class HomeUiState(
+    val languageFrom: AvailableLanguage? = AvailableLanguage.ENGLISH,
+    val languageTo: AvailableLanguage? = AvailableLanguage.from(Locale.getDefault().language),
+    val selectedOptionsLanguage: AvailableLanguage? = null,
+    val translateLanguageType: TranslateLanguageType? = null,
+    val isLanguageDialogVisible: Boolean = false,
+    val isServiceRunning: Boolean = false,
+) {
 
     val homeSection = listOf(
+        HomeSection(HomeTypeSection.CARD_LANGUAGE_CHOICE),
         HomeSection(HomeTypeSection.CARD_BUTTON_SCREEN_SHOT),
     ).toImmutableList()
+
+    val availableLanguageList: ImmutableList<AvailableLanguage>
+        get() = enumValues<AvailableLanguage>()
+            .toList()
+            .let { list ->
+                if (translateLanguageType == TranslateLanguageType.TO) {
+                    list.sortedBy { it.displayName }
+                } else {
+                    list.filter { it.enabledLanguageFrom }
+                        .sortedBy { it.displayName }
+                }
+            }
+            .toImmutableList()
 }

@@ -118,30 +118,35 @@ internal fun ScreenShotTranslateBottomSheet(
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.primary,
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    ScreenShotCorrectedOriginalText(
-                        correctedOriginalText = correctedOriginalText,
-                        isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
-                        onToggleDictionaryFullScreenDialog = {
-                            onToggleDictionaryFullScreenDialog(
-                                languageTranslationDomain.dictionaryUrl(it),
-                            )
-                        },
-                    )
+                    if (languageTranslationDomain.enabledDictionary.not()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        ScreenShotCorrectedOriginalText(
+                            correctedOriginalText = correctedOriginalText,
+                            isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
+                            onToggleDictionaryFullScreenDialog = {
+                                onToggleDictionaryFullScreenDialog(
+                                    languageTranslationDomain.dictionaryUrl(it),
+                                )
+                            },
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
-        correctedOriginalTextStatus
-            .onLoading { correctedOriginalText = languageTranslationDomain.originalText }
-            .onSuccess {
-                correctedOriginalText = it
-            }
-            .onError { correctedOriginalText = it }
+        if (languageTranslationDomain.enabledDictionary.not()) {
+            correctedOriginalTextStatus
+                .onLoading { correctedOriginalText = languageTranslationDomain.originalText }
+                .onSuccess {
+                    correctedOriginalText = it
+                }
+                .onError { correctedOriginalText = it }
+        }
     }
-
-    LaunchedEffect(Unit) {
-        onCorrectedOriginalText(languageTranslationDomain.originalText)
+    if (languageTranslationDomain.enabledDictionary.not()) {
+        LaunchedEffect(Unit) {
+            onCorrectedOriginalText(languageTranslationDomain.originalText)
+        }
     }
 }
 
@@ -204,6 +209,7 @@ private fun ScreenShotTranslateBottomSheetPreview() {
             "Translated",
             "en",
             "pt",
+            true,
         ),
         correctedOriginalTextStatus = statusSuccess("Corrected original"),
         onCorrectedOriginalText = {},

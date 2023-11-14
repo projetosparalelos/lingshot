@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.home_presentation
+package com.lingshot.remote.api
 
-import com.lingshot.languagechoice_domain.model.AvailableLanguage
-import com.lingshot.languagechoice_domain.model.TranslateLanguageType
+import com.lingshot.remote.BuildConfig
+import com.lingshot.remote.model.GoogleTranslateResponse
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-sealed class HomeEvent {
+interface GoogleTranslateService {
 
-    object ToggleServiceButton : HomeEvent()
-
-    data class SaveLanguage(val availableLanguage: AvailableLanguage?, val translateLanguageType: TranslateLanguageType?) : HomeEvent()
-
-    data class SelectedOptionsLanguage(val selectedOptionsLanguage: AvailableLanguage?) : HomeEvent()
-
-    data class ToggleLanguageDialog(val translateLanguageType: TranslateLanguageType?) : HomeEvent()
+    @GET("language/translate/v2")
+    suspend fun get(
+        @Query("key") apiKey: String = BuildConfig.GOOGLE_TRANSLATE_KEY,
+        @Query("q") text: String,
+        @Query("source") languageFrom: String,
+        @Query("target") languageTo: String,
+    ): GoogleTranslateResponse
 }
