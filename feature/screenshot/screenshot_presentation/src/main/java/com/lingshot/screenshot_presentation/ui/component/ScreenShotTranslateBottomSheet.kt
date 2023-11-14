@@ -118,38 +118,41 @@ internal fun ScreenShotTranslateBottomSheet(
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.primary,
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    ScreenShotCorrectedOriginalText(
-                        correctedOriginalText = correctedOriginalText,
-                        enabledDictionary = languageTranslationDomain.enabledDictionary,
-                        isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
-                        onToggleDictionaryFullScreenDialog = {
-                            onToggleDictionaryFullScreenDialog(
-                                languageTranslationDomain.dictionaryUrl(it),
-                            )
-                        },
-                    )
+                    if (languageTranslationDomain.enabledDictionary.not()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        ScreenShotCorrectedOriginalText(
+                            correctedOriginalText = correctedOriginalText,
+                            isLoadingStatus = correctedOriginalTextStatus.isLoadingStatus,
+                            onToggleDictionaryFullScreenDialog = {
+                                onToggleDictionaryFullScreenDialog(
+                                    languageTranslationDomain.dictionaryUrl(it),
+                                )
+                            },
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
-        correctedOriginalTextStatus
-            .onLoading { correctedOriginalText = languageTranslationDomain.originalText }
-            .onSuccess {
-                correctedOriginalText = it
-            }
-            .onError { correctedOriginalText = it }
+        if (languageTranslationDomain.enabledDictionary.not()) {
+            correctedOriginalTextStatus
+                .onLoading { correctedOriginalText = languageTranslationDomain.originalText }
+                .onSuccess {
+                    correctedOriginalText = it
+                }
+                .onError { correctedOriginalText = it }
+        }
     }
-
-    LaunchedEffect(Unit) {
-        onCorrectedOriginalText(languageTranslationDomain.originalText)
+    if (languageTranslationDomain.enabledDictionary.not()) {
+        LaunchedEffect(Unit) {
+            onCorrectedOriginalText(languageTranslationDomain.originalText)
+        }
     }
 }
 
 @Composable
 private fun ScreenShotCorrectedOriginalText(
     correctedOriginalText: String,
-    enabledDictionary: Boolean,
     isLoadingStatus: Boolean,
     onToggleDictionaryFullScreenDialog: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -171,7 +174,6 @@ private fun ScreenShotCorrectedOriginalText(
                     highlight = PlaceholderHighlight.shimmer(),
                 ),
             text = correctedOriginalText,
-            enabledDictionary = enabledDictionary,
             onToggleDictionaryFullScreenDialog = onToggleDictionaryFullScreenDialog,
         )
     }
@@ -180,30 +182,20 @@ private fun ScreenShotCorrectedOriginalText(
 @Composable
 fun ScreenShotOpenDictionaryByWord(
     text: String,
-    enabledDictionary: Boolean,
     modifier: Modifier = Modifier,
     onToggleDictionaryFullScreenDialog: (String) -> Unit,
 ) {
     val words = text.split(" ")
     FlowRow(modifier = modifier) {
         words.forEach { word ->
-            if (enabledDictionary) {
-                Text(
-                    text = word,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp),
-                )
-            } else {
-                Text(
-                    text = word,
-                    fontSize = 14.sp,
-                    textDecoration = TextDecoration.Underline,
-                    modifier = Modifier
-                        .clickable { onToggleDictionaryFullScreenDialog(word) }
-                        .padding(horizontal = 4.dp),
-                )
-            }
+            Text(
+                text = word,
+                fontSize = 14.sp,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier
+                    .clickable { onToggleDictionaryFullScreenDialog(word) }
+                    .padding(horizontal = 4.dp),
+            )
         }
     }
 }

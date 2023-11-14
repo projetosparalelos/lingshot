@@ -15,7 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_select_language_speak_message">Sélectionnez une langue que vous parlez.</string>
     <string name="text_title_dialog_choose_language_from">Traduire depuis</string>
     <string name="text_title_dialog_choose_language_to">Traduire vers</string>
     <string name="text_button_select_dialog_choose_language">Sélectionner</string>

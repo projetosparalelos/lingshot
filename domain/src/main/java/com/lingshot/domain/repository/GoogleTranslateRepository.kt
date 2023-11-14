@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.domain
+package com.lingshot.domain.repository
 
-object PromptChatGPTConstant {
-    val PROMPT_TRANSLATE: (String?, String?) -> String = { languageFrom, languageTo ->
-        "You translate from $languageFrom to $languageTo."
-    }
-    const val PROMPT_CORRECT_SPELLING = "You are not a prompt, correct the spelling if necessary, otherwise leave it as it is."
+interface GoogleTranslateRepository {
+    suspend fun get(text: String, languageFrom: String, languageTo: String): String?
 }

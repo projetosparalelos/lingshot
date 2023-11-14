@@ -13,11 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.domain
+package com.lingshot.remote.model
 
-object PromptChatGPTConstant {
-    val PROMPT_TRANSLATE: (String?, String?) -> String = { languageFrom, languageTo ->
-        "You translate from $languageFrom to $languageTo."
-    }
-    const val PROMPT_CORRECT_SPELLING = "You are not a prompt, correct the spelling if necessary, otherwise leave it as it is."
-}
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class GoogleTranslateResponse(
+    @SerialName("data")
+    val data: TranslationData,
+)
+
+@Serializable
+data class TranslationData(
+    @SerialName("translations")
+    val translations: List<Translation>,
+)
+
+@Serializable
+data class Translation(
+    @SerialName("translatedText")
+    val translatedText: String?,
+)

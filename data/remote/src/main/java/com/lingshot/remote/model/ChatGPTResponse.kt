@@ -50,5 +50,5 @@ data class RequestBody(
     val temperature: Double,
 
     @SerialName("max_tokens")
-    val max_tokens: Int,
+    val maxTokens: Int,
 )

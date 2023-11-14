@@ -24,7 +24,6 @@ import androidx.lifecycle.viewModelScope
 import com.lingshot.common.helper.TextToSpeechFacade
 import com.lingshot.common.helper.launchWithStatus
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
-import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
 import com.lingshot.domain.model.MessageDomain
 import com.lingshot.domain.model.Status
@@ -34,6 +33,7 @@ import com.lingshot.domain.model.statusError
 import com.lingshot.domain.repository.ChatGPTRepository
 import com.lingshot.domain.repository.TextIdentifierRepository
 import com.lingshot.domain.usecase.LanguageIdentifierUseCase
+import com.lingshot.domain.usecase.TranslateApiUseCase
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType.FROM
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType.TO
@@ -62,6 +62,7 @@ class ScreenShotViewModel @Inject constructor(
     private val textIdentifierRepository: TextIdentifierRepository,
     private val languageChoiceRepository: LanguageChoiceRepository,
     private val languageIdentifierUseCase: LanguageIdentifierUseCase,
+    private val translateApiUseCase: TranslateApiUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScreenShotUiState())
@@ -164,22 +165,10 @@ class ScreenShotViewModel @Inject constructor(
         viewModelScope.launch {
             if (text.isLanguageAvailable()) {
                 viewModelScope.launchWithStatus({
-                    val requestBody = ChatGPTPromptBodyDomain(
-                        messages = listOf(
-                            MessageDomain(
-                                role = "system",
-                                content = PROMPT_TRANSLATE(getLanguageTo()?.name?.lowercase()),
-                            ),
-                            MessageDomain(
-                                role = "user",
-                                content = text,
-                            ),
-                        ),
-                    )
                     LanguageTranslationDomain(
                         originalText = text,
-                        translatedText = chatGPTRepository.get(requestBody),
-                        languageCodeFrom = languageIdentifierUseCase(text),
+                        translatedText = translateApiUseCase(text),
+                        languageCodeFrom = getLanguageFrom()?.languageCode.toString(),
                         languageCodeTo = getLanguageTo()?.languageCode.toString(),
                         enabledDictionary = getLanguageFrom()?.enabledDictionary == false,
                     )
@@ -251,7 +240,10 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private suspend fun String.isLanguageAvailable(): Boolean {
-        return languageIdentifierUseCase(this) == getLanguageFrom()?.languageCode
+        return (
+            languageIdentifierUseCase(this) == getLanguageFrom()?.languageCode ||
+                getLanguageFrom()?.enabledLanguage == false
+            )
     }
 
     private fun String?.formatText(): String {

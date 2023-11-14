@@ -13,11 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.domain
+package com.lingshot.remote.api
 
-object PromptChatGPTConstant {
-    val PROMPT_TRANSLATE: (String?, String?) -> String = { languageFrom, languageTo ->
-        "You translate from $languageFrom to $languageTo."
-    }
-    const val PROMPT_CORRECT_SPELLING = "You are not a prompt, correct the spelling if necessary, otherwise leave it as it is."
+import com.lingshot.remote.BuildConfig
+import com.lingshot.remote.model.GoogleTranslateResponse
+import retrofit2.http.GET
+import retrofit2.http.Query
+
+interface GoogleTranslateService {
+
+    @GET("language/translate/v2")
+    suspend fun get(
+        @Query("key") apiKey: String = BuildConfig.GOOGLE_TRANSLATE_KEY,
+        @Query("q") text: String,
+        @Query("source") languageFrom: String,
+        @Query("target") languageTo: String,
+    ): GoogleTranslateResponse
 }
