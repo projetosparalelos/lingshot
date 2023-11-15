@@ -21,11 +21,10 @@ import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import java.util.Locale
 
 data class HomeUiState(
     val languageFrom: AvailableLanguage? = AvailableLanguage.ENGLISH,
-    val languageTo: AvailableLanguage? = AvailableLanguage.from(Locale.getDefault().language),
+    val languageTo: AvailableLanguage? = AvailableLanguage.ENGLISH,
     val selectedOptionsLanguage: AvailableLanguage? = null,
     val translateLanguageType: TranslateLanguageType? = null,
     val isLanguageDialogVisible: Boolean = false,

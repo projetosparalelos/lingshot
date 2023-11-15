@@ -26,7 +26,6 @@ import com.lingshot.languagechoice_domain.model.TranslateLanguageType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.Locale
 import javax.inject.Inject
 
 class LanguageChoiceLocalStorage @Inject constructor(
@@ -43,7 +42,7 @@ class LanguageChoiceLocalStorage @Inject constructor(
                 if (translateLanguageType == TranslateLanguageType.FROM) {
                     preferences[LANGUAGE_FROM_CODE_KEY] ?: AvailableLanguage.ENGLISH.languageCode
                 } else {
-                    preferences[LANGUAGE_TO_CODE_KEY] ?: Locale.getDefault().language
+                    preferences[LANGUAGE_TO_CODE_KEY] ?: AvailableLanguage.ENGLISH.languageCode
                 }
             AvailableLanguage.from(languageCode)
         }
