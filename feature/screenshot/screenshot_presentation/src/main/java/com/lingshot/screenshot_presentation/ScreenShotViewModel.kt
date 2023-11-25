@@ -39,13 +39,9 @@ import com.lingshot.languagechoice_domain.model.TranslateLanguageType.FROM
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType.TO
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.FOCUS
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.LISTEN
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
+import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem
+import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.LISTEN
+import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.TRANSLATE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -74,20 +70,17 @@ class ScreenShotViewModel @Inject constructor(
 
     fun handleEvent(screenShotEvent: ScreenShotEvent) {
         when (screenShotEvent) {
-            is ScreenShotEvent.CroppedImage -> {
-                croppedImage(screenShotEvent.actionCropImage)
-            }
-
             is ScreenShotEvent.FetchCorrectedOriginalText -> {
                 fetchCorrectedOriginalText(screenShotEvent.originalText)
             }
 
             is ScreenShotEvent.FetchTextRecognizer -> {
+                croppedImage()
                 fetchTextRecognizer(screenShotEvent.imageBitmap, screenShotEvent.illegiblePhrase)
             }
 
-            is ScreenShotEvent.SelectedOptionsNavigationBar -> {
-                selectedOptionsNavigationBar(screenShotEvent.navigationBarItem)
+            is ScreenShotEvent.SelectedOptionsButtonMenuItem -> {
+                selectedOptionsButtonMenuItem(screenShotEvent.buttonMenuItem)
             }
 
             is ScreenShotEvent.ClearStatus -> {
@@ -100,27 +93,19 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun croppedImage(actionCropImageType: ActionCropImage?) {
-        _uiState.update { it.copy(actionCropImage = actionCropImageType) }
+    private fun croppedImage() {
+        _uiState.update { it.copy(isCrop = !it.isCrop) }
     }
 
-    private fun selectedOptionsNavigationBar(navigationBarItem: NavigationBarItem) {
-        when (navigationBarItem) {
-            TRANSLATE -> {
+    private fun selectedOptionsButtonMenuItem(buttonMenuItem: ButtonMenuItem) {
+        when (buttonMenuItem) {
+            TRANSLATE, LISTEN -> {
                 viewModelScope.launch {
-                    croppedImage(CROPPED_IMAGE)
+                    croppedImage()
                 }
             }
-
-            LISTEN -> {
-                croppedImage(CROPPED_IMAGE)
-            }
-
-            FOCUS -> {
-                croppedImage(FOCUS_IMAGE)
-            }
         }
-        _uiState.update { it.copy(navigationBarItem = navigationBarItem) }
+        _uiState.update { it.copy(buttonMenuItem = buttonMenuItem) }
     }
 
     private fun toggleDictionaryFullScreenDialog(url: String?) {
@@ -141,10 +126,9 @@ class ScreenShotViewModel @Inject constructor(
             when (val status = textIdentifierRepository.fetchTextRecognizer(imageBitmap)) {
                 is Status.Success -> {
                     val textFormatted = status.data.formatText()
-                    when (_uiState.value.navigationBarItem) {
+                    when (_uiState.value.buttonMenuItem) {
                         TRANSLATE -> fetchPhraseToTranslate(textFormatted)
                         LISTEN -> fetchLanguageIdentifier(textFormatted, illegiblePhrase)
-                        else -> Unit
                     }
                 }
 

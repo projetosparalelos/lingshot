@@ -27,6 +27,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,22 +42,20 @@ import com.lingshot.common.helper.onSuccess
 import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ScreenShotEvent
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ClearStatus
-import com.lingshot.screenshot_presentation.ScreenShotEvent.CroppedImage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchCorrectedOriginalText
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchTextRecognizer
-import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsNavigationBar
+import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsButtonMenuItem
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleDictionaryFullScreenDialog
 import com.lingshot.screenshot_presentation.ScreenShotUiState
 import com.lingshot.screenshot_presentation.ScreenShotViewModel
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem.TRANSLATE
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotBalloon
+import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.TRANSLATE
+import com.lingshot.screenshot_presentation.ui.component.ScreenShotButtonMenu
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotCropImage
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotDictionaryFullScreenDialog
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotLottieLoading
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotNavigationBar
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotNavigationBarItem
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotSnackBarError
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotTranslateBottomSheet
+import es.dmoral.toasty.Toasty
 
 @Composable
 internal fun ScreenShotRoute(
@@ -75,6 +75,7 @@ internal fun ScreenShotScreen(
     modifier: Modifier = Modifier,
     handleEvent: (event: ScreenShotEvent) -> Unit,
 ) {
+    val context = LocalContext.current
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -83,12 +84,17 @@ internal fun ScreenShotScreen(
     ) {
         val illegiblePhrase = stringResource(id = R.string.text_message_illegible_phrase)
         ScreenShotCropImage(
-            actionCropImage = uiState.actionCropImage,
             onCropImageResult = { bitmap ->
-                handleEvent(FetchTextRecognizer(bitmap, illegiblePhrase))
+                handleEvent(FetchTextRecognizer(bitmap?.asAndroidBitmap(), illegiblePhrase))
             },
-            onCroppedImage = {
-                handleEvent(CroppedImage(it))
+            isCrop = uiState.isCrop,
+        )
+        ScreenShotButtonMenu(
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onSelectedOptionsButtonMenuItem = {
+                if (!uiState.screenShotStatus.isLoadingStatus) {
+                    handleEvent(SelectedOptionsButtonMenuItem(it))
+                }
             },
         )
         Column(
@@ -99,15 +105,10 @@ internal fun ScreenShotScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             uiState.screenShotStatus.onEmpty {
-                ScreenShotBalloon(
-                    modifier = Modifier.padding(bottom = 32.dp),
-                    text = illegiblePhrase,
-                    onDismiss = {
-                        handleEvent(ClearStatus)
-                    },
-                )
+                Toasty.warning(context, illegiblePhrase).show()
+                handleEvent(ClearStatus)
             }.onLoading {
-                val loading = uiState.navigationBarItem
+                val loading = uiState.buttonMenuItem
                     .takeIf { it == TRANSLATE }
                     ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
 
@@ -116,7 +117,7 @@ internal fun ScreenShotScreen(
                     loading = loading,
                 )
             }.onSuccess {
-                if (uiState.navigationBarItem == TRANSLATE) {
+                if (uiState.buttonMenuItem == TRANSLATE) {
                     ScreenShotTranslateBottomSheet(
                         languageTranslationDomain = it,
                         correctedOriginalTextStatus = uiState.correctedOriginalTextStatus,
@@ -140,22 +141,8 @@ internal fun ScreenShotScreen(
                     },
                 )
             }
-            ScreenShotNavigationBar(
-                modifier = Modifier.padding(bottom = 16.dp),
-            ) {
-                ScreenShotNavigationBarItem(
-                    navigationBarItem = uiState.navigationBarItem,
-                    navigationBarItemList = uiState.navigationBarItemList,
-                    onSelectedOptionsNavigationBar = { item ->
-                        if (!uiState.screenShotStatus.isLoadingStatus) {
-                            handleEvent(SelectedOptionsNavigationBar(item))
-                        }
-                    },
-                )
-            }
         }
     }
-
     uiState.dictionaryUrl?.let { url ->
         ScreenShotDictionaryFullScreenDialog(url) {
             handleEvent(ToggleDictionaryFullScreenDialog(null))

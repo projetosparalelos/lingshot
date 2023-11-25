@@ -15,9 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_label_navigation_bar_item_translate">Traduire</string>
-    <string name="text_label_navigation_bar_item_listen">Écouter</string>
-    <string name="text_label_navigation_bar_item_focus">Focus</string>
     <string name="text_message_illegible_phrase">Langue différente de celle sélectionnée ou inconnue!</string>
     <string name="text_title_translate_bottom_sheet">Votre traduction</string>
     <string name="text_title_dictionary_full_screen_dialog_screenshot">Dictionnaire</string>

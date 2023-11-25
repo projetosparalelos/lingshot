@@ -15,9 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_label_navigation_bar_item_translate">Översätt</string>
-    <string name="text_label_navigation_bar_item_listen">Lyssna</string>
-    <string name="text_label_navigation_bar_item_focus">Fokus</string>
     <string name="text_message_illegible_phrase">Annat språk än det valda eller okänt!</string>
     <string name="text_title_translate_bottom_sheet">Din översättning</string>
     <string name="text_title_dictionary_full_screen_dialog_screenshot">Ordbok</string>

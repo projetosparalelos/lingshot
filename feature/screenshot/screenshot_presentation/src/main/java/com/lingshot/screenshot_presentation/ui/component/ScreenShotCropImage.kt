@@ -15,126 +15,115 @@
  */
 package com.lingshot.screenshot_presentation.ui.component
 
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Rect
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
-import android.widget.LinearLayout.LayoutParams
-import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.viewinterop.AndroidView
-import com.canhub.cropper.CropImageOptions
-import com.canhub.cropper.CropImageView
-import com.canhub.cropper.CropImageView.CropCornerShape.OVAL
-import com.canhub.cropper.CropImageView.Guidelines.OFF
+import androidx.compose.ui.unit.dp
 import com.lingshot.common.util.findActivity
 import com.lingshot.screenshot_presentation.R
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
-import timber.log.Timber
+import com.smarttoolfactory.cropper.ImageCropper
+import com.smarttoolfactory.cropper.model.OutlineType
+import com.smarttoolfactory.cropper.model.RectCropShape
+import com.smarttoolfactory.cropper.model.aspectRatios
+import com.smarttoolfactory.cropper.settings.CropDefaults
+import com.smarttoolfactory.cropper.settings.CropOutlineProperty
+import java.io.FileNotFoundException
 
 @Composable
 internal fun ScreenShotCropImage(
-    actionCropImage: ActionCropImage?,
-    onCroppedImage: (ActionCropImage?) -> Unit,
+    isCrop: Boolean,
     modifier: Modifier = Modifier,
-    imageUri: Uri? = rememberImageUriPath(),
-    onCropImageResult: (Bitmap?) -> Unit,
+    imageBitmap: ImageBitmap? = rememberImageBitmap(),
+    onCropImageResult: (ImageBitmap?) -> Unit,
 ) {
-    val cropImage = rememberCropImage()
+    val handleSize: Float = LocalDensity.current.run { 20.dp.toPx() }
 
-    AndroidView(
-        modifier = modifier,
-        factory = {
-            cropImage.apply {
-                setImageUriAsync(imageUri)
-                cropRectDefault()
-            }
-        },
-    ) { cropImageView ->
-        when (actionCropImage) {
-            ActionCropImage.CROPPED_IMAGE -> {
-                cropImage.croppedImageAsync()
-            }
-
-            FOCUS_IMAGE -> {
-                cropImage.cropRect = Rect(null)
-            }
-
-            else -> {
-                Timber.i("Clear crop action of image.")
-            }
-        }
-        cropImageView.setOnCropImageCompleteListener { _, result ->
-            onCropImageResult(result.bitmap)
-        }
+    val cropProperties by remember {
+        mutableStateOf(
+            CropDefaults.properties(
+                contentScale = ContentScale.Inside,
+                cropOutlineProperty = CropOutlineProperty(
+                    OutlineType.Rect,
+                    RectCropShape(0, "Rect"),
+                ),
+                aspectRatio = aspectRatios[4].aspectRatio,
+                handleSize = handleSize,
+                overlayRatio = 0.2f,
+                maxZoom = 4f,
+            ),
+        )
     }
-    LaunchedEffect(actionCropImage) {
-        onCroppedImage(null)
+    val cropStyle by remember {
+        mutableStateOf(
+            CropDefaults.style(drawGrid = false, strokeWidth = 2.dp),
+        )
+    }
+
+    imageBitmap?.let { image ->
+        ImageCropper(
+            modifier = modifier
+                .fillMaxWidth(),
+            imageBitmap = image,
+            contentDescription = null,
+            cropStyle = cropStyle,
+            cropProperties = cropProperties,
+            crop = isCrop,
+            onCropStart = {},
+            onCropSuccess = onCropImageResult,
+        )
     }
 }
 
 @Composable
 @Suppress("Deprecation")
-private fun rememberImageUriPath(context: Context = LocalContext.current) = remember {
+private fun rememberImageBitmap(context: Context = LocalContext.current) = remember {
     val activity = context.findActivity()
     val intent = activity?.intent
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        intent?.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+        uriToBitmap(context, intent?.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java))
     } else {
-        intent?.getParcelableExtra(Intent.EXTRA_STREAM)
-    }
+        uriToBitmap(context, intent?.getParcelableExtra(Intent.EXTRA_STREAM))
+    }?.asImageBitmap()
 }
 
-@Composable
-private fun rememberCropImage(context: Context = LocalContext.current) = remember {
-    CropImageView(context).apply {
-        val cropImageOptions = CropImageOptions(
-            guidelines = OFF,
-            cornerShape = OVAL,
-            showProgressBar = false,
-        )
-        layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
-        setImageCropOptions(cropImageOptions)
+private fun uriToBitmap(context: Context, uri: Uri?): Bitmap? {
+    uri?.let {
+        try {
+            context.contentResolver.openInputStream(it)?.use { inputStream ->
+                return BitmapFactory.decodeStream(inputStream)
+            }
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        }
     }
-}
-
-private fun CropImageView.cropRectDefault() {
-    val rectRight = 500
-    val rectBottom = 450
-    val width = resources.displayMetrics.widthPixels
-    cropRect = Rect(width - rectRight, 0, width, rectBottom)
+    return null
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun ScreenShotCropImagePreview() {
-    val resources = LocalContext.current.resources
-    val cropImagePreview = R.drawable.crop_image_preview
-
-    val imageUri = Uri.Builder()
-        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-        .authority(resources.getResourcePackageName(cropImagePreview))
-        .appendPath(resources.getResourceTypeName(cropImagePreview))
-        .appendPath(resources.getResourceEntryName(cropImagePreview))
-        .build()
+    val imageBitmap = ImageBitmap.imageResource(R.drawable.crop_image_preview)
 
     ScreenShotCropImage(
-        imageUri = imageUri,
-        actionCropImage = FOCUS_IMAGE,
-        onCroppedImage = {},
+        isCrop = false,
+        imageBitmap = imageBitmap,
         onCropImageResult = {},
     )
-}
-
-enum class ActionCropImage {
-    CROPPED_IMAGE,
-    FOCUS_IMAGE,
 }

@@ -19,18 +19,13 @@ import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
+import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem
 
 data class ScreenShotUiState(
     val screenShotStatus: Status<LanguageTranslationDomain> = statusDefault(),
     val correctedOriginalTextStatus: Status<String> = statusDefault(),
     val dictionaryUrl: String? = null,
-    val actionCropImage: ActionCropImage? = null,
+    val isCrop: Boolean = false,
     val availableLanguage: AvailableLanguage? = null,
-    val navigationBarItem: NavigationBarItem = NavigationBarItem.TRANSLATE,
-    val navigationBarItemList: ImmutableList<NavigationBarItem> =
-        enumValues<NavigationBarItem>().toList().toImmutableList(),
+    val buttonMenuItem: ButtonMenuItem = ButtonMenuItem.TRANSLATE,
 )
