@@ -63,7 +63,7 @@ internal fun ScreenShotCropImage(
                     OutlineType.Rect,
                     RectCropShape(0, "Rect"),
                 ),
-                aspectRatio = aspectRatios[4].aspectRatio,
+                aspectRatio = aspectRatios[3].aspectRatio,
                 handleSize = handleSize,
                 overlayRatio = 0.2f,
                 maxZoom = 4f,
