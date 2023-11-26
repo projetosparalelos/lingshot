@@ -68,7 +68,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
         super.onCreate()
         screenshotDetection.startScreenshotDetection()
     }
-//
+
     override fun onConfigurationChanged(configuration: Configuration) {
         super.onConfigurationChanged(configuration)
 
