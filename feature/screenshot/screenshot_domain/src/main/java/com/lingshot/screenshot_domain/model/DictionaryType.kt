@@ -32,6 +32,7 @@ enum class DictionaryType {
 
     protected fun String.removeCharactersFromStartAndEnd(): String {
         return replace(Regex("[\"']"), "")
+            .replace("?", "")
             .replace(Regex("^[^\\p{L}\\p{N}]+|[^\\p{L}\\p{N}]+\$"), "")
             .lowercase()
             .trim()
