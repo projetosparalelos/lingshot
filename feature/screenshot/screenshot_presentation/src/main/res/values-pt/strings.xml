@@ -17,5 +17,5 @@
 <resources>
     <string name="text_message_illegible_phrase">Idioma diferente do selecionado ou desconhecido!</string>
     <string name="text_title_translate_bottom_sheet">Sua tradução</string>
-    <string name="text_title_dictionary_full_screen_dialog_screenshot">Dicionário</string>
+    <string name="text_label_dictionary">Dicionário</string>
 </resources>

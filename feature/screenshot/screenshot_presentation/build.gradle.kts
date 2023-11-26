@@ -28,5 +28,6 @@ dependencies {
 
     implementation(libs.toasty)
     implementation(libs.compose.cropper)
+    implementation(libs.balloon.compose)
     implementation(libs.lottie.compose)
 }
