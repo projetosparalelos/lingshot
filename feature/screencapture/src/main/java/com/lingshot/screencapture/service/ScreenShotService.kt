@@ -22,6 +22,7 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
 import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.net.Uri
@@ -29,6 +30,7 @@ import android.os.Build
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat.startForeground
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.lingshot.common.CommonConstant.CHANNEL_ID
@@ -150,7 +152,11 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
                 getString(R.string.text_notification_message_display_reading_is_ready_to_use),
             )
             .setSmallIcon(R.drawable.ic_translate_24).run {
-                startForeground(NOTIFICATION_FOREGROUND_ID, build())
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    startForeground(this@ScreenShotService, NOTIFICATION_FOREGROUND_ID, notification, FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
+                } else {
+                    startForeground(NOTIFICATION_FOREGROUND_ID, build())
+                }
             }
     }
 

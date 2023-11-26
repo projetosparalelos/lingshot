@@ -24,13 +24,17 @@ enum class DictionaryType {
             val languageFrom = AvailableLanguage.from(languageCodeFrom)?.name
             val languageTo = AvailableLanguage.from(languageCodeTo)?.name
 
-            return "$baseUrl/$languageFrom-$languageTo/$word".removeCharactersFromEnd()
+            return "$baseUrl/$languageFrom-$languageTo/$word".removeCharactersFromStartAndEnd()
         }
     }, ;
 
     abstract fun url(languageCodeFrom: String, languageCodeTo: String, word: String): String
 
-    protected fun String.removeCharactersFromEnd(): String {
-        return replace(Regex("[^\\p{L}\\p{N}]+\$"), "").lowercase().trim()
+    protected fun String.removeCharactersFromStartAndEnd(): String {
+        return replace(Regex("[\"']"), "")
+            .replace("?", "")
+            .replace(Regex("^[^\\p{L}\\p{N}]+|[^\\p{L}\\p{N}]+\$"), "")
+            .lowercase()
+            .trim()
     }
 }

@@ -41,7 +41,7 @@ daggerHilt = "2.48.1"
 
 firebaseBom = "29.3.0"
 
-imageCropper = "4.5.0"
+composeCropper = "0.4.0"
 coil = "2.4.0"
 balloon = "1.6.1"
 lottie = "6.1.0"
@@ -127,7 +127,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx" }
 firebase-performance-gradle = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerf" }
 
-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
+compose-cropper = { module = "com.github.SmartToolFactory:Compose-Cropper", version.ref = "composeCropper" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }

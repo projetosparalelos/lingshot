@@ -16,18 +16,13 @@
 package com.lingshot.screenshot_presentation
 
 import android.graphics.Bitmap
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
-import com.lingshot.screenshot_presentation.ui.component.NavigationBarItem
+import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem
 
 sealed class ScreenShotEvent {
     object ClearStatus : ScreenShotEvent()
 
-    data class CroppedImage(
-        val actionCropImage: ActionCropImage?,
-    ) : ScreenShotEvent()
-
-    data class SelectedOptionsNavigationBar(
-        val navigationBarItem: NavigationBarItem,
+    data class SelectedOptionsButtonMenuItem(
+        val buttonMenuItem: ButtonMenuItem,
     ) : ScreenShotEvent()
 
     data class FetchCorrectedOriginalText(

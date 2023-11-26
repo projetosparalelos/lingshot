@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@file:OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalLayoutApi::class,
+    ExperimentalFoundationApi::class,
+)
 
 package com.lingshot.screenshot_presentation.ui.component
 
+import android.content.Context
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -45,9 +51,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +73,12 @@ import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusSuccess
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
 import com.lingshot.screenshot_presentation.R
+import com.skydoves.balloon.BalloonSizeSpec
+import com.skydoves.balloon.compose.Balloon
+import com.skydoves.balloon.compose.rememberBalloonBuilder
+import com.skydoves.balloon.compose.setBackgroundColor
+import com.skydoves.balloon.compose.setTextColor
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun ScreenShotTranslateBottomSheet(
@@ -186,18 +201,69 @@ fun ScreenShotOpenDictionaryByWord(
     onToggleDictionaryFullScreenDialog: (String) -> Unit,
 ) {
     val words = text.split(" ")
-    FlowRow(modifier = modifier) {
-        words.forEach { word ->
-            Text(
-                text = word,
-                fontSize = 14.sp,
-                textDecoration = TextDecoration.Underline,
-                modifier = Modifier
-                    .clickable { onToggleDictionaryFullScreenDialog(word) }
-                    .padding(horizontal = 4.dp),
-            )
+    var selectedWords by remember { mutableStateOf(setOf<String>()) }
+
+    val scope = rememberCoroutineScope()
+
+    Balloon(
+        builder = rememberBalloonBuilder(),
+    ) { balloonWindow ->
+        FlowRow(modifier = modifier) {
+            words.forEach { word ->
+                Text(
+                    text = word,
+                    fontSize = 14.sp,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier
+                        .combinedClickable(
+                            onClick = {
+                                onToggleDictionaryFullScreenDialog(word)
+                            },
+                            onLongClick = {
+                                selectedWords = if (word in selectedWords) {
+                                    selectedWords.minus(word)
+                                } else {
+                                    selectedWords.plus(word)
+                                }
+
+                                if (selectedWords.size > 1) {
+                                    scope.launch {
+                                        balloonWindow.showAlignTop()
+                                        balloonWindow.setOnBalloonClickListener {
+                                            onToggleDictionaryFullScreenDialog(selectedWords.joinToString(separator = " "))
+                                        }
+                                    }
+                                }
+                            },
+                        )
+                        .background(
+                            if (word in selectedWords) {
+                                MaterialTheme.colorScheme.primaryContainer
+                            } else {
+                                Color.Transparent
+                            },
+                        )
+                        .padding(horizontal = 4.dp),
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun rememberBalloonBuilder(
+    context: Context = LocalContext.current,
+    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+) = rememberBalloonBuilder {
+    setText(context.getString(R.string.text_label_dictionary))
+    setTextSize(14f)
+    setHeight(BalloonSizeSpec.WRAP)
+    setIsVisibleArrow(false)
+    setPadding(12)
+    setMarginHorizontal(16)
+    setTextColor(textColor)
+    setBackgroundColor(containerColor)
 }
 
 @Preview(showBackground = true)

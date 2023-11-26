@@ -18,6 +18,8 @@
     <application>
         <service
             android:name="com.lingshot.screencapture.service.ScreenShotService"
-            android:foregroundServiceType="mediaProjection" />
+            android:foregroundServiceType="mediaProjection"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 </manifest>

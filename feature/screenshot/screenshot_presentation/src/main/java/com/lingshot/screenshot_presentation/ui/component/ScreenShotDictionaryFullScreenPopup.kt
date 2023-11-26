@@ -32,7 +32,7 @@ internal fun ScreenShotDictionaryFullScreenDialog(
 ) {
     LingshotFullScreenDialog(
         modifier = modifier,
-        title = stringResource(R.string.text_title_dictionary_full_screen_dialog_screenshot),
+        title = stringResource(R.string.text_label_dictionary),
         onDismiss = onDismiss,
     ) {
         LingshotWebView(url = url)
