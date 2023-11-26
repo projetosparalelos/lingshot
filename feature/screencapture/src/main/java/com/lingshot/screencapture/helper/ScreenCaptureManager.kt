@@ -57,6 +57,7 @@ class ScreenCaptureManager @Inject constructor(
     @SuppressLint("WrongConstant")
     fun startCapture(resultCode: Int, data: Intent) {
         mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data)
+        mediaProjection?.registerCallback(object : MediaProjection.Callback() {}, null)
         imageReader = ImageReader.newInstance(
             displayMetrics.widthPixels,
             displayMetrics.heightPixels,
