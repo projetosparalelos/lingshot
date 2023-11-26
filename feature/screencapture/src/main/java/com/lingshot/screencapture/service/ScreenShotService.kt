@@ -63,7 +63,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
     lateinit var screenCaptureManager: ScreenCaptureManager
 
     private var isOrientationPortrait: Boolean = true
-//
+
     override fun onCreate() {
         super.onCreate()
         screenshotDetection.startScreenshotDetection()
