@@ -27,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -58,14 +57,13 @@ internal fun ScreenShotCropImage(
     val cropProperties by remember {
         mutableStateOf(
             CropDefaults.properties(
-                contentScale = ContentScale.Inside,
+                contentScale = ContentScale.Fit,
                 cropOutlineProperty = CropOutlineProperty(
                     OutlineType.Rect,
                     RectCropShape(0, "Rect"),
                 ),
                 aspectRatio = aspectRatios[3].aspectRatio,
                 handleSize = handleSize,
-                overlayRatio = 0.2f,
                 maxZoom = 4f,
             ),
         )
