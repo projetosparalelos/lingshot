@@ -51,7 +51,7 @@ internal fun ScreenShotCropImage(
     modifier: Modifier = Modifier,
     imageBitmap: ImageBitmap? = rememberImageBitmap(),
     onCropImageResult: (ImageBitmap?) -> Unit,
-) {//
+) {
     val handleSize: Float = LocalDensity.current.run { 20.dp.toPx() }
 
     val cropProperties by remember {
