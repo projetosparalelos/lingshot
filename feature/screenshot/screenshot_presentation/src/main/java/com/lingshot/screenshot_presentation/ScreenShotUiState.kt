@@ -19,13 +19,14 @@ import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
+import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
 import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem
 
 data class ScreenShotUiState(
     val screenShotStatus: Status<LanguageTranslationDomain> = statusDefault(),
     val correctedOriginalTextStatus: Status<String> = statusDefault(),
     val dictionaryUrl: String? = null,
-    val isCrop: Boolean = false,
+    val actionCropImage: ActionCropImage? = null,
     val availableLanguage: AvailableLanguage? = null,
     val buttonMenuItem: ButtonMenuItem = ButtonMenuItem.TRANSLATE,
 )

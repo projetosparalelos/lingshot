@@ -38,7 +38,7 @@ import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.LISTEN
 import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.TRANSLATE
 
 @Composable
-internal fun ScreenShotButtonMenu(
+internal fun ScreenShotButtonMenuEnd(
     onSelectedOptionsButtonMenuItem: (ButtonMenuItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -76,8 +76,8 @@ internal fun ScreenShotButtonMenu(
 
 @Preview(showBackground = true)
 @Composable
-private fun ScreenShotButtonMenuPreview() {
-    ScreenShotButtonMenu(
+private fun ScreenShotButtonMenuEndPreview() {
+    ScreenShotButtonMenuEnd(
         onSelectedOptionsButtonMenuItem = {},
     )
 }
@@ -85,4 +85,5 @@ private fun ScreenShotButtonMenuPreview() {
 enum class ButtonMenuItem {
     TRANSLATE,
     LISTEN,
+    FOCUS,
 }

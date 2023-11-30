@@ -39,7 +39,11 @@ import com.lingshot.languagechoice_domain.model.TranslateLanguageType.FROM
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType.TO
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
+import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
+import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
+import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
 import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem
+import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.FOCUS
 import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.LISTEN
 import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.TRANSLATE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,12 +74,15 @@ class ScreenShotViewModel @Inject constructor(
 
     fun handleEvent(screenShotEvent: ScreenShotEvent) {
         when (screenShotEvent) {
+            is ScreenShotEvent.CroppedImage -> {
+                croppedImage(screenShotEvent.actionCropImage)
+            }
+
             is ScreenShotEvent.FetchCorrectedOriginalText -> {
                 fetchCorrectedOriginalText(screenShotEvent.originalText)
             }
 
             is ScreenShotEvent.FetchTextRecognizer -> {
-                croppedImage()
                 fetchTextRecognizer(screenShotEvent.imageBitmap, screenShotEvent.illegiblePhrase)
             }
 
@@ -93,16 +100,19 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun croppedImage() {
-        _uiState.update { it.copy(isCrop = !it.isCrop) }
+    private fun croppedImage(actionCropImage: ActionCropImage?) {
+        _uiState.update { it.copy(actionCropImage = actionCropImage) }
     }
 
     private fun selectedOptionsButtonMenuItem(buttonMenuItem: ButtonMenuItem) {
         when (buttonMenuItem) {
             TRANSLATE, LISTEN -> {
                 viewModelScope.launch {
-                    croppedImage()
+                    croppedImage(CROPPED_IMAGE)
                 }
+            }
+            FOCUS -> {
+                croppedImage(FOCUS_IMAGE)
             }
         }
         _uiState.update { it.copy(buttonMenuItem = buttonMenuItem) }
@@ -129,6 +139,7 @@ class ScreenShotViewModel @Inject constructor(
                     when (_uiState.value.buttonMenuItem) {
                         TRANSLATE -> fetchPhraseToTranslate(textFormatted)
                         LISTEN -> fetchLanguageIdentifier(textFormatted, illegiblePhrase)
+                        else -> Unit
                     }
                 }
 

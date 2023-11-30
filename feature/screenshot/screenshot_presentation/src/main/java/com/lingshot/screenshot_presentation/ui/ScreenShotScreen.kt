@@ -27,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,6 +41,7 @@ import com.lingshot.common.helper.onSuccess
 import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ScreenShotEvent
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ClearStatus
+import com.lingshot.screenshot_presentation.ScreenShotEvent.CroppedImage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchCorrectedOriginalText
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchTextRecognizer
 import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsButtonMenuItem
@@ -49,7 +49,8 @@ import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleDictionaryFull
 import com.lingshot.screenshot_presentation.ScreenShotUiState
 import com.lingshot.screenshot_presentation.ScreenShotViewModel
 import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.TRANSLATE
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotButtonMenu
+import com.lingshot.screenshot_presentation.ui.component.ScreenShotButtonMenuEnd
+import com.lingshot.screenshot_presentation.ui.component.ScreenShotButtonMenuStart
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotCropImage
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotDictionaryFullScreenDialog
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotLottieLoading
@@ -84,12 +85,21 @@ internal fun ScreenShotScreen(
     ) {
         val illegiblePhrase = stringResource(id = R.string.text_message_illegible_phrase)
         ScreenShotCropImage(
+            actionCropImage = uiState.actionCropImage,
             onCropImageResult = { bitmap ->
-                handleEvent(FetchTextRecognizer(bitmap?.asAndroidBitmap(), illegiblePhrase))
+                handleEvent(FetchTextRecognizer(bitmap, illegiblePhrase))
             },
-            isCrop = uiState.isCrop,
+            onCroppedImage = { actionCropImage ->
+                handleEvent(CroppedImage(actionCropImage))
+            },
         )
-        ScreenShotButtonMenu(
+        ScreenShotButtonMenuStart(
+            modifier = Modifier.align(Alignment.BottomStart),
+            onSelectedOptionsButtonMenuItem = {
+                handleEvent(SelectedOptionsButtonMenuItem(it))
+            },
+        )
+        ScreenShotButtonMenuEnd(
             modifier = Modifier.align(Alignment.BottomEnd),
             onSelectedOptionsButtonMenuItem = {
                 if (!uiState.screenShotStatus.isLoadingStatus) {

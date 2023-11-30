@@ -16,6 +16,7 @@
 package com.lingshot.screenshot_presentation
 
 import android.graphics.Bitmap
+import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
 import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem
 
 sealed class ScreenShotEvent {
@@ -23,6 +24,10 @@ sealed class ScreenShotEvent {
 
     data class SelectedOptionsButtonMenuItem(
         val buttonMenuItem: ButtonMenuItem,
+    ) : ScreenShotEvent()
+
+    data class CroppedImage(
+        val actionCropImage: ActionCropImage?,
     ) : ScreenShotEvent()
 
     data class FetchCorrectedOriginalText(
