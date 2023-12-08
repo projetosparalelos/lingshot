@@ -357,5 +357,9 @@ private fun intentApplicationDetailsPermission(context: Context) =
     )
 
 private fun TypeActionScreenshot.isUpsideDownCakeAndNotDeviceButton(): Boolean {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && this != DEVICE_BUTTON
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        this != DEVICE_BUTTON
+    } else {
+        true
+    }
 }
