@@ -16,5 +16,9 @@
 -->
 <resources>
     <string name="text_message_notification_permission_home">Vänligen aktivera aviseringstillståndet för uppdateringar!</string>
-    <string name="text_button_donate">Donera</string>
+    <string name="text_description_subtitle_for_manga_home">Översätt direkt från vilken källa eller webbplats som helst utan att behöva ha dem på din enhet.</string>
+    <string name="text_title_subtitle_for_manga_home">Undertext för Manga</string>
+    <string name="text_label_use_any_source_subtitle_home">Använd vilken källa som helst</string>
+    <string name="text_button_start_reading_subtitle_home">Börja läsa</string>
+    <string name="text_button_stop_reading_subtitle_home">Sluta läsa</string>
 </resources>

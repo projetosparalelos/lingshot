@@ -83,7 +83,7 @@ internal fun ScreenShotScreen(
             .navigationBarsPadding()
             .background(Color.Black),
     ) {
-        val illegiblePhrase = stringResource(id = R.string.text_message_illegible_phrase)
+        val illegiblePhrase = stringResource(id = com.lingshot.common.R.string.text_message_illegible_phrase)
         ScreenShotCropImage(
             actionCropImage = uiState.actionCropImage,
             onCropImageResult = { bitmap ->

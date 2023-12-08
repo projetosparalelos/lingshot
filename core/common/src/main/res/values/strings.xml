@@ -17,4 +17,5 @@
 <resources>
     <!-- App -->
     <string name="app_name">Lingshot</string>
+    <string name="text_message_illegible_phrase">Different language than selected or unknown!</string>
 </resources>

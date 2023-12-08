@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingshot.common.helper.TextToSpeechFacade
 import com.lingshot.common.helper.launchWithStatus
+import com.lingshot.common.util.formatText
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
 import com.lingshot.domain.model.MessageDomain
@@ -239,12 +240,5 @@ class ScreenShotViewModel @Inject constructor(
             languageIdentifierUseCase(this) == getLanguageFrom()?.languageCode ||
                 getLanguageFrom()?.enabledLanguage == false
             )
-    }
-
-    private fun String?.formatText(): String {
-        return toString()
-            .replace("\n", " ")
-            .lowercase()
-            .replaceFirstChar { it.uppercase() }
     }
 }

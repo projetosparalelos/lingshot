@@ -33,6 +33,7 @@ data class HomeUiState(
 
     val homeSection = listOf(
         HomeSection(HomeTypeSection.CARD_LANGUAGE_CHOICE),
+        HomeSection((HomeTypeSection.CARD_SUBTITLE)),
         HomeSection(HomeTypeSection.CARD_BUTTON_SCREEN_SHOT),
     ).toImmutableList()
 

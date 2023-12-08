@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Screenshot
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -56,7 +57,10 @@ internal fun HomeOptionScreenShotCard(
     onClickChanged: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    OutlinedCard(modifier = modifier.clickable(enabled = isEnabled, onClick = onClickChanged)) {
+    OutlinedCard(
+        modifier = modifier.clickable(enabled = isEnabled, onClick = onClickChanged),
+        border = CardDefaults.outlinedCardBorder().copy(width = 0.5.dp),
+    ) {
         ListItem(
             headlineContent = { Text(stringResource(id = title), fontWeight = FontWeight.Bold) },
             trailingContent = {
