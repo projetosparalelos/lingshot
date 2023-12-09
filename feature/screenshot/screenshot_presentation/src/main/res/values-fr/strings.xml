@@ -15,7 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string name="text_message_illegible_phrase">Langue différente de celle sélectionnée ou inconnue!</string>
     <string name="text_title_translate_bottom_sheet">Votre traduction</string>
     <string name="text_label_dictionary">Dictionnaire</string>
 </resources>

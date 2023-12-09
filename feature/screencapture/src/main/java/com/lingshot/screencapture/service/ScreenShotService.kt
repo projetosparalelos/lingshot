@@ -191,6 +191,7 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
         private const val STOP_SERVICE = "STOP_SERVICE"
         private const val NOTIFICATION_FOREGROUND_ID = 1
         var isScreenCaptureByDevice: Boolean = false
+        var isScreenCaptureForSubtitle: Boolean = false
 
         fun screenShotServiceIntent(context: Context?): Intent {
             return Intent(context, ScreenShotService::class.java).apply {

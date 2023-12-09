@@ -46,14 +46,11 @@ fun View.isViewOverlapping(other: View, deltaX: Int = 0, deltaY: Int = 0): Boole
         )
 }
 
-fun String.limitCharactersWithEllipsize(limit: Int): String {
-    return if (length >= limit) {
-        val stringBuilder = StringBuilder(substring(0, limit))
-        stringBuilder.append("...")
-        stringBuilder.toString()
-    } else {
-        this
-    }
+fun String?.formatText(): String {
+    return toString()
+        .replace("\n", " ")
+        .lowercase()
+        .replaceFirstChar { it.uppercase() }
 }
 
 fun Context.findActivity(): Activity? = when (this) {

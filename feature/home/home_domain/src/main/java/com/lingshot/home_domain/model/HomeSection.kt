@@ -22,4 +22,5 @@ data class HomeSection(
 enum class HomeTypeSection {
     CARD_BUTTON_SCREEN_SHOT,
     CARD_LANGUAGE_CHOICE,
+    CARD_SUBTITLE,
 }

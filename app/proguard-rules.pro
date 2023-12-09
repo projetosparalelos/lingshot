@@ -2,6 +2,7 @@
 -keepattributes Signature
 -keep class * extends com.google.protobuf.GeneratedMessageLite {*;}
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+-dontwarn com.lingshot.common.R$string
 -dontwarn com.squareup.okhttp.CipherSuite
 -dontwarn com.squareup.okhttp.ConnectionSpec
 -dontwarn com.squareup.okhttp.TlsVersion

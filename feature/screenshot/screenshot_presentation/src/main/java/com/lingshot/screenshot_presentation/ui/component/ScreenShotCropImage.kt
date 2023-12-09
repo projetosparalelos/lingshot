@@ -35,8 +35,8 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.CropImageView.CropCornerShape.RECTANGLE
 import com.canhub.cropper.CropImageView.Guidelines.OFF
+import com.lingshot.common.R.drawable.crop_image_preview
 import com.lingshot.common.util.findActivity
-import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
 import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
 import timber.log.Timber
@@ -120,7 +120,7 @@ private fun CropImageView.cropRectDefault() {
 @Composable
 private fun ScreenShotCropImagePreview() {
     val resources = LocalContext.current.resources
-    val cropImagePreview = R.drawable.crop_image_preview
+    val cropImagePreview = crop_image_preview
 
     val imageUri = Uri.Builder()
         .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)

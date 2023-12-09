@@ -47,6 +47,7 @@ balloon = "1.6.1"
 lottie = "6.1.0"
 markdown = "0.3.6"
 toasty = "1.5.2"
+telephotoZoomable = "0.7.1"
 
 jUnit = "4.13.2"
 testParameterInjector = "1.14"
@@ -133,6 +134,7 @@ balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref 
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "markdown" }
 toasty = { module = "com.github.grenderg:toasty", version.ref = "toasty" }
+telephoto-zoomable = { module = "me.saket.telephoto:zoomable", version.ref = "telephotoZoomable" }
 
 junit = { module = "junit:junit", version.ref = "jUnit" }
 coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }

@@ -16,5 +16,9 @@
 -->
 <resources>
     <string name="text_message_notification_permission_home">Por favor, habilite a permissão de notificação para atualizações!</string>
-    <string name="text_button_donate">Doar</string>
+    <string name="text_description_subtitle_for_manga_home">Traduza instantaneamente de qualquer fonte ou site sem a necessidade de tê-los em seu dispositivo.</string>
+    <string name="text_title_subtitle_for_manga_home">Legenda para Mangá</string>
+    <string name="text_label_use_any_source_subtitle_home">Use qualquer fonte</string>
+    <string name="text_button_start_reading_subtitle_home">Iniciar Leitura</string>
+    <string name="text_button_stop_reading_subtitle_home">Parar Leitura</string>
 </resources>

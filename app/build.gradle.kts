@@ -65,6 +65,7 @@ dependencies {
     implementation(project(":feature:screenshot:screenshot_domain"))
     implementation(project(":feature:screenshot:screenshot_presentation"))
     implementation(project(":feature:swipepermission:swipepermission_presentation"))
+    implementation(project(":feature:subtitle:subtitle_presentation"))
 
     implementation(libs.multidex)
 

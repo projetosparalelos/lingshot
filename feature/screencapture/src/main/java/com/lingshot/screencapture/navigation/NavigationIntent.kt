@@ -19,12 +19,19 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.lingshot.common.util.fadeAnimation
+import com.lingshot.screencapture.service.ScreenShotService.Companion.isScreenCaptureForSubtitle
 
 object NavigationIntent {
     private const val SCREEN_SHOT_ACTIVITY_PATH = "com.lingshot.screenshot_presentation.ui.ScreenShotActivity"
+    private const val SUBTITLE_ACTIVITY_PATH = "com.lingshot.subtitle_presentation.ui.SubtitleActivity"
 
     fun launchScreenShotActivity(context: Context, uri: Uri?) {
-        Intent(context, Class.forName(SCREEN_SHOT_ACTIVITY_PATH)).apply {
+        val activityPath = if (isScreenCaptureForSubtitle) {
+            SUBTITLE_ACTIVITY_PATH
+        } else {
+            SCREEN_SHOT_ACTIVITY_PATH
+        }
+        Intent(context, Class.forName(activityPath)).apply {
             putExtra(Intent.EXTRA_STREAM, uri)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -27,6 +27,7 @@ import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.core.view.isVisible
 import com.lingshot.common.util.isViewOverlapping
+import com.lingshot.screencapture.service.ScreenShotService.Companion.isScreenCaptureForSubtitle
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
@@ -182,6 +183,13 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
         windowManager.addView(rootViewFloating, windowParamsFloating)
         windowManager.addView(rootViewFloatingClose, windowParamsFloatingClose)
 
+        imageButtonScreenCaptureFloating.setImageResource(
+            if (isScreenCaptureForSubtitle) {
+                R.drawable.ic_chat_bubble_24
+            } else {
+                R.drawable.ic_app_shortcut_24
+            },
+        )
         imageButtonScreenCaptureFloating.isVisible = isScreenCaptureByDevice.not()
     }.getOrNull()
 
