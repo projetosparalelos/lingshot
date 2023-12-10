@@ -86,7 +86,8 @@ This project takes advantage of best practices, and many popular libraries and t
 * GitHub Boots
   * [Renovate](https://github.com/renovatebot/renovate)
 * Other Tools
-  * [Compose Cropper](https://github.com/SmartToolFactory/Compose-Cropper)
+  * [Image Cropper](https://github.com/CanHub/Android-Image-Cropper)
+  * [Telephoto Zoomable](https://github.com/saket/telephoto)
   * [Balloon Compose](https://github.com/skydoves/Balloon)
   * [Markdown Compose](https://github.com/jeziellago/compose-markdown)
   * [Chucker Proxy](https://github.com/ChuckerTeam/chucker)
