@@ -70,7 +70,12 @@ internal fun HomeSubtitleCard(
     val context = LocalContext.current
 
     OutlinedCard(
-        modifier = modifier.clickable(onClick = onClickChanged),
+        modifier = modifier
+            .clickable(onClick = onClickChanged)
+            .placeholder(
+                visible = (offeringText == null),
+                highlight = PlaceholderHighlight.fade(),
+            ),
         border = CardDefaults.outlinedCardBorder().copy(width = 0.5.dp),
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -123,11 +128,6 @@ internal fun HomeSubtitleCard(
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 ElevatedButton(
-                    modifier = Modifier
-                        .placeholder(
-                            visible = (offeringText == null),
-                            highlight = PlaceholderHighlight.fade(),
-                        ),
                     colors = if (isSelected) {
                         ButtonDefaults.elevatedButtonColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer,

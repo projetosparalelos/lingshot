@@ -49,6 +49,7 @@ internal fun HomeLanguageChoice(
     ) {
         FilledTonalButton(
             modifier = Modifier.placeholder(visible = (languageFrom == null), highlight = PlaceholderHighlight.fade()),
+            enabled = (languageFrom != null),
             onClick = onClickLanguageFrom,
         ) {
             Text("${languageFrom?.flagEmoji}  ${languageFrom?.let { stringResource(id = it.displayName) }}")
@@ -62,6 +63,7 @@ internal fun HomeLanguageChoice(
 
         FilledTonalButton(
             modifier = Modifier.placeholder(visible = (languageTo == null), highlight = PlaceholderHighlight.fade()),
+            enabled = (languageTo != null),
             onClick = onClickLanguageTo,
         ) {
             Text("${languageTo?.flagEmoji}  ${languageTo?.let { stringResource(id = it.displayName) }}")
