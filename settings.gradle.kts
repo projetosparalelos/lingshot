@@ -1,5 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+include(":core:analytics")
+
+
 pluginManagement {
     includeBuild("plugins")
     repositories {

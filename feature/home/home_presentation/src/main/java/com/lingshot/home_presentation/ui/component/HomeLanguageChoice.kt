@@ -29,6 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
+import com.lingshot.designsystem.component.placeholder.fade
+import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 
 @Composable
@@ -45,6 +48,7 @@ internal fun HomeLanguageChoice(
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         FilledTonalButton(
+            modifier = Modifier.placeholder(visible = (languageFrom == null), highlight = PlaceholderHighlight.fade()),
             onClick = onClickLanguageFrom,
         ) {
             Text("${languageFrom?.flagEmoji}  ${languageFrom?.let { stringResource(id = it.displayName) }}")
@@ -57,6 +61,7 @@ internal fun HomeLanguageChoice(
         )
 
         FilledTonalButton(
+            modifier = Modifier.placeholder(visible = (languageTo == null), highlight = PlaceholderHighlight.fade()),
             onClick = onClickLanguageTo,
         ) {
             Text("${languageTo?.flagEmoji}  ${languageTo?.let { stringResource(id = it.displayName) }}")

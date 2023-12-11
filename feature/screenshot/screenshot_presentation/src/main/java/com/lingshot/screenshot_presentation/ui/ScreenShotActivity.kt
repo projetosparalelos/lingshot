@@ -19,7 +19,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.lingshot.designsystem.theme.LingshotTheme
 import com.lingshot.screencapture.helper.ScreenCaptureFloatingWindowLifecycle
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,16 +39,6 @@ class ScreenShotActivity : ComponentActivity() {
                 ScreenShotRoute()
             }
         }
-        showFeedBackBottomSheetDialog()
         screenCaptureFloatingWindowLifecycle(this)
-    }
-
-    private fun showFeedBackBottomSheetDialog() {
-        val reviewManager = ReviewManagerFactory.create(applicationContext)
-        reviewManager.requestReviewFlow().addOnCompleteListener { review ->
-            if (review.isSuccessful) {
-                reviewManager.launchReviewFlow(this, review.result)
-            }
-        }
     }
 }

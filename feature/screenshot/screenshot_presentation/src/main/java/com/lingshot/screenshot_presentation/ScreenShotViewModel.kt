@@ -21,6 +21,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lingshot.analytics.constant.LANGUAGE_UND_VALUE
+import com.lingshot.analytics.constant.ORIGINAL_CONTENT
+import com.lingshot.analytics.constant.ORIGINAL_LISTENING_VALUE
+import com.lingshot.analytics.constant.TRANSLATE_CONTENT
+import com.lingshot.analytics.constant.TYPE_SCREEN_CAPTURE_ITEM
+import com.lingshot.analytics.constant.TYPE_SCREEN_CAPTURE_STANDARD_VALUE
+import com.lingshot.analytics.helper.AnalyticsEventHelper
 import com.lingshot.common.helper.TextToSpeechFacade
 import com.lingshot.common.helper.launchWithStatus
 import com.lingshot.common.util.formatText
@@ -59,6 +66,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ScreenShotViewModel @Inject constructor(
     @ApplicationContext context: Context,
+    private val analyticsEventHelper: AnalyticsEventHelper,
     private val chatGPTRepository: ChatGPTRepository,
     private val textIdentifierRepository: TextIdentifierRepository,
     private val languageChoiceRepository: LanguageChoiceRepository,
@@ -112,6 +120,7 @@ class ScreenShotViewModel @Inject constructor(
                     croppedImage(CROPPED_IMAGE)
                 }
             }
+
             FOCUS -> {
                 croppedImage(FOCUS_IMAGE)
             }
@@ -167,11 +176,22 @@ class ScreenShotViewModel @Inject constructor(
                         languageCodeFrom = getLanguageFrom()?.languageCode.toString(),
                         languageCodeTo = getLanguageTo()?.languageCode.toString(),
                         enabledDictionary = getLanguageFrom()?.enabledDictionary == false,
-                    )
+                    ).also {
+                        analyticsEventHelper.sendSelectItem(
+                            TRANSLATE_CONTENT to it.translatedText.toString(),
+                            ORIGINAL_CONTENT to it.originalText,
+                            TYPE_SCREEN_CAPTURE_ITEM to TYPE_SCREEN_CAPTURE_STANDARD_VALUE,
+                        )
+                    }
                 }, { status ->
                     _uiState.update { it.copy(screenShotStatus = status) }
                 })
             } else {
+                analyticsEventHelper.sendSelectItem(
+                    TRANSLATE_CONTENT to LANGUAGE_UND_VALUE,
+                    ORIGINAL_CONTENT to text,
+                    TYPE_SCREEN_CAPTURE_ITEM to TYPE_SCREEN_CAPTURE_STANDARD_VALUE,
+                )
                 _uiState.update { it.copy(screenShotStatus = statusEmpty()) }
             }
         }
@@ -206,6 +226,9 @@ class ScreenShotViewModel @Inject constructor(
             }
             when (val status = textIdentifierRepository.fetchLanguageIdentifier(newText)) {
                 is Status.Success -> {
+                    analyticsEventHelper.sendSelectItem(
+                        ORIGINAL_CONTENT to "$newText-[${ORIGINAL_LISTENING_VALUE}]",
+                    )
                     textToSpeech.speakText(newText, status.data.toString())
                 }
 

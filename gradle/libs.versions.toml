@@ -41,6 +41,9 @@ daggerHilt = "2.48.1"
 
 firebaseBom = "29.3.0"
 
+billing = "6.1.0"
+qonversionSdk = "6.2.0"
+
 imageCropper = "4.5.0"
 coil = "2.4.0"
 balloon = "1.6.1"
@@ -56,6 +59,8 @@ detekt = "1.22.0"
 spotless = "6.22.0"
 composeDetekt = "0.0.26"
 composeLintChecks = "1.2.0"
+junit = "1.1.5"
+espresso-core = "3.5.1"
 
 [libraries]
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
@@ -128,6 +133,9 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx" }
 firebase-performance-gradle = { group = "com.google.firebase", name = "perf-plugin", version.ref = "firebasePerf" }
 
+billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
+qonversion-sdk = { module = "io.qonversion.android.sdk:sdk", version.ref = "qonversionSdk" }
+
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
@@ -144,6 +152,8 @@ test-parameter-injector = { module = "com.google.testparameterinjector:test-para
 
 compose-detekt = { module = "com.twitter.compose.rules:detekt", version.ref = "composeDetekt" }
 compose-lint-checks = { module = "com.slack.lint.compose:compose-lint-checks", version.ref = "composeLintChecks" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 
 [bundles]
 lifecyle = ["lifecycle-runtime-ktx", "lifecycle-service", "lifecycle-runtimeCompose", "lifecycle-viewModelCompose"]

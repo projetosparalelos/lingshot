@@ -21,6 +21,9 @@ dependencies {
 
     testImplementation(project(":core:testing"))
 
+    implementation(libs.bundles.play.review)
+
+    implementation(libs.qonversion.sdk)
     implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.lottie.compose)

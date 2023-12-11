@@ -3,6 +3,7 @@
 import com.android.build.api.dsl.ApplicationExtension
 import extension.configureAndroidCompose
 import extension.configureKotlinJvm
+import helper.KeyHelper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
@@ -21,6 +22,10 @@ class AndroidApplicationPlugin : Plugin<Project> {
             extension.apply {
                 configureKotlinJvm(this)
                 configureAndroidCompose(this)
+
+                defaultConfig {
+                    buildConfigField("String", "QONVERSION_PROJECT_KEY", KeyHelper.getValue("QONVERSION_PROJECT_KEY"))
+                }
             }
         }
     }

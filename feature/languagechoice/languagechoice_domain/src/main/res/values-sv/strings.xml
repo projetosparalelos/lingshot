@@ -26,4 +26,9 @@
     <string name="text_display_name_japanese_language">Japanska</string>
     <string name="text_display_name_chinese_language">Kinesiska</string>
     <string name="text_display_name_korean_language">Koreansk</string>
+    <string name="text_display_name_arabic_language">Arabiska</string>
+    <string name="text_display_name_bengali_language">Bengali</string>
+    <string name="text_display_name_hebrew_language">Hebreiska</string>
+    <string name="text_display_name_hindi_language">Hindi</string>
+    <string name="text_display_name_tagalog_language">Tagalog</string>
 </resources>

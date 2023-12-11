@@ -21,4 +21,6 @@
     <string name="text_label_use_any_source_subtitle_home">Use qualquer fonte</string>
     <string name="text_button_start_reading_subtitle_home">Iniciar Leitura</string>
     <string name="text_button_stop_reading_subtitle_home">Parar Leitura</string>
+    <string name="text_message_subscription_success_home">Inscrição concluída com sucesso!</string>
+    <string name="text_label_free_trial_home">Teste gratuito por 3 dias.</string>
 </resources>
