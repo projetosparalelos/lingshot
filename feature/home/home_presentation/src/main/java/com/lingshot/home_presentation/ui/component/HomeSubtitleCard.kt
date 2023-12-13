@@ -15,6 +15,7 @@
  */
 package com.lingshot.home_presentation.ui.component
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -60,7 +61,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun HomeSubtitleCard(
-    hasPremiumPermission: Boolean,
+    hasPremiumPermission: Boolean?,
     offeringText: String?,
     isEnabled: Boolean,
     isSelected: Boolean,
@@ -73,7 +74,7 @@ internal fun HomeSubtitleCard(
         modifier = modifier
             .clickable(onClick = onClickChanged)
             .placeholder(
-                visible = (offeringText == null),
+                visible = (hasPremiumPermission == null),
                 highlight = PlaceholderHighlight.fade(),
             ),
         border = CardDefaults.outlinedCardBorder().copy(width = 0.5.dp),
@@ -119,7 +120,7 @@ internal fun HomeSubtitleCard(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (hasPremiumPermission.not() && offeringText.isNullOrEmpty().not()) {
+                if (hasPremiumPermission == false) {
                     Text(
                         text = stringResource(R.string.text_label_free_trial_home),
                         fontWeight = FontWeight.Light,
@@ -141,7 +142,7 @@ internal fun HomeSubtitleCard(
                 ) {
                     Text(
                         text =
-                        if (hasPremiumPermission.not()) {
+                        if (hasPremiumPermission == false) {
                             offeringText.toString()
                         } else {
                             stringResource(
@@ -255,18 +256,31 @@ enum class RecommendationCard(val label: String, val logo: Int) {
     },
     ;
 
+    @Suppress("SwallowedException")
     open fun openApp(context: Context, link: String = "", isMarketplace: Boolean = true) {
-        context.startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse(
-                    if (isMarketplace) {
-                        "market://details?id=$link"
-                    } else {
-                        link
-                    },
+        if (isMarketplace) {
+            try {
+                context.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$link"),
+                    ),
+                )
+            } catch (e: ActivityNotFoundException) {
+                context.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=$link"),
+                    ),
+                )
+            }
+        } else {
+            context.startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(link),
                 ),
-            ),
-        )
+            )
+        }
     }
 }

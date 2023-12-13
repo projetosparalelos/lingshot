@@ -15,6 +15,7 @@
  */
 package com.lingshot.domain.usecase
 
+import androidx.annotation.Keep
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_TRANSLATE
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
 import com.lingshot.domain.model.MessageDomain
@@ -27,6 +28,7 @@ import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
+@Keep
 class TranslateApiUseCase @Inject constructor(
     private val chatGPTRepository: ChatGPTRepository,
     private val googleTranslateRepository: GoogleTranslateRepository,

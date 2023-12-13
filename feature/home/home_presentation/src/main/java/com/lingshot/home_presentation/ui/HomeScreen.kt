@@ -43,11 +43,9 @@ import androidx.compose.material.icons.filled.FitScreen
 import androidx.compose.material.icons.filled.Screenshot
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -62,8 +60,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.lingshot.common.util.findActivity
+import com.lingshot.common.util.isOnline
 import com.lingshot.designsystem.component.LingshotOnLifecycleEvent
 import com.lingshot.home_domain.model.HomeTypeSection
 import com.lingshot.home_domain.model.TypeActionScreenshot
@@ -80,7 +78,6 @@ import com.lingshot.home_presentation.HomeViewModel
 import com.lingshot.home_presentation.R
 import com.lingshot.home_presentation.helper.LINGSHOT_PAYMENT_ID
 import com.lingshot.home_presentation.helper.purchaseProduct
-import com.lingshot.home_presentation.helper.restorePurchases
 import com.lingshot.home_presentation.navigation.HomeDestination
 import com.lingshot.home_presentation.ui.component.HomeLanguageChoice
 import com.lingshot.home_presentation.ui.component.HomeOptionScreenShotCard
@@ -97,7 +94,6 @@ import com.qonversion.android.sdk.Qonversion.Companion.shared
 import es.dmoral.toasty.Toasty.success
 import es.dmoral.toasty.Toasty.warning
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun HomeRoute(
@@ -121,7 +117,6 @@ internal fun HomeScreen(
     context: Context = LocalContext.current,
 ) {
     val activity = context.findActivity()
-    val scope = rememberCoroutineScope()
 
     var enabledType by remember {
         mutableStateOf(getInitialEnabledType())
@@ -207,7 +202,7 @@ internal fun HomeScreen(
                                         return@HomeSubtitleCard
                                     }
 
-                                    if (uiState.hasPremiumPermission) {
+                                    if (uiState.hasPremiumPermission == true) {
                                         activity?.handleServiceToggle(
                                             isServiceRunning = uiState.isServiceRunning,
                                             handleEvent = handleEvent,
@@ -217,19 +212,15 @@ internal fun HomeScreen(
                                         )
                                         isScreenCaptureForSubtitle = true
                                     } else {
-                                        scope.launch {
-                                            val restoreResult = shared.restorePurchases()
-                                            if (restoreResult != null) {
-                                                return@launch
+                                        if (context.isOnline()) {
+                                            shared.purchaseProduct(
+                                                context,
+                                                uiState.premiumProduct?.get(LINGSHOT_PAYMENT_ID)
+                                                    ?: return@HomeSubtitleCard,
+                                            ) {
+                                                handleEvent(HomeEvent.UpdatePermissions)
+                                                success(context, messageSubscriptionSuccess).show()
                                             }
-                                        }
-
-                                        shared.purchaseProduct(
-                                            context,
-                                            uiState.premiumProduct?.get(LINGSHOT_PAYMENT_ID)
-                                                ?: return@HomeSubtitleCard,
-                                        ) {
-                                            success(context, messageSubscriptionSuccess).show()
                                         }
                                     }
                                 },
@@ -320,10 +311,6 @@ internal fun HomeScreen(
             },
         )
     }
-
-    LaunchedEffect(Unit) {
-        activity?.showFeedBackBottomSheetDialog()
-    }
 }
 
 @Preview(showBackground = true)
@@ -334,15 +321,6 @@ private fun HomeScreenPreview() {
         handleEvent = {},
         uiState = HomeUiState(),
     )
-}
-
-private fun Activity.showFeedBackBottomSheetDialog() {
-    val reviewManager = ReviewManagerFactory.create(applicationContext)
-    reviewManager.requestReviewFlow().addOnCompleteListener { review ->
-        if (review.isSuccessful) {
-            review.result?.let { reviewManager.launchReviewFlow(this, it) }
-        }
-    }
 }
 
 private fun handleNotificationPermission(

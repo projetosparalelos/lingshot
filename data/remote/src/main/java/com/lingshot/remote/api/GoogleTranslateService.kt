@@ -15,11 +15,13 @@
  */
 package com.lingshot.remote.api
 
+import androidx.annotation.Keep
 import com.lingshot.remote.BuildConfig
 import com.lingshot.remote.model.GoogleTranslateResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+@Keep
 interface GoogleTranslateService {
 
     @GET("language/translate/v2")

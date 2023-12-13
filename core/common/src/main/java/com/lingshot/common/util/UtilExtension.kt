@@ -20,7 +20,10 @@ import android.app.ActivityOptions
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Rect
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import com.lingshot.common.R
 
@@ -57,4 +60,17 @@ fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
     is ContextWrapper -> baseContext.findActivity()
     else -> null
+}
+
+fun String.decodeHtmlString(): String {
+    return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString()
+}
+
+@Suppress("ReturnCount")
+fun Context.isOnline(): Boolean {
+    val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+    return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
 }

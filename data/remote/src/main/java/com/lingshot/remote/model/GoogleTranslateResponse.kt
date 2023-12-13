@@ -15,23 +15,23 @@
  */
 package com.lingshot.remote.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 
-@Serializable
+@Keep
 data class GoogleTranslateResponse(
-    @SerialName("data")
+    @SerializedName("data")
     val data: TranslationData,
 )
 
-@Serializable
+@Keep
 data class TranslationData(
-    @SerialName("translations")
+    @SerializedName("translations")
     val translations: List<Translation>,
 )
 
-@Serializable
+@Keep
 data class Translation(
-    @SerialName("translatedText")
+    @SerializedName("translatedText")
     val translatedText: String?,
 )

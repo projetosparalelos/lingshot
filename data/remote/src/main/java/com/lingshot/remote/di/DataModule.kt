@@ -17,7 +17,6 @@ package com.lingshot.remote.di
 
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.lingshot.domain.repository.ChatGPTRepository
 import com.lingshot.domain.repository.GoogleTranslateRepository
 import com.lingshot.remote.BuildConfig
@@ -30,12 +29,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -80,14 +78,9 @@ object DataModule {
     @Singleton
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit.Builder {
-        val contentType = "application/json".toMediaType()
-        val json = Json {
-            encodeDefaults = true
-            ignoreUnknownKeys = true
-        }
         return Retrofit.Builder()
             .client(client)
-            .addConverterFactory(json.asConverterFactory(contentType))
+            .addConverterFactory(GsonConverterFactory.create())
     }
 
     @Singleton

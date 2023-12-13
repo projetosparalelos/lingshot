@@ -107,5 +107,5 @@ suspend fun Qonversion.restorePurchases() =
         )
     }
 
-private const val PREMIUM_OFFERING = "premium"
+private const val PREMIUM_OFFERING = "lingshot_premium"
 const val LINGSHOT_PAYMENT_ID = "lingshot_payment_id"

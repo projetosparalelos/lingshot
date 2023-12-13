@@ -20,7 +20,7 @@ import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
 import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem
 
 sealed class ScreenShotEvent {
-    object ClearStatus : ScreenShotEvent()
+    data object ClearStatus : ScreenShotEvent()
 
     data class SelectedOptionsButtonMenuItem(
         val buttonMenuItem: ButtonMenuItem,

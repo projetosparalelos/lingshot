@@ -15,6 +15,7 @@
  */
 package com.lingshot.remote.api
 
+import androidx.annotation.Keep
 import com.lingshot.remote.BuildConfig
 import com.lingshot.remote.model.ChatGPTResponse
 import com.lingshot.remote.model.RequestBody
@@ -22,6 +23,7 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
+@Keep
 interface ChatGPTService {
 
     @Headers("Content-Type: application/json", "Authorization: Bearer ${BuildConfig.CHAT_GPT_KEY}")

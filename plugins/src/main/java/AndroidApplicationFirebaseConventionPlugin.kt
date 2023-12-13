@@ -14,7 +14,6 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("com.google.gms.google-services")
-                apply("com.google.firebase.firebase-perf")
                 apply("com.google.firebase.crashlytics")
             }
 
@@ -22,7 +21,6 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
                 add("implementation", platform(libs.getLibrary("firebase-bom")))
                 add("implementation", libs.getLibrary("firebase.analytics"))
                 add("implementation", libs.getLibrary("firebase.crashlytics"))
-                add("implementation", libs.getLibrary("firebase.performance"))
             }
 
             val extension = extensions.getByType<ApplicationExtension>()

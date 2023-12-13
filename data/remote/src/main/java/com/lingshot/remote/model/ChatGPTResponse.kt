@@ -15,40 +15,41 @@
  */
 package com.lingshot.remote.model
 
-import kotlinx.serialization.*
+import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 
-@Serializable
+@Keep
 data class ChatGPTResponse(
-    @SerialName("choices")
+    @SerializedName("choices")
     val choices: List<Choice>,
 )
 
-@Serializable
+@Keep
 data class Choice(
-    @SerialName("message")
+    @SerializedName("message")
     val message: Message,
 )
 
-@Serializable
+@Keep
 data class Message(
-    @SerialName("role")
+    @SerializedName("role")
     val role: String?,
 
-    @SerialName("content")
+    @SerializedName("content")
     val content: String?,
 )
 
-@Serializable
+@Keep
 data class RequestBody(
-    @SerialName("model")
+    @SerializedName("model")
     val model: String?,
 
-    @SerialName("messages")
+    @SerializedName("messages")
     val messages: List<Message>,
 
-    @SerialName("temperature")
+    @SerializedName("temperature")
     val temperature: Double,
 
-    @SerialName("max_tokens")
+    @SerializedName("max_tokens")
     val maxTokens: Int,
 )

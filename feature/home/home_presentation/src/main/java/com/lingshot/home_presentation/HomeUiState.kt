@@ -29,7 +29,7 @@ data class HomeUiState(
     val premiumProduct: Map<String, QProduct>? = mapOf(),
     val selectedOptionsLanguage: AvailableLanguage? = null,
     val translateLanguageType: TranslateLanguageType? = null,
-    val hasPremiumPermission: Boolean = false,
+    val hasPremiumPermission: Boolean? = null,
     val isLanguageDialogVisible: Boolean = false,
     val isServiceRunning: Boolean = false,
 ) {

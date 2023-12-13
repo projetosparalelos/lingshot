@@ -7,7 +7,6 @@ dependencies {
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.ksp.gradle.plugin)
     compileOnly(libs.firebase.crashlytics.gradlePlugin)
-    compileOnly(libs.firebase.performance.gradlePlugin)
     implementation(libs.detekt.plugin)
     implementation(libs.spotless.plugin)
 }

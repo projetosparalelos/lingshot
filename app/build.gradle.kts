@@ -80,6 +80,5 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.play.services.ads)
 
-    implementation(libs.billing)
     implementation(libs.qonversion.sdk)
 }
