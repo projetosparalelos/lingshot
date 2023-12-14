@@ -190,19 +190,18 @@ internal fun HomeScreen(
                                 },
                                 isSelected = (isScreenCaptureForSubtitle && uiState.isServiceRunning),
                                 onClickChanged = {
-                                    if (notificationPermissionState?.status?.isGranted?.not() == true) {
-                                        if (notificationPermissionState.status.shouldShowRationale) {
-                                            handleNotificationPermission(
-                                                textMessage = textMessageNotificationPermission,
-                                                context = context,
-                                            )
-                                        } else {
-                                            notificationPermissionState.launchPermissionRequest()
-                                        }
-                                        return@HomeSubtitleCard
-                                    }
-
                                     if (uiState.hasPremiumPermission == true) {
+                                        if (notificationPermissionState?.status?.isGranted?.not() == true) {
+                                            if (notificationPermissionState.status.shouldShowRationale) {
+                                                handleNotificationPermission(
+                                                    textMessage = textMessageNotificationPermission,
+                                                    context = context,
+                                                )
+                                            } else {
+                                                notificationPermissionState.launchPermissionRequest()
+                                            }
+                                            return@HomeSubtitleCard
+                                        }
                                         activity?.handleServiceToggle(
                                             isServiceRunning = uiState.isServiceRunning,
                                             handleEvent = handleEvent,
