@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:analytics"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
     implementation(project(":domain"))
@@ -18,8 +19,6 @@ dependencies {
     implementation(project(":feature:languagechoice:languagechoice_presentation"))
     implementation(project(":feature:screencapture"))
     implementation(project(":feature:screenshot:screenshot_domain"))
-
-    implementation(libs.bundles.play.review)
 
     implementation(libs.activity.compose)
     implementation(libs.accompanist.systemuicontroller)

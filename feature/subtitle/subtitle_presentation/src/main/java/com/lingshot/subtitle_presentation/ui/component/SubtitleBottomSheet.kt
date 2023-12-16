@@ -55,6 +55,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lingshot.common.helper.onError
 import com.lingshot.common.helper.onSuccess
+import com.lingshot.common.util.decodeHtmlString
 import com.lingshot.designsystem.theme.md_theme_dark_onSecondary
 import com.lingshot.designsystem.theme.md_theme_dark_onSecondaryContainer
 import com.lingshot.designsystem.theme.md_theme_dark_secondary
@@ -177,7 +178,7 @@ private fun SpeechBubble(text: String, imageBitmap: Bitmap?, modifier: Modifier 
             }
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                text = text,
+                text = text.decodeHtmlString(),
                 fontWeight = FontWeight.Bold,
                 color = md_theme_dark_onSecondaryContainer,
                 fontFamily = Font(R.font.comic_sans).toFontFamily(),

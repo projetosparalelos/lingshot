@@ -19,14 +19,17 @@ import com.lingshot.home_domain.model.HomeSection
 import com.lingshot.home_domain.model.HomeTypeSection
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType
+import com.qonversion.android.sdk.dto.products.QProduct
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 data class HomeUiState(
-    val languageFrom: AvailableLanguage? = AvailableLanguage.ENGLISH,
-    val languageTo: AvailableLanguage? = AvailableLanguage.ENGLISH,
+    val languageFrom: AvailableLanguage? = null,
+    val languageTo: AvailableLanguage? = null,
+    val premiumProduct: Map<String, QProduct>? = mapOf(),
     val selectedOptionsLanguage: AvailableLanguage? = null,
     val translateLanguageType: TranslateLanguageType? = null,
+    val hasPremiumPermission: Boolean? = null,
     val isLanguageDialogVisible: Boolean = false,
     val isServiceRunning: Boolean = false,
 ) {
@@ -42,10 +45,10 @@ data class HomeUiState(
             .toList()
             .let { list ->
                 if (translateLanguageType == TranslateLanguageType.TO) {
-                    list.sortedBy { it.displayName }
+                    list.sortedBy { it.name }
                 } else {
                     list.filter { it.enabledLanguageFrom }
-                        .sortedBy { it.displayName }
+                        .sortedBy { it.name }
                 }
             }
             .toImmutableList()

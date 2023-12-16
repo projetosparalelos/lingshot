@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.remote.model
+package com.lingshot.analytics.constant
 
-import androidx.annotation.Keep
-import com.google.gson.annotations.SerializedName
+const val LANGUAGE_FROM_TO_ITEM = "language_from_to_item"
+const val TYPE_SCREEN_CAPTURE_ITEM = "type_screen_capture_item"
+const val TRANSLATE_CONTENT = "translate_content"
+const val ORIGINAL_CONTENT = "original_content"
 
-@Keep
-data class GoogleTranslateResponse(
-    @SerializedName("data")
-    val data: TranslationData,
-)
-
-@Keep
-data class TranslationData(
-    @SerializedName("translations")
-    val translations: List<Translation>,
-)
-
-@Keep
-data class Translation(
-    @SerializedName("translatedText")
-    val translatedText: String?,
-)
+const val TYPE_SCREEN_CAPTURE_STANDARD_VALUE = "standard"
+const val TYPE_SCREEN_CAPTURE_SUBTITLE_VALUE = "subtitle"
+const val LANGUAGE_UND_VALUE = "und"
+const val ORIGINAL_LISTENING_VALUE = "SpeechUsed"

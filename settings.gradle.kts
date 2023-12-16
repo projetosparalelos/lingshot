@@ -21,6 +21,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Lingshot"
 include(":app")
+include(":core:analytics")
 include(":core:common")
 include(":core:designsystem")
 include(":core:testing")

@@ -13,25 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.remote.model
+package com.lingshot.analytics.di
 
-import androidx.annotation.Keep
-import com.google.gson.annotations.SerializedName
+import com.lingshot.analytics.helper.AnalyticsEventHelper
+import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-@Keep
-data class GoogleTranslateResponse(
-    @SerializedName("data")
-    val data: TranslationData,
-)
+@Module
+@InstallIn(SingletonComponent::class)
+object AnalyticsModule {
 
-@Keep
-data class TranslationData(
-    @SerializedName("translations")
-    val translations: List<Translation>,
-)
-
-@Keep
-data class Translation(
-    @SerializedName("translatedText")
-    val translatedText: String?,
-)
+    @Singleton
+    @Provides
+    fun provideAnalyticsEventHelper(
+        languageChoiceRepository: LanguageChoiceRepository,
+    ) = AnalyticsEventHelper(languageChoiceRepository)
+}

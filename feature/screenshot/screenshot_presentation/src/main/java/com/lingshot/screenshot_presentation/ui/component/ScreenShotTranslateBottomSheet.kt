@@ -66,6 +66,7 @@ import com.lingshot.common.helper.isLoadingStatus
 import com.lingshot.common.helper.onError
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
+import com.lingshot.common.util.decodeHtmlString
 import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
 import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.designsystem.component.placeholder.shimmer
@@ -129,7 +130,7 @@ internal fun ScreenShotTranslateBottomSheet(
 
                 Column {
                     Text(
-                        text = languageTranslationDomain.translatedText.orEmpty(),
+                        text = languageTranslationDomain.translatedText.orEmpty().decodeHtmlString(),
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.primary,
                     )

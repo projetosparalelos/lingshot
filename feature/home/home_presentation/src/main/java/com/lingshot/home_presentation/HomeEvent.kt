@@ -20,7 +20,9 @@ import com.lingshot.languagechoice_domain.model.TranslateLanguageType
 
 sealed class HomeEvent {
 
-    object ToggleServiceButton : HomeEvent()
+    data object ToggleServiceButton : HomeEvent()
+
+    data object UpdatePermissions : HomeEvent()
 
     data class SaveLanguage(val availableLanguage: AvailableLanguage?, val translateLanguageType: TranslateLanguageType?) : HomeEvent()
 

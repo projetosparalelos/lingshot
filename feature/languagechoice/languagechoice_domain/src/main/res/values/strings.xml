@@ -26,4 +26,9 @@
     <string name="text_display_name_japanese_language">Japanese</string>
     <string name="text_display_name_chinese_language">Chinese</string>
     <string name="text_display_name_korean_language">Korean</string>
+    <string name="text_display_name_arabic_language">Arabic</string>
+    <string name="text_display_name_bengali_language">Bengali</string>
+    <string name="text_display_name_hebrew_language">Hebrew</string>
+    <string name="text_display_name_hindi_language">Hindi</string>
+    <string name="text_display_name_tagalog_language">Tagalog</string>
 </resources>

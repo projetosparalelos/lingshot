@@ -15,6 +15,7 @@
  */
 package com.lingshot.home_presentation.ui.component
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -22,6 +23,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -50,11 +53,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.lingshot.designsystem.component.placeholder.PlaceholderHighlight
+import com.lingshot.designsystem.component.placeholder.fade
+import com.lingshot.designsystem.component.placeholder.placeholder
 import com.lingshot.home_presentation.R
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun HomeSubtitleCard(
+    hasPremiumPermission: Boolean?,
+    offeringText: String?,
     isEnabled: Boolean,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
@@ -63,7 +71,12 @@ internal fun HomeSubtitleCard(
     val context = LocalContext.current
 
     OutlinedCard(
-        modifier = modifier.clickable(onClick = onClickChanged),
+        modifier = modifier
+            .clickable(onClick = onClickChanged)
+            .placeholder(
+                visible = (hasPremiumPermission == null),
+                highlight = PlaceholderHighlight.fade(),
+            ),
         border = CardDefaults.outlinedCardBorder().copy(width = 0.5.dp),
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -103,29 +116,45 @@ internal fun HomeSubtitleCard(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(text = stringResource(id = R.string.text_description_subtitle_for_manga_home))
-            ElevatedButton(
-                modifier = Modifier.align(Alignment.End),
-                colors = if (isSelected) {
-                    ButtonDefaults.elevatedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                    )
-                } else {
-                    ButtonDefaults.elevatedButtonColors()
-                },
-                enabled = isEnabled,
-                onClick = onClickChanged,
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text =
-                    stringResource(
-                        if (isSelected) {
-                            R.string.text_button_stop_reading_subtitle_home
+                if (hasPremiumPermission == false) {
+                    Text(
+                        text = stringResource(R.string.text_label_free_trial_home),
+                        fontWeight = FontWeight.Light,
+                        fontSize = 12.sp,
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                ElevatedButton(
+                    colors = if (isSelected) {
+                        ButtonDefaults.elevatedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                        )
+                    } else {
+                        ButtonDefaults.elevatedButtonColors()
+                    },
+                    enabled = isEnabled,
+                    onClick = onClickChanged,
+                ) {
+                    Text(
+                        text =
+                        if (hasPremiumPermission == false) {
+                            offeringText.toString()
                         } else {
-                            R.string.text_button_start_reading_subtitle_home
+                            stringResource(
+                                if (isSelected) {
+                                    R.string.text_button_stop_reading_subtitle_home
+                                } else {
+                                    R.string.text_button_start_reading_subtitle_home
+                                },
+                            )
                         },
-                    ),
-                )
+                    )
+                }
             }
         }
     }
@@ -181,6 +210,8 @@ private fun SubtitleRecommendationCard(context: Context) {
 @Composable
 private fun HomeSubtitleCardPreview() {
     HomeSubtitleCard(
+        offeringText = "R$ 2,00",
+        hasPremiumPermission = false,
         isEnabled = true,
         isSelected = false,
         onClickChanged = {},
@@ -225,18 +256,31 @@ enum class RecommendationCard(val label: String, val logo: Int) {
     },
     ;
 
+    @Suppress("SwallowedException")
     open fun openApp(context: Context, link: String = "", isMarketplace: Boolean = true) {
-        context.startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse(
-                    if (isMarketplace) {
-                        "market://details?id=$link"
-                    } else {
-                        link
-                    },
+        if (isMarketplace) {
+            try {
+                context.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$link"),
+                    ),
+                )
+            } catch (e: ActivityNotFoundException) {
+                context.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=$link"),
+                    ),
+                )
+            }
+        } else {
+            context.startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(link),
                 ),
-            ),
-        )
+            )
+        }
     }
 }

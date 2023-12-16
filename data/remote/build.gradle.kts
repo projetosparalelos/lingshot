@@ -14,8 +14,7 @@ dependencies {
     implementation(project(":domain"))
 
     implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlin.serialization)
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit.gson)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.timber)
 

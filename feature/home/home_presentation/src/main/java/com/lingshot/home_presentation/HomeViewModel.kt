@@ -17,10 +17,14 @@ package com.lingshot.home_presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lingshot.home_presentation.helper.getPremiumProduct
+import com.lingshot.home_presentation.helper.hasPremiumEntitlement
+import com.lingshot.home_presentation.helper.restorePurchases
 import com.lingshot.languagechoice_domain.model.AvailableLanguage
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType.FROM
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
+import com.qonversion.android.sdk.Qonversion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -39,6 +43,11 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(HomeUiState())
 
+    init {
+        restorePurchases()
+        updatePermissions()
+    }
+
     val uiState: StateFlow<HomeUiState> =
         combine(
             languageChoiceRepository.getLanguage(FROM),
@@ -46,6 +55,7 @@ class HomeViewModel @Inject constructor(
             _uiState,
         ) { languageFrom, languageTo, uiState ->
             uiState.copy(
+                premiumProduct = Qonversion.shared.getPremiumProduct(),
                 languageFrom = languageFrom,
                 languageTo = languageTo,
             )
@@ -72,6 +82,22 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.ToggleServiceButton -> {
                 toggleServiceButton()
             }
+
+            is HomeEvent.UpdatePermissions -> {
+                updatePermissions()
+            }
+        }
+    }
+
+    private fun restorePurchases() {
+        viewModelScope.launch {
+            Qonversion.shared.restorePurchases()
+        }
+    }
+
+    private fun updatePermissions() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(hasPremiumPermission = Qonversion.shared.hasPremiumEntitlement()) }
         }
     }
 

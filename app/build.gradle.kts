@@ -79,4 +79,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.coil.compose)
     implementation(libs.play.services.ads)
+
+    implementation(libs.qonversion.sdk)
 }
