@@ -40,7 +40,6 @@ This project takes advantage of best practices, and many popular libraries and t
     + [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
     + [Kotlin Flow](https://kotlinlang.org/docs/flow.html)
     + [Kotlin Symbol Processing](https://kotlinlang.org/docs/ksp-overview.html)
-    + [Kotlin Serialization](https://kotlinlang.org/docs/serialization.html)
     + [Kotlin Immutable Collections](https://github.com/Kotlin/kotlinx.collections.immutable)
   * [Retrofit](https://square.github.io/retrofit/)
   * [Jetpack](https://developer.android.com/jetpack)
@@ -67,7 +66,8 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition/v2)
   * [Text Speech](https://developer.android.com/reference/android/speech/tts/TextToSpeech)
   * [Language Identification](https://developers.google.com/ml-kit/language/identification)
-
+* In-app products
+  * [Qonversion](https://qonversion.io/)
 * CI
   * [GitHub Actions](https://github.com/features/actions)
   * [Danger System](https://danger.systems/ruby/)
