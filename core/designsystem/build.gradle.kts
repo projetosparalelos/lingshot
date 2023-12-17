@@ -10,7 +10,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.webview)
+    implementation(libs.image.cropper)
     implementation(libs.lottie.compose)
 }

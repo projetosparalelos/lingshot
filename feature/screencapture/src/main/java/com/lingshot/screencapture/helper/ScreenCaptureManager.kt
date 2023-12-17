@@ -19,7 +19,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY
 import android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC
 import android.hardware.display.VirtualDisplay
@@ -87,8 +86,7 @@ class ScreenCaptureManager @Inject constructor(
         val image: Image? = imageReader?.acquireLatestImage()
         val bitmap: Bitmap? = image?.let { imageToBitmap(it) }
         image?.close()
-        val cropBitmap: Bitmap? = bitmap?.let { cropBitmap(it) }
-        saveBitmap(cropBitmap, coroutineScope)
+        saveBitmap(bitmap, coroutineScope)
         return bitmap
     }
 
@@ -104,6 +102,7 @@ class ScreenCaptureManager @Inject constructor(
             displayMetrics.heightPixels,
             Bitmap.Config.ARGB_8888,
         )
+
         bitmap.copyPixelsFromBuffer(buffer)
         return Bitmap.createBitmap(
             bitmap,
@@ -112,23 +111,6 @@ class ScreenCaptureManager @Inject constructor(
             displayMetrics.widthPixels,
             displayMetrics.heightPixels,
         )
-    }
-
-    private fun cropBitmap(bitmap: Bitmap): Bitmap? {
-        val topHeight = cropPeace(28)
-        val bottomHeight = cropPeace(46)
-        val croppedBitmap = Bitmap.createBitmap(
-            bitmap.width,
-            bitmap.height - topHeight - bottomHeight,
-            Bitmap.Config.ARGB_8888,
-        )
-        val canvas = Canvas(croppedBitmap)
-        canvas.drawBitmap(bitmap, 0f, (-topHeight).toFloat(), null)
-        return croppedBitmap
-    }
-
-    private fun cropPeace(px: Int): Int {
-        return (px * context.resources.displayMetrics.density).toInt()
     }
 
     private fun saveBitmap(bitmap: Bitmap?, coroutineScope: CoroutineScope) {

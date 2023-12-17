@@ -16,15 +16,11 @@
 package com.lingshot.screenshot_presentation
 
 import android.graphics.Bitmap
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
-import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem
+import com.lingshot.designsystem.component.ActionCropImage
 
 sealed class ScreenShotEvent {
-    data object ClearStatus : ScreenShotEvent()
 
-    data class SelectedOptionsButtonMenuItem(
-        val buttonMenuItem: ButtonMenuItem,
-    ) : ScreenShotEvent()
+    data object ClearStatus : ScreenShotEvent()
 
     data class CroppedImage(
         val actionCropImage: ActionCropImage?,
@@ -34,9 +30,13 @@ sealed class ScreenShotEvent {
         val originalText: String,
     ) : ScreenShotEvent()
 
+    data class FetchLanguageIdentifier(
+        val originalText: String,
+        val illegiblePhrase: String,
+    ) : ScreenShotEvent()
+
     data class FetchTextRecognizer(
         val imageBitmap: Bitmap?,
-        val illegiblePhrase: String,
     ) : ScreenShotEvent()
 
     data class ToggleDictionaryFullScreenDialog(

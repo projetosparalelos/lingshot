@@ -15,9 +15,9 @@
  */
 package com.lingshot.subtitle_presentation
 
+import com.lingshot.designsystem.component.ActionCropImage
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
-import com.lingshot.subtitle_presentation.ui.component.ActionCropImage
 
 data class SubtitleUiState(
     val subtitleStatus: Status<List<Subtitle>> = statusDefault(),

@@ -13,21 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.screenshot_presentation.ui.component
+package com.lingshot.designsystem.component
 
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
-import android.widget.LinearLayout.LayoutParams
+import android.util.TypedValue.COMPLEX_UNIT_DIP
+import android.util.TypedValue.applyDimension
+import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
@@ -35,21 +43,30 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.CropImageView.CropCornerShape.RECTANGLE
 import com.canhub.cropper.CropImageView.Guidelines.OFF
-import com.lingshot.common.R.drawable.crop_image_preview
+import com.canhub.cropper.CropImageView.ScaleType.CENTER_CROP
 import com.lingshot.common.util.findActivity
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
+import com.lingshot.designsystem.R
+import com.lingshot.designsystem.component.ActionCropImage.CROPPED_IMAGE
+import com.lingshot.designsystem.component.ActionCropImage.FOCUS_IMAGE
+import com.lingshot.designsystem.theme.md_theme_dark_tertiary
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
-internal fun ScreenShotCropImage(
+fun LingshotCropImage(
     actionCropImage: ActionCropImage?,
     onCroppedImage: (ActionCropImage?) -> Unit,
     modifier: Modifier = Modifier,
+    isAutomaticCropperEnabled: Boolean = false,
+    isRunnable: Boolean = false,
     imageUri: Uri? = rememberImageUriPath(),
     onCropImageResult: (Bitmap?) -> Unit,
 ) {
     val cropImage = rememberCropImage()
+    val scope = rememberCoroutineScope()
+    var copyRect by remember { mutableStateOf(cropImage.cropRect) }
 
     AndroidView(
         modifier = modifier,
@@ -76,6 +93,18 @@ internal fun ScreenShotCropImage(
         cropImageView.setOnCropImageCompleteListener { _, result ->
             onCropImageResult(result.bitmap)
         }
+
+        if (isAutomaticCropperEnabled) {
+            cropImageView.setOnSetCropOverlayReleasedListener {
+                scope.launch {
+                    delay(1.seconds)
+                    if (copyRect != it && isRunnable.not()) {
+                        onCroppedImage(CROPPED_IMAGE)
+                        copyRect = it
+                    }
+                }
+            }
+        }
     }
     LaunchedEffect(actionCropImage) {
         if (actionCropImage != null) {
@@ -86,7 +115,7 @@ internal fun ScreenShotCropImage(
 
 @Composable
 @Suppress("Deprecation")
-private fun rememberImageUriPath(context: Context = LocalContext.current) = remember {
+fun rememberImageUriPath(context: Context = LocalContext.current) = remember {
     val activity = context.findActivity()
     val intent = activity?.intent
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -98,29 +127,41 @@ private fun rememberImageUriPath(context: Context = LocalContext.current) = reme
 
 @Composable
 private fun rememberCropImage(context: Context = LocalContext.current) = remember {
+    val borderCornerColor = md_theme_dark_tertiary.toArgb()
     CropImageView(context).apply {
         val cropImageOptions = CropImageOptions(
+            borderLineThickness = 0f,
+            borderCornerOffset = applyDimension(COMPLEX_UNIT_DIP, 1f, Resources.getSystem().displayMetrics),
+            borderCornerThickness = applyDimension(COMPLEX_UNIT_DIP, 4f, Resources.getSystem().displayMetrics),
+            borderCornerColor = borderCornerColor,
+            scaleType = CENTER_CROP,
             guidelines = OFF,
             cornerShape = RECTANGLE,
             showProgressBar = false,
+            autoZoomEnabled = false,
         )
-        layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
         setImageCropOptions(cropImageOptions)
     }
 }
 
 private fun CropImageView.cropRectDefault() {
-    val rectRight = 500
-    val rectBottom = 450
-    val width = resources.displayMetrics.widthPixels
-    cropRect = Rect(width - rectRight, 0, width, rectBottom)
+    val sideLength = applyDimension(COMPLEX_UNIT_DIP, 100f, Resources.getSystem().displayMetrics).toInt()
+    val screenWidth = resources.displayMetrics.widthPixels
+    val screenHeight = resources.displayMetrics.heightPixels
+
+    val rectTop = (screenHeight - sideLength) / 2
+    val rectBottom = rectTop + sideLength
+    val rectLeft = screenWidth - sideLength
+
+    cropRect = Rect(rectLeft, rectTop, screenWidth, rectBottom)
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ScreenShotCropImagePreview() {
+private fun LingshotCropImagePreview() {
     val resources = LocalContext.current.resources
-    val cropImagePreview = crop_image_preview
+    val cropImagePreview = R.drawable.crop_image_preview
 
     val imageUri = Uri.Builder()
         .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
@@ -129,7 +170,7 @@ private fun ScreenShotCropImagePreview() {
         .appendPath(resources.getResourceEntryName(cropImagePreview))
         .build()
 
-    ScreenShotCropImage(
+    LingshotCropImage(
         imageUri = imageUri,
         actionCropImage = FOCUS_IMAGE,
         onCroppedImage = {},

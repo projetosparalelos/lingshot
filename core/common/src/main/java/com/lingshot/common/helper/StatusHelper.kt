@@ -18,6 +18,7 @@ package com.lingshot.common.helper
 import androidx.compose.runtime.Composable
 import com.lingshot.domain.model.Status
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -27,9 +28,9 @@ val <T> Status<T>.isLoadingStatus get() =
 fun <T> CoroutineScope.launchWithStatus(
     data: suspend () -> T?,
     onCopy: (Status<T>) -> Unit,
-) {
+): Job {
     onCopy(Status.Loading())
-    launch {
+    return launch {
         try {
             val value = data()
             onCopy(Status.Success(value))
