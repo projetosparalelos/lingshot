@@ -21,7 +21,7 @@ Key Features:
 
 🔒 Privacy Guaranteed: We value your privacy and ensure that your screenshots and translations remain secure and confidential.
 
-<img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/9416ab15-433b-4dba-8fef-698c0b9b80d2" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/d7261250-5957-4673-8309-625864d59242" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/c72d2f64-1430-46d2-bf01-35f361f23e7d" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/bd778f50-2fed-4bb9-8708-8b127bc8e1c4" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/5913f6ec-0b72-4d36-88b3-c11eefb55d55" width="186">
+<img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/7f792725-7087-40a5-8edd-5ebbd62d9b52" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/856b5258-86c3-480e-9f04-67bb9efa4202" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/e87b384f-b1cc-45ab-a379-0dbf5fc37713" width="186">  <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/dbbdd475-450b-41cb-b2a3-0ce6beb4a688" width="186"> <img src="https://github.com/CharlesMoreira1/lingshot/assets/55266908/6936ad0c-ed6c-4b29-a760-0a1e579e8b82" width="186">
 
 This project's primary focus is to promote a modular, scalable, maintainable, and testable architecture. It incorporates a cutting-edge tech stack and embodies the best practices in software development. While the application may seem straightforward, it encompasses all the essential components that form the foundation for a robust, large-scale application.
 
