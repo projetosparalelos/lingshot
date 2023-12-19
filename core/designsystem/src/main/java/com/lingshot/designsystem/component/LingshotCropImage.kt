@@ -20,6 +20,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
@@ -27,6 +29,8 @@ import android.util.TypedValue.COMPLEX_UNIT_DIP
 import android.util.TypedValue.applyDimension
 import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,7 +47,6 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.CropImageView.CropCornerShape.RECTANGLE
 import com.canhub.cropper.CropImageView.Guidelines.OFF
-import com.canhub.cropper.CropImageView.ScaleType.CENTER_CROP
 import com.lingshot.common.util.findActivity
 import com.lingshot.designsystem.R
 import com.lingshot.designsystem.component.ActionCropImage.CROPPED_IMAGE
@@ -62,49 +65,56 @@ fun LingshotCropImage(
     isAutomaticCropperEnabled: Boolean = false,
     isRunnable: Boolean = false,
     imageUri: Uri? = rememberImageUriPath(),
+    content: @Composable BoxScope.(Rect) -> Unit = {},
+    onClear: () -> Unit = {},
     onCropImageResult: (Bitmap?) -> Unit,
 ) {
     val cropImage = rememberCropImage()
     val scope = rememberCoroutineScope()
     var copyRect by remember { mutableStateOf(cropImage.cropRect) }
 
-    AndroidView(
-        modifier = modifier,
-        factory = {
-            cropImage.apply {
-                setImageUriAsync(imageUri)
-                cropRectDefault()
+    Box(modifier = modifier) {
+        AndroidView(
+            factory = {
+                cropImage.apply {
+                    setImageUriAsync(imageUri)
+                    cropRectDefault()
+                }
+            },
+        ) { cropImageView ->
+            when (actionCropImage) {
+                CROPPED_IMAGE -> {
+                    cropImage.croppedImageAsync()
+                }
+
+                FOCUS_IMAGE -> {
+                    cropImage.cropRect = Rect(null)
+                }
+
+                else -> {
+                    Timber.i("Clear crop action of image.")
+                }
             }
-        },
-    ) { cropImageView ->
-        when (actionCropImage) {
-            CROPPED_IMAGE -> {
-                cropImage.croppedImageAsync()
+            cropImageView.setOnCropImageCompleteListener { _, result ->
+                onCropImageResult(result.bitmap)
             }
 
-            FOCUS_IMAGE -> {
-                cropImage.cropRect = Rect(null)
-            }
-
-            else -> {
-                Timber.i("Clear crop action of image.")
-            }
-        }
-        cropImageView.setOnCropImageCompleteListener { _, result ->
-            onCropImageResult(result.bitmap)
-        }
-
-        if (isAutomaticCropperEnabled) {
-            cropImageView.setOnSetCropOverlayReleasedListener {
-                scope.launch {
-                    delay(1.seconds)
-                    if (copyRect != it && isRunnable.not()) {
-                        onCroppedImage(CROPPED_IMAGE)
-                        copyRect = it
+            if (isAutomaticCropperEnabled) {
+                cropImageView.setOnSetCropOverlayReleasedListener {
+                    scope.launch {
+                        delay(1.seconds)
+                        if (copyRect != it && isRunnable.not()) {
+                            onCroppedImage(CROPPED_IMAGE)
+                            copyRect = it
+                        }
                     }
+                }
+                cropImageView.setOnSetCropOverlayMovedListener {
+                    onClear()
                 }
             }
         }
+        copyRect?.let { content(it) }
     }
     LaunchedEffect(actionCropImage) {
         if (actionCropImage != null) {
@@ -126,6 +136,19 @@ fun rememberImageUriPath(context: Context = LocalContext.current) = remember {
 }
 
 @Composable
+fun uriToBitmap(context: Context, uri: Uri? = rememberImageUriPath()): Bitmap? {
+    val contentResolver: ContentResolver = context.contentResolver
+
+    return runCatching {
+        uri?.let { newUri ->
+            contentResolver.openInputStream(newUri)?.use {
+                BitmapFactory.decodeStream(it)
+            }
+        }
+    }.getOrNull()
+}
+
+@Composable
 private fun rememberCropImage(context: Context = LocalContext.current) = remember {
     val borderCornerColor = md_theme_dark_tertiary.toArgb()
     CropImageView(context).apply {
@@ -134,7 +157,7 @@ private fun rememberCropImage(context: Context = LocalContext.current) = remembe
             borderCornerOffset = applyDimension(COMPLEX_UNIT_DIP, 1f, Resources.getSystem().displayMetrics),
             borderCornerThickness = applyDimension(COMPLEX_UNIT_DIP, 4f, Resources.getSystem().displayMetrics),
             borderCornerColor = borderCornerColor,
-            scaleType = CENTER_CROP,
+            backgroundColor = Color.argb(50, 0, 0, 0),
             guidelines = OFF,
             cornerShape = RECTANGLE,
             showProgressBar = false,

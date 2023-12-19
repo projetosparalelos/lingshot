@@ -42,15 +42,14 @@ import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ScreenShotEvent
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ClearStatus
 import com.lingshot.screenshot_presentation.ScreenShotEvent.CroppedImage
-import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchCorrectedOriginalText
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchTextRecognizer
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleDictionaryFullScreenDialog
 import com.lingshot.screenshot_presentation.ScreenShotUiState
 import com.lingshot.screenshot_presentation.ScreenShotViewModel
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotDictionaryFullScreenDialog
+import com.lingshot.screenshot_presentation.ui.component.ScreenShotDrawSpeech
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotLottieLoading
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotSnackBarError
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotTranslateBottomSheet
 import es.dmoral.toasty.Toasty
 
 @Composable
@@ -78,16 +77,28 @@ internal fun ScreenShotScreen(
             .navigationBarsPadding()
             .background(Color.Black),
     ) {
-        val illegiblePhrase = stringResource(id = com.lingshot.common.R.string.text_message_illegible_phrase)
+        val illegiblePhrase =
+            stringResource(id = com.lingshot.common.R.string.text_message_illegible_phrase)
         LingshotCropImage(
             isAutomaticCropperEnabled = true,
             isRunnable = uiState.isRunnable,
             actionCropImage = uiState.actionCropImage,
+            onClear = {
+                handleEvent(ClearStatus)
+            },
             onCropImageResult = { bitmap ->
                 handleEvent(FetchTextRecognizer(bitmap))
             },
             onCroppedImage = { actionCropImage ->
                 handleEvent(CroppedImage(actionCropImage))
+            },
+            content = { rect ->
+                uiState.screenShotStatus.onSuccess {
+                    ScreenShotDrawSpeech(
+                        boundingBox = rect,
+                        translatedText = it.translatedText.toString(),
+                    )
+                }
             },
         )
 
@@ -105,20 +116,6 @@ internal fun ScreenShotScreen(
                 ScreenShotLottieLoading(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     loading = R.raw.loading_translate,
-                )
-            }.onSuccess {
-                ScreenShotTranslateBottomSheet(
-                    languageTranslationDomain = it,
-                    correctedOriginalTextStatus = uiState.correctedOriginalTextStatus,
-                    onCorrectedOriginalText = { original ->
-                        handleEvent(FetchCorrectedOriginalText(original))
-                    },
-                    onToggleDictionaryFullScreenDialog = { url ->
-                        handleEvent(ToggleDictionaryFullScreenDialog(url))
-                    },
-                    onDismiss = {
-                        handleEvent(ClearStatus)
-                    },
                 )
             }.onError {
                 ScreenShotSnackBarError(

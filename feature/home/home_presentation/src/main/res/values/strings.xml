@@ -22,5 +22,5 @@
     <string name="text_button_start_reading_subtitle_home">Start Reading</string>
     <string name="text_button_stop_reading_subtitle_home">Stop Reading</string>
     <string name="text_message_subscription_success_home">Subscription successfully completed!</string>
-    <string name="text_label_free_trial_home">Free trial for 3 days.</string>
+    <string name="text_label_explain_subscription_home">Subscribe and use per month:</string>
 </resources>
