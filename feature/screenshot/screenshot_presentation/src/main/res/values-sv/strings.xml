@@ -17,4 +17,6 @@
 <resources>
     <string name="text_title_translate_bottom_sheet">Din översättning</string>
     <string name="text_label_dictionary">Ordbok</string>
+    <string name="text_menu_item_standard_read_mode_home">Standard</string>
+    <string name="text_menu_item_speech_bubble_read_mode_home">Pratbubbla</string>
 </resources>

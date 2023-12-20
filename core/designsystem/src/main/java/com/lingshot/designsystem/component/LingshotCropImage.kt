@@ -55,7 +55,7 @@ import com.lingshot.designsystem.theme.md_theme_dark_tertiary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun LingshotCropImage(
@@ -102,7 +102,7 @@ fun LingshotCropImage(
             if (isAutomaticCropperEnabled) {
                 cropImageView.setOnSetCropOverlayReleasedListener {
                     scope.launch {
-                        delay(1.seconds)
+                        delay(500.milliseconds)
                         if (copyRect != it && isRunnable.not()) {
                             onCroppedImage(CROPPED_IMAGE)
                             copyRect = it

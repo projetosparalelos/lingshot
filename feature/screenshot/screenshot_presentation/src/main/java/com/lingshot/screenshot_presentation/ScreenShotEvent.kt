@@ -17,10 +17,15 @@ package com.lingshot.screenshot_presentation
 
 import android.graphics.Bitmap
 import com.lingshot.designsystem.component.ActionCropImage
+import com.lingshot.screenshot_domain.model.ReadModeType
 
 sealed class ScreenShotEvent {
 
     data object ClearStatus : ScreenShotEvent()
+
+    data class ChangeReadMode(
+        val readModeType: ReadModeType,
+    ) : ScreenShotEvent()
 
     data class CroppedImage(
         val actionCropImage: ActionCropImage?,

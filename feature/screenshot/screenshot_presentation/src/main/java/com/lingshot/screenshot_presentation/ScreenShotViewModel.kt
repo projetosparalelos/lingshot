@@ -48,6 +48,8 @@ import com.lingshot.languagechoice_domain.model.TranslateLanguageType.FROM
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType.TO
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
+import com.lingshot.screenshot_domain.model.ReadModeType
+import com.lingshot.screenshot_domain.repository.ReadModeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
@@ -65,6 +67,7 @@ class ScreenShotViewModel @Inject constructor(
     private val chatGPTRepository: ChatGPTRepository,
     private val textIdentifierRepository: TextIdentifierRepository,
     private val languageChoiceRepository: LanguageChoiceRepository,
+    private val readModeRepository: ReadModeRepository,
     private val languageIdentifierUseCase: LanguageIdentifierUseCase,
     private val translateApiUseCase: TranslateApiUseCase,
 ) : ViewModel() {
@@ -78,6 +81,10 @@ class ScreenShotViewModel @Inject constructor(
 
     private var translateJob: Job? = null
     private var correctedOriginalTextJob: Job? = null
+
+    init {
+        launchReadMode()
+    }
 
     fun handleEvent(screenShotEvent: ScreenShotEvent) {
         when (screenShotEvent) {
@@ -95,6 +102,10 @@ class ScreenShotViewModel @Inject constructor(
 
             is ScreenShotEvent.FetchTextRecognizer -> {
                 fetchTextRecognizer(screenShotEvent.imageBitmap)
+            }
+
+            is ScreenShotEvent.ChangeReadMode -> {
+                changeReadMode(screenShotEvent.readModeType)
             }
 
             is ScreenShotEvent.ClearStatus -> {
@@ -237,6 +248,20 @@ class ScreenShotViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         textToSpeech.shutdown()
+    }
+
+    private fun launchReadMode() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(readModeType = readModeRepository.getMode().first()) }
+        }
+    }
+
+    private fun changeReadMode(readModeType: ReadModeType) {
+        viewModelScope.launch {
+            readModeRepository.saveMode(readModeType)
+        }.invokeOnCompletion {
+            _uiState.update { it.copy(readModeType = readModeType) }
+        }
     }
 
     private suspend fun getLanguageTo(): AvailableLanguage? {

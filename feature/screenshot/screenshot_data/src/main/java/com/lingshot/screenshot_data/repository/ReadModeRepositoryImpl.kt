@@ -13,19 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.screenshot_presentation
+package com.lingshot.screenshot_data.repository
 
-import com.lingshot.designsystem.component.ActionCropImage
-import com.lingshot.domain.model.Status
-import com.lingshot.domain.model.statusDefault
-import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
+import com.lingshot.screenshot_data.storage.ReadModeLocalStorage
 import com.lingshot.screenshot_domain.model.ReadModeType
+import com.lingshot.screenshot_domain.repository.ReadModeRepository
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-data class ScreenShotUiState(
-    val screenShotStatus: Status<LanguageTranslationDomain> = statusDefault(),
-    val correctedOriginalTextStatus: Status<String> = statusDefault(),
-    val dictionaryUrl: String? = null,
-    val isRunnable: Boolean = false,
-    val actionCropImage: ActionCropImage? = null,
-    val readModeType: ReadModeType? = null,
-)
+class ReadModeRepositoryImpl @Inject constructor(
+    private val readModeLocalStorage: ReadModeLocalStorage,
+) : ReadModeRepository {
+
+    override fun getMode(): Flow<ReadModeType?> {
+        return readModeLocalStorage.getMode()
+    }
+
+    override suspend fun saveMode(readModeType: ReadModeType) {
+        readModeLocalStorage.saveMode(readModeType)
+    }
+}

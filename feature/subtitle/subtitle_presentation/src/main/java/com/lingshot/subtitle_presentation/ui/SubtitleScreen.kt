@@ -23,7 +23,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -38,6 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lingshot.common.helper.isLoadingStatus
+import com.lingshot.common.util.findActivity
+import com.lingshot.designsystem.theme.md_theme_dark_tertiary
 import com.lingshot.domain.model.Status
 import com.lingshot.subtitle_presentation.R
 import com.lingshot.subtitle_presentation.SubtitleEvent
@@ -75,6 +83,7 @@ internal fun SubtitleScreen(
 ) {
     val listSubtitleImage = remember { mutableStateListOf<Bitmap?>() }
     val context = LocalContext.current
+    val activity = context.findActivity()
 
     Box(
         modifier = modifier
@@ -98,6 +107,24 @@ internal fun SubtitleScreen(
             onCroppedImage = {
                 handleEvent(CroppedImage(it))
             },
+        )
+
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = md_theme_dark_tertiary,
+                actionIconContentColor = md_theme_dark_tertiary,
+            ),
+            navigationIcon = {
+                IconButton(
+                    onClick = {
+                        activity?.finish()
+                    },
+                ) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+                }
+            },
+            title = {},
         )
 
         if (uiState.subtitleStatus.isLoadingStatus) {

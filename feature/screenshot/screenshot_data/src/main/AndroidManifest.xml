@@ -14,9 +14,4 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-    <string name="text_title_translate_bottom_sheet">Your translate</string>
-    <string name="text_label_dictionary">Dictionary</string>
-    <string name="text_menu_item_standard_read_mode_home">Standard</string>
-    <string name="text_menu_item_speech_bubble_read_mode_home">Speech Bubble</string>
-</resources>
+<manifest/>

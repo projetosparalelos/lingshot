@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.lingshot.screenshot_presentation.ui
 
 import androidx.compose.foundation.background
@@ -22,6 +24,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,9 +46,14 @@ import com.lingshot.common.helper.onEmpty
 import com.lingshot.common.helper.onError
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
+import com.lingshot.common.util.findActivity
 import com.lingshot.designsystem.component.LingshotCropImage
+import com.lingshot.designsystem.theme.md_theme_dark_tertiary
+import com.lingshot.screenshot_domain.model.ReadModeType.SPEECH_BUBBLE
+import com.lingshot.screenshot_domain.model.ReadModeType.STANDARD
 import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ScreenShotEvent
+import com.lingshot.screenshot_presentation.ScreenShotEvent.ChangeReadMode
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ClearStatus
 import com.lingshot.screenshot_presentation.ScreenShotEvent.CroppedImage
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchTextRecognizer
@@ -49,8 +63,10 @@ import com.lingshot.screenshot_presentation.ScreenShotViewModel
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotDictionaryFullScreenDialog
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotDrawSpeech
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotLottieLoading
+import com.lingshot.screenshot_presentation.ui.component.ScreenShotReadModeMenu
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotSnackBarError
-import es.dmoral.toasty.Toasty
+import com.lingshot.screenshot_presentation.ui.component.ScreenShotTranslateBottomSheet
+import es.dmoral.toasty.Toasty.warning
 
 @Composable
 internal fun ScreenShotRoute(
@@ -71,6 +87,8 @@ internal fun ScreenShotScreen(
     handleEvent: (event: ScreenShotEvent) -> Unit,
 ) {
     val context = LocalContext.current
+    val activity = context.findActivity()
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -93,15 +111,44 @@ internal fun ScreenShotScreen(
                 handleEvent(CroppedImage(actionCropImage))
             },
             content = { rect ->
-                uiState.screenShotStatus.onSuccess {
-                    ScreenShotDrawSpeech(
-                        boundingBox = rect,
-                        translatedText = it.translatedText.toString(),
-                    )
+                if (uiState.readModeType == SPEECH_BUBBLE) {
+                    uiState.screenShotStatus.onSuccess {
+                        ScreenShotDrawSpeech(
+                            boundingBox = rect,
+                            translatedText = it.translatedText.toString(),
+                        )
+                    }
                 }
             },
         )
-
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = md_theme_dark_tertiary,
+                actionIconContentColor = md_theme_dark_tertiary,
+            ),
+            navigationIcon = {
+                IconButton(
+                    onClick = {
+                        activity?.finish()
+                    },
+                ) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+                }
+            },
+            actions = {
+                ScreenShotReadModeMenu(
+                    readModeType = uiState.readModeType,
+                    onChangeReadMode = { readModeType ->
+                        handleEvent(ChangeReadMode(readModeType))
+                    },
+                    onClear = {
+                        handleEvent(ClearStatus)
+                    },
+                )
+            },
+            title = {},
+        )
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -110,13 +157,29 @@ internal fun ScreenShotScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             uiState.screenShotStatus.onEmpty {
-                Toasty.warning(context, illegiblePhrase).show()
+                warning(context, illegiblePhrase).show()
                 handleEvent(ClearStatus)
             }.onLoading {
                 ScreenShotLottieLoading(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     loading = R.raw.loading_translate,
                 )
+            }.onSuccess {
+                if (uiState.readModeType == STANDARD) {
+                    ScreenShotTranslateBottomSheet(
+                        languageTranslationDomain = it,
+                        correctedOriginalTextStatus = uiState.correctedOriginalTextStatus,
+                        onCorrectedOriginalText = { original ->
+                            handleEvent(ScreenShotEvent.FetchCorrectedOriginalText(original))
+                        },
+                        onToggleDictionaryFullScreenDialog = { url ->
+                            handleEvent(ToggleDictionaryFullScreenDialog(url))
+                        },
+                        onDismiss = {
+                            handleEvent(ClearStatus)
+                        },
+                    )
+                }
             }.onError {
                 ScreenShotSnackBarError(
                     modifier = Modifier.padding(bottom = 16.dp),

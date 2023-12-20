@@ -17,4 +17,6 @@
 <resources>
     <string name="text_title_translate_bottom_sheet">Sua tradução</string>
     <string name="text_label_dictionary">Dicionário</string>
+    <string name="text_menu_item_standard_read_mode_home">Padrão</string>
+    <string name="text_menu_item_speech_bubble_read_mode_home">Balão de Fala</string>
 </resources>

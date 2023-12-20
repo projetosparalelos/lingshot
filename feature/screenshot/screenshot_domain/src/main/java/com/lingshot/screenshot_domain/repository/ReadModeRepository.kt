@@ -13,19 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.screenshot_presentation
+package com.lingshot.screenshot_domain.repository
 
-import com.lingshot.designsystem.component.ActionCropImage
-import com.lingshot.domain.model.Status
-import com.lingshot.domain.model.statusDefault
-import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
 import com.lingshot.screenshot_domain.model.ReadModeType
+import kotlinx.coroutines.flow.Flow
 
-data class ScreenShotUiState(
-    val screenShotStatus: Status<LanguageTranslationDomain> = statusDefault(),
-    val correctedOriginalTextStatus: Status<String> = statusDefault(),
-    val dictionaryUrl: String? = null,
-    val isRunnable: Boolean = false,
-    val actionCropImage: ActionCropImage? = null,
-    val readModeType: ReadModeType? = null,
-)
+interface ReadModeRepository {
+
+    fun getMode(): Flow<ReadModeType?>
+
+    suspend fun saveMode(readModeType: ReadModeType)
+}
