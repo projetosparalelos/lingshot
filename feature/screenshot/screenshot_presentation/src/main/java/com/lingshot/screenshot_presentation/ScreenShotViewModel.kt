@@ -31,6 +31,7 @@ import com.lingshot.analytics.helper.AnalyticsEventHelper
 import com.lingshot.common.helper.TextToSpeechFacade
 import com.lingshot.common.helper.launchWithStatus
 import com.lingshot.common.util.formatText
+import com.lingshot.designsystem.component.ActionCropImage
 import com.lingshot.domain.PromptChatGPTConstant.PROMPT_CORRECT_SPELLING
 import com.lingshot.domain.model.ChatGPTPromptBodyDomain
 import com.lingshot.domain.model.MessageDomain
@@ -47,15 +48,11 @@ import com.lingshot.languagechoice_domain.model.TranslateLanguageType.FROM
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType.TO
 import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
 import com.lingshot.screenshot_domain.model.LanguageTranslationDomain
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
-import com.lingshot.screenshot_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
-import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem
-import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.FOCUS
-import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.LISTEN
-import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.TRANSLATE
+import com.lingshot.screenshot_domain.model.ReadModeType
+import com.lingshot.screenshot_domain.repository.ReadModeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -70,6 +67,7 @@ class ScreenShotViewModel @Inject constructor(
     private val chatGPTRepository: ChatGPTRepository,
     private val textIdentifierRepository: TextIdentifierRepository,
     private val languageChoiceRepository: LanguageChoiceRepository,
+    private val readModeRepository: ReadModeRepository,
     private val languageIdentifierUseCase: LanguageIdentifierUseCase,
     private val translateApiUseCase: TranslateApiUseCase,
 ) : ViewModel() {
@@ -79,6 +77,13 @@ class ScreenShotViewModel @Inject constructor(
 
     private val textToSpeech = TextToSpeechFacade(context) { status ->
         _uiState.update { it.copy(screenShotStatus = status) }
+    }
+
+    private var translateJob: Job? = null
+    private var correctedOriginalTextJob: Job? = null
+
+    init {
+        launchReadMode()
     }
 
     fun handleEvent(screenShotEvent: ScreenShotEvent) {
@@ -91,12 +96,16 @@ class ScreenShotViewModel @Inject constructor(
                 fetchCorrectedOriginalText(screenShotEvent.originalText)
             }
 
-            is ScreenShotEvent.FetchTextRecognizer -> {
-                fetchTextRecognizer(screenShotEvent.imageBitmap, screenShotEvent.illegiblePhrase)
+            is ScreenShotEvent.FetchLanguageIdentifier -> {
+                fetchLanguageIdentifier(screenShotEvent.originalText, screenShotEvent.illegiblePhrase)
             }
 
-            is ScreenShotEvent.SelectedOptionsButtonMenuItem -> {
-                selectedOptionsButtonMenuItem(screenShotEvent.buttonMenuItem)
+            is ScreenShotEvent.FetchTextRecognizer -> {
+                fetchTextRecognizer(screenShotEvent.imageBitmap)
+            }
+
+            is ScreenShotEvent.ChangeReadMode -> {
+                changeReadMode(screenShotEvent.readModeType)
             }
 
             is ScreenShotEvent.ClearStatus -> {
@@ -113,21 +122,6 @@ class ScreenShotViewModel @Inject constructor(
         _uiState.update { it.copy(actionCropImage = actionCropImage) }
     }
 
-    private fun selectedOptionsButtonMenuItem(buttonMenuItem: ButtonMenuItem) {
-        when (buttonMenuItem) {
-            TRANSLATE, LISTEN -> {
-                viewModelScope.launch {
-                    croppedImage(CROPPED_IMAGE)
-                }
-            }
-
-            FOCUS -> {
-                croppedImage(FOCUS_IMAGE)
-            }
-        }
-        _uiState.update { it.copy(buttonMenuItem = buttonMenuItem) }
-    }
-
     private fun toggleDictionaryFullScreenDialog(url: String?) {
         _uiState.update { it.copy(dictionaryUrl = url) }
     }
@@ -141,16 +135,14 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
-    private fun fetchTextRecognizer(imageBitmap: Bitmap?, illegiblePhrase: String) {
+    private fun fetchTextRecognizer(imageBitmap: Bitmap?) {
         viewModelScope.launch {
             when (val status = textIdentifierRepository.fetchTextRecognizer(imageBitmap)) {
                 is Status.Success -> {
+                    updateServiceRunning()
+
                     val textFormatted = status.data.formatText()
-                    when (_uiState.value.buttonMenuItem) {
-                        TRANSLATE -> fetchPhraseToTranslate(textFormatted)
-                        LISTEN -> fetchLanguageIdentifier(textFormatted, illegiblePhrase)
-                        else -> Unit
-                    }
+                    fetchPhraseToTranslate(textFormatted)
                 }
 
                 is Status.Error -> {
@@ -167,9 +159,10 @@ class ScreenShotViewModel @Inject constructor(
     }
 
     private fun fetchPhraseToTranslate(text: String) {
+        translateJob?.cancel()
         viewModelScope.launch {
-            if (text.isLanguageAvailable()) {
-                viewModelScope.launchWithStatus({
+            if (text.isNotEmpty()) {
+                translateJob = viewModelScope.launchWithStatus({
                     LanguageTranslationDomain(
                         originalText = text,
                         translatedText = translateApiUseCase(text),
@@ -194,11 +187,14 @@ class ScreenShotViewModel @Inject constructor(
                 )
                 _uiState.update { it.copy(screenShotStatus = statusEmpty()) }
             }
+        }.invokeOnCompletion {
+            updateServiceRunning()
         }
     }
 
     private fun fetchCorrectedOriginalText(originalText: String) {
-        viewModelScope.launchWithStatus({
+        correctedOriginalTextJob?.cancel()
+        correctedOriginalTextJob = viewModelScope.launchWithStatus({
             val requestBody = ChatGPTPromptBodyDomain(
                 messages = listOf(
                     MessageDomain(
@@ -245,9 +241,27 @@ class ScreenShotViewModel @Inject constructor(
         }
     }
 
+    private fun updateServiceRunning() {
+        _uiState.update { it.copy(isRunnable = !it.isRunnable) }
+    }
+
     override fun onCleared() {
         super.onCleared()
         textToSpeech.shutdown()
+    }
+
+    private fun launchReadMode() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(readModeType = readModeRepository.getMode().first()) }
+        }
+    }
+
+    private fun changeReadMode(readModeType: ReadModeType) {
+        viewModelScope.launch {
+            readModeRepository.saveMode(readModeType)
+        }.invokeOnCompletion {
+            _uiState.update { it.copy(readModeType = readModeType) }
+        }
     }
 
     private suspend fun getLanguageTo(): AvailableLanguage? {

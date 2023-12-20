@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.subtitle_presentation
+package com.lingshot.screenshot_domain.repository
 
-import com.lingshot.designsystem.component.ActionCropImage
-import com.lingshot.domain.model.Status
-import com.lingshot.domain.model.statusDefault
+import com.lingshot.screenshot_domain.model.ReadModeType
+import kotlinx.coroutines.flow.Flow
 
-data class SubtitleUiState(
-    val subtitleStatus: Status<List<Subtitle>> = statusDefault(),
-    val actionCropImage: ActionCropImage? = null,
-)
+interface ReadModeRepository {
+
+    fun getMode(): Flow<ReadModeType?>
+
+    suspend fun saveMode(readModeType: ReadModeType)
+}

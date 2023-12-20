@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.lingshot.screenshot_presentation.ui
 
 import androidx.compose.foundation.background
@@ -22,6 +24,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,30 +42,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.lingshot.common.helper.isLoadingStatus
 import com.lingshot.common.helper.onEmpty
 import com.lingshot.common.helper.onError
 import com.lingshot.common.helper.onLoading
 import com.lingshot.common.helper.onSuccess
+import com.lingshot.common.util.findActivity
+import com.lingshot.designsystem.component.LingshotCropImage
+import com.lingshot.designsystem.theme.md_theme_dark_tertiary
+import com.lingshot.screenshot_domain.model.ReadModeType.SPEECH_BUBBLE
+import com.lingshot.screenshot_domain.model.ReadModeType.STANDARD
 import com.lingshot.screenshot_presentation.R
 import com.lingshot.screenshot_presentation.ScreenShotEvent
+import com.lingshot.screenshot_presentation.ScreenShotEvent.ChangeReadMode
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ClearStatus
 import com.lingshot.screenshot_presentation.ScreenShotEvent.CroppedImage
-import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchCorrectedOriginalText
 import com.lingshot.screenshot_presentation.ScreenShotEvent.FetchTextRecognizer
-import com.lingshot.screenshot_presentation.ScreenShotEvent.SelectedOptionsButtonMenuItem
 import com.lingshot.screenshot_presentation.ScreenShotEvent.ToggleDictionaryFullScreenDialog
 import com.lingshot.screenshot_presentation.ScreenShotUiState
 import com.lingshot.screenshot_presentation.ScreenShotViewModel
-import com.lingshot.screenshot_presentation.ui.component.ButtonMenuItem.TRANSLATE
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotButtonMenuEnd
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotButtonMenuStart
-import com.lingshot.screenshot_presentation.ui.component.ScreenShotCropImage
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotDictionaryFullScreenDialog
+import com.lingshot.screenshot_presentation.ui.component.ScreenShotDrawSpeech
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotLottieLoading
+import com.lingshot.screenshot_presentation.ui.component.ScreenShotReadModeMenu
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotSnackBarError
 import com.lingshot.screenshot_presentation.ui.component.ScreenShotTranslateBottomSheet
-import es.dmoral.toasty.Toasty
+import es.dmoral.toasty.Toasty.warning
 
 @Composable
 internal fun ScreenShotRoute(
@@ -77,35 +87,67 @@ internal fun ScreenShotScreen(
     handleEvent: (event: ScreenShotEvent) -> Unit,
 ) {
     val context = LocalContext.current
+    val activity = context.findActivity()
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .navigationBarsPadding()
             .background(Color.Black),
     ) {
-        val illegiblePhrase = stringResource(id = com.lingshot.common.R.string.text_message_illegible_phrase)
-        ScreenShotCropImage(
+        val illegiblePhrase =
+            stringResource(id = com.lingshot.common.R.string.text_message_illegible_phrase)
+        LingshotCropImage(
+            isAutomaticCropperEnabled = true,
+            isRunnable = uiState.isRunnable,
             actionCropImage = uiState.actionCropImage,
+            onClear = {
+                handleEvent(ClearStatus)
+            },
             onCropImageResult = { bitmap ->
-                handleEvent(FetchTextRecognizer(bitmap, illegiblePhrase))
+                handleEvent(FetchTextRecognizer(bitmap))
             },
             onCroppedImage = { actionCropImage ->
                 handleEvent(CroppedImage(actionCropImage))
             },
-        )
-        ScreenShotButtonMenuStart(
-            modifier = Modifier.align(Alignment.BottomStart),
-            onSelectedOptionsButtonMenuItem = {
-                handleEvent(SelectedOptionsButtonMenuItem(it))
-            },
-        )
-        ScreenShotButtonMenuEnd(
-            modifier = Modifier.align(Alignment.BottomEnd),
-            onSelectedOptionsButtonMenuItem = {
-                if (!uiState.screenShotStatus.isLoadingStatus) {
-                    handleEvent(SelectedOptionsButtonMenuItem(it))
+            content = { rect ->
+                if (uiState.readModeType == SPEECH_BUBBLE) {
+                    uiState.screenShotStatus.onSuccess {
+                        ScreenShotDrawSpeech(
+                            boundingBox = rect,
+                            translatedText = it.translatedText.toString(),
+                        )
+                    }
                 }
             },
+        )
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = md_theme_dark_tertiary,
+                actionIconContentColor = md_theme_dark_tertiary,
+            ),
+            navigationIcon = {
+                IconButton(
+                    onClick = {
+                        activity?.finish()
+                    },
+                ) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+                }
+            },
+            actions = {
+                ScreenShotReadModeMenu(
+                    readModeType = uiState.readModeType,
+                    onChangeReadMode = { readModeType ->
+                        handleEvent(ChangeReadMode(readModeType))
+                    },
+                    onClear = {
+                        handleEvent(ClearStatus)
+                    },
+                )
+            },
+            title = {},
         )
         Column(
             modifier = Modifier
@@ -115,24 +157,20 @@ internal fun ScreenShotScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             uiState.screenShotStatus.onEmpty {
-                Toasty.warning(context, illegiblePhrase).show()
+                warning(context, illegiblePhrase).show()
                 handleEvent(ClearStatus)
             }.onLoading {
-                val loading = uiState.buttonMenuItem
-                    .takeIf { it == TRANSLATE }
-                    ?.let { R.raw.loading_translate } ?: R.raw.loading_listen
-
                 ScreenShotLottieLoading(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    loading = loading,
+                    loading = R.raw.loading_translate,
                 )
             }.onSuccess {
-                if (uiState.buttonMenuItem == TRANSLATE) {
+                if (uiState.readModeType == STANDARD) {
                     ScreenShotTranslateBottomSheet(
                         languageTranslationDomain = it,
                         correctedOriginalTextStatus = uiState.correctedOriginalTextStatus,
                         onCorrectedOriginalText = { original ->
-                            handleEvent(FetchCorrectedOriginalText(original))
+                            handleEvent(ScreenShotEvent.FetchCorrectedOriginalText(original))
                         },
                         onToggleDictionaryFullScreenDialog = { url ->
                             handleEvent(ToggleDictionaryFullScreenDialog(url))

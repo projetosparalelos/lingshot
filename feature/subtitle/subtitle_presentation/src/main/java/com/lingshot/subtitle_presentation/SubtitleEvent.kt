@@ -16,7 +16,7 @@
 package com.lingshot.subtitle_presentation
 
 import android.graphics.Bitmap
-import com.lingshot.subtitle_presentation.ui.component.ActionCropImage
+import com.lingshot.designsystem.component.ActionCropImage
 
 sealed class SubtitleEvent {
     data object ClearStatus : SubtitleEvent()

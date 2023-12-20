@@ -27,7 +27,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.toasty)
 
-    implementation(libs.image.cropper)
     implementation(libs.lottie.compose)
     implementation(libs.telephoto.zoomable)
 }

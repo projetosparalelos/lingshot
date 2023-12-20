@@ -28,25 +28,20 @@ import com.lingshot.analytics.constant.TYPE_SCREEN_CAPTURE_SUBTITLE_VALUE
 import com.lingshot.analytics.helper.AnalyticsEventHelper
 import com.lingshot.common.helper.launchWithStatus
 import com.lingshot.common.util.formatText
+import com.lingshot.designsystem.component.ActionCropImage
+import com.lingshot.designsystem.component.ActionCropImage.CROPPED_IMAGE
+import com.lingshot.designsystem.component.ActionCropImage.FOCUS_IMAGE
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.domain.model.statusError
 import com.lingshot.domain.repository.TextIdentifierRepository
-import com.lingshot.domain.usecase.LanguageIdentifierUseCase
 import com.lingshot.domain.usecase.TranslateApiUseCase
-import com.lingshot.languagechoice_domain.model.AvailableLanguage
-import com.lingshot.languagechoice_domain.model.TranslateLanguageType
-import com.lingshot.languagechoice_domain.repository.LanguageChoiceRepository
-import com.lingshot.subtitle_presentation.ui.component.ActionCropImage
-import com.lingshot.subtitle_presentation.ui.component.ActionCropImage.CROPPED_IMAGE
-import com.lingshot.subtitle_presentation.ui.component.ActionCropImage.FOCUS_IMAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -56,8 +51,6 @@ import javax.inject.Inject
 class SubtitleViewModel @Inject constructor(
     private val analyticsEventHelper: AnalyticsEventHelper,
     private val textIdentifierRepository: TextIdentifierRepository,
-    private val languageChoiceRepository: LanguageChoiceRepository,
-    private val languageIdentifierUseCase: LanguageIdentifierUseCase,
     private val translateApiUseCase: TranslateApiUseCase,
 ) : ViewModel() {
 
@@ -144,25 +137,17 @@ class SubtitleViewModel @Inject constructor(
             val status = textIdentifierRepository.fetchTextRecognizer(bitmap)
             if (status is Status.Success) {
                 val text = status.data.toString()
-                val languageIdentifier =
-                    languageIdentifierUseCase(text) ==
-                        getLanguageFrom()?.languageCode ||
-                        getLanguageFrom()?.enabledLanguage == false
 
-                if (languageIdentifier.not()) {
+                if (text.isEmpty()) {
                     analyticsEventHelper.sendSelectItem(
                         TRANSLATE_CONTENT to LANGUAGE_UND_VALUE,
                         ORIGINAL_CONTENT to text,
                         TYPE_SCREEN_CAPTURE_ITEM to TYPE_SCREEN_CAPTURE_SUBTITLE_VALUE,
                     )
                 }
-                block(languageIdentifier)
+                block(text.isNotEmpty())
             }
         }
-    }
-
-    private suspend fun getLanguageFrom(): AvailableLanguage? {
-        return languageChoiceRepository.getLanguage(TranslateLanguageType.FROM).first()
     }
 }
 

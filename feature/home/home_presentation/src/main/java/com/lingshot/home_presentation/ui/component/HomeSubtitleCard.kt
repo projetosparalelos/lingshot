@@ -122,7 +122,7 @@ internal fun HomeSubtitleCard(
             ) {
                 if (hasPremiumPermission == false) {
                     Text(
-                        text = stringResource(R.string.text_label_free_trial_home),
+                        text = stringResource(R.string.text_label_explain_subscription_home),
                         fontWeight = FontWeight.Light,
                         fontSize = 12.sp,
                     )

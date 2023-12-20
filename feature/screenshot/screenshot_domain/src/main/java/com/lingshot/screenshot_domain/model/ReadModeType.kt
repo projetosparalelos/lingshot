@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lingshot.subtitle_presentation
+package com.lingshot.screenshot_domain.model
 
-import com.lingshot.designsystem.component.ActionCropImage
-import com.lingshot.domain.model.Status
-import com.lingshot.domain.model.statusDefault
+enum class ReadModeType(val id: Int) {
+    STANDARD(id = 1),
+    SPEECH_BUBBLE(id = 2),
+    ;
 
-data class SubtitleUiState(
-    val subtitleStatus: Status<List<Subtitle>> = statusDefault(),
-    val actionCropImage: ActionCropImage? = null,
-)
+    companion object {
+        fun from(id: Int): ReadModeType? =
+            entries.firstOrNull {
+                it.id == id
+            }
+    }
+}
