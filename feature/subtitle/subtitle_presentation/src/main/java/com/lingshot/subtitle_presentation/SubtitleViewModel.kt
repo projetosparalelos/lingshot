@@ -30,7 +30,6 @@ import com.lingshot.common.helper.launchWithStatus
 import com.lingshot.common.util.formatText
 import com.lingshot.designsystem.component.ActionCropImage
 import com.lingshot.designsystem.component.ActionCropImage.CROPPED_IMAGE
-import com.lingshot.designsystem.component.ActionCropImage.FOCUS_IMAGE
 import com.lingshot.domain.model.Status
 import com.lingshot.domain.model.statusDefault
 import com.lingshot.domain.model.statusError
@@ -73,10 +72,6 @@ class SubtitleViewModel @Inject constructor(
 
             is SubtitleEvent.FetchTextTranslate -> {
                 fetchTextToTranslate(screenShotEvent.listSubtitle)
-            }
-
-            is SubtitleEvent.FocusImage -> {
-                croppedImage(FOCUS_IMAGE)
             }
         }
     }

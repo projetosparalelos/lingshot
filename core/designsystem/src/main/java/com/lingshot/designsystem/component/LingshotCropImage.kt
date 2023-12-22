@@ -50,7 +50,6 @@ import com.canhub.cropper.CropImageView.Guidelines.OFF
 import com.lingshot.common.util.findActivity
 import com.lingshot.designsystem.R
 import com.lingshot.designsystem.component.ActionCropImage.CROPPED_IMAGE
-import com.lingshot.designsystem.component.ActionCropImage.FOCUS_IMAGE
 import com.lingshot.designsystem.theme.md_theme_dark_tertiary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -85,10 +84,6 @@ fun LingshotCropImage(
             when (actionCropImage) {
                 CROPPED_IMAGE -> {
                     cropImage.croppedImageAsync()
-                }
-
-                FOCUS_IMAGE -> {
-                    cropImage.cropRect = Rect(null)
                 }
 
                 else -> {
@@ -195,7 +190,7 @@ private fun LingshotCropImagePreview() {
 
     LingshotCropImage(
         imageUri = imageUri,
-        actionCropImage = FOCUS_IMAGE,
+        actionCropImage = CROPPED_IMAGE,
         onCroppedImage = {},
         onCropImageResult = {},
     )
@@ -203,5 +198,4 @@ private fun LingshotCropImagePreview() {
 
 enum class ActionCropImage {
     CROPPED_IMAGE,
-    FOCUS_IMAGE,
 }

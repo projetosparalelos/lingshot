@@ -21,6 +21,8 @@
     <string name="text_label_use_any_source_subtitle_home">Usa cualquier fuente</string>
     <string name="text_button_start_reading_subtitle_home">Comenzar a Leer</string>
     <string name="text_button_stop_reading_subtitle_home">Detener Lectura</string>
+    <string name="text_description_auto_translation_home">Esta opción requiere permiso para ver su pantalla a fin de generar una imagen, lo que le permite tener un botón flotante en su pantalla para un acceso fácil. Tenga la seguridad de que las imágenes nunca salen de su dispositivo.</string>
+    <string name="text_title_auto_translation_home">Traducción Automática</string>
     <string name="text_message_subscription_success_home">¡Suscripción completada con éxito!</string>
     <string name="text_label_explain_subscription_home">Suscríbete y usa por mes:</string>
 </resources>

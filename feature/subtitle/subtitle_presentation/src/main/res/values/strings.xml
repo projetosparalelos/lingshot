@@ -16,7 +16,6 @@
 -->
 <resources>
     <string name="text_label_navigation_item_translate">Translate</string>
-    <string name="text_label_navigation_item_focus">Focus</string>
     <string name="text_label_navigation_item_select">Select</string>
     <string name="text_message_info_add_phrase">Add a phrase to translate!</string>
 </resources>

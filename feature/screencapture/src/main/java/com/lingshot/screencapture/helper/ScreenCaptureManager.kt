@@ -27,9 +27,6 @@ import android.media.ImageReader
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
-import android.os.Build
-import android.os.Environment.DIRECTORY_PICTURES
-import android.os.Environment.getExternalStoragePublicDirectory
 import com.lingshot.screencapture.navigation.NavigationIntent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -115,31 +112,22 @@ class ScreenCaptureManager @Inject constructor(
 
     private fun saveBitmap(bitmap: Bitmap?, coroutineScope: CoroutineScope) {
         if (bitmap == null) return
-        val file = fileScreenShot()
 
         coroutineScope.launch {
-            if (file.exists()) {
-                file.delete()
-            }
-
             withContext(Dispatchers.IO) {
-                val newFile = fileScreenShot()
                 try {
-                    val fos = FileOutputStream(newFile)
+                    val directory = directoryScreenShot()
+                    val fileName = "Lingshot_${System.currentTimeMillis()}.jpg"
+                    val file = File(directory, fileName)
+
+                    val fos = FileOutputStream(file)
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
                     fos.flush()
                     fos.close()
-
-                    if (newFile.exists() &&
-                        (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
-                    ) {
-                        context.let {
-                            NavigationIntent.launchScreenShotActivity(
-                                it,
-                                Uri.fromFile(newFile),
-                            )
-                        }
-                    }
+                    NavigationIntent.launchScreenShotActivity(
+                        context,
+                        Uri.fromFile(file),
+                    )
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -147,18 +135,16 @@ class ScreenCaptureManager @Inject constructor(
         }
     }
 
-    private fun fileScreenShot(): File {
-        return File(getExternalStoragePublicDirectory(DIRECTORY_PICTURES), FILE_NAME)
-    }
-
-    fun deleteScreenShot() {
-        if (fileScreenShot().exists()) {
-            fileScreenShot().delete()
+    private fun directoryScreenShot(): File {
+        val directory = context.getDir(DIRECTORY_NAME, Context.MODE_PRIVATE)
+        if (!directory.exists()) {
+            directory.mkdir()
         }
+        return directory
     }
 
     companion object {
-        const val FILE_NAME = "Lingshot_Screenshot.jpg"
+        private const val DIRECTORY_NAME = "screenshot"
         private const val VIRTUAL_NAME_DISPLAY = "ScreenCapture"
     }
 }

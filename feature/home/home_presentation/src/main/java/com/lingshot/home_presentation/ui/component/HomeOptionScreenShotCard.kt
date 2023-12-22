@@ -43,7 +43,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lingshot.home_domain.R.*
 import com.lingshot.home_presentation.R
 
 @Composable
@@ -102,8 +101,8 @@ private fun HomeOptionScreenShotCardPreview() {
     HomeOptionScreenShotCard(
         icon = Icons.Default.Screenshot,
         imageOnboarding = R.drawable.floating_balloon_onboarding,
-        title = string.text_title_by_floating_balloon_home,
-        description = string.text_description_floating_balloon_home,
+        title = R.string.text_title_auto_translation_home,
+        description = R.string.text_description_auto_translation_home,
         isEnabled = true,
         isChecked = false,
         onClickChanged = {},

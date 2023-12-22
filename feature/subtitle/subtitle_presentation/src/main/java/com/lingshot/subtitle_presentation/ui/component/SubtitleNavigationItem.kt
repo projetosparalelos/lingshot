@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoFixHigh
 import androidx.compose.material.icons.filled.Translate
-import androidx.compose.material.icons.filled.ZoomOutMap
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,7 +45,6 @@ internal fun SubtitleNavigationItem(
     countPhraseSelected: Int,
     onFetchTextRecognizerSelect: () -> Unit,
     onFetchTextTranslate: () -> Unit,
-    onFocusImage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -77,17 +75,6 @@ internal fun SubtitleNavigationItem(
                 },
             )
         }
-
-        IconButtonWithText(
-            text = stringResource(id = R.string.text_label_navigation_item_focus),
-            onClick = onFocusImage,
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.ZoomOutMap,
-                    contentDescription = null,
-                )
-            },
-        )
     }
 }
 
@@ -115,6 +102,5 @@ private fun SubtitleNavigationItemPreview() {
         countPhraseSelected = 1,
         onFetchTextRecognizerSelect = {},
         onFetchTextTranslate = {},
-        onFocusImage = {},
     )
 }
