@@ -74,7 +74,6 @@ internal fun SubtitleBottomSheet(
     countPhraseSelected: Int,
     onFetchTextRecognizerSelect: () -> Unit,
     onFetchTextTranslate: () -> Unit,
-    onFocusImage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -100,7 +99,6 @@ internal fun SubtitleBottomSheet(
                     countPhraseSelected = countPhraseSelected,
                     onFetchTextRecognizerSelect = onFetchTextRecognizerSelect,
                     onFetchTextTranslate = onFetchTextTranslate,
-                    onFocusImage = onFocusImage,
                 )
             }
         },
@@ -195,6 +193,5 @@ private fun SubtitleBottomSheetPreview() {
         countPhraseSelected = 0,
         onFetchTextRecognizerSelect = {},
         onFetchTextTranslate = {},
-        onFocusImage = {},
     )
 }

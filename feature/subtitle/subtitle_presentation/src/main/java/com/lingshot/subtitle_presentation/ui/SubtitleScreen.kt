@@ -52,7 +52,6 @@ import com.lingshot.subtitle_presentation.SubtitleEvent
 import com.lingshot.subtitle_presentation.SubtitleEvent.CroppedImage
 import com.lingshot.subtitle_presentation.SubtitleEvent.FetchTextRecognizerSelect
 import com.lingshot.subtitle_presentation.SubtitleEvent.FetchTextTranslate
-import com.lingshot.subtitle_presentation.SubtitleEvent.FocusImage
 import com.lingshot.subtitle_presentation.SubtitleUiState
 import com.lingshot.subtitle_presentation.SubtitleViewModel
 import com.lingshot.subtitle_presentation.ui.component.SubtitleBottomSheet
@@ -148,9 +147,6 @@ internal fun SubtitleScreen(
                 } else {
                     info(context, messageInfoAddPhrase).show()
                 }
-            },
-            onFocusImage = {
-                handleEvent(FocusImage)
             },
         )
     }

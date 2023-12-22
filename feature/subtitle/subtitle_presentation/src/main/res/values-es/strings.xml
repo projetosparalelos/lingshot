@@ -16,7 +16,6 @@
 -->
 <resources>
     <string name="text_label_navigation_item_translate">Traducir</string>
-    <string name="text_label_navigation_item_focus">Enfoque</string>
     <string name="text_label_navigation_item_select">Seleccionar</string>
     <string name="text_message_info_add_phrase">¡Agrega una frase para traducir!</string>
 </resources>

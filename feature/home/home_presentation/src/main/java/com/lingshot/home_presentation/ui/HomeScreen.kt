@@ -33,26 +33,19 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitScreen
-import androidx.compose.material.icons.filled.Screenshot
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEachIndexed
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,10 +57,6 @@ import com.lingshot.common.util.findActivity
 import com.lingshot.common.util.isOnline
 import com.lingshot.designsystem.component.LingshotOnLifecycleEvent
 import com.lingshot.home_domain.model.HomeTypeSection
-import com.lingshot.home_domain.model.TypeActionScreenshot
-import com.lingshot.home_domain.model.TypeActionScreenshot.DEVICE_BUTTON
-import com.lingshot.home_domain.model.TypeActionScreenshot.FLOATING_BALLOON
-import com.lingshot.home_domain.model.screenShotActions
 import com.lingshot.home_presentation.HomeEvent
 import com.lingshot.home_presentation.HomeEvent.SaveLanguage
 import com.lingshot.home_presentation.HomeEvent.SelectedOptionsLanguage
@@ -85,7 +74,6 @@ import com.lingshot.home_presentation.ui.component.HomeSubtitleCard
 import com.lingshot.home_presentation.ui.component.HomeToolbar
 import com.lingshot.languagechoice_domain.model.TranslateLanguageType
 import com.lingshot.languagechoice_presentation.ui.LanguageChoiceDialog
-import com.lingshot.screencapture.service.ScreenShotService.Companion.isScreenCaptureByDevice
 import com.lingshot.screencapture.service.ScreenShotService.Companion.isScreenCaptureForSubtitle
 import com.lingshot.screencapture.service.ScreenShotService.Companion.screenShotServiceIntent
 import com.lingshot.screencapture.service.ScreenShotService.Companion.screenShotServiceIntentWithMediaProjection
@@ -117,10 +105,6 @@ internal fun HomeScreen(
     context: Context = LocalContext.current,
 ) {
     val activity = context.findActivity()
-
-    var enabledType by remember {
-        mutableStateOf(getInitialEnabledType())
-    }
 
     val notificationPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
@@ -227,66 +211,39 @@ internal fun HomeScreen(
                         }
 
                         HomeTypeSection.CARD_BUTTON_SCREEN_SHOT -> {
-                            screenShotActions.filter {
-                                it.typeActionScreenshot.isUpsideDownCakeAndNotDeviceButton()
-                            }.fastForEachIndexed { position, item ->
-                                val isCheckForItem = item.typeActionScreenshot == enabledType
-                                HomeOptionScreenShotCard(
-                                    onClickChanged = {
-                                        if (notificationPermissionState?.status?.isGranted?.not() == true) {
-                                            if (notificationPermissionState.status.shouldShowRationale) {
-                                                handleNotificationPermission(
-                                                    textMessage = textMessageNotificationPermission,
-                                                    context = context,
-                                                )
-                                            } else {
-                                                notificationPermissionState.launchPermissionRequest()
-                                            }
-                                            return@HomeOptionScreenShotCard
-                                        }
-                                        activity?.handleServiceToggle(
-                                            isServiceRunning = uiState.isServiceRunning,
-                                            handleEvent = handleEvent,
-                                            launchScreenShot = {
-                                                if (item.typeActionScreenshot == FLOATING_BALLOON) {
-                                                    launcherScreenShotService.launch(it.mediaProjectionIntent())
-                                                } else {
-                                                    it.startScreenShotService()
-                                                    handleEvent(ToggleServiceButton)
-                                                }
-                                            },
-                                        )
-                                        enabledType = item.typeActionScreenshot
-                                        isScreenCaptureForSubtitle = false
-                                    },
-                                    icon = if (item.typeActionScreenshot == FLOATING_BALLOON) {
-                                        Icons.Default.FitScreen
-                                    } else {
-                                        Icons.Default.Screenshot
-                                    },
-                                    imageOnboarding = if (item.typeActionScreenshot == FLOATING_BALLOON) {
-                                        R.drawable.floating_balloon_onboarding
-                                    } else {
-                                        R.drawable.device_button_onboarding
-                                    },
-
-                                    title = item.title,
-                                    description = item.description,
-                                    isEnabled = if (uiState.isServiceRunning) {
-                                        if (isScreenCaptureForSubtitle && isCheckForItem) {
-                                            false
+                            HomeOptionScreenShotCard(
+                                onClickChanged = {
+                                    if (notificationPermissionState?.status?.isGranted?.not() == true) {
+                                        if (notificationPermissionState.status.shouldShowRationale) {
+                                            handleNotificationPermission(
+                                                textMessage = textMessageNotificationPermission,
+                                                context = context,
+                                            )
                                         } else {
-                                            isCheckForItem
+                                            notificationPermissionState.launchPermissionRequest()
                                         }
-                                    } else {
-                                        true
-                                    },
-                                    isChecked = (isCheckForItem && isScreenCaptureForSubtitle.not() && uiState.isServiceRunning),
-                                )
-                                if (position != screenShotActions.size.minus(1)) {
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                }
-                            }
+                                        return@HomeOptionScreenShotCard
+                                    }
+                                    activity?.handleServiceToggle(
+                                        isServiceRunning = uiState.isServiceRunning,
+                                        handleEvent = handleEvent,
+                                        launchScreenShot = {
+                                            launcherScreenShotService.launch(it.mediaProjectionIntent())
+                                        },
+                                    )
+                                    isScreenCaptureForSubtitle = false
+                                },
+                                icon = Icons.Default.FitScreen,
+                                imageOnboarding = R.drawable.floating_balloon_onboarding,
+                                title = R.string.text_title_auto_translation_home,
+                                description = R.string.text_description_auto_translation_home,
+                                isEnabled = if (uiState.isServiceRunning) {
+                                    isScreenCaptureForSubtitle.not()
+                                } else {
+                                    true
+                                },
+                                isChecked = (isScreenCaptureForSubtitle.not() && uiState.isServiceRunning),
+                            )
                         }
                     }
                 }
@@ -343,19 +300,6 @@ private fun Activity?.handleServiceToggle(
     }
 }
 
-private fun getInitialEnabledType(): TypeActionScreenshot {
-    return if (!isScreenCaptureByDevice) {
-        FLOATING_BALLOON
-    } else {
-        DEVICE_BUTTON
-    }
-}
-
-private fun Activity.startScreenShotService() =
-    screenShotServiceIntent(this).also {
-        startService(it)
-    }
-
 private fun Activity.startScreenShotServiceWithResult(
     resultData: Intent?,
 ) = screenShotServiceIntentWithMediaProjection(this, resultData).also {
@@ -376,11 +320,3 @@ private fun intentApplicationDetailsPermission(context: Context) =
         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
         Uri.parse("package:${context.packageName}"),
     )
-
-private fun TypeActionScreenshot.isUpsideDownCakeAndNotDeviceButton(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-        this != DEVICE_BUTTON
-    } else {
-        true
-    }
-}

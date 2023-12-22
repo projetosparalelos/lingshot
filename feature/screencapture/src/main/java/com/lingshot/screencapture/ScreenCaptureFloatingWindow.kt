@@ -179,7 +179,7 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
         rootViewFloating.isVisible = isVisible
     }
 
-    fun start(isScreenCaptureByDevice: Boolean) = runCatching {
+    fun start() = runCatching {
         windowManager.addView(rootViewFloating, windowParamsFloating)
         windowManager.addView(rootViewFloatingClose, windowParamsFloatingClose)
 
@@ -190,7 +190,6 @@ class ScreenCaptureFloatingWindow @Inject constructor(private val context: Conte
                 R.drawable.ic_app_shortcut_24
             },
         )
-        imageButtonScreenCaptureFloating.isVisible = isScreenCaptureByDevice.not()
     }.getOrNull()
 
     fun close() = runCatching {

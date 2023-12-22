@@ -25,9 +25,7 @@ import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
 import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
-import android.net.Uri
 import android.os.Build
-import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat.startForeground
@@ -38,36 +36,23 @@ import com.lingshot.common.helper.MainActivityManager.getMainActivity
 import com.lingshot.screencapture.R
 import com.lingshot.screencapture.ScreenCaptureFloatingWindow
 import com.lingshot.screencapture.helper.ScreenCaptureManager
-import com.lingshot.screencapture.helper.ScreenShotDetection
-import com.lingshot.screencapture.navigation.NavigationIntent
 import dagger.hilt.android.AndroidEntryPoint
-import es.dmoral.toasty.Toasty.success
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
-class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDetectionListener {
+class ScreenShotService : LifecycleService() {
 
     @Inject
     lateinit var screenCaptureFloatingWindow: ScreenCaptureFloatingWindow
 
     @Inject
-    lateinit var screenshotDetectionFactory: ScreenShotDetection.Factory
-    private val screenshotDetection by lazy { screenshotDetectionFactory.create(this) }
-
-    @Inject
     lateinit var screenCaptureManager: ScreenCaptureManager
 
     private var isOrientationPortrait: Boolean = true
-
-    override fun onCreate() {
-        super.onCreate()
-        screenshotDetection.startScreenshotDetection()
-    }
 
     override fun onConfigurationChanged(configuration: Configuration) {
         super.onConfigurationChanged(configuration)
@@ -83,20 +68,18 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         setupNotificationForeground()
-        intent.setupScreenCaptureFloatingWindow()
+        setupScreenCaptureFloatingWindow()
         intent.sendIntentScreenCapture()
 
         if (intent?.action == STOP_SERVICE) {
-            screenCaptureManager.deleteScreenShot()
             stopSelf()
         }
         setupFinishMainActivity()
         return super.onStartCommand(intent, flags, startId)
     }
 
-    private fun Intent?.setupScreenCaptureFloatingWindow() {
-        isScreenCaptureByDevice = this?.getBooleanExtra(SCREEN_CAPTURE_BY_DEVICE, false) ?: false
-        screenCaptureFloatingWindow.start(isScreenCaptureByDevice)
+    private fun setupScreenCaptureFloatingWindow() {
+        screenCaptureFloatingWindow.start()
         screenCaptureFloatingWindow.onFloating(
             lifecycleScope,
             onScreenShot = {
@@ -108,10 +91,6 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
                 delay(500.milliseconds)
                 stopSelf()
             }
-        }
-
-        if (isScreenCaptureByDevice) {
-            setupToastMessageCaptureScreenDeviceButton()
         }
     }
 
@@ -133,15 +112,6 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
                 e.printStackTrace()
             }
         }
-    }
-
-    private fun setupToastMessageCaptureScreenDeviceButton() {
-        success(
-            baseContext,
-            getString(R.string.text_toast_message_device_button_screen_capture),
-            LENGTH_LONG,
-            true,
-        ).show()
     }
 
     private fun setupNotificationForeground() {
@@ -170,33 +140,21 @@ class ScreenShotService : LifecycleService(), ScreenShotDetection.ScreenshotDete
             )
         }
 
-    override fun onScreenCaptured(path: String) {
-        if (isOrientationPortrait) {
-            NavigationIntent.launchScreenShotActivity(this, Uri.fromFile(File(path)))
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         screenCaptureFloatingWindow.close()
-        screenshotDetection.stopScreenshotDetection()
         screenCaptureManager.stopCapture()
-        screenCaptureManager.deleteScreenShot()
     }
 
     companion object {
         private const val MAIN_ACTIVITY_PATH = "com.lingshot.languagelearn.MainActivity"
         private const val SCREEN_CAPTURE_DATA = "SCREEN_CAPTURE_DATA"
-        private const val SCREEN_CAPTURE_BY_DEVICE = "SCREEN_CAPTURE_BY_DEVICE"
         private const val STOP_SERVICE = "STOP_SERVICE"
         private const val NOTIFICATION_FOREGROUND_ID = 1
-        var isScreenCaptureByDevice: Boolean = false
         var isScreenCaptureForSubtitle: Boolean = false
 
         fun screenShotServiceIntent(context: Context?): Intent {
-            return Intent(context, ScreenShotService::class.java).apply {
-                putExtra(SCREEN_CAPTURE_BY_DEVICE, true)
-            }
+            return Intent(context, ScreenShotService::class.java)
         }
 
         fun screenShotServiceIntentWithMediaProjection(context: Context?, data: Intent?): Intent {

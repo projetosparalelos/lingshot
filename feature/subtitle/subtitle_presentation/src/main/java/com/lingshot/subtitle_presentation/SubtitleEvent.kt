@@ -28,6 +28,4 @@ sealed class SubtitleEvent {
     data object FetchTextRecognizerSelect : SubtitleEvent()
 
     data class FetchTextTranslate(val listSubtitle: List<Bitmap?>) : SubtitleEvent()
-
-    data object FocusImage : SubtitleEvent()
 }
