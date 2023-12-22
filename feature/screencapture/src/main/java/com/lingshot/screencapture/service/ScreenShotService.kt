@@ -112,7 +112,7 @@ class ScreenShotService : LifecycleService() {
                 e.printStackTrace()
             }
         }
-    }//
+    }
 
     private fun setupNotificationForeground() {
         NotificationCompat.Builder(this, CHANNEL_ID)
