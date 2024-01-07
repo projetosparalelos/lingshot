@@ -58,7 +58,7 @@ You'll need two API keys—one from Google Cloud and one from OpenAI.
 In your project directory, make a file named `lingshot-keys` and add:
 
 ```properties
-CHAT_GPT_KEY = "Your_OpenAI_API_Key>"
+CHAT_GPT_KEY = "<Your_OpenAI_API_Key>"
 GOOGLE_TRANSLATE_KEY = "<Your_Google_Cloud_API_Key>"
 ```
 
