@@ -21,9 +21,6 @@ import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import androidx.multidex.MultiDex
 import com.lingshot.common.CommonConstant.CHANNEL_ID
-import com.qonversion.android.sdk.Qonversion
-import com.qonversion.android.sdk.QonversionConfig
-import com.qonversion.android.sdk.dto.QLaunchMode
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -33,22 +30,12 @@ class LingshotApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         setupMultidex()
-        setupQonversion()
         setupNotificationChannel()
         setupTimber()
     }
 
     private fun setupMultidex() {
         MultiDex.install(this)
-    }
-
-    private fun setupQonversion() {
-        val qonversionConfig = QonversionConfig.Builder(
-            this,
-            BuildConfig.QONVERSION_PROJECT_KEY,
-            QLaunchMode.SubscriptionManagement,
-        ).build()
-        Qonversion.initialize(qonversionConfig)
     }
 
     private fun setupNotificationChannel() {

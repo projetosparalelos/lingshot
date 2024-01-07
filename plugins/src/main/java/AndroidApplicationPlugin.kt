@@ -22,10 +22,6 @@ class AndroidApplicationPlugin : Plugin<Project> {
             extension.apply {
                 configureKotlinJvm(this)
                 configureAndroidCompose(this)
-
-                defaultConfig {
-                    buildConfigField("String", "QONVERSION_PROJECT_KEY", KeyHelper.getValue("QONVERSION_PROJECT_KEY"))
-                }
             }
         }
     }

@@ -22,8 +22,6 @@ sealed class HomeEvent {
 
     data object ToggleServiceButton : HomeEvent()
 
-    data object UpdatePermissions : HomeEvent()
-
     data class SaveLanguage(val availableLanguage: AvailableLanguage?, val translateLanguageType: TranslateLanguageType?) : HomeEvent()
 
     data class SelectedOptionsLanguage(val selectedOptionsLanguage: AvailableLanguage?) : HomeEvent()

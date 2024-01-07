@@ -41,10 +41,6 @@ gradlePlugin {
             id = "lingshot.android.application.firebase"
             implementationClass = "AndroidApplicationFirebaseConventionPlugin"
         }
-        register("androidAdmobPlugin") {
-            id = "lingshot.android.admob.plugin"
-            implementationClass = "AndroidAdmobPlugin"
-        }
         register("androidNetworkPlugin") {
             id = "lingshot.android.network.plugin"
             implementationClass = "AndroidNetworkPlugin"

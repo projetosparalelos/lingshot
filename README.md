@@ -31,6 +31,46 @@ The design principles and architectural choices applied in this project are idea
 
 <a href='https://play.google.com/store/apps/details?id=com.lingshot.languagelearn'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width=240/></a>
 
+# Architecture
+
+The **Lingshot** app follows the
+[official architecture guidance](https://developer.android.com/topic/architecture).
+
+# Easy App Building Tutorial
+
+### Step 1: Get API Keys
+
+You'll need two API keys—one from Google Cloud and one from OpenAI.
+
+- **Google Cloud API Key:**
+  1. Visit [Google Cloud Console](https://console.cloud.google.com/).
+  2. Create or select your project.
+  3. Navigate to "APIs & Services" > "Credentials."
+  4. Generate a new API key, ensuring to set restrictions for security.
+
+- **OpenAI API Key:**
+  1. Head to [OpenAI Developer](https://openai.com/).
+  2. Sign up and create a new project.
+  3. Retrieve your API key from project settings.
+
+### Step 2: Create a Properties File
+
+In your project directory, make a file named `lingshot-keys` and add:
+
+```properties
+CHAT_GPT_KEY = "Your_OpenAI_API_Key>"
+GOOGLE_TRANSLATE_KEY = "<Your_Google_Cloud_API_Key>"
+```
+
+Replace `<Your_OpenAI_API_Key>` and `<Your_Google_Cloud_API_Key>` with your actual API keys.
+
+### Step 3: Firebase Configuration
+
+1. Create an account on [Firebase](https://console.firebase.google.com/).
+2. Create a new project in the Firebase Console.
+3. Add an Android app to the project and follow the instructions to generate the `google-services.json` file.
+4. Import the `google-services.json` file into your app directory.
+
 ## Tech-Stack
 
 This project takes advantage of best practices, and many popular libraries and tools in the Android ecosystem.
@@ -66,8 +106,6 @@ This project takes advantage of best practices, and many popular libraries and t
   * [Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition/v2)
   * [Text Speech](https://developer.android.com/reference/android/speech/tts/TextToSpeech)
   * [Language Identification](https://developers.google.com/ml-kit/language/identification)
-* In-app products
-  * [Qonversion](https://qonversion.io/)
 * CI
   * [GitHub Actions](https://github.com/features/actions)
   * [Danger System](https://danger.systems/ruby/)

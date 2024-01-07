@@ -23,6 +23,4 @@
     <string name="text_button_stop_reading_subtitle_home">Sluta läsa</string>
     <string name="text_description_auto_translation_home">Denna alternativ kräver behörighet att visa din skärm för att generera en bild, vilket gör att du kan ha en flytande knapp på din skärm för enkel åtkomst. Var lugn, bilderna lämnar aldrig din enhet.</string>
     <string name="text_title_auto_translation_home">Automatisk Översättning</string>
-    <string name="text_message_subscription_success_home">Prenumerationen har slutförts!</string>
-    <string name="text_label_explain_subscription_home">Prenumerera och använd per månad:</string>
 </resources>

@@ -54,7 +54,6 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.lingshot.common.util.findActivity
-import com.lingshot.common.util.isOnline
 import com.lingshot.designsystem.component.LingshotOnLifecycleEvent
 import com.lingshot.home_domain.model.HomeTypeSection
 import com.lingshot.home_presentation.HomeEvent
@@ -65,8 +64,6 @@ import com.lingshot.home_presentation.HomeEvent.ToggleServiceButton
 import com.lingshot.home_presentation.HomeUiState
 import com.lingshot.home_presentation.HomeViewModel
 import com.lingshot.home_presentation.R
-import com.lingshot.home_presentation.helper.LINGSHOT_PAYMENT_ID
-import com.lingshot.home_presentation.helper.purchaseProduct
 import com.lingshot.home_presentation.navigation.HomeDestination
 import com.lingshot.home_presentation.ui.component.HomeLanguageChoice
 import com.lingshot.home_presentation.ui.component.HomeOptionScreenShotCard
@@ -78,8 +75,6 @@ import com.lingshot.screencapture.service.ScreenShotService.Companion.isScreenCa
 import com.lingshot.screencapture.service.ScreenShotService.Companion.screenShotServiceIntent
 import com.lingshot.screencapture.service.ScreenShotService.Companion.screenShotServiceIntentWithMediaProjection
 import com.lingshot.screencapture.util.isServiceRunning
-import com.qonversion.android.sdk.Qonversion.Companion.shared
-import es.dmoral.toasty.Toasty.success
 import es.dmoral.toasty.Toasty.warning
 import kotlinx.collections.immutable.toImmutableList
 
@@ -161,12 +156,7 @@ internal fun HomeScreen(
                         }
 
                         HomeTypeSection.CARD_SUBTITLE -> {
-                            val messageSubscriptionSuccess =
-                                stringResource(R.string.text_message_subscription_success_home)
-
                             HomeSubtitleCard(
-                                hasPremiumPermission = uiState.hasPremiumPermission,
-                                offeringText = uiState.premiumProduct?.get(LINGSHOT_PAYMENT_ID)?.prettyPrice,
                                 isEnabled = if (uiState.isServiceRunning) {
                                     isScreenCaptureForSubtitle
                                 } else {
@@ -174,38 +164,25 @@ internal fun HomeScreen(
                                 },
                                 isSelected = (isScreenCaptureForSubtitle && uiState.isServiceRunning),
                                 onClickChanged = {
-                                    if (uiState.hasPremiumPermission == true) {
-                                        if (notificationPermissionState?.status?.isGranted?.not() == true) {
-                                            if (notificationPermissionState.status.shouldShowRationale) {
-                                                handleNotificationPermission(
-                                                    textMessage = textMessageNotificationPermission,
-                                                    context = context,
-                                                )
-                                            } else {
-                                                notificationPermissionState.launchPermissionRequest()
-                                            }
-                                            return@HomeSubtitleCard
+                                    if (notificationPermissionState?.status?.isGranted?.not() == true) {
+                                        if (notificationPermissionState.status.shouldShowRationale) {
+                                            handleNotificationPermission(
+                                                textMessage = textMessageNotificationPermission,
+                                                context = context,
+                                            )
+                                        } else {
+                                            notificationPermissionState.launchPermissionRequest()
                                         }
-                                        activity?.handleServiceToggle(
-                                            isServiceRunning = uiState.isServiceRunning,
-                                            handleEvent = handleEvent,
-                                            launchScreenShot = {
-                                                launcherScreenShotService.launch(it.mediaProjectionIntent())
-                                            },
-                                        )
-                                        isScreenCaptureForSubtitle = true
-                                    } else {
-                                        if (context.isOnline()) {
-                                            shared.purchaseProduct(
-                                                context,
-                                                uiState.premiumProduct?.get(LINGSHOT_PAYMENT_ID)
-                                                    ?: return@HomeSubtitleCard,
-                                            ) {
-                                                handleEvent(HomeEvent.UpdatePermissions)
-                                                success(context, messageSubscriptionSuccess).show()
-                                            }
-                                        }
+                                        return@HomeSubtitleCard
                                     }
+                                    activity?.handleServiceToggle(
+                                        isServiceRunning = uiState.isServiceRunning,
+                                        handleEvent = handleEvent,
+                                        launchScreenShot = {
+                                            launcherScreenShotService.launch(it.mediaProjectionIntent())
+                                        },
+                                    )
+                                    isScreenCaptureForSubtitle = true
                                 },
                             )
                         }

@@ -23,6 +23,4 @@
     <string name="text_button_stop_reading_subtitle_home">Stop Reading</string>
     <string name="text_description_auto_translation_home">This option requires permission to view your screen in order to generate an image, allowing you to have a floating button on your screen for easy access. Rest assured, images never leave your device.</string>
     <string name="text_title_auto_translation_home">Auto Translation</string>
-    <string name="text_message_subscription_success_home">Subscription successfully completed!</string>
-    <string name="text_label_explain_subscription_home">Subscribe and use per month:</string>
 </resources>

@@ -23,6 +23,4 @@
     <string name="text_button_stop_reading_subtitle_home">Arrêter la Lecture</string>
     <string name="text_description_auto_translation_home">Cette option nécessite l\'autorisation de visualiser votre écran afin de générer une image, vous permettant d\'avoir un bouton flottant sur votre écran pour un accès facile. Soyez assuré, les images ne quittent jamais votre appareil.</string>
     <string name="text_title_auto_translation_home">Traduction Automatique</string>
-    <string name="text_message_subscription_success_home">Inscription réussie avec succès!</string>
-    <string name="text_label_explain_subscription_home">Abonnez-vous et utilisez par mois:</string>
 </resources>
